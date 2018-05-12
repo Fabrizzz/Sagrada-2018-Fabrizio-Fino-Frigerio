@@ -9,9 +9,11 @@ import it.polimi.se2018.utils.Tool;
 import java.util.*;
 
 public abstract class Model extends Observable {
+
+    //Define
     private static final int numberOfToolCards = 3;
     private static final int numberOfPublicObjectives = 3;
-    private static final int numberOfDicePerColor = 18;
+    private static final int numberOfDicePerColor = 18;     //Nei 90 dadi ho 18 dadi per colore; passo 18 al costruttore del diceBag
 
     private Map<Player, PlayerBoard> boardMap;
     private Map<Player, PrivateObjective> privateObjectiveMap;
@@ -22,19 +24,20 @@ public abstract class Model extends Observable {
     private boolean normalMove;
 
 
-    private DiceBag diceBag;
-    private DraftPool draftPool;  //dadi del round
-    private RoundTrack roundTrack; //il tracciato
-    private List<Player> players;
+    private DiceBag diceBag;    //Il sacchetto contenente i dadi
+    private DraftPool draftPool;  //Dadi pescati del round
+    private RoundTrack roundTrack; //Il tracciato
+    private List<Player> players;   //I player in gioco
 
     private Tool[] tools;
     private PublicObjective[] publicObjective;
 
 
+    //Costruttore
     public Model(Player[] players) {
-        this.players = new ArrayList<>(Arrays.asList(players));
-        diceBag = new DiceBag(numberOfDicePerColor);
-        draftPool = new DraftPool(players.length, diceBag);
+        this.players = new ArrayList<>(Arrays.asList(players)); //Creazione di un arraylist che conterrà i player
+        diceBag = new DiceBag(numberOfDicePerColor);    //Creazione del sacchetto; viene passato 18 così verranno generati i 90 dadi, 18 per colore
+        draftPool = new DraftPool(players.length, diceBag); //Creazione della variabile draftPool per i dadi pescati; viene passato il numero di dadi da pescare (numplayer  2 +1) e il sacchetto da cui pescare
         tools = Tool.getRandTools(numberOfToolCards);
 
     }
