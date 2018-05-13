@@ -36,13 +36,20 @@ public class DieTest {
 
     @Test
     public void reRoll() {
-        boolean result;
         Die dice = new Die(Color.BLUE);
         dice.reRoll();
         for(int i = 0; i<100; i++){
-            result = dice.getNumber().getInt() <= NumberEnum.SIX.getInt() && dice.getNumber().getInt() >= NumberEnum.ONE.getInt();
-            assertTrue(result);
+            assertTrue(dice.getNumber().getInt() <= NumberEnum.SIX.getInt() && dice.getNumber().getInt() >= NumberEnum.ONE.getInt());
         }
+    }
+
+    @Test
+    public void testFlip(){
+        Die dice = new Die(Color.BLUE);
+        int number = dice.getNumber().getInt();
+
+        dice.flip();
+        assertEquals(dice.getNumber().getInt(),7 - number);
     }
 
 }
