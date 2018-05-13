@@ -11,6 +11,9 @@ public class Player implements Serializable { //da completare
     private boolean canDoTwoTurn;
     private boolean isYourTurn = false;
 
+    public Player(String nick){
+        this.nick = nick;
+    }
     public boolean isYourTurn() {
         return isYourTurn;
     }

@@ -19,7 +19,7 @@ public enum Tool {
     DILUENTEPERPASTASALDA("Diluente Per Pasta Salda"),
     TAGLIERINAMANUALE("Taglierina Manuale");
 
-    public String toolName;
+    private String toolName;
 
     Tool(String str) {
         toolName = str;

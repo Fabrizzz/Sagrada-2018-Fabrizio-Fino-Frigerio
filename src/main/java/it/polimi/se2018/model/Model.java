@@ -72,7 +72,7 @@ public class Model extends Observable {
         this.firstTurn = firstTurn;
     }
 
-    public boolean HasUsedTool() {
+    public boolean hasUsedTool() {
         return usedTool;
     }
 
@@ -124,9 +124,12 @@ public class Model extends Observable {
 
     public abstract int calculateUnusedCellPoints(Player player);*/
 
-    public PrivateObjective getPrivateObjective(Player player) {
-
-        return privateObjectiveMap.get(player);
+    public PrivateObjective getPrivateObjective(Player player) throws IllegalArgumentException{
+        if(players.contains(player)) {
+            return privateObjectiveMap.get(player);
+        }else{
+            throw new IllegalArgumentException("Player non presente");
+        }
     }
 
     public List<PublicObjective> getPublicObjectives() {
@@ -153,9 +156,7 @@ public class Model extends Observable {
 
     }
 
-    public void endGame() {
-
-    }
+    public void endGame() {}
 
     public void nextTurn() {
         usedTool = false;
