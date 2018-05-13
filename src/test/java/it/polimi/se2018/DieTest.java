@@ -5,7 +5,8 @@ import it.polimi.se2018.utils.Color;
 import it.polimi.se2018.utils.NumberEnum;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DieTest {
 
@@ -20,7 +21,7 @@ public class DieTest {
         boolean result;
         Die dice = new Die(Color.BLUE);
         for(int i = 0; i<100; i++){
-            result = dice.getNumber().getNumber() <= NumberEnum.SIX.getNumber() && dice.getNumber().getNumber() >= NumberEnum.ONE.getNumber();
+            result = dice.getNumber().getInt() <= NumberEnum.SIX.getInt() && dice.getNumber().getInt() >= NumberEnum.ONE.getInt();
             assertTrue(result);
         }
 
@@ -39,7 +40,7 @@ public class DieTest {
         Die dice = new Die(Color.BLUE);
         dice.reRoll();
         for(int i = 0; i<100; i++){
-            result = dice.getNumber().getNumber() <= NumberEnum.SIX.getNumber() && dice.getNumber().getNumber() >= NumberEnum.ONE.getNumber();
+            result = dice.getNumber().getInt() <= NumberEnum.SIX.getInt() && dice.getNumber().getInt() >= NumberEnum.ONE.getInt();
             assertTrue(result);
         }
     }

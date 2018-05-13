@@ -4,6 +4,7 @@ import it.polimi.se2018.model.DiceBag;
 import it.polimi.se2018.model.DraftPool;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -35,14 +36,22 @@ public class DraftPoolTest {
         DraftPool draftpool = new DraftPool(player, dicebag);
         List<Die> drafpool_temp = new ArrayList<>();
         for(n = 0; n < draftpool.size(); n ++){
-            drafpool_temp.add(draftpool.getDie(n));
+            try {
+                drafpool_temp.add(draftpool.getDie(n));
+            } catch (NoDieException e) {
+                fail();
+            }
         }
         i = draftpool.size();
         draftpool.reRollDice();
         k = draftpool.size();
         assertEquals(i,k);
         for(n = 0; n < draftpool.size(); n ++){
-            assertEquals(drafpool_temp.get(n), draftpool.getDie(n));
+            try {
+                assertEquals(drafpool_temp.get(n), draftpool.getDie(n));
+            } catch (NoDieException e) {
+                fail();
+            }
         }
 
     }
@@ -56,8 +65,12 @@ public class DraftPoolTest {
         Die dice1 = new Die(Color.BLUE);
         Die dice2;
         draftpool.addDie(dice1);
-        dice2 = draftpool.getDie(draftpool.size()-1);
-        assertEquals(dice1, dice2);
+        try {
+            dice2 = draftpool.getDie(draftpool.size() - 1);
+            assertEquals(dice1, dice2);
+        } catch (NoDieException e) {
+            fail();
+        }
     }
 
     @Test
@@ -71,13 +84,17 @@ public class DraftPoolTest {
         Die dice2;
         i = draftpool.size();
         draftpool.addDie(dice1);
-        dice2 = draftpool.getDie(draftpool.size()-1);
-        assertEquals(i + 1,draftpool.size());
-        assertEquals(dice1, dice2);
+        try {
+            dice2 = draftpool.getDie(draftpool.size() - 1);
+            assertEquals(i + 1,draftpool.size());
+            assertEquals(dice1, dice2);
+        } catch (NoDieException e) {
+            fail();
+        }
     }
 
     @Test
-    public void removeDie() {   //Rimozione per indice
+    public void removeDie() throws NoDieException {   //Rimozione per indice
         int player = 4;
         int j = 18;
         int i;
@@ -85,10 +102,14 @@ public class DraftPoolTest {
         DraftPool draftpool = new DraftPool(player, dicebag);
         i = draftpool.size();
         Die dice;
-        dice = draftpool.getDie(0);
-        draftpool.removeDie(0);
-        assertEquals(i-1, draftpool.size());
-        assertNotEquals(dice, draftpool.getDie(0));
+        try {
+            dice = draftpool.getDie(0);
+            draftpool.removeDie(0);
+            assertEquals(i-1, draftpool.size());
+            assertNotEquals(dice, draftpool.getDie(0));
+        } catch (NoDieException e) {
+            fail();
+        }
     }
 
     @Test
@@ -100,10 +121,14 @@ public class DraftPoolTest {
         DraftPool draftpool = new DraftPool(player, dicebag);
         i = draftpool.size();
         Die dice;
-        dice = draftpool.getDie(0);
-        draftpool.removeDie(dice);
-        assertEquals(i-1, draftpool.size());
-        assertNotEquals(dice, draftpool.getDie(0));
+        try {
+            dice = draftpool.getDie(0);
+            draftpool.removeDie(dice);
+            assertEquals(i-1, draftpool.size());
+            assertNotEquals(dice, draftpool.getDie(0));
+        } catch (NoDieException e) {
+            fail();
+        }
     }
 
     @Test
