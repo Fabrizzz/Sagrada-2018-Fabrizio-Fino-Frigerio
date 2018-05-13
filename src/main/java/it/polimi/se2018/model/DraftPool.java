@@ -56,10 +56,11 @@ public class DraftPool implements Serializable {
     }
 
     //Rimuove tutti i dadi
-    public void removeAll() {
-        while(dice.size() != 0){
-            removeDie(0);
-        }
+    public List<Die> removeAll() {
+        List<Die> temp = new ArrayList<>(dice);
+        dice.clear();
+        return temp;
+
     }
 
     //Ritorna la dimensione attuale di dice (dei dadi rimasti tra quelli pescati)

@@ -28,6 +28,10 @@ public class RoundTrack implements Serializable {
         tracks.get(round).add(die);
     }
 
+    public void addDice(int round, List<Die> dice) {
+        tracks.get(round).addAll(dice);
+    }
+
     public void removeDie(int round, int pos) throws NoDieException {
         if (pos >= tracks.get(round).size())
             throw new NoDieException();

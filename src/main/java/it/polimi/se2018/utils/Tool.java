@@ -25,10 +25,10 @@ public enum Tool {
         toolName = str;
     }
 
-    public static Tool[] getRandTools(int n) {
+    public static List<Tool> getRandTools(int n) {
         List<Tool> tools = Arrays.asList(Tool.values());
         Collections.shuffle(tools);
-        return (Tool[]) tools.subList(0, n).toArray();
+        return tools.subList(0, n);
     }
 
     @Override

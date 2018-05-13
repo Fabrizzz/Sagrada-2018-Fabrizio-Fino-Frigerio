@@ -7,23 +7,23 @@ import it.polimi.se2018.utils.Tool;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
-import java.rmi.Remote;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ModelView implements Observer, Serializable, Remote {
+public class ModelView implements Observer, Serializable {
 
-    private final Tool[] tools;
-    private final PublicObjective[] publicObjective;
-    private DiceBag diceBag;    //Il sacchetto contenente i dadi
-    private DraftPool draftPool;  //Dadi pescati del round
-    private RoundTrack roundTrack; //Il tracciato
-    private List<Player> players;   //I player in gioco
-    private Map<Player, PlayerBoard> boardMap;
+    private final List<Tool> tools;
+    private final List<PublicObjective> publicObjective;
+    private final DiceBag diceBag;    //Il sacchetto contenente i dadi
+    private final DraftPool draftPool;  //Dadi pescati del round
+    private final RoundTrack roundTrack; //Il tracciato
+    private final List<Player> players;   //I player in gioco
+    private final Map<Player, PlayerBoard> boardMap;
+
     private int round;
-    private boolean firstTurn = true; //ogni round è fatto da due turni, è importante tenerne conto anche per l' uso di certe tool
+    private boolean firstTurn;
     private boolean usedTool;
     private boolean normalMove;
 
@@ -48,6 +48,12 @@ public class ModelView implements Observer, Serializable, Remote {
 
     @Override
     public void update(Observable o, Object arg) {
+        Model model = (Model) o;
+        round = model.getRound();
+        firstTurn = model.isFirstTurn();
+        usedTool = model.HasUsedTool();
+        normalMove = model.HasUsedNormalMove();
+
     }
 
     public int getRound() {
@@ -86,7 +92,7 @@ public class ModelView implements Observer, Serializable, Remote {
         return players;
     }
 
-    public Tool[] getTools() {
+    public List<Tool> getTools() {
         return tools;
     }
 
@@ -120,8 +126,8 @@ public class ModelView implements Observer, Serializable, Remote {
         return getDiceBag().takeDie();
     }
 
-
-    public PublicObjective[] getPublicObjectives() {
+    public List<PublicObjective> getPublicObjective() {
         return publicObjective;
     }
+
 }
