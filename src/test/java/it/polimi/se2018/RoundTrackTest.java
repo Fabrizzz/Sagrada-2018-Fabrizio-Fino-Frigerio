@@ -3,7 +3,11 @@ package it.polimi.se2018;
 import it.polimi.se2018.model.RoundTrack;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Test;
+
+import java.util.prefs.NodeChangeEvent;
 
 import static org.junit.Assert.*;
 
@@ -64,5 +68,29 @@ public class RoundTrackTest {
         assertTrue(colore);
         colore = roundtrack.hasColor(Color.GREEN);
         assertFalse(colore);
+    }
+
+    @Test
+    public void testRemoveDie(){
+        RoundTrack roundtrack = new RoundTrack();
+        Die dice = new Die(Color.BLUE);
+
+        try{
+            roundtrack.removeDie(0,0);
+            fail();
+        }catch(NoDieException e){}
+
+        roundtrack.addDie(0,dice);
+        try{
+            roundtrack.removeDie(0,0);
+        }catch(NoDieException e){
+            fail();
+        }
+
+        try{
+            roundtrack.removeDie(0,roundtrack.numberOfDice(0));
+            fail();
+        }catch(NoDieException e){}
+
     }
 }

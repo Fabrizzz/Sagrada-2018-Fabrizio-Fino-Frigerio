@@ -78,6 +78,11 @@ public class PlayerBoardTest {
             fail();
         }
 
+        try{
+            playerBoard.getDie(0,0);
+            fail();
+        }catch(NoDieException e){}
+
     }
 
     @Test
