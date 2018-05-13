@@ -3,6 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
 import it.polimi.se2018.model.cell.Cell;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.model.cell.NoRestriction;
 import it.polimi.se2018.utils.BoardName;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
@@ -16,7 +17,7 @@ public class PlayerBoard implements Serializable {
     public PlayerBoard() {
         AbstractRestrictionFactory factory = AbstractRestrictionFactory.getFactory();
         for (int i = 0; i < cells.length; i++) { //da completare
-
+            cells[i] = new Cell(new NoRestriction());//inizializzazione temporanea per testing
         }
     }
 

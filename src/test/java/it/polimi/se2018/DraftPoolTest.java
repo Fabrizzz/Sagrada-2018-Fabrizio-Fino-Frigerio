@@ -65,12 +65,18 @@ public class DraftPoolTest {
         Die dice1 = new Die(Color.BLUE);
         Die dice2;
         draftpool.addDie(dice1);
+
         try {
             dice2 = draftpool.getDie(draftpool.size() - 1);
             assertEquals(dice1, dice2);
         } catch (NoDieException e) {
             fail();
         }
+
+        try{
+            dice2 = draftpool.getDie(draftpool.size());
+            fail();
+        } catch (NoDieException e) {}
     }
 
     @Test
