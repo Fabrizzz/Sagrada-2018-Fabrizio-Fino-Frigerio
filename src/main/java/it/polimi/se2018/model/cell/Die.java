@@ -4,7 +4,7 @@ import it.polimi.se2018.utils.Color;
 import it.polimi.se2018.utils.NumberEnum;
 import java.util.Random;
 
-//Costruttore
+
 public class Die {
     private final Color color;  //Colore del dado; Color è un enum contenente i colori corretti
     private NumberEnum number;  //Numero del dado; NumberEnum è un enum contenente i numeri 1 a 6

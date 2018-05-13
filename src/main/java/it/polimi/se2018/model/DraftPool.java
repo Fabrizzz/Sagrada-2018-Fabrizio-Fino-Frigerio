@@ -24,6 +24,7 @@ public class DraftPool {
         }
     }
 
+    //Roll a tutti i dadi della draftpool
     public void reRollDice() {
         for (Die die : dice) {
             die.reRoll();
@@ -48,6 +49,13 @@ public class DraftPool {
     //Rimuove il dado passato per parametro
     public void removeDie(Die die) {
         dice.remove(die);
+    }
+
+    //Rimuove tutti i dadi
+    public void removeAll() {
+        while(dice.size() != 0){
+            removeDie(0);
+        }
     }
 
     //Ritorna la dimensione attuale di dice (dei dadi rimasti tra quelli pescati)
