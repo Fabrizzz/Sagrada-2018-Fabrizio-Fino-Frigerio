@@ -2,7 +2,9 @@ package it.polimi.se2018.model.cell;
 
 import it.polimi.se2018.utils.Color;
 
-public class ColorRestriction implements Restriction {
+import java.io.Serializable;
+
+public class ColorRestriction implements Restriction, Serializable {
     private final Color color;
 
     public ColorRestriction(Color color) {

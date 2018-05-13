@@ -15,7 +15,12 @@ public enum NumberEnum {
         this.n = n;
     }
 
-    public int getNumber() {
+    public static NumberEnum getNumber(int n) {
+        return NumberEnum.values()[n - 1];
+
+    }
+
+    public int getInt() {
         return n;
     }
 }

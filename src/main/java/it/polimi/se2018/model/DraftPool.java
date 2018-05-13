@@ -1,11 +1,13 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.utils.exceptions.NoDieException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DraftPool {
+public class DraftPool implements Serializable {
 
     private List<Die> dice = new ArrayList<>(9);    //Lista contenente tutti i dadi pescati
     private int numberOfDices;  //Numero di dadi da pescare a ogni round
@@ -31,7 +33,9 @@ public class DraftPool {
     }
 
     //Restituisce il dado nella posizione indicata
-    public Die getDie(int i) {
+    public Die getDie(int i) throws NoDieException {
+        if (i >= size())
+            throw new NoDieException();
         return dice.get(i);
     }
 

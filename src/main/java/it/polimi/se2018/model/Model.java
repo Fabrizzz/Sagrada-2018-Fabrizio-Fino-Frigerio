@@ -1,9 +1,7 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
-import it.polimi.se2018.utils.Color;
 import it.polimi.se2018.utils.Tool;
 
 import java.util.*;
@@ -17,20 +15,21 @@ public abstract class Model extends Observable {
 
     private Map<Player, PlayerBoard> boardMap;
     private Map<Player, PrivateObjective> privateObjectiveMap;
+    private final Tool[] tools;
+    private final PublicObjective[] publicObjective;
 
     private int round = 0;
+    private int turn = 0;
     private boolean firstTurn = true; //ogni round è fatto da due turni, è importante tenerne conto anche per l' uso di certe tool
     private boolean usedTool;
     private boolean normalMove;
-
 
     private DiceBag diceBag;    //Il sacchetto contenente i dadi
     private DraftPool draftPool;  //Dadi pescati del round
     private RoundTrack roundTrack; //Il tracciato
     private List<Player> players;   //I player in gioco
 
-    private Tool[] tools;
-    private PublicObjective[] publicObjective;
+
 
 
     //Costruttore
@@ -39,89 +38,124 @@ public abstract class Model extends Observable {
         diceBag = new DiceBag(numberOfDicePerColor);    //Creazione del sacchetto; viene passato 18 così verranno generati i 90 dadi, 18 per colore
         draftPool = new DraftPool(players.length, diceBag); //Creazione della variabile draftPool per i dadi pescati; viene passato il numero di dadi da pescare (numplayer  2 +1) e il sacchetto da cui pescare
         tools = Tool.getRandTools(numberOfToolCards);
+        publicObjective = new PublicObjective[3];
+        this.players = new ArrayList<>(Arrays.asList(players));
+        players[0].setYourTurn(true);
 
     }
 
-    public void setBoard(Player player, PlayerBoard playerBoard) {
-        boardMap.put(player, playerBoard);
+    public int getRound() {
+        return round;
     }
 
-    public boolean verifyNumberRestriction(Player player, Die die, int row, int column) {
-        return boardMap.get(player).verifyNumberRestriction(die, row, column);
+    public void setRound(int round) {
+        this.round = round;
     }
 
-    public boolean verifyColorRestriction(Player player, Die die, int row, int column) {
-        return boardMap.get(player).verifyColorRestriction(die, row, column);
+    public boolean isFirstTurn() {
+        return firstTurn;
     }
 
-    public boolean verifyPositionRestriction(Player player, int row, int column) {
-        return boardMap.get(player).verifyPositionRestriction(row, column);
+    public void setFirstTurn(boolean firstTurn) {
+        this.firstTurn = firstTurn;
     }
 
-    public boolean verifyNearCellsRestriction(Player player, Die die, int row, int column) {
-        return boardMap.get(player).verifyNearCellsRestriction(die, row, column);
+    public boolean HasUsedTool() {
+        return usedTool;
     }
 
-    public boolean verifyInitialPositionRestriction(Player player, int row, int column) {
-        return boardMap.get(player).verifyInitialPositionRestriction(row, column);
+    public void setUsedTool(boolean usedTool) {
+        this.usedTool = usedTool;
     }
 
+    public boolean HasUsedNormalMove() {
+        return normalMove;
+    }
 
-    public abstract boolean changeDieValue(Player player, int row, int column, int val);
+    public void setNormalMove(boolean normalMove) {
+        this.normalMove = normalMove;
+    }
 
-    public abstract boolean containsDie(Player player, int row, int column);
+    protected Map<Player, PlayerBoard> getBoardMap() {
+        return boardMap;
+    }
 
-    public abstract Die getDie(Player player, int row, int column);
+    public PlayerBoard getBoard(Player player) {
+        return boardMap.get(player);
+    }
 
-    public abstract boolean removeDie(Player player, int row, int column);
+    public DiceBag getDiceBag() {
+        return diceBag;
+    }
 
-    public abstract boolean setDie(Player player, Die die, int row, int column);
+    public DraftPool getDraftPool() {
+        return draftPool;
+    }
 
-    public abstract boolean flipDie(Player player, int row, int column);
+    public RoundTrack getRoundTrack() {
+        return roundTrack;
+    }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
 
-    public abstract Die putRoundTrackDie(int round);
+    public Tool[] getTools() {
+        return tools;
+    }
 
-    public abstract Die getRoundTrackDie(int round, int pos);
-
-    public abstract boolean removeRoundTrackDie(int round, int pos);
-
-    public abstract boolean containsColor(Color color);
-
-
-    public abstract boolean rollDraftPoolDie(int pos);
-
-    public abstract boolean rollDraftPool();
-
-    public abstract Die getDraftPoolDie(int pos);
-
-    public abstract boolean removeDraftPoolDie(int pos);
-
-
-    public abstract Die getDiceBagDie();
-
-    public abstract void putDiceBagDie(Die die);
-
-
-    public abstract boolean setskipSecondTurn(Player player);
-
-    public abstract boolean getSkipSecondTurn(Player player);
-
-    public abstract int calculatePrivatePoints(Player player);
+    /*public abstract int calculatePrivatePoints(Player player);
 
     public abstract int calculatePublicPoints(Player player);
 
-    public abstract int calculateUnusedCellPoints(Player player);
+    public abstract int calculateUnusedCellPoints(Player player);*/
 
-    public abstract PrivateObjective getPrivateObjective(Player player);
+    public PrivateObjective getPrivateObjective(Player player) {
 
-    public abstract PublicObjective[] getpublicObjectives();
+        return privateObjectiveMap.get(player);
+    }
+
+    public PublicObjective[] getPublicObjectives() {
+        return publicObjective;
+    }
 
 
-    public abstract boolean endRound();
+    public void endRound() {
+        turn = 0;
+        firstTurn = true;
+        round++;
+    }
 
-    public abstract boolean startRound();
+    public void endGame() {
 
-    public abstract boolean nextTurn();
+    }
+
+    public void nextTurn() {
+        int playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
+        players.get(playerPosition).setYourTurn(false);
+        turn++;
+
+        if (turn == players.size() * 2)
+            endRound();
+        else if (turn == players.size())
+            firstTurn = false;
+        if (round == 10) {
+            endGame();
+        } else {
+
+            playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
+            players.get(playerPosition).setYourTurn(true);
+
+
+            if (!players.get(playerPosition).isYourTurn())
+                nextTurn();
+        }
+    }
+
+
+    public void notifyObs() {
+        setChanged();
+        notifyObservers();
+    }
 
 }

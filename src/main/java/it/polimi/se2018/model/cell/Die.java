@@ -2,10 +2,12 @@ package it.polimi.se2018.model.cell;
 
 import it.polimi.se2018.utils.Color;
 import it.polimi.se2018.utils.NumberEnum;
+
+import java.io.Serializable;
 import java.util.Random;
 
 //Costruttore
-public class Die {
+public class Die implements Serializable {
     private final Color color;  //Colore del dado; Color è un enum contenente i colori corretti
     private NumberEnum number;  //Numero del dado; NumberEnum è un enum contenente i numeri 1 a 6
     private Random random = new Random();
@@ -31,5 +33,9 @@ public class Die {
     //Generazione di un nuovo numero casuale tra 1 e 6
     public void reRoll() {
         number = NumberEnum.values()[random.nextInt(NumberEnum.values().length)];
+    }
+
+    public void flip() {
+        setNumber(NumberEnum.getNumber(7 - getNumber().getInt()));
     }
 }

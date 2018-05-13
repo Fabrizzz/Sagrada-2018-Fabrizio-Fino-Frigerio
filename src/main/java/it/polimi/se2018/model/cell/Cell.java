@@ -1,6 +1,11 @@
 package it.polimi.se2018.model.cell;
 
-public class Cell {
+import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.NoDieException;
+
+import java.io.Serializable;
+
+public class Cell implements Serializable {
     private final Restriction restriction;
     private Die die;
     private boolean isUsed = false;
@@ -13,15 +18,23 @@ public class Cell {
         return isUsed;
     }
 
-    public void removeDie() {
+    public void removeDie() throws NoDieException {
+
+        if (!isUsed())
+            throw new NoDieException();
+
         isUsed = false;
     }
 
-    public Die getDie() {
+    public Die getDie() throws NoDieException {
+        if (!isUsed())
+            throw new NoDieException();
         return die;
     }
 
-    public void setDie(Die die) {
+    public void setDie(Die die) throws AlredySetDie {
+        if (isUsed)
+            throw new AlredySetDie();
         this.die = die;
         isUsed = true;
     }

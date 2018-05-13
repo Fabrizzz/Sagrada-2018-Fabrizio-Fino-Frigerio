@@ -3,10 +3,11 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.Color;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class DiceBag {
+public class DiceBag implements Serializable {
     private LinkedList<Die> bag = new LinkedList<>();   //Array contenente tutti i dadi del sacchetto
 
     //Costruttore

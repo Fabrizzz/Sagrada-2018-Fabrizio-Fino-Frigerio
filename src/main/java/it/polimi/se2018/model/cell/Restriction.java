@@ -1,6 +1,8 @@
 package it.polimi.se2018.model.cell;
 
-public interface Restriction {
+import java.io.Serializable;
+
+public interface Restriction extends Serializable {
 
     boolean isNumberRestriction();
 

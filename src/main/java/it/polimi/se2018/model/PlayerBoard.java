@@ -4,8 +4,12 @@ import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
 import it.polimi.se2018.model.cell.Cell;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.BoardName;
+import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.NoDieException;
 
-public class PlayerBoard {
+import java.io.Serializable;
+
+public class PlayerBoard implements Serializable {
     private BoardName boardName;
     private Cell[] cells = new Cell[20];
 
@@ -20,6 +24,22 @@ public class PlayerBoard {
 
         return cells[column + 5 * row];
 
+    }
+
+    public Die getDie(int row, int column) throws NoDieException {
+        return get(row, column).getDie();
+    }
+
+    public boolean containsDie(int row, int column) {
+        return get(row, column).isUsed();
+    }
+
+    public void removeDie(int row, int column) throws NoDieException {
+        get(row, column).removeDie();
+    }
+
+    public void setDie(Die die, int row, int column) throws AlredySetDie {
+        get(row, column).setDie(die);
     }
 
     public boolean verifyColorRestriction(Die die, int row, int column) {
@@ -55,24 +75,28 @@ public class PlayerBoard {
     public boolean verifyNearCellsRestriction(Die die, int row, int column) {
         boolean ris = true;
 
-        if (row > 0 && (get(row - 1, column).isUsed())) {
-            if (get(row - 1, column).getDie().getColor().equals(die.getColor()) || get(row - 1, column).getDie().getNumber().equals(die.getNumber()))
-                ris = false;
-        }
+        try {
+            if (row > 0 && (get(row - 1, column).isUsed())) {
+                if (get(row - 1, column).getDie().getColor().equals(die.getColor()) || get(row - 1, column).getDie().getNumber().equals(die.getNumber()))
+                    ris = false;
+            }
 
-        if (row < 3 && (get(row + 1, column).isUsed())) {
-            if (get(row + 1, column).getDie().getColor().equals(die.getColor()) || get(row + 1, column).getDie().getNumber().equals(die.getNumber()))
-                ris = false;
-        }
+            if (row < 3 && (get(row + 1, column).isUsed())) {
+                if (get(row + 1, column).getDie().getColor().equals(die.getColor()) || get(row + 1, column).getDie().getNumber().equals(die.getNumber()))
+                    ris = false;
+            }
 
-        if (column > 0 && (get(row, column - 1).isUsed())) {
-            if (get(row, column - 1).getDie().getColor().equals(die.getColor()) || get(row, column - 1).getDie().getNumber().equals(die.getNumber()))
-                ris = false;
-        }
+            if (column > 0 && (get(row, column - 1).isUsed())) {
+                if (get(row, column - 1).getDie().getColor().equals(die.getColor()) || get(row, column - 1).getDie().getNumber().equals(die.getNumber()))
+                    ris = false;
+            }
 
-        if (column < 4 && (get(row, column + 1).isUsed())) {
-            if (get(row, column + 1).getDie().getColor().equals(die.getColor()) || get(row, column + 1).getDie().getNumber().equals(die.getNumber()))
-                ris = false;
+            if (column < 4 && (get(row, column + 1).isUsed())) {
+                if (get(row, column + 1).getDie().getColor().equals(die.getColor()) || get(row, column + 1).getDie().getNumber().equals(die.getNumber()))
+                    ris = false;
+            }
+        } catch (NoDieException e) {
+            System.err.println(e);
         }
 
 
