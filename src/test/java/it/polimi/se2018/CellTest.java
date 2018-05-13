@@ -1,10 +1,8 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.model.cell.Cell;
-import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.model.cell.NoRestriction;
-import it.polimi.se2018.model.cell.Restriction;
+import it.polimi.se2018.model.cell.*;
 import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Test;
@@ -22,12 +20,13 @@ public class CellTest {
         try{
             cell.setDie(dice);
         }catch (AlredySetDie e){
-            assertTrue(cell.isUsed());
+            fail();
         }
         assertTrue(cell.isUsed());
 
         try{
             cell.setDie(dice);
+            fail();
         }catch (AlredySetDie e){
             assertTrue(cell.isUsed());
         }
@@ -100,6 +99,31 @@ public class CellTest {
             cell.setDie(dice);
             fail();
         }catch (AlredySetDie e){}
+    }
+
+    @Test
+    public void testVerifyRestriction(){
+        Restriction restriction = new ColorRestriction(Color.BLUE);
+        Cell cell = new Cell(restriction);
+        Die dice = new Die(Color.BLUE);
+
+        try{
+            cell.setDie(dice);
+        }catch(AlredySetDie e){
+            fail();
+        }
+
+        assertTrue(cell.verifyRestriction(dice));
+
+        try{
+            cell.removeDie();
+        }catch(NoDieException e){
+            fail();
+        }
+
+        dice = new Die(Color.RED);
+        assertFalse(cell.verifyRestriction(dice));
+
     }
 
     @Test
