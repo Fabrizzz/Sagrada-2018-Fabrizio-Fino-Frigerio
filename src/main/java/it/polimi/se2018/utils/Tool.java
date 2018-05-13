@@ -19,7 +19,7 @@ public enum Tool {
     DILUENTEPERPASTASALDA("Diluente Per Pasta Salda"),
     TAGLIERINAMANUALE("Taglierina Manuale");
 
-    public String toolName;
+    private String toolName;
 
     Tool(String str) {
         toolName = str;
@@ -28,7 +28,7 @@ public enum Tool {
     public static Tool[] getRandTools(int n) {
         List<Tool> tools = Arrays.asList(Tool.values());
         Collections.shuffle(tools);
-        return (Tool[]) tools.subList(0, n).toArray();
+        return tools.subList(0, n).toArray(new Tool[0]);
     }
 
     @Override
