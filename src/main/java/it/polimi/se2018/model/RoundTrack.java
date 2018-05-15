@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe tracciato dei dadi
+ * Tracciato dei dadi
  * @author Giampietro
  */
 public class RoundTrack implements Serializable {

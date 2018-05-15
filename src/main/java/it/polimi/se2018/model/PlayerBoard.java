@@ -11,7 +11,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import java.io.Serializable;
 
 /**
- * Classe plancia del giocatore
+ * Plancia del giocatore
  * @author Giampietro
  */
 public class PlayerBoard implements Serializable {
