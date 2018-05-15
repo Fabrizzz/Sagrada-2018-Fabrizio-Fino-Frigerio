@@ -135,6 +135,12 @@ public class DraftPoolTest {
         } catch (NoDieException e) {
             fail();
         }
+        /* try {
+            dice = new Die(Color.BLUE);
+            draftpool.removeDie(dice);
+            fail();
+        } catch (NoDieException e) {}*/
+
     }
 
     @Test
