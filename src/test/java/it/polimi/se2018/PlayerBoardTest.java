@@ -1,15 +1,12 @@
 package it.polimi.se2018;
 
 import it.polimi.se2018.model.PlayerBoard;
-import it.polimi.se2018.model.cell.Cell;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.utils.BoardName;
 import it.polimi.se2018.utils.Color;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
-import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.prefs.NodeChangeEvent;
 
 import static org.junit.Assert.*;
 
@@ -17,7 +14,7 @@ public class PlayerBoardTest {
 
     @Test
     public void testGetDie(){
-        PlayerBoard playerBoard = new PlayerBoard();
+        PlayerBoard playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         Die dice = new Die(Color.BLUE);
 
         try{
@@ -42,7 +39,7 @@ public class PlayerBoardTest {
 
     @Test
     public void testContainsDie(){
-        PlayerBoard playerBoard = new PlayerBoard();
+        PlayerBoard playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         assertFalse(playerBoard.containsDie(0,0));
 
 
@@ -58,7 +55,7 @@ public class PlayerBoardTest {
 
     @Test
     public void testRemoveDice(){
-        PlayerBoard playerBoard = new PlayerBoard();
+        PlayerBoard playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         try{
             playerBoard.removeDie(0,0);

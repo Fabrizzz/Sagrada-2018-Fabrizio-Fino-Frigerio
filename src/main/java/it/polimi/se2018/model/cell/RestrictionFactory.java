@@ -5,6 +5,7 @@ import it.polimi.se2018.utils.NumberEnum;
 
 import java.util.EnumMap;
 
+
 public class RestrictionFactory extends AbstractRestrictionFactory {  //FlyWeight Pattern per risparmiare memoria, essendo le restriction immutabili
 
     private static EnumMap<Color, ColorRestriction> colorRestrictions = new EnumMap<>(Color.class);

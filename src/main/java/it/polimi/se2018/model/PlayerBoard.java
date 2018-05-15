@@ -3,12 +3,15 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
 import it.polimi.se2018.model.cell.Cell;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.model.cell.NoRestriction;
+import it.polimi.se2018.model.cell.Restriction;
 import it.polimi.se2018.utils.BoardName;
+import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Plancia del giocatore
@@ -21,10 +24,26 @@ public class PlayerBoard implements Serializable {
     /**
      * Costruttore
      */
-    public PlayerBoard() {
+    public PlayerBoard(BoardName boardName) {
         AbstractRestrictionFactory factory = AbstractRestrictionFactory.getFactory();
-        for (int i = 0; i < cells.length; i++) { //da completare
-            cells[i] = new Cell(new NoRestriction());//inizializzazione temporanea per testing
+        this.boardName = boardName;
+        String[] restrictions = boardName.getRestrictions();
+        Restriction restrizione;
+
+
+        for (int i = 0; i < restrictions.length; i++) {
+            String temp = restrictions[i];
+
+            if (Arrays.stream(NumberEnum.values()).map(Enum::toString).anyMatch(numberEnum -> numberEnum.equals(temp)))
+                restrizione = factory.createNumberRestriction(NumberEnum.valueOf(restrictions[i]));
+            else if (Arrays.stream(Color.values()).map(Enum::toString).anyMatch(color -> color.equals(temp)))
+                restrizione = factory.createColorRestriction(Color.valueOf(restrictions[i]));
+            else if (restrictions[i].length() == 0)
+                restrizione = factory.createNoRestriction();
+            else
+                throw new IllegalArgumentException();
+            cells[i] = new Cell(restrizione);
+
         }
     }
 
