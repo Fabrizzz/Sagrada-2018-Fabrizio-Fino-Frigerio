@@ -1,5 +1,9 @@
 package it.polimi.se2018.utils;
 
+/**
+ * Enumerazione numeri dei dadi
+ * @author Giampietro
+ */
 public enum NumberEnum {
 
     ONE(1),
