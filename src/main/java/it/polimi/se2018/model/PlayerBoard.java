@@ -139,12 +139,13 @@ public class PlayerBoard implements Serializable {
         boolean ris = false;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                try {
-                    if (get(row + i, column + j).isUsed())
-                        ris = true;
-                } catch (IndexOutOfBoundsException e) {
+                if ((i != 0 || j != 0))
+                    try {
+                        if (get(row + i, column + j).isUsed())
+                            ris = true;
+                    } catch (IndexOutOfBoundsException e) {
 
-                }
+                    }
             }
         }
         return ris;
@@ -193,6 +194,10 @@ public class PlayerBoard implements Serializable {
 
         return (row == 0 || row == 3 || column == 0 || column == 4);
 
+    }
+
+    public Restriction getRestriction(int row, int column) {
+        return get(row, column).getRestriction();
     }
 
 }
