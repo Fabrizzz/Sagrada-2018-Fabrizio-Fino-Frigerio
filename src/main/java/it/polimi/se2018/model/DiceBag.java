@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -32,6 +33,8 @@ public class DiceBag implements Serializable {
      * @return dado estratto
      */
     public Die takeDie() {
+        if (bag.isEmpty())
+            throw new EmptyBagException();
         return bag.poll();    }
 
     /**
