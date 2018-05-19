@@ -34,6 +34,10 @@ public enum BoardName {
         return restrictions;
     }
 
+    public String getRestriction(int row, int column) {
+        return getRestrictions()[column + 5 * row];
+    }
+
     public int getTokens() {
         return tokens;
     }
