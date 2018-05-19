@@ -8,7 +8,6 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.utils.Color;
-import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +16,7 @@ import java.util.*;
 
 import static junit.framework.TestCase.*;
 
-public class ModelTest {
+public class TestModel {
     private  Model model;
     private Player[] players;
     private List<PublicObjective> publicObjectives;

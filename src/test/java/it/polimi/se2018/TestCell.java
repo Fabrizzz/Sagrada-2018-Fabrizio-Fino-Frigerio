@@ -1,21 +1,27 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.model.cell.*;
+import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
+import it.polimi.se2018.model.cell.Cell;
+import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.model.cell.Restriction;
 import it.polimi.se2018.utils.Color;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-public class CellTest {
+public class TestCell {
     private Cell cell;
-    private Die dice;
+    AbstractRestrictionFactory factory;
+    private Die die;
 
     @Before
     public void initCell(){
-        cell = new Cell(new NoRestriction());
-        dice = new Die(Color.BLUE);
+        die = new Die(Color.BLUE);
+        factory = AbstractRestrictionFactory.getFactory();
+        cell = new Cell(factory.createNoRestriction());
     }
 
     @Test
@@ -23,14 +29,14 @@ public class CellTest {
         assertFalse(cell.isUsed());
 
         try{
-            cell.setDie(dice);
+            cell.setDie(die);
         }catch (AlredySetDie e){
             fail();
         }
         assertTrue(cell.isUsed());
 
         try{
-            cell.setDie(dice);
+            cell.setDie(die);
             fail();
         }catch (AlredySetDie e){
             assertTrue(cell.isUsed());
@@ -47,7 +53,7 @@ public class CellTest {
         }
 
         try{
-            cell.setDie(dice);
+            cell.setDie(die);
         }catch (AlredySetDie e){
             fail();
         }
@@ -73,13 +79,13 @@ public class CellTest {
         }
 
         try{
-            cell.setDie(dice);
+            cell.setDie(die);
         }catch (AlredySetDie e){
             fail();
         }
 
         try {
-            assertEquals(cell.getDie(), dice);
+            assertEquals(cell.getDie(), die);
         }catch (NoDieException e){
             fail();
         }
@@ -88,44 +94,32 @@ public class CellTest {
     @Test
     public void testSetDice(){
         try{
-            cell.setDie(dice);
+            cell.setDie(die);
         }catch (AlredySetDie e){
             fail();
         }
 
         try{
-            cell.setDie(dice);
+            cell.setDie(die);
             fail();
         }catch (AlredySetDie e){}
     }
 
     @Test
     public void testVerifyRestriction(){
-        Restriction restriction = new ColorRestriction(Color.BLUE);
-        Cell cell = new Cell(restriction);
 
-        try{
-            cell.setDie(dice);
-        }catch(AlredySetDie e){
-            fail();
-        }
+        Cell cell = new Cell(factory.createColorRestriction(Color.BLUE));
 
-        assertTrue(cell.verifyRestriction(dice));
+        assertTrue(cell.verifyRestriction(die));
 
-        try{
-            cell.removeDie();
-        }catch(NoDieException e){
-            fail();
-        }
-
-        dice = new Die(Color.RED);
-        assertFalse(cell.verifyRestriction(dice));
+        die = new Die(Color.RED);
+        assertFalse(cell.verifyRestriction(die));
 
     }
 
     @Test
     public void testGetRestriction(){
-        Restriction restriction = new NoRestriction();
+        Restriction restriction = factory.createNoRestriction();
         Cell cell = new Cell(restriction);
 
         assertEquals(cell.getRestriction(),restriction);

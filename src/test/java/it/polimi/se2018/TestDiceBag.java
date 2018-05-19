@@ -3,20 +3,28 @@ package it.polimi.se2018;
 import it.polimi.se2018.model.DiceBag;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.Color;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.Random;
 
-public class DiceBagTest {
+import static org.junit.Assert.assertEquals;
+
+public class TestDiceBag {
+
+    private DiceBag dicebag;
+
+    @Before
+    public void initCell() {
+        dicebag = new DiceBag(18);
+    }
 
     @Test
-    public void takeDie() {
-        int j = 18;
+    public void testTakeDie() {
         int i = 0;
-        DiceBag dicebag = new DiceBag(j);
-        assertEquals(Color.values().length * j, dicebag.size());
+        Color rand = Color.values()[new Random().nextInt(Color.values().length)];
         while(dicebag.size() != 0){
-            if(dicebag.takeDie().getColor() == Color.BLUE){
+            if (dicebag.takeDie().getColor() == rand) {
                 i++;
             }
         }
@@ -24,14 +32,12 @@ public class DiceBagTest {
     }
 
     @Test
-    public void addDie() {
-        int j = 18;
+    public void testAddDie() {
         int i = 0;
         int k;
-        DiceBag dicebag = new DiceBag(j);
-        Die dice = new Die(Color.BLUE);
+        Die die = new Die(Color.BLUE);
         k = dicebag.size();
-        dicebag.addDie(dice);
+        dicebag.addDie(die);
         assertEquals(k + 1, dicebag.size());
         while(dicebag.size() != 0){
             if(dicebag.takeDie().getColor() == Color.BLUE){
@@ -43,11 +49,10 @@ public class DiceBagTest {
     }
 
     @Test
-    public void size() {
-        int j = 18;
+    public void testSize() {
+        assertEquals(Color.values().length * 18, dicebag.size());
         int i = 0;
         int k;
-        DiceBag dicebag = new DiceBag(j);
         k = dicebag.size();
         while(dicebag.size() != 0){
                 dicebag.takeDie();
