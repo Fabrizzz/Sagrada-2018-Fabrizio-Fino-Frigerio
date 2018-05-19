@@ -78,7 +78,9 @@ public class DraftPool implements Serializable {
      * Rimuove il dado die dalla riserva
      * @param die dado da rimuovere
      */
-    public void removeDie(Die die){
+    public void removeDie(Die die) throws NoDieException {
+        if (!dice.contains(die))
+            throw new NoDieException();
         dice.remove(die);//TODO aggiungere eccezione nel caso il dado non sia presente
     }
 
