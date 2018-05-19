@@ -1,6 +1,10 @@
 package it.polimi.se2018.model.cell;
 
 public class NoRestriction implements Restriction {
+
+    protected NoRestriction() {
+    }
+
     @Override
     public boolean isNumberRestriction() {
         return false;

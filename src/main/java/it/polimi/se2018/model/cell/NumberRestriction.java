@@ -6,7 +6,7 @@ public class NumberRestriction implements Restriction {
     private final NumberEnum number;
 
 
-    public NumberRestriction(NumberEnum number) {
+    protected NumberRestriction(NumberEnum number) {
         this.number = number;
     }
 

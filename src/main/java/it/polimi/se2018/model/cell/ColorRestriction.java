@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class ColorRestriction implements Restriction, Serializable {
     private final Color color;
 
-    public ColorRestriction(Color color) {
+    protected ColorRestriction(Color color) {
         this.color = color;
     }
 
