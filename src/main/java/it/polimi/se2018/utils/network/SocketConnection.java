@@ -1,7 +1,7 @@
-package it.polimi.se2018.socket.server;
+package it.polimi.se2018.utils.network;
 
 import it.polimi.se2018.server.ServerNetwork;
-import it.polimi.se2018.utils.Connection;
+import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.net.Socket;
  * Connessione socket con il client
  * @author Alessio
  */
-public class ServerSocketConnection extends Thread implements Connection {
+public class SocketConnection extends Thread implements Connection {
     private Socket socket;
     private ServerNetwork serverNetwork;
     private ObjectOutputStream out;
@@ -24,7 +24,7 @@ public class ServerSocketConnection extends Thread implements Connection {
      * @param serverNetwork server
      * @param socket socket della connessione istaurata con il client
      */
-    public ServerSocketConnection(ServerNetwork serverNetwork, Socket socket) {
+    public SocketConnection(ServerNetwork serverNetwork, Socket socket) {
         this.serverNetwork = serverNetwork;
         this.socket = socket;
         try {
