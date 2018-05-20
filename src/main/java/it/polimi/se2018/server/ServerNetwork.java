@@ -29,11 +29,11 @@ public class ServerNetwork implements NetworkHandler {
      */
     public ServerNetwork(RemoteView remoteView){
         this.remoteView = remoteView;
-        connectionGatherer = new SocketConnectionGatherer(this,8423);
+        connectionGatherer = new SocketConnectionGatherer(this,8421);
         connectionGatherer.start();
 
         try {
-            LocateRegistry.createRegistry(8424);
+            LocateRegistry.createRegistry(8422);
         } catch (RemoteException e) {}
 
         try {
@@ -41,9 +41,9 @@ public class ServerNetwork implements NetworkHandler {
 
             Naming.rebind("//localhost/MyServer", serverRMIImplementation);
         } catch (MalformedURLException e) {
-            System.err.println("Impossibile registrare l'oggetto indicato!");
+            //System.err.println("Impossibile registrare l'oggetto indicato!");
         } catch (RemoteException e) {
-            System.err.println("Errore di connessione: " + e.getMessage() + "!");
+            //System.err.println("Errore di connessione: " + e.getMessage() + "!");
         }
     }
 

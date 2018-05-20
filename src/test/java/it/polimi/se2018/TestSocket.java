@@ -33,13 +33,13 @@ public class TestSocket {
 
     @Test
     public void socketConnectionTest(){
-        assertTrue(clientNetwork.connectSocket("localhost",8423));
-        assertFalse(clientNetwork.connectSocket("localhost",8423));
+        assertTrue(clientNetwork.connectSocket("localhost",8421));
+        assertFalse(clientNetwork.connectSocket("localhost",8421));
     }
 
-    @Test
+    /*@Test
     public void socketTransmissionTest(){
-        assertTrue(clientNetwork.connectSocket("localhost",8423));
+        assertTrue(clientNetwork.connectSocket("localhost",8421));
         Tool tool = Tool.SKIPTURN;
         PlayerMove playerMove = new PlayerMove(tool);
         Message message = new ClientMessage(playerMove);
