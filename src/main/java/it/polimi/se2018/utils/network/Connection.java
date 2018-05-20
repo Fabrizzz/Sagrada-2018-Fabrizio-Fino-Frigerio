@@ -1,4 +1,4 @@
-package it.polimi.se2018.utils;
+package it.polimi.se2018.utils.network;
 
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.utils.Message;
@@ -12,5 +12,5 @@ public interface Connection {
      * Invia messaggio al client
      * @param message messaggio da inviare
      */
-    public void sendMessage(Message message);
+    public boolean sendMessage(Message message);
 }

@@ -2,9 +2,10 @@ package it.polimi.se2018.server;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.rmi.server.ServerRMIImplementation;
-import it.polimi.se2018.socket.server.ConnectionGatherer;
-import it.polimi.se2018.utils.Connection;
+import it.polimi.se2018.socket.server.SocketConnectionGatherer;
+import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.network.NetworkHandler;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
  * Riceve e invia messaggi ai client
  * @author Alessio
  */
-public class ServerNetwork{
+public class ServerNetwork implements NetworkHandler {
     private ArrayList<Connection> clientConnections = new ArrayList<Connection>();
-    private ConnectionGatherer connectionGatherer;
+    private SocketConnectionGatherer connectionGatherer;
     private RemoteView remoteView;
     private ServerRMIImplementation serverRMIImplementation;
 
@@ -28,7 +29,7 @@ public class ServerNetwork{
      */
     public ServerNetwork(RemoteView remoteView){
         this.remoteView = remoteView;
-        connectionGatherer = new ConnectionGatherer(this,8421);
+        connectionGatherer = new SocketConnectionGatherer(this,8421);
         connectionGatherer.run();
 
         try {
@@ -50,15 +51,21 @@ public class ServerNetwork{
      * Aggiunge un client alla lista delle connessioni, puo' essere sia un socket o rmi client
      * @param clientConnection client da aggiungere
      */
-    public void addClient(Connection clientConnection){
-        clientConnections.add(clientConnection);
+    public boolean addClient(Connection clientConnection){
+        if(clientConnections.size() <= 4){
+            clientConnections.add(clientConnection);
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     /**
      * Rimuove un client dalla lista delle connessioni
      * @param clientConnection client da rimuovere
      */
-    public void removeClient(Connection clientConnection){
+    public void removeConnection(Connection clientConnection){
         clientConnections.remove(clientConnection);
     }
 
@@ -67,15 +74,17 @@ public class ServerNetwork{
      * @param message messaggio
      * @param connection connessione al client
      */
-    public void sendMessage(Message message, Connection connection){
-        if(clientConnections.contains(connection)) {
-            connection.sendMessage(message);
+    public boolean sendMessage(Message message, Connection connection){
+        if(clientConnections.contains(connection)){
+            return connection.sendMessage(message);
+        }else{
+            return false;
         }
     }
 
     /**
      * Invia un messaggio a tutti i client
-     * @param message
+     * @param message messaggio
      */
     public void sendAll(Message message){
         for(Connection connection : clientConnections){
@@ -89,7 +98,7 @@ public class ServerNetwork{
      * @param clientConnection client connection che ha ricevuto il messaggio
      */
     public void reciveMessage(Message message,Connection clientConnection){
-
+        //notifica remoteView
     }
 
 }

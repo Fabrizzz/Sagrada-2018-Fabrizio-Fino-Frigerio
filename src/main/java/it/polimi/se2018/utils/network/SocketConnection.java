@@ -1,6 +1,5 @@
 package it.polimi.se2018.utils.network;
 
-import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 
@@ -15,17 +14,17 @@ import java.net.Socket;
  */
 public class SocketConnection extends Thread implements Connection {
     private Socket socket;
-    private ServerNetwork serverNetwork;
+    private NetworkHandler networkHandler;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
     /**
      * Costruttore
-     * @param serverNetwork server
+     * @param networkHandler server
      * @param socket socket della connessione istaurata con il client
      */
-    public SocketConnection(ServerNetwork serverNetwork, Socket socket) {
-        this.serverNetwork = serverNetwork;
+    public SocketConnection(NetworkHandler networkHandler, Socket socket) {
+        this.networkHandler = networkHandler;
         this.socket = socket;
         try {
             out = new ObjectOutputStream(this.socket.getOutputStream());
@@ -36,15 +35,17 @@ public class SocketConnection extends Thread implements Connection {
     }
 
     /**
-     * Invia messaggio al client
+     * Invia messaggio
      * @param message messaggio da inviare
      */
-    public void sendMessage(Message message){
+    public boolean sendMessage(Message message){
         try{
             out.writeObject(message);
             out.flush();
+            return true;
         }catch (IOException e){
             close();
+            return false;
         }
     }
 
@@ -64,7 +65,7 @@ public class SocketConnection extends Thread implements Connection {
             socket.close();
         }catch (IOException e){}
 
-        serverNetwork.removeClient(this);
+        networkHandler.removeConnection(this);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class SocketConnection extends Thread implements Connection {
         while (true) {
             try{
                 message = (Message) in.readObject();
-                serverNetwork.reciveMessage(message,this);
+                networkHandler.reciveMessage(message,this);
             }catch (IOException | ClassNotFoundException e){
                 break;
             }
