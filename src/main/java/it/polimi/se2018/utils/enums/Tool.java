@@ -1,4 +1,4 @@
-package it.polimi.se2018.utils;
+package it.polimi.se2018.utils.enums;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +17,8 @@ public enum Tool {
     RIGAINSUGHERO("Riga In Sughero"),
     TAMPONEDIAMANTATO("Tampone Di Amantato"),
     DILUENTEPERPASTASALDA("Diluente Per Pasta Salda"),
-    TAGLIERINAMANUALE("Taglierina Manuale");
+    TAGLIERINAMANUALE("Taglierina Manuale"),
+    SKIPTURN("Salta il turno");
 
     private String toolName;
 

@@ -1,4 +1,4 @@
-package it.polimi.se2018.utils;
+package it.polimi.se2018.utils.enums;
 
 public enum BoardName {
     KALEIDOSCOPICDREAM("Kaleidoscopi Dream", "VIRTUS", 4, "YELLOW", "BLUE", "", "", "ONE", "GREEN", "", "FIVE", "", "FOUR", "THREE", "", "RED", "", "GREEN", "TWO", "", "", "BLUE", "YELLOW"),
