@@ -1,4 +1,4 @@
-package it.polimi.se2018.utils;
+package it.polimi.se2018.utils.enums;
 
 /**
  * Enumerazione dei colori dei dadi
