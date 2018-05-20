@@ -2,9 +2,9 @@ package it.polimi.se2018;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.utils.BoardName;
-import it.polimi.se2018.utils.Color;
-import it.polimi.se2018.utils.NumberEnum;
+import it.polimi.se2018.utils.enums.BoardName;
+import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Test;

@@ -2,7 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
-import it.polimi.se2018.utils.Tool;
+import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 
 import java.util.*;
@@ -21,7 +21,7 @@ public class Model extends Observable {
     private final Map<Player, PlayerBoard> boardMap;
     private final Map<Player, PrivateObjective> privateObjectiveMap;
     private final List<Tool> tools;
-    private final List<PublicObjective> publicObjective = new ArrayList<>();
+    private final List<PublicObjective> publicObjective = new ArrayList<>(numberOfPublicObjectives);
 
     private final DiceBag diceBag;    //Il sacchetto contenente i dadi
     private final DraftPool draftPool;  //Dadi pescati del round
@@ -33,6 +33,7 @@ public class Model extends Observable {
     private boolean firstTurn = true; //ogni round è fatto da due turni, è importante tenerne conto anche per l' uso di certe tool
     private boolean usedTool = false;
     private boolean normalMove = false;
+    private boolean timerScaduto = false;
 
 
     /**
@@ -234,6 +235,7 @@ public class Model extends Observable {
         firstTurn = true;
         roundTrack.addDice(round, draftPool.removeAll());
         round++;
+        Collections.rotate(players, 1);
         if (round == 10)
             endGame();
         else {
@@ -272,6 +274,13 @@ public class Model extends Observable {
         }
     }
 
+    public synchronized boolean isTimerScaduto() {
+        return timerScaduto;
+    }
+
+    public synchronized void setTimerScaduto(boolean timerScaduto) {
+        this.timerScaduto = timerScaduto;
+    }
 
     public void notifyObs() {
         setChanged();

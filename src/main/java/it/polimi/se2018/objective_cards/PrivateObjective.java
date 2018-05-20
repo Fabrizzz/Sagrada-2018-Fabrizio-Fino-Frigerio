@@ -1,7 +1,7 @@
 package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
-import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.enums.Color;
 
 public class PrivateObjective implements ObjectiveCard {
 

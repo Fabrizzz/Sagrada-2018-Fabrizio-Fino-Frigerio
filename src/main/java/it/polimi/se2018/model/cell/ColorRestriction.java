@@ -1,6 +1,6 @@
 package it.polimi.se2018.model.cell;
 
-import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.enums.Color;
 
 import java.io.Serializable;
 

@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 public class Player implements Serializable { //da completare
     private String nick;
+    private long id;
     private int favorTokens;
     private boolean isConnected;
 
@@ -15,13 +16,44 @@ public class Player implements Serializable { //da completare
     private boolean canDoTwoTurn;
     private boolean isYourTurn = false;
 
+
     /**
      * Costruttore
-     * @param nick nickname del giocatore
+
+     * @param nick
+     * @param id
      */
-    public Player(String nick){
+    public Player(String nick, Long id) {
         this.nick = nick;
+        this.id = id;
     }
+
+    public boolean isSkipSecondTurn() {
+        return skipSecondTurn;
+    }
+
+    public void setSkipSecondTurn(boolean skipSecondTurn) {
+        this.skipSecondTurn = skipSecondTurn;
+    }
+
+    public int getFavorTokens() {
+        return favorTokens;
+    }
+
+    public void setFavorTokens(int favorTokens) {
+        this.favorTokens = favorTokens;
+    }
+
+    public boolean isCanDoTwoTurn() {
+        return canDoTwoTurn;
+
+    }
+
+    public void setCanDoTwoTurn(boolean canDoTwoTurn) {
+        this.canDoTwoTurn = canDoTwoTurn;
+    }
+
+
 
     /**
      * Restituisce se e' il turno del giocatore

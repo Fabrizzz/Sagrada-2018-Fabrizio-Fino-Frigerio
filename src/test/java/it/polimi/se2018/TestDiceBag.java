@@ -2,7 +2,7 @@ package it.polimi.se2018;
 
 import it.polimi.se2018.model.DiceBag;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.enums.Color;
 import org.junit.Before;
 import org.junit.Test;
 

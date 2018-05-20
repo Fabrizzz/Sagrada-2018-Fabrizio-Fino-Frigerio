@@ -1,7 +1,7 @@
 package it.polimi.se2018.model.cell;
 
-import it.polimi.se2018.utils.Color;
-import it.polimi.se2018.utils.NumberEnum;
+import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
 
 import java.io.Serializable;
 import java.util.Random;

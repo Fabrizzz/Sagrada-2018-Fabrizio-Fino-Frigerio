@@ -7,7 +7,7 @@ import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
-import it.polimi.se2018.utils.Color;
+import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 import org.junit.Before;
 import org.junit.Test;

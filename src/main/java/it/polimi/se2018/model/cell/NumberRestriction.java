@@ -1,6 +1,6 @@
 package it.polimi.se2018.model.cell;
 
-import it.polimi.se2018.utils.NumberEnum;
+import it.polimi.se2018.utils.enums.NumberEnum;
 
 public class NumberRestriction implements Restriction {
     private final NumberEnum number;

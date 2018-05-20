@@ -2,8 +2,8 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.PublicObjective;
-import it.polimi.se2018.utils.Color;
-import it.polimi.se2018.utils.Tool;
+import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
