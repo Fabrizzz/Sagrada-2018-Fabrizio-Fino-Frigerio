@@ -29,17 +29,17 @@ public class ServerNetwork implements NetworkHandler {
      */
     public ServerNetwork(RemoteView remoteView){
         this.remoteView = remoteView;
-        connectionGatherer = new SocketConnectionGatherer(this,8421);
-        connectionGatherer.run();
+        connectionGatherer = new SocketConnectionGatherer(this,8423);
+        connectionGatherer.start();
 
         try {
-            LocateRegistry.createRegistry(8422);
+            LocateRegistry.createRegistry(8424);
         } catch (RemoteException e) {}
 
         try {
             serverRMIImplementation = new ServerRMIImplementation(this);
 
-            Naming.rebind("//localhost/sagradaServer", serverRMIImplementation);
+            Naming.rebind("//localhost/MyServer", serverRMIImplementation);
         } catch (MalformedURLException e) {
             System.err.println("Impossibile registrare l'oggetto indicato!");
         } catch (RemoteException e) {

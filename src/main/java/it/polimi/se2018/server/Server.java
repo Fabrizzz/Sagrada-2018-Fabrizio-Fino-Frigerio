@@ -1,4 +1,4 @@
-package it.polimi.se2018.Server;
+package it.polimi.se2018.server;
 
 public class Server {
     //appena un client si connette, crea l' oggetto remoteview e gli associa la connection, così che poi la remoteview possa ricevere il mex iniziale per creare l oggetto player e registrarsi

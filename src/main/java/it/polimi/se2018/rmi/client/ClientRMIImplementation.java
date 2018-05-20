@@ -20,4 +20,6 @@ public class ClientRMIImplementation implements Remote,Connection{
         //gestione messaggio lato client
         return false;
     }
+
+    public void close(){}//todo
 }

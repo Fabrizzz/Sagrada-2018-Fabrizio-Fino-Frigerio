@@ -11,7 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
  * Servizio server RMI
  * @author Alessio
  */
-public class ServerRMIImplementation extends UnicastRemoteObject {
+public class ServerRMIImplementation extends UnicastRemoteObject implements ServerRMIInterface {
     private ServerNetwork serverNetwork;
 
     /**
@@ -28,7 +28,7 @@ public class ServerRMIImplementation extends UnicastRemoteObject {
      * Aggiunge client alla lista di connessioni del gestore di rete del server
      * @param connection connessione da aggiungere
      */
-    public boolean addClient(Connection connection){
+    public boolean addClient(Connection connection) throws RemoteException{
         return serverNetwork.addClient(connection);
     }
 
@@ -37,7 +37,7 @@ public class ServerRMIImplementation extends UnicastRemoteObject {
       * @param message messaggio inviato dal client
      * @param connection connessione
      */
-    public void reciveMessage(Message message,Connection connection){
+    public void reciveMessage(Message message,Connection connection) throws RemoteException{
         serverNetwork.reciveMessage(message,connection);
     }
 }

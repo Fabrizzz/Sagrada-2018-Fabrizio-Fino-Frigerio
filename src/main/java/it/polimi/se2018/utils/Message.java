@@ -2,7 +2,9 @@ package it.polimi.se2018.utils;
 
 import it.polimi.se2018.utils.enums.MessageType;
 
-public abstract class Message {
+import java.io.Serializable;
+
+public abstract class Message implements Serializable {
     private MessageType messageType;
 
     public Message(MessageType messageType) {
