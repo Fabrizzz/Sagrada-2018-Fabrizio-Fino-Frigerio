@@ -28,8 +28,8 @@ public class ServerRMIImplementation extends UnicastRemoteObject {
      * Aggiunge client alla lista di connessioni del gestore di rete del server
      * @param connection connessione da aggiungere
      */
-    public void addClient(Connection connection){
-        serverNetwork.addClient(connection);
+    public boolean addClient(Connection connection){
+        return serverNetwork.addClient(connection);
     }
 
     /**

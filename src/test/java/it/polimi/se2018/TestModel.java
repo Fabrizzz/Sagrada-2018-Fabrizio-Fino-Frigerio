@@ -36,7 +36,7 @@ public class TestModel {
         playerBoard = new PlayerBoard[3];
         boardMap = new HashMap<Player,PlayerBoard>();
         for(int i = 0; i < players.length; i ++){
-            players[i] = new Player("Player " + i);
+            players[i] = new Player("Player " + i,(long) i);
             boardMap.put(players[i],playerBoard[i]);
         }
         privateObjective = new PrivateObjective[3];
@@ -69,7 +69,7 @@ public class TestModel {
 
         players = new Player[4];
         for(int i = 0; i < players.length; i ++){
-            players[i] = new Player("Player " + i);
+            players[i] = new Player("Player " + i,(long) i);
         }
         try{
             model = new Model(players, publicObjectives,boardMap,privateObjectiveMap);
@@ -142,7 +142,7 @@ public class TestModel {
         privateObjective[3] = new PrivateObjective(Color.GREEN);
         players = new Player[4];
         for(int i = 0; i < players.length; i ++){
-            players[i] = new Player("Player " + i);
+            players[i] = new Player("Player " + i,(long) i);
         }
         try{
             assertEquals(privateObjective[3], model.getPrivateObjective(players[3]));

@@ -1,13 +1,22 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.controller.Controller;
+import it.polimi.se2018.rmi.client.ClientRMIImplementation;
+import it.polimi.se2018.rmi.server.ServerRMIImplementation;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.NetworkHandler;
 import it.polimi.se2018.utils.network.SocketConnection;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 /**
  * Gestore connessione client
@@ -42,6 +51,28 @@ public class ClientNetwork implements NetworkHandler {
                 return false;
             }
         }else{
+            return false;
+        }
+    }
+
+    /**
+     * Connetti al server tramite rmi
+     * @param name nome del servizio
+     * @return true se la connessione avviene correttamente, false altrimenti
+     */
+    public boolean connectRMI(String name){
+        ServerRMIImplementation server;
+        try {
+
+            server = (ServerRMIImplementation)Naming.lookup(name);
+
+            connection = new ClientRMIImplementation();
+
+            ClientRMIImplementation remoteRef = (ClientRMIImplementation) UnicastRemoteObject.exportObject((Remote) connection, 0);
+
+            return server.addClient(remoteRef);
+
+        } catch (MalformedURLException | RemoteException | NotBoundException e) {
             return false;
         }
     }
