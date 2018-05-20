@@ -7,16 +7,16 @@ import java.util.Optional;
 
 public class PlayerMove {
     private Tool tool;
-    private Optional<Integer> row;
-    private Optional<Integer> column;
-    private Optional<Integer> draftPosition;
-    private Optional<Boolean> aumentaValoreDado;
-    private Optional<Integer> roundTrackRound;
-    private Optional<Integer> roundTrackPosition;
-    private Optional<NumberEnum> newDiceValue;
-    private Optional<Integer> finalRow;
-    private Optional<Integer> finalColumn;
-    private Optional<PlayerMove> nextMove; //per la tool che permette di lanciare FINO a due dadi
+    private Integer row;
+    private Integer column;
+    private Integer draftPosition;
+    private Boolean aumentaValoreDado;
+    private Integer roundTrackRound;
+    private Integer roundTrackPosition;
+    private NumberEnum newDiceValue;
+    private Integer finalRow;
+    private Integer finalColumn;
+    private PlayerMove nextMove; //per la tool che permette di lanciare FINO a due dadi
 
 
     public PlayerMove(Tool tool) {
@@ -31,9 +31,9 @@ public class PlayerMove {
             throw new IllegalArgumentException();
 
         this.tool = tool;
-        this.row = Optional.of(row);
-        this.column = Optional.of(column);
-        this.draftPosition = Optional.of(draftPosition);
+        this.row = row;
+        this.column = column;
+        this.draftPosition = draftPosition;
     }
 
     public PlayerMove(Tool tool, int draftPosition, boolean aumentaDiUno) {
@@ -41,8 +41,8 @@ public class PlayerMove {
             throw new IllegalArgumentException();
 
         this.tool = tool;
-        this.draftPosition = Optional.of(draftPosition);
-        this.aumentaValoreDado = Optional.of(aumentaDiUno);
+        this.draftPosition = draftPosition;
+        this.aumentaValoreDado = aumentaDiUno;
     }
 
     public PlayerMove(Tool tool, int row, int column, int finalRow, int finalColumn) {
@@ -50,10 +50,10 @@ public class PlayerMove {
         if (tool != Tool.PENNELLOPEREGLOMISE && tool != Tool.ALESATOREPERLAMINADIRAME && tool != Tool.LATHEKIN && tool != Tool.TAGLIERINAMANUALE)
             throw new IllegalArgumentException();
         this.tool = tool;
-        this.row = Optional.of(row);
-        this.column = Optional.of(column);
-        this.finalRow = Optional.of(finalRow);
-        this.finalColumn = Optional.of(finalColumn);
+        this.row = row;
+        this.column = column;
+        this.finalRow = finalRow;
+        this.finalColumn = finalColumn;
     }
 
     public PlayerMove(Tool tool, int row, int column, int finalRow, int finalColumn, PlayerMove nextMove) {
@@ -61,11 +61,11 @@ public class PlayerMove {
         if (tool != Tool.TAGLIERINAMANUALE && tool != Tool.LATHEKIN)
             throw new IllegalArgumentException();
         this.tool = tool;
-        this.row = Optional.of(row);
-        this.column = Optional.of(column);
-        this.finalRow = Optional.of(finalRow);
-        this.finalColumn = Optional.of(finalColumn);
-        this.nextMove = Optional.of(nextMove);
+        this.row = row;
+        this.column = column;
+        this.finalRow = finalRow;
+        this.finalColumn = finalColumn;
+        this.nextMove = nextMove;
     }
 
 
@@ -75,9 +75,9 @@ public class PlayerMove {
             throw new IllegalArgumentException();
 
         this.tool = tool;
-        this.draftPosition = Optional.of(draftPosition);
-        this.roundTrackPosition = Optional.of(roundTrackPosition);
-        this.roundTrackRound = Optional.of(roundTrackRound);
+        this.draftPosition = draftPosition;
+        this.roundTrackPosition = roundTrackPosition;
+        this.roundTrackRound = roundTrackRound;
 
     }
 
@@ -88,10 +88,10 @@ public class PlayerMove {
 
 
         this.tool = tool;
-        this.row = Optional.of(row);
-        this.column = Optional.of(column);
-        this.draftPosition = Optional.of(draftPosition);
-        this.newDiceValue = Optional.of(newDiceValue);
+        this.row = row;
+        this.column = column;
+        this.draftPosition = draftPosition;
+        this.newDiceValue = newDiceValue;
 
     }
 
@@ -102,8 +102,8 @@ public class PlayerMove {
 
 
         this.tool = tool;
-        this.draftPosition = Optional.of(draftPosition);
-        this.newDiceValue = Optional.of(newDiceValue);
+        this.draftPosition = draftPosition;
+        this.newDiceValue = newDiceValue;
 
     }
 
@@ -115,7 +115,7 @@ public class PlayerMove {
 
 
         this.tool = tool;
-        this.draftPosition = Optional.of(draftPosition);
+        this.draftPosition = draftPosition;
 
     }
 
@@ -124,42 +124,62 @@ public class PlayerMove {
     }
 
     public Optional<Integer> getRow() {
-        return row;
+        if (row == null)
+            return Optional.empty();
+        return Optional.of(row);
     }
 
     public Optional<Integer> getColumn() {
-        return column;
+        if (column == null)
+            return Optional.empty();
+        return Optional.of(column);
     }
 
     public Optional<Integer> getDraftPosition() {
-        return draftPosition;
+        if (draftPosition == null)
+            return Optional.empty();
+        return Optional.of(draftPosition);
     }
 
     public Optional<Boolean> getAumentaValoreDado() {
-        return aumentaValoreDado;
+        if (aumentaValoreDado == null)
+            return Optional.empty();
+        return Optional.of(aumentaValoreDado);
     }
 
     public Optional<Integer> getRoundTrackRound() {
-        return roundTrackRound;
+        if (roundTrackRound == null)
+            return Optional.empty();
+        return Optional.of(roundTrackRound);
     }
 
     public Optional<Integer> getRoundTrackPosition() {
-        return roundTrackPosition;
+        if (roundTrackPosition == null)
+            return Optional.empty();
+        return Optional.of(roundTrackPosition);
     }
 
     public Optional<NumberEnum> getNewDiceValue() {
-        return newDiceValue;
+        if (newDiceValue == null)
+            return Optional.empty();
+        return Optional.of(newDiceValue);
     }
 
     public Optional<Integer> getFinalRow() {
-        return finalRow;
+        if (finalRow == null)
+            return Optional.empty();
+        return Optional.of(finalRow);
     }
 
     public Optional<Integer> getFinalColumn() {
-        return finalColumn;
+        if (finalColumn == null)
+            return Optional.empty();
+        return Optional.of(finalColumn);
     }
 
     public Optional<PlayerMove> getNextMove() {
-        return nextMove;
+        if (nextMove == null)
+            return Optional.empty();
+        return Optional.of(nextMove);
     }
 }
