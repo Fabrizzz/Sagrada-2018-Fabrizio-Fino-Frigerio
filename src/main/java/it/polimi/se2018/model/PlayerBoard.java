@@ -4,9 +4,9 @@ import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
 import it.polimi.se2018.model.cell.Cell;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.Restriction;
-import it.polimi.se2018.utils.BoardName;
-import it.polimi.se2018.utils.Color;
-import it.polimi.se2018.utils.NumberEnum;
+import it.polimi.se2018.utils.enums.BoardName;
+import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
@@ -20,6 +20,7 @@ import java.util.Arrays;
 public class PlayerBoard implements Serializable {
     private BoardName boardName;
     private Cell[] cells = new Cell[20];
+    boolean isEmpty = true;
 
     /**
      * Costruttore
@@ -57,6 +58,15 @@ public class PlayerBoard implements Serializable {
 
         return cells[column + 5 * row];
 
+    }
+
+    /**
+     * Indica se la Board non contiene nessun dado
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        return isEmpty;
     }
 
     /**
@@ -99,6 +109,7 @@ public class PlayerBoard implements Serializable {
      */
     public void setDie(Die die, int row, int column) throws AlredySetDie {
         get(row, column).setDie(die);
+        isEmpty = false;
     }
 
     /**

@@ -3,8 +3,8 @@ package it.polimi.se2018;
 import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.Restriction;
-import it.polimi.se2018.utils.Color;
-import it.polimi.se2018.utils.NumberEnum;
+import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
