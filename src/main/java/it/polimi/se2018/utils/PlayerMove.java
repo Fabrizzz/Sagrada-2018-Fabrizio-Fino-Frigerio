@@ -124,62 +124,42 @@ public class PlayerMove {
     }
 
     public Optional<Integer> getRow() {
-        if (row == null)
-            return Optional.empty();
-        return Optional.of(row);
+        return Optional.ofNullable(row);
     }
 
     public Optional<Integer> getColumn() {
-        if (column == null)
-            return Optional.empty();
-        return Optional.of(column);
+        return Optional.ofNullable(column);
     }
 
     public Optional<Integer> getDraftPosition() {
-        if (draftPosition == null)
-            return Optional.empty();
-        return Optional.of(draftPosition);
+        return Optional.ofNullable(draftPosition);
     }
 
     public Optional<Boolean> getAumentaValoreDado() {
-        if (aumentaValoreDado == null)
-            return Optional.empty();
-        return Optional.of(aumentaValoreDado);
+        return Optional.ofNullable(aumentaValoreDado);
     }
 
     public Optional<Integer> getRoundTrackRound() {
-        if (roundTrackRound == null)
-            return Optional.empty();
-        return Optional.of(roundTrackRound);
+        return Optional.ofNullable(roundTrackRound);
     }
 
     public Optional<Integer> getRoundTrackPosition() {
-        if (roundTrackPosition == null)
-            return Optional.empty();
-        return Optional.of(roundTrackPosition);
+        return Optional.ofNullable(roundTrackPosition);
     }
 
     public Optional<NumberEnum> getNewDiceValue() {
-        if (newDiceValue == null)
-            return Optional.empty();
-        return Optional.of(newDiceValue);
+        return Optional.ofNullable(newDiceValue);
     }
 
     public Optional<Integer> getFinalRow() {
-        if (finalRow == null)
-            return Optional.empty();
-        return Optional.of(finalRow);
+        return Optional.ofNullable(finalRow);
     }
 
     public Optional<Integer> getFinalColumn() {
-        if (finalColumn == null)
-            return Optional.empty();
-        return Optional.of(finalColumn);
+        return Optional.ofNullable(finalColumn);
     }
 
     public Optional<PlayerMove> getNextMove() {
-        if (nextMove == null)
-            return Optional.empty();
-        return Optional.of(nextMove);
+        return Optional.ofNullable(nextMove);
     }
 }
