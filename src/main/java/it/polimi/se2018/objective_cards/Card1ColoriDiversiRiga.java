@@ -65,7 +65,7 @@ public class Card1ColoriDiversiRiga extends PublicObjective {
         int i;
         int j;
 
-        j = 1;
+                j = 1;
         for (i = 0; i < rowColor.size(); i++){
             while (j < rowColor.size()){
                 if(rowColor.get(i) == rowColor.get(j)){

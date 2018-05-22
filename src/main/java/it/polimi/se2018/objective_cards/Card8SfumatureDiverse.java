@@ -18,7 +18,7 @@ public class Card8SfumatureDiverse extends PublicObjective {
     }
 
     /**
-     * Conta i punti: 5 punti per ogni set di ogni valore
+     * Conta i punti: 5 punti per ogni set di dadi di ogni valore
      * @param playerBoard
      * @return punteggio della playboard
      */
@@ -49,7 +49,7 @@ public class Card8SfumatureDiverse extends PublicObjective {
 
         }
         min = minArray(counter);
-        return counter[min];
+        return (5*counter[min]);
     }
 
     /**
