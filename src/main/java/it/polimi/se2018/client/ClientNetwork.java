@@ -57,6 +57,7 @@ public class ClientNetwork implements NetworkHandler {
 
     /**
      * Connect to the server using rmi
+     * @param hostname hostname del server
      * @return true if the connection can be created, false otherwise
      */
     public boolean connectRMI(String hostname){
@@ -117,7 +118,7 @@ public class ClientNetwork implements NetworkHandler {
 
     /**
      * Remove the connection
-     * @param connections
+     * @param connection connection
      */
     public void removeConnection(Connection connection) {
         this.connection = null;

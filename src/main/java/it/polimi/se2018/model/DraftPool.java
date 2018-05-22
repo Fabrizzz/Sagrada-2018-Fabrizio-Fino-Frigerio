@@ -77,7 +77,7 @@ public class DraftPool implements Serializable {
     /**
      * Remove the die die from the draftpool
      * @param die die to be removed
-     * @throws NoDieexception if the die is not contained in the draftpool
+     * @throws NoDieException if the die is not contained in the draftpool
      */
     public void removeDie(Die die) throws NoDieException {
         if (!dice.contains(die))
