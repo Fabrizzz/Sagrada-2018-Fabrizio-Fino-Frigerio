@@ -28,7 +28,7 @@ public class Card1ColoriDiversiRiga extends PublicObjective {
     @Override
     public int getPoints(PlayerBoard playerBoard) {
 
-        int row, colomn;
+        int row, column;
         int point = 0;
         boolean noDie;
         ArrayList<Color> rowColor = new ArrayList<Color>();
@@ -39,12 +39,12 @@ public class Card1ColoriDiversiRiga extends PublicObjective {
 
         for(row = 0; row < 4; row++){
             noDie = false;
-            for(colomn = 0; colomn < 5; colomn++){
+            for(column = 0; column < 5; column++){
                 try {
-                    rowColor.add(playerBoard.getDie(row,colomn).getColor());
+                    rowColor.add(playerBoard.getDie(row,column).getColor());
                 } catch (NoDieException e) {
                     noDie = true;
-                    colomn = 5;
+                    column = 5;
                 }
             }
             if(!noDie && controlColorRow(rowColor)){

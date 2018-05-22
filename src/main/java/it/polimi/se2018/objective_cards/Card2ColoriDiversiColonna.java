@@ -28,47 +28,47 @@ public class Card2ColoriDiversiColonna extends PublicObjective {
     @Override
     public int getPoints(PlayerBoard playerBoard) {
 
-        int row, colomn;
+        int row, column;
         int point = 0;
         boolean noDie;
-        ArrayList<Color> colomnColor = new ArrayList<Color>();
+        ArrayList<Color> columnColor = new ArrayList<Color>();
 
         if(playerBoard.isEmpty()){
             return 0;
         }
 
-        for(colomn = 0; colomn < 5; colomn++){
+        for(column = 0; column < 5; column++){
             noDie = false;
             for(row = 0; row < 4; row++){
                 try {
-                    colomnColor.add(playerBoard.getDie(row,colomn).getColor());
+                    columnColor.add(playerBoard.getDie(row,column).getColor());
                 } catch (NoDieException e) {
                     noDie = true;
                     row = 4;
                 }
             }
-            if(!noDie && controlColorColomn(colomnColor)){
+            if(!noDie && controlColorColumn(columnColor)){
                 point = point + 5;
             }
-            removeAll(colomnColor);
+            removeAll(columnColor);
         }
         return point;
     }
 
     /**
      * Controlla se su una colonna ci sono tutti colori diversi
-     * @param colomnColor
+     * @param columnColor
      * @return true se su una colonna ci sono tutti colori diversi, false altrimenti
      */
-    public boolean controlColorColomn(ArrayList<Color> colomnColor){
+    public boolean controlColorColumn(ArrayList<Color> columnColor){
 
         int i;
         int j;
 
         j = 1;
-        for (i = 0; i < colomnColor.size(); i++){
-            while (j < colomnColor.size()){
-                if(colomnColor.get(i) == colomnColor.get(j)){
+        for (i = 0; i < columnColor.size(); i++){
+            while (j < columnColor.size()){
+                if(columnColor.get(i) == columnColor.get(j)){
                     return false;
                 }
                 j++;
@@ -80,12 +80,12 @@ public class Card2ColoriDiversiColonna extends PublicObjective {
 
     /**
      * Svuota un arraylist
-     * @param colomnColor
+     * @param columnColor
      */
-    public void removeAll (ArrayList<Color> colomnColor){
+    public void removeAll (ArrayList<Color> columnColor){
 
-        while (colomnColor.size() != 0){
-            colomnColor.remove(0);
+        while (columnColor.size() != 0){
+            columnColor.remove(0);
         }
     }
 }

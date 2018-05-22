@@ -28,7 +28,7 @@ public class Card3SfumatureDiverseRiga extends PublicObjective {
     @Override
     public int getPoints(PlayerBoard playerBoard) {
 
-        int row, colomn;
+        int row, column;
         int point = 0;
         boolean noDie;
         ArrayList<Integer> rowNum = new ArrayList<Integer>();
@@ -39,12 +39,12 @@ public class Card3SfumatureDiverseRiga extends PublicObjective {
 
         for(row = 0; row < 4; row++){
             noDie = false;
-            for(colomn = 0; colomn < 5; colomn++){
+            for(column = 0; column < 5; column++){
                 try {
-                    rowNum.add(playerBoard.getDie(row,colomn).getNumber().getInt());
+                    rowNum.add(playerBoard.getDie(row,column).getNumber().getInt());
                 } catch (NoDieException e) {
                     noDie = true;
-                    colomn = 5;
+                    column = 5;
                 }
             }
             if(!noDie && controlNumRow(rowNum)){

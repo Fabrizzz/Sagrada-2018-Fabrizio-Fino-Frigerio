@@ -27,47 +27,47 @@ public class Card4SfumatureDiverseColonne extends PublicObjective {
     @Override
     public int getPoints(PlayerBoard playerBoard) {
 
-        int row, colomn;
+        int row, column;
         int point = 0;
         boolean noDie;
-        ArrayList<Integer> colomnNum = new ArrayList<Integer>();
+        ArrayList<Integer> columnNum = new ArrayList<Integer>();
 
         if(playerBoard.isEmpty()){
             return 0;
         }
 
-        for(colomn = 0; colomn < 5; colomn++){
+        for(column = 0; column < 5; column++){
             noDie = false;
             for(row = 0; row < 4; row++){
                 try {
-                    colomnNum.add(playerBoard.getDie(row,colomn).getNumber().getInt());
+                    columnNum.add(playerBoard.getDie(row,column).getNumber().getInt());
                 } catch (NoDieException e) {
                     noDie = true;
                     row = 4;
                 }
             }
-            if(!noDie && controlNumColomn(colomnNum)){
+            if(!noDie && controlNumColumn(columnNum)){
                 point = point + 4;
             }
-            removeAll(colomnNum);
+            removeAll(columnNum);
         }
         return point;
     }
 
     /**
      * Controlla se su una colonna ci sono tutti numeri diversi
-     * @param colomnNum
+     * @param columnNum
      * @return true se su una colonna ci sono tutti numeri diversi, false altrimenti
      */
-    public boolean controlNumColomn(ArrayList<Integer> colomnNum){
+    public boolean controlNumColumn(ArrayList<Integer> columnNum){
 
         int i;
         int j;
 
         j = 1;
-        for (i = 0; i < colomnNum.size(); i++){
-            while (j < colomnNum.size()){
-                if(colomnNum.get(i) == colomnNum.get(j)){
+        for (i = 0; i < columnNum.size(); i++){
+            while (j < columnNum.size()){
+                if(columnNum.get(i) == columnNum.get(j)){
                     return false;
                 }
                 j++;
@@ -79,12 +79,12 @@ public class Card4SfumatureDiverseColonne extends PublicObjective {
 
     /**
      * Svuota un arraylist
-     * @param colomnNum
+     * @param columnNum
      */
-    public void removeAll (ArrayList<Integer> colomnNum){
+    public void removeAll (ArrayList<Integer> columnNum){
 
-        while (colomnNum.size() != 0){
-            colomnNum.remove(0);
+        while (columnNum.size() != 0){
+            columnNum.remove(0);
         }
     }
 }
