@@ -6,42 +6,42 @@ import it.polimi.se2018.utils.enums.MessageType;
 import java.util.Optional;
 
 public class ClientMessage extends Message {
-    private Optional<PlayerMove> playerMove;
-    private Optional<String> nick;
-    private Optional<Long> id;
-    private Optional<BoardName> boardName;
+    private PlayerMove playerMove;
+    private String nick;
+    private Long id;
+    private BoardName boardName;
 
     public ClientMessage(PlayerMove playerMove) {
         super(MessageType.PLAYERMOVE);
-        this.playerMove = Optional.of(playerMove);
+        this.playerMove = playerMove;
     }
 
     public ClientMessage(String nick, Long id) {
         super(MessageType.INITIALCONFIG);
-        this.nick = Optional.of(nick);
-        this.id = Optional.of(id);
+        this.nick = nick;
+        this.id = id;
     }
 
     public ClientMessage(BoardName boardName) {
         super(MessageType.CHOSENBOARD);
-        this.boardName = Optional.of(boardName);
+        this.boardName = boardName;
     }
 
 
     public Optional<PlayerMove> getPlayerMove() {
-        return playerMove;
+        return Optional.ofNullable(playerMove);
     }
 
     public Optional<String> getNick() {
-        return nick;
+        return Optional.ofNullable(nick);
     }
 
     public Optional<Long> getId() {
-        return id;
+        return Optional.ofNullable(id);
     }
 
     public Optional<BoardName> getBoardName() {
-        return boardName;
+        return Optional.ofNullable(boardName);
     }
 
 }
