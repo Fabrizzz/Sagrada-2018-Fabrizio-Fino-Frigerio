@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Riserva dei dadi del turno
+ * Draft pool
  * @author Giampietro
  */
 public class DraftPool implements Serializable {
@@ -17,9 +17,9 @@ public class DraftPool implements Serializable {
     private int numberOfDices;  //Numero di dadi da pescare a ogni round
 
     /**
-     * Costruttore
-     * @param lenght
-     * @param diceBag Sacchetto dei dadi
+     * Constructor
+     * @param lenght Number of turns
+     * @param diceBag dice bag
      */
     public DraftPool(int lenght, DiceBag diceBag) {
         numberOfDices = lenght * 2 + 1; //Inizializzazione del numero di dadi da pescare ogni round
@@ -28,8 +28,8 @@ public class DraftPool implements Serializable {
     }
 
     /**
-     * Estrae i dadi dal sacchetto e gli inserisce nella riserva
-     * @param diceBag Sacchetto dei dadi
+     * Dice are drawn from the bag and added to the draftpool
+     * @param diceBag dice bag
      */
     public void rollDice(DiceBag diceBag) {
         for (int i = 0; i < numberOfDices; i++) {
@@ -38,7 +38,7 @@ public class DraftPool implements Serializable {
     }
 
     /**
-     * Ritira tutti i dadi nella riserva
+     * Roll again all the dice in the draftpool
      */
     public void reRollDice() {
         for (Die die : dice) {
@@ -47,10 +47,10 @@ public class DraftPool implements Serializable {
     }
 
     /**
-     * Restituisce il dado nella riserva in posizione i
-     * @param i posizione del dado
-     * @return dado nella posizione i
-     * @throws NoDieException se non e' presente nessun dado nella posizione i
+     * Return the die in the draftpool in position i
+     * @param i position of the die in the draftpool
+     * @return die extracted
+     * @throws NoDieException if no die is found in the draftpool in positio i
      */
     public Die getDie(int i) throws NoDieException {
         if (i >= size())
@@ -59,34 +59,35 @@ public class DraftPool implements Serializable {
     }
 
     /**
-     * Aggiunge un dado alla riserva
-     * @param die dado da aggiungere
+     * Add a die to the draftpool
+     * @param die die to be added
      */
     public void addDie(Die die) {
         dice.add(die);
     }
 
     /**
-     * Rimuove il dado dalla rieserva nell'indice i
-     * @param i indice del dado da rimuovere
+     * Remove the die in position i from the draftpool
+     * @param i position of the die to be removed
      */
     public void removeDie(int i) {
         dice.remove(i);
     }
 
     /**
-     * Rimuove il dado die dalla riserva
-     * @param die dado da rimuovere
+     * Remove the die die from the draftpool
+     * @param die die to be removed
+     * @throws NoDieException if the die is not contained in the draftpool
      */
     public void removeDie(Die die) throws NoDieException {
         if (!dice.contains(die))
             throw new NoDieException();
-        dice.remove(die);//TODO aggiungere eccezione nel caso il dado non sia presente
+        dice.remove(die);
     }
 
     /**
-     * Riumuove tutti i dadi dalla riserva
-     * @return ritorna la copia della lista dei dadi prima della rimozione
+     * Remove all the dice in the draftpool
+     * @return return a copy of the draftpool dice removed
      */
     public List<Die> removeAll() {
         List<Die> temp = new ArrayList<>(dice);
@@ -96,8 +97,8 @@ public class DraftPool implements Serializable {
     }
 
     /**
-     * Restituisce il numero dei dadi nella riserva
-     * @return numero dei dadi nella riserva
+     * Return the size of the draftpool
+     * @return the size of the draftpool
      */
     public int size() {
         return dice.size();
