@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * Plancia del giocatore
+ * Board of the player
  * @author Giampietro
  */
 public class PlayerBoard implements Serializable {
@@ -23,7 +23,8 @@ public class PlayerBoard implements Serializable {
     boolean isEmpty = true;
 
     /**
-     * Costruttore
+     * Costructor
+     * @param boardName name of the board
      */
     public PlayerBoard(BoardName boardName) {
         AbstractRestrictionFactory factory = AbstractRestrictionFactory.getFactory();
@@ -49,10 +50,10 @@ public class PlayerBoard implements Serializable {
     }
 
     /**
-     * Restituisce la cella in riga row e colonna column
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return cella in riga row e colonna column
+     * Return the cell in the board in posizion row,column
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return cell in position row,column
      */
     private Cell get(int row, int column) {
 
@@ -61,51 +62,50 @@ public class PlayerBoard implements Serializable {
     }
 
     /**
-     * Indica se la Board non contiene nessun dado
-     *
-     * @return
+     * Return if the board contains at least a die
+     * @return true if is empty, false otherwise
      */
     public boolean isEmpty() {
         return isEmpty;
     }
 
     /**
-     * Restituisce il dado nella cella in posizione row,column
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return dado nella cella selezionata
-     * @throws NoDieException se non e' presente alcun dado nella cella
+     * Return the die in the cell in position row,column
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return die in the cell
+     * @throws NoDieException if the cell is empty
      */
     public Die getDie(int row, int column) throws NoDieException {
         return get(row, column).getDie();
     }
 
     /**
-     * Controlla la presenza di un dado nella cella in posizione row,column
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return true se la cella e' piena, false se vuota
+     * Check if a cell contains a die
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return true if the cell contains a die, false otherwise
      */
     public boolean containsDie(int row, int column) {
         return get(row, column).isUsed();
     }
 
     /**
-     * Rimuove il dado nella cella in posizione row,column
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @throws NoDieException se la cella e' vuota
+     * Remove the die in the cell in position row,colunm
+     * @param row row of the cell
+     * @param column column of the cell
+     * @throws NoDieException if the cell is empty
      */
     public void removeDie(int row, int column) throws NoDieException {
         get(row, column).removeDie();
     }
 
     /**
-     * Inserisce un dado nella cella di posizione row,column
-     * @param die dado da inserire
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @throws AlredySetDie se e' gia presente un dado nella cella
+     * Insert a die in the cell in position row,column
+     * @param die die 
+     * @param row row of the cell
+     * @param column column of the cell
+     * @throws AlredySetDie if a die is already in the cell
      */
     public void setDie(Die die, int row, int column) throws AlredySetDie {
         get(row, column).setDie(die);
@@ -113,11 +113,11 @@ public class PlayerBoard implements Serializable {
     }
 
     /**
-     * Verifica se il dado die rispetta la restrizione di colore della cella in posizione row,column
-     * @param die dado da controllare
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return esito della verifica: true se passata, false altrimenti
+     * Check if the die respect the color restriction of the cell
+     * @param die die 
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return true if the die respect the restriction, false otherwise
      */
     public boolean verifyColorRestriction(Die die, int row, int column) {
         if (get(row, column).getRestriction().isColorRestriction())
@@ -127,11 +127,11 @@ public class PlayerBoard implements Serializable {
     }
 
     /**
-     * Verifica se il dado die rispetta le restrizione di numero della cella in posizione row,column
-     * @param die dado da controllare
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return esito della verifica: true se passata, false altrimenti
+     * Check if the die respect the number restriction of the cell
+     * @param die die 
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return true if the die respect the restriction, false otherwise
      */
     public boolean verifyNumberRestriction(Die die, int row, int column) {
         if (get(row, column).getRestriction().isNumberRestriction())
@@ -141,10 +141,10 @@ public class PlayerBoard implements Serializable {
     }
 
     /**
-     * Verifica le regole di posizione delle celle nella plancia
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return esito della verifica: true se passata, false altrimenti
+     * Check if the position rules are respected for the cell in position row,column
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return true if the restriction is respected, false otherwise
      */
     public boolean verifyPositionRestriction(int row, int column) {
         boolean ris = false;
@@ -164,11 +164,11 @@ public class PlayerBoard implements Serializable {
     }
 
     /**
-     * Verifica se il dado die rispetta le restrizione di prossimita' della cella in posizione row,column
-     * @param die dado da controllare
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return esito della verifica: true se passata, false altrimenti
+     * Check if the proximity position restriction can be respected by the die in the cell row,column
+     * @param die die to be used in the check
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return true if the restriction is respected, false otherwise
      */
     public boolean verifyNearCellsRestriction(Die die, int row, int column) {
         boolean ris = true;

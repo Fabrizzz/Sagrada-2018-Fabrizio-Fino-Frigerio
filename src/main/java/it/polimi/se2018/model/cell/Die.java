@@ -7,56 +7,56 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- * Classe dado
+ * Die
  * @author Giampietro
  */
 public class Die implements Serializable {
-    private final Color color;  //Colore del dado; Color è un enum contenente i colori corretti
-    private NumberEnum number;  //Numero del dado; NumberEnum è un enum contenente i numeri 1 a 6
+    private final Color color;
+    private NumberEnum number;
     private Random random = new Random();
 
     /**
-     * Costruttore
-     * @param color colore del dado
+     * Constructor
+     * @param color color of the die
      */
-    public Die(Color color) {   //Viene passato il colore al costruttore perchè un dado viene creato dalla classe DiceBag che controlla il numero esatto di dati (18 per colore)
-        this.color = color; //Inizializzazione del colore passato
-        number = NumberEnum.values()[random.nextInt(NumberEnum.values().length)];   //Metodo della classe Random per generare un numero casuale; NumberEnum.values().length = 6, quindi si genera un valore tra 1 a 6
+    public Die(Color color) {  
+        this.color = color;
+        number = NumberEnum.values()[random.nextInt(NumberEnum.values().length)]; 
     }
 
     /**
-     * Ritorna il colore del dado
-     * @return colore del dado
+     * Return the die color
+     * @return color of the die
      */
     public Color getColor() {
         return color;
     }
 
     /**
-     * Ritorna il numero del dado
-     * @return numero del dado
+     * Return the number on the die
+     * @return value of the die
      */
     public NumberEnum getNumber() {
         return number;
     }
 
     /**
-     * Imposta il numero del dado
-     * @param number numero del dado
+     * Set the die value
+     * @param number new value of the die
      */
     public void setNumber(NumberEnum number) {
         this.number = number;
     }
 
     /**
-     * Ritira il dado rigenerando il valore casualmente
+     * Roll the die
      */
     public void reRoll() {
         number = NumberEnum.values()[random.nextInt(NumberEnum.values().length)];
     }
 
     /**
-     * Gira il dado sottosopra modificando il valore del dado
+     * Turn the die upside down and change the die value
      */
     public void flip() {
         setNumber(NumberEnum.getNumber(7 - getNumber().getInt()));
