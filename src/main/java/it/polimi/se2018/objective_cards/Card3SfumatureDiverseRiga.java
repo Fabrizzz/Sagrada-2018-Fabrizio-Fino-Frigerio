@@ -1,27 +1,27 @@
 package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
-import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.util.ArrayList;
 
 /**
- * Obiettivo pubblico 1
+ * Obiettivo pubblico 3
  * @author Matteo
  */
-public class Card1ColoriDiversiRiga extends PublicObjective {
+public class Card3SfumatureDiverseRiga extends PublicObjective {
 
     /**
      * Costruttore
      * @param objectiveName
      */
-    public Card1ColoriDiversiRiga(PublicObjectiveName objectiveName) {
+    public Card3SfumatureDiverseRiga(PublicObjectiveName objectiveName) {
         super(objectiveName);
     }
 
+
     /**
-     * Conta i punti: ogni riga con tutti i colori diversi vale 6 punti
+     * Conta i punti: ogni riga con tutti i numeri diversi vale 5 punti
      * @param playerBoard
      * @return punteggio della playerBoard
      */
@@ -31,7 +31,7 @@ public class Card1ColoriDiversiRiga extends PublicObjective {
         int row, colomn;
         int point = 0;
         boolean noDie;
-        ArrayList<Color> rowColor = new ArrayList<Color>();
+        ArrayList<Integer> rowNum = new ArrayList<Integer>();
 
         if(playerBoard.isEmpty()){
             return 0;
@@ -41,34 +41,34 @@ public class Card1ColoriDiversiRiga extends PublicObjective {
             noDie = false;
             for(colomn = 0; colomn < 5; colomn++){
                 try {
-                    rowColor.add(playerBoard.getDie(row,colomn).getColor());
+                    rowNum.add(playerBoard.getDie(row,colomn).getNumber().getInt());
                 } catch (NoDieException e) {
                     noDie = true;
                     colomn = 5;
                 }
             }
-            if(!noDie && controlColorRow(rowColor)){
-                point = point + 6;
+            if(!noDie && controlNumRow(rowNum)){
+                point = point + 5;
             }
-            removeAll(rowColor);
+            removeAll(rowNum);
         }
         return point;
     }
 
     /**
-     * Controlla se su una riga ci sono tutti colori diversi
-     * @param rowColor
-     * @return true se su una riga ci sono tutti colori diversi, false altrimenti
+     * Controlla se su una riga ci sono tutti numeri diversi
+     * @param rowNum
+     * @return true se su una riga ci sono tutti numeri diversi, false altrimenti
      */
-    public boolean controlColorRow(ArrayList<Color> rowColor){
+    public boolean controlNumRow(ArrayList<Integer> rowNum){
 
         int i;
         int j;
 
         j = 1;
-        for (i = 0; i < rowColor.size(); i++){
-            while (j < rowColor.size()){
-                if(rowColor.get(i) == rowColor.get(j)){
+        for (i = 0; i < rowNum.size(); i++){
+            while (j < rowNum.size()){
+                if(rowNum.get(i) == rowNum.get(j)){
                     return false;
                 }
                 j++;
@@ -80,12 +80,12 @@ public class Card1ColoriDiversiRiga extends PublicObjective {
 
     /**
      * Svuota un arraylist
-     * @param rowColor
+     * @param rowNum
      */
-    public void removeAll (ArrayList<Color> rowColor){
+    public void removeAll (ArrayList<Integer> rowNum){
 
-        while (rowColor.size() != 0){
-            rowColor.remove(0);
+        while (rowNum.size() != 0){
+            rowNum.remove(0);
         }
     }
 }
