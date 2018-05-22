@@ -9,28 +9,28 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 /**
- * Sacchetto dei dadi
+ * Dice bag
  * @author Giampietro
  */
 public class DiceBag implements Serializable {
-    private LinkedList<Die> bag = new LinkedList<>();   //Array contenente tutti i dadi del sacchetto
+    private LinkedList<Die> bag = new LinkedList<>();
 
     /**
-     * Costruttore
-     * @param n Numero dei dadi per ogni colore
+     * Constructor
+     * @param n Number of die for each color
      */
     public DiceBag(int n) {
         for (int i = 0; i < n; i++) {
-            for (Color color : Color.values()) {    //Per ogni colore viene creato un dado; si ripete questa operazione n volte
+            for (Color color : Color.values()) {
                 bag.add(new Die(color));
             }
         }
-        Collections.shuffle(bag);   //L'array contenente i dadi viene mischiato
+        Collections.shuffle(bag);
     }
 
     /**
-     * Estrae a caso un dado dal sacchetto
-     * @return dado estratto
+     * Draw a die form the bag
+     * @return die draw
      */
     public Die takeDie() {
         if (bag.isEmpty())
@@ -39,17 +39,16 @@ public class DiceBag implements Serializable {
     }
 
     /**
-     * Ritorna il prossimo dado da estrarre
-     *
-     * @return dado estratto
+     * Return the next die to be drawnn
+     * @return next die to be drawnn 
      */
     public Die getFirst() {
         return bag.getFirst();
     }
 
     /**
-     * aggiunge un dado al sacchetto
-     * @param die dado da aggiungere
+     * Add a die to the bag
+     * @param die die to be added
      */
     public void addDie(Die die) {
         bag.add(die);
@@ -57,8 +56,8 @@ public class DiceBag implements Serializable {
     }
 
     /**
-     * Restituisce numero dei dadi presenti nel sacchetto
-     * @return numero dei dadi nel sacchetto
+     * Return the number of dice remaining in the bag
+     * @return number of dice remaining
      */
     public int size() {
         return bag.size();
