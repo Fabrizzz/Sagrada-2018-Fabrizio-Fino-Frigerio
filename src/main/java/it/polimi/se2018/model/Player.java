@@ -3,7 +3,7 @@ package it.polimi.se2018.model;
 import java.io.Serializable;
 
 /**
- * Giocatore
+ * Player
  * @author Giampietro
  */
 public class Player implements Serializable { //da completare
@@ -18,10 +18,9 @@ public class Player implements Serializable { //da completare
 
 
     /**
-     * Costruttore
-
-     * @param nick
-     * @param id
+     * Constructor
+     * @param nick nickname of the player
+     * @param id id of the player
      */
     public Player(String nick, Long id) {
         this.nick = nick;
@@ -56,32 +55,32 @@ public class Player implements Serializable { //da completare
 
 
     /**
-     * Restituisce se e' il turno del giocatore
-     * @return true se e' il turno del giocatore, false altrimenti
+     * Return if is the player turn
+     * @return true if is the player turn, false otherwise
      */
     public boolean isYourTurn() {
         return isYourTurn;
     }
 
     /**
-     * Imposta il valore di yourTurn
-     * @param yourTurn il nuovo valore di yourTurn
+     * Set the value of yourTurb
+     * @param yourTurn new value of yourTurn
      */
     public void setYourTurn(boolean yourTurn) {
         isYourTurn = yourTurn;
     }
 
     /**
-     * Restituisce se il giocatore e' connesso
-     * @return true se il giocatore e' connesso, false altrimenti
+     * Retun if the player is connected
+     * @return true if the player is connected, false otherwise
      */
     public boolean isConnected() {
         return isConnected;
     }
 
     /**
-     * Imposta se il giocatore e' connessio
-     * @param connected nuovo valore di isConnected
+     * Set if the player is connected
+     * @param connected new value of the connection state
      */
     public void setConnected(boolean connected) {
         isConnected = connected;

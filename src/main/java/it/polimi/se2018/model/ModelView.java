@@ -32,8 +32,8 @@ public class ModelView implements Observer, Serializable {
     private boolean normalMove;
 
     /**
-     * Costruttore
-     * @param model modello del gioco
+     * Constructor
+     * @param model model of the game
      */
     public ModelView(Model model) {
 
@@ -64,104 +64,104 @@ public class ModelView implements Observer, Serializable {
     }
 
     /**
-     * Ritorna il numero del round corrente
-     * @return numero del round corrente
+     * Return the current round number
+     * @return current round number
      */
     public int getRound() {
         return round;
     }
 
     /**
-     * Restituisce se e' il primo turno del giro
-     * @return true se e' il primo turno del giro,false altrimenti
+     * Return if is the first turn in the round
+     * @return true if is the first turn in the round, false otherwise
      */
     public boolean isFirstTurn() {
         return firstTurn;
     }
 
     /**
-     * Restituisce se e' stata usata una carta oggetto nel giro corrente
-     * @return true se e' stata usata una carta tool,false altrimenti
+     * Return if a tool card has been used this round
+     * @return true if a tool card has been used this round, false otherwise
      */
     public boolean isUsedTool() {
         return usedTool;
     }
 
     /**
-     * Restituisce se e' stata fatta una mossa normale nel giro corrente
-     * @return true se e' stata effettuata una mossa normale, false altrimenti
+     * Return if a player had done a normal move this round
+     * @return true a player had done a normal move this round, false otherwise
      */
     public boolean isNormalMove() {
         return normalMove;
     }
 
     /**
-     * Restituisce la plancia di un giocatore
-     * @param player giocatore
-     * @return la plancia di player
+     * Return the player  board of player
+     * @param player player
+     * @return playerBoard
      */
     private PlayerBoard getBoard(Player player) {
         return boardMap.get(player);
     }
 
     /**
-     * Restituisce il sacchetto dei dadi
-     * @return il sacchetto dei dadi
+     * Return the dicebag
+     * @return diceBag
      */
     private DiceBag getDiceBag() {
         return diceBag;
     }
 
     /**
-     * Restituisce la riserva dei dadi
-     * @return la riserva dei dadi
+     * Return the draftPool
+     * @return draftPool
      */
     private DraftPool getDraftPool() {
         return draftPool;
     }
 
     /**
-     * Resistuisce il tracciato dei dadi
-     * @return il tracciato dei dadi
+     * Return the roundTrack
+     * @return roundTrack
      */
     private RoundTrack getRoundTrack() {
         return roundTrack;
     }
 
     /**
-     * Restituisce la lista dei giocatori
-     * @return la lista dei giocatori
+     * Return the list of the players
+     * @return list of the players
      */
     public List<Player> getPlayers() {
         return players;
     }
 
     /**
-     * Restituisce la lista delle carte oggetto
-     * @return la lista delle carte oggetto
+     * Return the tool card list
+     * @return tool card list
      */
     public List<Tool> getTools() {
         return tools;
     }
 
     /**
-     * Restituisce se la cella nella posizione specificata nella plancia di un giocatore contiene un dado
-     * @param player giocatore
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return true se contiene un dado, false altimenti
+     * Return if the cell in position row,column contains a die in the player board
+     * @param player player
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return true if the cell contains a die, false otherwise
      */
     public boolean boardContainsDie(Player player, int row, int column) {
         return getBoard(player).containsDie(row, column);
     }
 
     /**
-     * Restituisce il dado contenuto nella plancia di un giocatore nella posizione specificata
-     * @param player giocatore
-     * @param row riga della cella
-     * @param column colonna della cella
-     * @return il dado nella cella in posizione row,col
-     * @throws NoDieException se non e' presente un dado nella cella
+     * Return the die in the playerBoard in position row,column
+     * @param player player
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return die in the cell
+     * @throws NoDieException if no die is found in the cell
      */
     public Die getBoardDie(Player player, int row, int column) throws NoDieException {
 
@@ -169,53 +169,53 @@ public class ModelView implements Observer, Serializable {
     }
 
     /**
-     * Restituisce il dado nel tracciato dei dadi in posizione pos nel giro round
-     * @param round giro
-     * @param pos posizione del dado nel giro
-     * @return il dado in posizione round,pos nel tracciato
+     * Return the die in the roundTrack in position pos in round round
+     * @param round round
+     * @param pos position of the die in the roundTrack
+     * @return die in the roundTrack
      */
     public Die getRoundTrackDie(int round, int pos) {
         return getRoundTrack().getDie(round, pos);
     }
 
     /**
-     * Restituisce se il tracciato dei dadi contiene almeno un dado di colore color
-     * @param color colore da cercare
-     * @return true se contiene un dado di colore color,false altrimenti
+     * Return if the roundTrack contains a die of color color
+     * @param color color
+     * @return true if the roundTrack contains a die of color color, false otherwise
      */
     public boolean roundTrackContainsColor(Color color) {
         return getRoundTrack().hasColor(color);
     }
 
     /**
-     * Restituisce il numero di dadi nella riserva
-     * @return numero di dadi nella riserva
+     * Return the size of the DraftPoll
+     * @return number of dice in the draftPool
      */
     public int DraftPoolSize() {
         return getDraftPool().size();
     }
 
     /**
-     * Restituisce il dado nella riserva in posizione pos
-     * @param pos posizione del dado nella riserva
-     * @return il dado in posizione pos nella riserva
-     * @throws NoDieException se non e' presente nessun dado in posizione pos
+     * Return the die in the draftPool in position pos
+     * @param pos position of the die in the draftPool
+     * @return the die in the draftPool in position pos
+     * @throws NoDieException if no die is found in position pos
      */
     public Die getDraftPoolDie(int pos) throws NoDieException {
         return getDraftPool().getDie(pos);
     }
 
     /**
-     * Estrae un dado dal sacchetto
-     * @return dado estratto dal sacchetto
+     * Draft a die from the dicebag
+     * @return Drafted die
      */
     public Die getDiceBagDie() {
         return getDiceBag().takeDie();
     }
 
     /**
-     * Restituisce la lista degli obiettivi publici
-     * @return lista degli obiettivi pubblici
+     * Return the list of the public objectives
+     * @return list of the public objectives
      */
     public List<PublicObjective> getPublicObjective() {
         return publicObjective;
