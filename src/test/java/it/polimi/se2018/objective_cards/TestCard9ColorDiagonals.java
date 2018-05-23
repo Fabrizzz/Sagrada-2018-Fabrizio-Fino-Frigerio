@@ -12,23 +12,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestCard10ColorVariety {
+public class TestCard9ColorDiagonals {
 
     private PlayerBoard playerBoard;
     private Die die;
-    private Card10ColorVariety card;
-    private int[] color;
+    private Card9ColorDiagonals card;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
 
-        card = new Card10ColorVariety(PublicObjectiveName.VARIETADICOLORE);
+        card = new Card9ColorDiagonals(PublicObjectiveName.DIAGONALICOLORATE);
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
-        color = new int[5];
-
-        for (int i = 0; i < 5; i++) {
-            color[i] = 0;
-        }
 
         //Row 0
 
@@ -197,52 +191,70 @@ public class TestCard10ColorVariety {
         int point;
 
         point = card.getPoints(playerBoard);
-        assertEquals(12, point);
+        assertEquals(6, point);
 
+
+        try {
+            playerBoard.removeDie(0,4);
+        } catch (NoDieException e) {
+            fail();
+        }
+        die = new Die(Color.RED);
+        die.setNumber(NumberEnum.ONE);
+        try {
+            playerBoard.setDie(die, 0,4);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
         try {
             playerBoard.removeDie(3,0);
         } catch (NoDieException e) {
             fail();
         }
-        die = new Die(Color.YELLOW);
+        die = new Die(Color.BLUE);
         die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 3,0);
         } catch (AlredySetDie alredySetDie) {
             fail();
         }
-        die = new Die(Color.BLUE);
-        die.setNumber(NumberEnum.FIVE);
+        point = card.getPoints(playerBoard);
+        assertEquals(8, point);
+
+
+        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        die = new Die(Color.YELLOW);
         try {
-            playerBoard.setDie(die, 3,3);
+            playerBoard.setDie(die, 0,0);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+        die = new Die(Color.YELLOW);
+        die.setNumber(NumberEnum.ONE);
+        try {
+            playerBoard.setDie(die, 0,4);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+        die = new Die(Color.YELLOW);
+        die.setNumber(NumberEnum.FOUR);
+        try {
+            playerBoard.setDie(die, 3,0);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+        die = new Die(Color.YELLOW);
+        try {
+            playerBoard.setDie(die, 3,4);
         } catch (AlredySetDie alredySetDie) {
             fail();
         }
         point = card.getPoints(playerBoard);
-        assertEquals(16, point);
+        assertEquals(0, point);
+
 
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         point = card.getPoints(playerBoard);
         assertEquals(0, point);
-    }
-
-    @Test
-    public void indexMinArray() {
-
-        int min;
-
-        min = card.indexMinArray(color);
-        assertEquals(0,min);
-
-        color[0] = 3;
-        color[1] = 1;
-        color[2] = 2;
-        color[4] = 5;
-        min = card.indexMinArray(color);
-        assertEquals(3,min);
-
-        color[3] = 3;
-        min = card.indexMinArray(color);
-        assertEquals(1,min);
     }
 }
