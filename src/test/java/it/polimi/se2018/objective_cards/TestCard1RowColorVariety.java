@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestCard1ColoriDiversiRiga {
+public class TestCard1RowColorVariety {
 
     private PlayerBoard playerBoard;
     private Die die;
@@ -122,7 +122,7 @@ public class TestCard1ColoriDiversiRiga {
 
         int point;
 
-        Card1ColoriDiversiRiga card1 = new Card1ColoriDiversiRiga(PublicObjectiveName.COLORIDIVERSIRIGA);
+        Card1RowColorVariety card1 = new Card1RowColorVariety(PublicObjectiveName.COLORIDIVERSIRIGA);
         point = card1.getPoints(playerBoard);
         assertEquals(12, point);
 

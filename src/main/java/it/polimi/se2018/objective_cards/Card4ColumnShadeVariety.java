@@ -9,13 +9,13 @@ import java.util.ArrayList;
  * Obiettivo pubblico 4
  * @author Matteo
  */
-public class Card4SfumatureDiverseColonne extends PublicObjective {
+public class Card4ColumnShadeVariety extends PublicObjective {
 
     /**
      * Costruttore
      * @param objectiveName
      */
-    public Card4SfumatureDiverseColonne(PublicObjectiveName objectiveName) {
+    public Card4ColumnShadeVariety(PublicObjectiveName objectiveName) {
         super(objectiveName);
     }
 

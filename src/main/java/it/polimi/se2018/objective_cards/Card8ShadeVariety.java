@@ -7,13 +7,13 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
  * Obiettivo pubblico 8
  * @author Matteo
  */
-public class Card8SfumatureDiverse extends PublicObjective {
+public class Card8ShadeVariety extends PublicObjective {
 
     /**
      * Costruttore
      * @param objectiveName
      */
-    public Card8SfumatureDiverse(PublicObjectiveName objectiveName) {
+    public Card8ShadeVariety(PublicObjectiveName objectiveName) {
         super(objectiveName);
     }
 

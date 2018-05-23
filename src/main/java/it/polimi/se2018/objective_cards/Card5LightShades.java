@@ -9,13 +9,13 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
  * Obiettivo pubblico 5
  * @author Matteo
  */
-public class Card5SfumatureChiare extends PublicObjective {
+public class Card5LightShades extends PublicObjective {
 
     /**
      * Costruttore
      * @param objectiveName
      */
-    public Card5SfumatureChiare(PublicObjectiveName objectiveName) {
+    public Card5LightShades(PublicObjectiveName objectiveName) {
         super(objectiveName);
     }
 

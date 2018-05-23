@@ -8,13 +8,13 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
  * Obiettivo pubblico 10
  * @author Matteo
  */
-public class Card10VarietaDiColori extends PublicObjective {
+public class Card10ColorVariety extends PublicObjective {
 
     /**
      * Costruttore
      * @param objectiveName
      */
-    public Card10VarietaDiColori(PublicObjectiveName objectiveName) {
+    public Card10ColorVariety(PublicObjectiveName objectiveName) {
         super(objectiveName);
     }
 

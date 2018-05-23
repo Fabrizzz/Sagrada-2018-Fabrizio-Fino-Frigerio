@@ -10,13 +10,13 @@ import java.util.ArrayList;
  * Obiettivo pubblico 2
  * @author Matteo
  */
-public class Card2ColoriDiversiColonna extends PublicObjective {
+public class Card2ColumnColorVariety extends PublicObjective {
 
     /**
      * Costruttore
      * @param objectiveName
      */
-    public Card2ColoriDiversiColonna(PublicObjectiveName objectiveName) {
+    public Card2ColumnColorVariety(PublicObjectiveName objectiveName) {
         super(objectiveName);
     }
 
