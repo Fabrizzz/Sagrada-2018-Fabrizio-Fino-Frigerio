@@ -65,6 +65,10 @@ public class Card1RowColorVariety extends PublicObjective {
         int i;
         int j;
 
+        if(rowColor.size() == 0){
+            return false;
+        }
+
         j = 1;
         for (i = 0; i < rowColor.size(); i++){
             while (j < rowColor.size()){

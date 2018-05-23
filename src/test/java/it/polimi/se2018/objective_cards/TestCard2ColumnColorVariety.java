@@ -24,7 +24,7 @@ public class TestCard2ColumnColorVariety {
     public void setUp() {
 
         columnColor = new ArrayList<Color>();
-        card = new Card2ColumnColorVariety(PublicObjectiveName.COLORIDIVERSIRIGA);
+        card = new Card2ColumnColorVariety(PublicObjectiveName.COLORIDIVERSICOLONNA);
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0
@@ -69,6 +69,20 @@ public class TestCard2ColumnColorVariety {
 
         die = new Die(Color.GREEN);
         try {
+            playerBoard.setDie(die, 1,0);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        die = new Die(Color.RED);
+        try {
+            playerBoard.setDie(die, 1,1);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        die = new Die(Color.GREEN);
+        try {
             playerBoard.setDie(die, 1,3);
         } catch (AlredySetDie alredySetDie) {
             fail();
@@ -84,7 +98,7 @@ public class TestCard2ColumnColorVariety {
             fail();
         }
 
-        die = new Die(Color.BLUE);
+        die = new Die(Color.PURPLE);
         try {
             playerBoard.setDie(die, 2,1);
         } catch (AlredySetDie alredySetDie) {
@@ -98,7 +112,7 @@ public class TestCard2ColumnColorVariety {
             fail();
         }
 
-        die = new Die(Color.RED);
+        die = new Die(Color.YELLOW);
         try {
             playerBoard.setDie(die, 2,3);
         } catch (AlredySetDie alredySetDie) {
@@ -115,10 +129,17 @@ public class TestCard2ColumnColorVariety {
 
         //Row 3
 
-        die = new Die(Color.YELLOW);
+        die = new Die(Color.GREEN);
         die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 3,0);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        die = new Die(Color.YELLOW);
+        try {
+            playerBoard.setDie(die, 3,1);
         } catch (AlredySetDie alredySetDie) {
             fail();
         }
@@ -130,7 +151,6 @@ public class TestCard2ColumnColorVariety {
             fail();
         }
 
-
     }
 
     @Test
@@ -139,7 +159,7 @@ public class TestCard2ColumnColorVariety {
         int point;
 
         point = card.getPoints(playerBoard);
-        assertEquals(5, point);
+        assertEquals(10, point);
 
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         point = card.getPoints(playerBoard);
@@ -150,6 +170,9 @@ public class TestCard2ColumnColorVariety {
     public void controlColorColumn() {
 
         boolean bool;
+
+        bool = card.controlColorColumn(columnColor);
+        assertFalse(bool);
 
         columnColor.add(Color.BLUE);
         columnColor.add(Color.RED);
@@ -169,6 +192,10 @@ public class TestCard2ColumnColorVariety {
     public void removeAll() {
 
         int size;
+
+        size = 0;
+        card.removeAll(columnColor);
+        assertEquals(size,columnColor.size());
 
         columnColor.add(Color.BLUE);
         columnColor.add(Color.RED);

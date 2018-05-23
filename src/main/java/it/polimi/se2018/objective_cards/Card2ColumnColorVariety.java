@@ -65,6 +65,10 @@ public class Card2ColumnColorVariety extends PublicObjective {
         int i;
         int j;
 
+        if(columnColor.size() == 0){
+            return false;
+        }
+
         j = 1;
         for (i = 0; i < columnColor.size(); i++){
             while (j < columnColor.size()){

@@ -64,6 +64,10 @@ public class Card4ColumnShadeVariety extends PublicObjective {
         int i;
         int j;
 
+        if (columnNum.size() == 0){
+            return false;
+        }
+
         j = 1;
         for (i = 0; i < columnNum.size(); i++){
             while (j < columnNum.size()){
