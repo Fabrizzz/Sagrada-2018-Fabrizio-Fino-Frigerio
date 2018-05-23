@@ -6,28 +6,34 @@ import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
-public class TestCard1RowColorVariety {
+public class TestCard8ShadeVariety {
 
     private PlayerBoard playerBoard;
     private Die die;
-    private ArrayList<Color> rowColor;
-    private Card1RowColorVariety card;
+    private Card8ShadeVariety card;
+    private int[] counter;
 
     @Before
     public void setUp() {
 
-        rowColor = new ArrayList<Color>();
-        card = new Card1RowColorVariety(PublicObjectiveName.COLORIDIVERSIRIGA);
+        card = new Card8ShadeVariety(PublicObjectiveName.SFUMATUREDIVERSE);
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        counter = new int[6];
+
+        for (int i = 0; i < 6; i++) {
+            counter[i] = 0;
+        }
 
         //Row 0
 
         die = new Die(Color.YELLOW);
+        die.setNumber(NumberEnum.ONE);
         try {
             playerBoard.setDie(die, 0,0);
         } catch (AlredySetDie alredySetDie) {
@@ -35,6 +41,7 @@ public class TestCard1RowColorVariety {
         }
 
         die = new Die(Color.BLUE);
+        die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 0,1);
         } catch (AlredySetDie alredySetDie) {
@@ -42,6 +49,7 @@ public class TestCard1RowColorVariety {
         }
 
         die = new Die(Color.RED);
+        die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 0,2);
         } catch (AlredySetDie alredySetDie) {
@@ -49,6 +57,7 @@ public class TestCard1RowColorVariety {
         }
 
         die = new Die(Color.PURPLE);
+        die.setNumber(NumberEnum.FOUR);
         try {
             playerBoard.setDie(die, 0,3);
         } catch (AlredySetDie alredySetDie) {
@@ -63,11 +72,51 @@ public class TestCard1RowColorVariety {
             fail();
         }
 
-        //Row 1 empty
+        //Row 1
+
+        die = new Die(Color.GREEN);
+        die.setNumber(NumberEnum.SIX);
+        try {
+            playerBoard.setDie(die, 1,0);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        die = new Die(Color.PURPLE);
+        die.setNumber(NumberEnum.ONE);
+        try {
+            playerBoard.setDie(die, 1,1);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        die = new Die(Color.BLUE);
+        die.setNumber(NumberEnum.FIVE);
+        try {
+            playerBoard.setDie(die, 1,2);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        die = new Die(Color.RED);
+        die.setNumber(NumberEnum.TWO);
+        try {
+            playerBoard.setDie(die, 1,3);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        die = new Die(Color.YELLOW);
+        die.setNumber(NumberEnum.FOUR);
+        try {
+            playerBoard.setDie(die, 1,4);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
 
         //Row 2
 
-        die = new Die(Color.YELLOW);
+        die = new Die(Color.RED);
         die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 2,0);
@@ -76,6 +125,7 @@ public class TestCard1RowColorVariety {
         }
 
         die = new Die(Color.BLUE);
+        die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 2,1);
         } catch (AlredySetDie alredySetDie) {
@@ -83,6 +133,7 @@ public class TestCard1RowColorVariety {
         }
 
         die = new Die(Color.RED);
+        die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 2,2);
         } catch (AlredySetDie alredySetDie) {
@@ -90,6 +141,7 @@ public class TestCard1RowColorVariety {
         }
 
         die = new Die(Color.PURPLE);
+        die.setNumber(NumberEnum.FOUR);
         try {
             playerBoard.setDie(die, 2,3);
         } catch (AlredySetDie alredySetDie) {
@@ -97,16 +149,16 @@ public class TestCard1RowColorVariety {
         }
 
         die = new Die(Color.GREEN);
+        die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 2,4);
         } catch (AlredySetDie alredySetDie) {
             fail();
         }
 
-
         //Row 3
 
-        die = new Die(Color.PURPLE);
+        die = new Die(Color.GREEN);
         die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 3,0);
@@ -114,28 +166,24 @@ public class TestCard1RowColorVariety {
             fail();
         }
 
-        die = new Die(Color.RED);
+        die = new Die(Color.PURPLE);
+        die.setNumber(NumberEnum.SIX);
         try {
             playerBoard.setDie(die, 3,1);
         } catch (AlredySetDie alredySetDie) {
             fail();
         }
 
-        die = new Die(Color.PURPLE);
+        die = new Die(Color.GREEN);
+        die.setNumber(NumberEnum.ONE);
         try {
             playerBoard.setDie(die, 3,2);
         } catch (AlredySetDie alredySetDie) {
             fail();
         }
 
-        die = new Die(Color.BLUE);
-        try {
-            playerBoard.setDie(die, 3,3);
-        } catch (AlredySetDie alredySetDie) {
-            fail();
-        }
-
         die = new Die(Color.YELLOW);
+        die.setNumber(NumberEnum.SIX);
         try {
             playerBoard.setDie(die, 3,4);
         } catch (AlredySetDie alredySetDie) {
@@ -149,58 +197,44 @@ public class TestCard1RowColorVariety {
         int point;
 
         point = card.getPoints(playerBoard);
-        assertEquals(12, point);
+        assertEquals(5, point);
+
+        die = new Die(Color.BLUE);
+        die.setNumber(NumberEnum.FIVE);
+        try {
+            playerBoard.setDie(die, 3,3);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
+
+        point = card.getPoints(playerBoard);
+        assertEquals(10, point);
 
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         point = card.getPoints(playerBoard);
         assertEquals(0, point);
-
     }
 
     @Test
-    public void controlColorRow() {
+    public void indexMinArray() {
 
-        boolean bool;
+        int min;
 
-        bool = card.controlColorRow(rowColor);
-        assertFalse(bool);
+        min = card.indexMinArray(counter);
+        assertEquals(0,min);
 
-        rowColor.add(Color.BLUE);
-        rowColor.add(Color.RED);
-        rowColor.add(Color.GREEN);
-        rowColor.add(Color.YELLOW);
-        rowColor.add(Color.PURPLE);
+        counter[0] = 3;
+        counter[1] = 1;
+        counter[2] = 2;
+        counter[4] = 5;
+        counter[5] = 1;
+        min = card.indexMinArray(counter);
+        assertEquals(3,min);
 
-        bool = card.controlColorRow(rowColor);
-        assertTrue(bool);
 
-        rowColor.add(Color.BLUE);
-        bool = card.controlColorRow(rowColor);
-        assertFalse(bool);
-
-    }
-
-    @Test
-    public void removeAll() {
-
-        int size;
-
-        size = 0;
-        card.removeAll(rowColor);
-        assertEquals(size,rowColor.size());
-
-        rowColor.add(Color.BLUE);
-        rowColor.add(Color.RED);
-        rowColor.add(Color.GREEN);
-        rowColor.add(Color.YELLOW);
-        rowColor.add(Color.PURPLE);
-
-        size = 5;
-        assertEquals(size, rowColor.size());
-
-        size = 0;
-        card.removeAll(rowColor);
-        assertEquals(size, rowColor.size());
+        counter[3] = 3;
+        min = card.indexMinArray(counter);
+        assertEquals(1,min);
 
     }
 }

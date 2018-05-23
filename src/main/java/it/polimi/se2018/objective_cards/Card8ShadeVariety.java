@@ -28,7 +28,7 @@ public class Card8ShadeVariety extends PublicObjective {
         int row, column;
         int[] counter = new int[6];
         int value;
-        int min;
+        int indexMin;
 
         if(playerBoard.isEmpty()){
             return 0;
@@ -48,8 +48,8 @@ public class Card8ShadeVariety extends PublicObjective {
             }
 
         }
-        min = minArray(counter);
-        return (5*counter[min]);
+        indexMin = indexMinArray(counter);
+        return (5*counter[indexMin]);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Card8ShadeVariety extends PublicObjective {
      * @param counter
      * @return indice del valore min dell'array
      */
-    public int minArray(int[] counter){
+    public int indexMinArray(int[] counter){
 
         int min = 0;
 

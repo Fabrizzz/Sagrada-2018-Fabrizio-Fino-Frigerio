@@ -28,7 +28,7 @@ public class Card10ColorVariety extends PublicObjective {
         int row, column;
         int[] color = new int[5];   // 0 red, 1 yellow, 2 green, 3 blue, 4 purple
         Color value;
-        int min;
+        int indexMin;
 
         if(playerBoard.isEmpty()){
             return 0;
@@ -61,8 +61,8 @@ public class Card10ColorVariety extends PublicObjective {
             }
 
         }
-        min = minArray(color);
-        return (4*color[min]);
+        indexMin = indexMinArray(color);
+        return (4*color[indexMin]);
     }
 
     /**
@@ -70,11 +70,11 @@ public class Card10ColorVariety extends PublicObjective {
      * @param array
      * @return indice del valore min dell'array
      */
-    public int minArray(int[] array){
+    public int indexMinArray(int[] array){
 
         int min = 0;
 
-        for (int i = 0; i < 6; i++){
+        for (int i = 0; i < 5; i++){
             if(array[i] < array[min]){
                 min = i;
             }
