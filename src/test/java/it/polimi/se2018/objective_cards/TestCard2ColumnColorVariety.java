@@ -8,21 +8,23 @@ import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
-public class TestCard1RowColorVariety {
+public class TestCard2ColumnColorVariety {
 
     private PlayerBoard playerBoard;
     private Die die;
-    private ArrayList<Color> rowColor;
-    private Card1RowColorVariety card;
+    private ArrayList<Color> columnColor;
+    private Card2ColumnColorVariety card;
 
     @Before
     public void setUp() {
 
-        rowColor = new ArrayList<Color>();
-        card = new Card1RowColorVariety(PublicObjectiveName.COLORIDIVERSIRIGA);
+        columnColor = new ArrayList<Color>();
+        card = new Card2ColumnColorVariety(PublicObjectiveName.COLORIDIVERSIRIGA);
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0
@@ -63,7 +65,14 @@ public class TestCard1RowColorVariety {
             fail();
         }
 
-        //Row 1 empty
+        //Row 1
+
+        die = new Die(Color.GREEN);
+        try {
+            playerBoard.setDie(die, 1,3);
+        } catch (AlredySetDie alredySetDie) {
+            fail();
+        }
 
         //Row 2
 
@@ -89,7 +98,7 @@ public class TestCard1RowColorVariety {
             fail();
         }
 
-        die = new Die(Color.PURPLE);
+        die = new Die(Color.RED);
         try {
             playerBoard.setDie(die, 2,3);
         } catch (AlredySetDie alredySetDie) {
@@ -120,59 +129,59 @@ public class TestCard1RowColorVariety {
         } catch (AlredySetDie alredySetDie) {
             fail();
         }
+
+
     }
 
     @Test
-    public void testgetPoints() {
+    public void getPoints() {
 
         int point;
 
         point = card.getPoints(playerBoard);
-        assertEquals(12, point);
+        assertEquals(5, point);
 
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         point = card.getPoints(playerBoard);
         assertEquals(0, point);
-
     }
 
     @Test
-    public void testcontrolColorRow() {
+    public void controlColorColumn() {
 
         boolean bool;
 
-        rowColor.add(Color.BLUE);
-        rowColor.add(Color.RED);
-        rowColor.add(Color.GREEN);
-        rowColor.add(Color.YELLOW);
-        rowColor.add(Color.PURPLE);
+        columnColor.add(Color.BLUE);
+        columnColor.add(Color.RED);
+        columnColor.add(Color.GREEN);
+        columnColor.add(Color.YELLOW);
+        columnColor.add(Color.PURPLE);
 
-        bool = card.controlColorRow(rowColor);
+        bool = card.controlColorColumn(columnColor);
         assertTrue(bool);
 
-        rowColor.add(Color.BLUE);
-        bool = card.controlColorRow(rowColor);
+        columnColor.add(Color.BLUE);
+        bool = card.controlColorColumn(columnColor);
         assertFalse(bool);
-
     }
 
     @Test
-    public void testremoveAll() {
+    public void removeAll() {
 
         int size;
 
-        rowColor.add(Color.BLUE);
-        rowColor.add(Color.RED);
-        rowColor.add(Color.GREEN);
-        rowColor.add(Color.YELLOW);
-        rowColor.add(Color.PURPLE);
+        columnColor.add(Color.BLUE);
+        columnColor.add(Color.RED);
+        columnColor.add(Color.GREEN);
+        columnColor.add(Color.YELLOW);
+        columnColor.add(Color.PURPLE);
 
         size = 5;
-        assertEquals(size, rowColor.size());
+        assertEquals(size, columnColor.size());
 
         size = 0;
-        card.removeAll(rowColor);
-        assertEquals(size, rowColor.size());
+        card.removeAll(columnColor);
+        assertEquals(size, columnColor.size());
 
     }
 }
