@@ -15,7 +15,7 @@ public class Card9ColorDiagonals extends PublicObjective {
     /**
      * Costruttore
      */
-    public Card9ColorDiagonals() {
+    protected Card9ColorDiagonals() {
         super(PublicObjectiveName.DIAGONALICOLORATE);
     }
 

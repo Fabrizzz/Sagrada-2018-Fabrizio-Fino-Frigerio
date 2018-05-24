@@ -2,7 +2,7 @@ package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.objective_cards.public_cards.Card2ColumnColorVariety;
+import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
@@ -20,13 +20,13 @@ public class TestCard2ColumnColorVariety {
     private PlayerBoard playerBoard;
     private Die die;
     private ArrayList<Color> columnColor;
-    private Card2ColumnColorVariety card;
+    private PublicObjective card;
 
     @Before
     public void setUp() {
 
         columnColor = new ArrayList<>();
-        card = new Card2ColumnColorVariety();
+        card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSICOLONNA);
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0

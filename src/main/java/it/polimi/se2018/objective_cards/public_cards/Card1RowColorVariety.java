@@ -18,7 +18,7 @@ public class Card1RowColorVariety extends PublicObjective {
     /**
      * Costruttore
      */
-    public Card1RowColorVariety() {
+    protected Card1RowColorVariety() {
         super(PublicObjectiveName.COLORIDIVERSIRIGA);
     }
 

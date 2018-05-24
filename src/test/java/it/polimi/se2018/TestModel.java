@@ -7,6 +7,7 @@ import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
+import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 import org.junit.Before;
@@ -30,9 +31,9 @@ public class TestModel {
         players = new Player[3];
 
         publicObjectives = new ArrayList<>();
-        publicObjectives.add(new PublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
-        publicObjectives.add(new PublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
-        publicObjectives.add(new PublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
+        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
+        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
+        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         playerBoard = new PlayerBoard[3];
         boardMap = new HashMap<Player,PlayerBoard>();
         for(int i = 0; i < players.length; i ++){
@@ -60,7 +61,7 @@ public class TestModel {
             fail();
         }
 
-        publicObjectives.add(new PublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
+        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         try{
             model = new Model(players, publicObjectives,boardMap,privateObjectiveMap);
             fail();
@@ -159,7 +160,7 @@ public class TestModel {
     @Test
     public void testSetPublicObjective(){
         try{
-            model.setPublicObjective(new PublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
+            model.setPublicObjective(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
             fail();
         }catch(SizeLimitExceededException e){}
     }

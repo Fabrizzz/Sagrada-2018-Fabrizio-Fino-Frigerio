@@ -17,7 +17,7 @@ public class Card8ShadeVariety extends PublicObjective {
     /**
      * Costruttore
      */
-    public Card8ShadeVariety() {
+    protected Card8ShadeVariety() {
         super(PublicObjectiveName.SFUMATUREDIVERSE);
     }
 

@@ -17,7 +17,7 @@ public class Card2ColumnColorVariety extends PublicObjective {
     /**
      * Costruttore
      */
-    public Card2ColumnColorVariety() {
+    protected Card2ColumnColorVariety() {
         super(PublicObjectiveName.COLORIDIVERSICOLONNA);
     }
 

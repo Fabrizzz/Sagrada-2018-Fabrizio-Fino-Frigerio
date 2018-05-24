@@ -17,7 +17,7 @@ public class Card4ColumnShadeVariety extends PublicObjective {
     /**
      * Costruttore
      */
-    public Card4ColumnShadeVariety() {
+    protected Card4ColumnShadeVariety() {
         super(PublicObjectiveName.SFUMATUREDIVERSECOLONNA);
     }
 

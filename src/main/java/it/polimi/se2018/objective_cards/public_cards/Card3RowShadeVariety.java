@@ -17,7 +17,7 @@ public class Card3RowShadeVariety extends PublicObjective {
     /**
      * Costruttore
      */
-    public Card3RowShadeVariety() {
+    protected Card3RowShadeVariety() {
         super(PublicObjectiveName.SFUMATUREDIVERSERIGA);
     }
 

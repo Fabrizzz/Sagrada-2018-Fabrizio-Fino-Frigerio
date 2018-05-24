@@ -20,7 +20,7 @@ public class CardsShades extends PublicObjective {
      * Costruttore
      * @param objectiveName
      */
-    public CardsShades(PublicObjectiveName objectiveName) {
+    protected CardsShades(PublicObjectiveName objectiveName) {
         super(objectiveName);
         if (objectiveName == PublicObjectiveName.SFUMATURECHIARE) {
             first = NumberEnum.ONE;
