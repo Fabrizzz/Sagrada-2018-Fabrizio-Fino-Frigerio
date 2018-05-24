@@ -2,14 +2,18 @@ package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.objective_cards.public_cards.Card1RowColorVariety;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.ArrayList;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestCard1RowColorVariety {
 
@@ -21,8 +25,8 @@ public class TestCard1RowColorVariety {
     @Before
     public void setUp() {
 
-        rowColor = new ArrayList<Color>();
-        card = new Card1RowColorVariety(PublicObjectiveName.COLORIDIVERSIRIGA);
+        rowColor = new ArrayList<>();
+        card = new Card1RowColorVariety();
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0
@@ -154,53 +158,6 @@ public class TestCard1RowColorVariety {
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         point = card.getPoints(playerBoard);
         assertEquals(0, point);
-
-    }
-
-    @Test
-    public void controlColorRow() {
-
-        boolean bool;
-
-        bool = card.controlColorRow(rowColor);
-        assertFalse(bool);
-
-        rowColor.add(Color.BLUE);
-        rowColor.add(Color.RED);
-        rowColor.add(Color.GREEN);
-        rowColor.add(Color.YELLOW);
-        rowColor.add(Color.PURPLE);
-
-        bool = card.controlColorRow(rowColor);
-        assertTrue(bool);
-
-        rowColor.add(Color.BLUE);
-        bool = card.controlColorRow(rowColor);
-        assertFalse(bool);
-
-    }
-
-    @Test
-    public void removeAll() {
-
-        int size;
-
-        size = 0;
-        card.removeAll(rowColor);
-        assertEquals(size,rowColor.size());
-
-        rowColor.add(Color.BLUE);
-        rowColor.add(Color.RED);
-        rowColor.add(Color.GREEN);
-        rowColor.add(Color.YELLOW);
-        rowColor.add(Color.PURPLE);
-
-        size = 5;
-        assertEquals(size, rowColor.size());
-
-        size = 0;
-        card.removeAll(rowColor);
-        assertEquals(size, rowColor.size());
 
     }
 }

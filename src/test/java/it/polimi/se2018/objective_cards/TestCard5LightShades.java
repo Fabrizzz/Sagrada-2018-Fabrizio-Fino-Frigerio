@@ -2,6 +2,7 @@ package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.objective_cards.public_cards.CardsShades;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
@@ -9,18 +10,20 @@ import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestCard5LightShades {
 
     private PlayerBoard playerBoard;
     private Die die;
-    private Card5LightShades card;
+    private CardsShades card;
 
     @Before
     public void setUp() {
 
-        card = new Card5LightShades(PublicObjectiveName.SFUMATURECHIARE);
+        card = new CardsShades(PublicObjectiveName.SFUMATURECHIARE);
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0

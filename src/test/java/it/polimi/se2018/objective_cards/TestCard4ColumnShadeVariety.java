@@ -2,6 +2,7 @@ package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.objective_cards.public_cards.Card4ColumnShadeVariety;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
@@ -11,7 +12,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestCard4ColumnShadeVariety {
 
@@ -21,10 +23,10 @@ public class TestCard4ColumnShadeVariety {
     private Card4ColumnShadeVariety card;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
-        columnNum = new ArrayList<Integer>();
-        card = new Card4ColumnShadeVariety(PublicObjectiveName.SFUMATUREDIVERSECOLONNA);
+        columnNum = new ArrayList<>();
+        card = new Card4ColumnShadeVariety();
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0
@@ -202,44 +204,4 @@ public class TestCard4ColumnShadeVariety {
         assertEquals(0, point);
     }
 
-    @Test
-    public void controlNumColumn() {
-
-        boolean bool;
-
-        bool = card.controlNumColumn(columnNum);
-        assertFalse(bool);
-
-        columnNum.add(1);
-        columnNum.add(2);
-        columnNum.add(3);
-
-        bool = card.controlNumColumn(columnNum);
-        assertTrue(bool);
-
-        columnNum.add(1);
-        bool = card.controlNumColumn(columnNum);
-        assertFalse(bool);
-    }
-
-    @Test
-    public void removeAll() {
-
-        int size;
-
-        size = 0;
-        card.removeAll(columnNum);
-        assertEquals(size, columnNum.size());
-
-        columnNum.add(1);
-        columnNum.add(2);
-        columnNum.add(3);
-
-        size = 3;
-        assertEquals(size, columnNum.size());
-
-        size = 0;
-        card.removeAll(columnNum);
-        assertEquals(size, columnNum.size());
-    }
 }

@@ -2,15 +2,16 @@ package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.objective_cards.public_cards.Card8ShadeVariety;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
-import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestCard8ShadeVariety {
 
@@ -22,7 +23,7 @@ public class TestCard8ShadeVariety {
     @Before
     public void setUp() {
 
-        card = new Card8ShadeVariety(PublicObjectiveName.SFUMATUREDIVERSE);
+        card = new Card8ShadeVariety();
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         counter = new int[6];
 
@@ -213,28 +214,5 @@ public class TestCard8ShadeVariety {
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         point = card.getPoints(playerBoard);
         assertEquals(0, point);
-    }
-
-    @Test
-    public void indexMinArray() {
-
-        int min;
-
-        min = card.indexMinArray(counter);
-        assertEquals(0,min);
-
-        counter[0] = 3;
-        counter[1] = 1;
-        counter[2] = 2;
-        counter[4] = 5;
-        counter[5] = 1;
-        min = card.indexMinArray(counter);
-        assertEquals(3,min);
-
-
-        counter[3] = 3;
-        min = card.indexMinArray(counter);
-        assertEquals(1,min);
-
     }
 }

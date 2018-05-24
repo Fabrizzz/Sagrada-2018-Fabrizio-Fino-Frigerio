@@ -11,4 +11,8 @@ public class PublicObjective implements ObjectiveCard {
     public int getPoints(PlayerBoard playerBoard){
         return 0;//da scrivere
     }
+
+    public PublicObjectiveName getObjectiveName() {
+        return objectiveName;
+    }
 }

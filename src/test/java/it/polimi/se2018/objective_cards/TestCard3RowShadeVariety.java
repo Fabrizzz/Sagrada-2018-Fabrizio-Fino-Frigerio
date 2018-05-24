@@ -2,14 +2,18 @@ package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.objective_cards.public_cards.Card3RowShadeVariety;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.ArrayList;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestCard3RowShadeVariety {
 
@@ -21,8 +25,8 @@ public class TestCard3RowShadeVariety {
     @Before
     public void setUp() {
 
-        rowNum = new ArrayList<Integer>();
-        card = new Card3RowShadeVariety(PublicObjectiveName.SFUMATUREDIVERSERIGA);
+        rowNum = new ArrayList<>();
+        card = new Card3RowShadeVariety();
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0
@@ -202,48 +206,5 @@ public class TestCard3RowShadeVariety {
 
     }
 
-    @Test
-    public void controlNumRow() {
 
-        boolean bool;
-
-        bool = card.controlNumRow(rowNum);
-        assertFalse(bool);
-
-        rowNum.add(1);
-        rowNum.add(2);
-        rowNum.add(3);
-        rowNum.add(5);
-        rowNum.add(6);
-
-        bool = card.controlNumRow(rowNum);
-        assertTrue(bool);
-
-        rowNum.add(1);
-        bool = card.controlNumRow(rowNum);
-        assertFalse(bool);
-    }
-
-    @Test
-    public void removeAll() {
-
-        int size;
-
-        size = 0;
-        card.removeAll(rowNum);
-        assertEquals(size, rowNum.size());
-
-        rowNum.add(1);
-        rowNum.add(2);
-        rowNum.add(3);
-        rowNum.add(5);
-        rowNum.add(6);
-
-        size = 5;
-        assertEquals(size, rowNum.size());
-
-        size = 0;
-        card.removeAll(rowNum);
-        assertEquals(size, rowNum.size());
-    }
 }

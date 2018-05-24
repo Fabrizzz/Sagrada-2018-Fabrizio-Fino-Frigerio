@@ -2,6 +2,7 @@ package it.polimi.se2018.objective_cards;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.objective_cards.public_cards.Card2ColumnColorVariety;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
@@ -11,7 +12,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestCard2ColumnColorVariety {
 
@@ -23,8 +25,8 @@ public class TestCard2ColumnColorVariety {
     @Before
     public void setUp() {
 
-        columnColor = new ArrayList<Color>();
-        card = new Card2ColumnColorVariety(PublicObjectiveName.COLORIDIVERSICOLONNA);
+        columnColor = new ArrayList<>();
+        card = new Card2ColumnColorVariety();
         playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
 
         //Row 0
@@ -166,49 +168,4 @@ public class TestCard2ColumnColorVariety {
         assertEquals(0, point);
     }
 
-    @Test
-    public void controlColorColumn() {
-
-        boolean bool;
-
-        bool = card.controlColorColumn(columnColor);
-        assertFalse(bool);
-
-        columnColor.add(Color.BLUE);
-        columnColor.add(Color.RED);
-        columnColor.add(Color.GREEN);
-        columnColor.add(Color.YELLOW);
-        columnColor.add(Color.PURPLE);
-
-        bool = card.controlColorColumn(columnColor);
-        assertTrue(bool);
-
-        columnColor.add(Color.BLUE);
-        bool = card.controlColorColumn(columnColor);
-        assertFalse(bool);
-    }
-
-    @Test
-    public void removeAll() {
-
-        int size;
-
-        size = 0;
-        card.removeAll(columnColor);
-        assertEquals(size,columnColor.size());
-
-        columnColor.add(Color.BLUE);
-        columnColor.add(Color.RED);
-        columnColor.add(Color.GREEN);
-        columnColor.add(Color.YELLOW);
-        columnColor.add(Color.PURPLE);
-
-        size = 5;
-        assertEquals(size, columnColor.size());
-
-        size = 0;
-        card.removeAll(columnColor);
-        assertEquals(size, columnColor.size());
-
-    }
 }
