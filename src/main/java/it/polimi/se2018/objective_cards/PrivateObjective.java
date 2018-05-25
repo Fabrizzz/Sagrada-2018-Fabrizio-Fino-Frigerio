@@ -15,6 +15,11 @@ public class PrivateObjective implements ObjectiveCard {
     @Override
     public int getPoints(PlayerBoard playerBoard) {
         int points = 0;
+
+        if(playerBoard.isEmpty()){
+            return 0;
+        }
+
         for (int row = 0; row < 4; row++) {
             for (int column = 0; column < 5; column++) {
                 try {

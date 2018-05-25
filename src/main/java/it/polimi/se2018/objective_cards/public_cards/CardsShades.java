@@ -8,7 +8,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 
 
 /**
- * Obiettivo pubblico 5
+ * Obiettivo pubblico 5 - 6 -7
  * @author Matteo
  */
 public class CardsShades extends PublicObjective {
