@@ -37,7 +37,7 @@ public class TestSocket {
         assertFalse(clientNetwork.connectSocket("localhost",8421));
     }
 
-    /*@Test
+    @Test
     public void socketTransmissionTest(){
         assertTrue(clientNetwork.connectSocket("localhost",8421));
         Tool tool = Tool.SKIPTURN;
