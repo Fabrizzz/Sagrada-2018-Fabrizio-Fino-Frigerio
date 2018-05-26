@@ -12,7 +12,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.*;
 
 /**
- * Riceve e invia messaggi ai client
+ * Manages the connections with the clients
  * @author Alessio
  */
 public class ServerNetwork implements NetworkHandler {
@@ -22,7 +22,7 @@ public class ServerNetwork implements NetworkHandler {
     private Map<Long,Connection> connectionMap = new HashMap<>();
 
     /**
-     * Costruttore
+     * Costructor
      */
     public ServerNetwork(){
         connectionGatherer = new SocketConnectionGatherer(this,8421);
@@ -53,8 +53,8 @@ public class ServerNetwork implements NetworkHandler {
     }
 
     /**
-     * Aggiunge un client alla lista delle connessioni, puo' essere sia un socket o rmi client
-     * @param clientConnection client da aggiungere
+     * Add a connection to the connection map
+     * @param clientConnection connection to add
      */
     public boolean addClient(Connection clientConnection){
         if(connectionMap.size() <= 4 && lobbyWaiting){
@@ -81,9 +81,9 @@ public class ServerNetwork implements NetworkHandler {
 
 
     /**
-     * Invia un messaggio ad un client
-     * @param message messaggio
-     * @param connection connessione al client
+     * Send a message to the client
+     * @param message message
+     * @param connection client connection
      */
     public boolean sendMessage(Message message, Connection connection){
         if(connectionMap.containsValue(connection) && connection.isConnected()){
@@ -94,8 +94,8 @@ public class ServerNetwork implements NetworkHandler {
     }
 
     /**
-     * Invia un messaggio a tutti i client
-     * @param message messaggio
+     * Send a message to all the connected client
+     * @param message message
      */
     public void sendAll(Message message){
         for(Connection connection : connectionMap.values()){
@@ -106,9 +106,9 @@ public class ServerNetwork implements NetworkHandler {
     }
 
     /**
-     * Metodo invocato dai socket o dalle rmi quando e' stato ricevuto un messaggio da un client
-     * @param message messaggio ricevuto dal client
-     * @param clientConnection client connection che ha ricevuto il messaggio
+     * Method called when a message is recived from a client
+     * @param message message recived
+     * @param clientConnection connection
      */
     public void reciveMessage(Message message,Connection clientConnection){
         //notifica remoteView

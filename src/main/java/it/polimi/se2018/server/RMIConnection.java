@@ -7,10 +7,26 @@ import it.polimi.se2018.utils.network.Connection;
 
 import java.rmi.RemoteException;
 
+/**
+ * RMI connection with the client
+ * @author Alessio
+ */
 public class RMIConnection implements Connection {
     private ClientRMIImplementation rmiImplementation;
     private boolean connected = true;
 
+    /**
+     * Constructor
+     * @param clientRMIImplementation client implementation
+     */
+    public RMIConnection(ClientRMIImplementation clientRMIImplementation){
+        this.rmiImplementation = clientRMIImplementation;
+    }
+    /**
+     *  Send a message to the client
+     * @param message message to send
+     * @return true if the message was sent correctly, false otherwise
+     */
     public boolean sendMessage(Message message) {
         if(isConnected()){
             try{
@@ -25,14 +41,25 @@ public class RMIConnection implements Connection {
         }
     }
 
+    /**
+     * Return if the connection is active
+     * @return status of the connection
+     */
     public boolean isConnected() {
         return connected;
     }
 
+    /**
+     * Wait for the initializzation message
+     * @return the message recived
+     */
     public ClientMessage waitInitializationMessage(){
         return null;
     }
 
+    /**
+     * Close the connection
+     */
     public void close(){
         try {
             this.rmiImplementation.close();

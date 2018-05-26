@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * Connessione socket con il client
+ * Socket connection
  * @author Alessio
  */
 public class SocketConnection extends Thread implements Connection {
@@ -22,9 +22,9 @@ public class SocketConnection extends Thread implements Connection {
     private boolean connected = true;
 
     /**
-     * Costruttore
-     * @param networkHandler server
-     * @param socket socket della connessione istaurata con il client
+     * Costructor
+     * @param networkHandler server connection manager
+     * @param socket connection socket
      */
     public SocketConnection(NetworkHandler networkHandler, Socket socket) {
         this.networkHandler = networkHandler;
@@ -38,8 +38,8 @@ public class SocketConnection extends Thread implements Connection {
     }
 
     /**
-     * Invia messaggio
-     * @param message messaggio da inviare
+     * Send message
+     * @param message message to send
      */
     public boolean sendMessage(Message message){
         try{
@@ -52,6 +52,10 @@ public class SocketConnection extends Thread implements Connection {
         }
     }
 
+    /**
+     * Wait for the initialization message
+     * @return the initializzation message
+     */
     public ClientMessage waitInitializationMessage(){
         ClientMessage clientMessage;
         Boolean waiting = true;
@@ -60,6 +64,9 @@ public class SocketConnection extends Thread implements Connection {
                 clientMessage = (ClientMessage) in.readObject();
                 if(clientMessage.getMessageType() == MessageType.INITIALCONFIG){
                     return clientMessage;
+                }else{
+                    close();
+                    return null;
                 }
             }catch (IOException | ClassNotFoundException e){
                 close();
@@ -68,8 +75,9 @@ public class SocketConnection extends Thread implements Connection {
         }
         return null;
     }
+
     /**
-     * Chiude connessione
+     * Close the connection
      */
     public void close(){
         try{
@@ -87,6 +95,10 @@ public class SocketConnection extends Thread implements Connection {
         this.connected = false;
     }
 
+    /**
+     * Return the status of the connection
+     * @return true if the client is connected, false otherwise
+     */
     public boolean isConnected() {
         return connected;
     }

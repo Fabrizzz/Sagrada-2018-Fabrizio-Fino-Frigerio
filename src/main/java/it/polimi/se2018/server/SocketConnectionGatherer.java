@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 /**
- * Gestore connessione client socket in entrata
+ * Socket connection gatherer
  * @author Alessio
  */
 public class SocketConnectionGatherer extends Thread {
@@ -21,9 +21,9 @@ public class SocketConnectionGatherer extends Thread {
     private Boolean run = true;
 
     /**
-     * Costruttore
-     * @param serverNetwork server
-     * @param port porta su cui ricevere le connessioni
+     * Costructor
+     * @param serverNetwork server network manager
+     * @param port listening port
      */
     public SocketConnectionGatherer(ServerNetwork serverNetwork, int port){
         this.serverNetwork = serverNetwork;
@@ -35,6 +35,10 @@ public class SocketConnectionGatherer extends Thread {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Stop listening for connections
+     */
     public void terminate(){
         try {
             serverSocket.close();

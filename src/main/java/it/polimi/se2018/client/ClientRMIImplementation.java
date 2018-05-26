@@ -6,19 +6,24 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * Classe remote del client
+ * Remote class of the client
  * @author Alessio
  */
 public class ClientRMIImplementation implements Remote{
 
     /**
-     * Metodo richiamato in remoto dal server quando deve inviare un messaggio al client
-     * @param message messaggio da inviare
+     * Called when the server wants to send a message to the client
+     * @param message message to send
+     * @throws RemoteException rmi error
      */
     public void sendMessage(Message message) throws RemoteException {
         //gestione messaggio lato client
     }
 
+    /**
+     * Signal the client to close the connection
+     * @throws RemoteException rmi error
+     */
     public void close() throws RemoteException{
         //il client chiude la connessione
     }

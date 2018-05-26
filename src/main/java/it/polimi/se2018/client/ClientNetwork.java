@@ -65,7 +65,7 @@ public class ClientNetwork implements NetworkHandler {
             try {
                 server = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
-                connection = new RMIConnection();
+                connection = new RMIConnection(new ClientRMIImplementation());
 
                 RMIConnection remoteRef = (RMIConnection) UnicastRemoteObject.exportObject((Remote) connection, 0);
 

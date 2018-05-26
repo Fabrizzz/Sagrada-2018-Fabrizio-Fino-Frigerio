@@ -7,16 +7,16 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
- * Servizio server RMI
+ * Server rmi service
  * @author Alessio
  */
 public class ServerRMIImplementation extends UnicastRemoteObject implements ServerRMIInterface {
     private ServerNetwork serverNetwork;
 
     /**
-     * Costruttore
-     * @param serverNetwork Gestore rete server
-     * @throws RemoteException
+     * Costructor
+     * @param serverNetwork Server network manager
+     * @throws RemoteException rmi error
      */
     public ServerRMIImplementation(ServerNetwork serverNetwork) throws RemoteException {
         super(0);
@@ -24,17 +24,18 @@ public class ServerRMIImplementation extends UnicastRemoteObject implements Serv
     }
 
     /**
-     * Aggiunge client alla lista di connessioni del gestore di rete del server
-     * @param connection connessione da aggiungere
+     * Add a client connection to the connection map on the server
+     * @param connection connection to add
+     * @return if the connection was correctly added
      */
     public boolean addClient(Connection connection) throws RemoteException{
         return serverNetwork.addClient(connection);
     }
 
     /**
-     * Metodo chiamato dal client quando deve inviare un messaggio al server
-      * @param message messaggio inviato dal client
-     * @param connection connessione
+      * Method called by the clinet to send a message to the server
+      * @param message message to send
+     * @param connection connection
      */
     public void reciveMessage(Message message,Connection connection) throws RemoteException{
         serverNetwork.reciveMessage(message,connection);
