@@ -6,7 +6,7 @@ import it.polimi.se2018.utils.enums.Tool;
 import java.io.Serializable;
 import java.util.Optional;
 
-public class PlayerMove  implements Serializable {
+public class PlayerMove implements Serializable {
     private Tool tool;
     private Integer row;
     private Integer column;

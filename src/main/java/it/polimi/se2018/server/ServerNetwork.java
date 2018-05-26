@@ -1,8 +1,6 @@
 package it.polimi.se2018.server;
 
-import it.polimi.se2018.controller.RemoteView;
-import it.polimi.se2018.rmi.server.ServerRMIImplementation;
-import it.polimi.se2018.socket.server.SocketConnectionGatherer;
+import it.polimi.se2018.utils.ClientMessage;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.NetworkHandler;
@@ -11,24 +9,22 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Riceve e invia messaggi ai client
  * @author Alessio
  */
 public class ServerNetwork implements NetworkHandler {
-    private ArrayList<Connection> clientConnections = new ArrayList<Connection>();
     private SocketConnectionGatherer connectionGatherer;
-    private RemoteView remoteView;
     private ServerRMIImplementation serverRMIImplementation;
+    private boolean lobbyWaiting = true;
+    private Map<Long,Connection> connectionMap = new HashMap<>();
 
     /**
      * Costruttore
-     * @param remoteView remoteView del server
      */
-    public ServerNetwork(RemoteView remoteView){
-        this.remoteView = remoteView;
+    public ServerNetwork(){
         connectionGatherer = new SocketConnectionGatherer(this,8421);
         connectionGatherer.start();
 
@@ -41,10 +37,19 @@ public class ServerNetwork implements NetworkHandler {
 
             Naming.rebind("//localhost/MyServer", serverRMIImplementation);
         } catch (MalformedURLException e) {
-            //System.err.println("Impossibile registrare l'oggetto indicato!");
+            System.err.println("Impossibile registrare l'oggetto indicato!");
         } catch (RemoteException e) {
             //System.err.println("Errore di connessione: " + e.getMessage() + "!");
+            e.printStackTrace();
         }
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                lobbyWaiting = false;
+            }
+        }, 60*1000);
     }
 
     /**
@@ -52,22 +57,28 @@ public class ServerNetwork implements NetworkHandler {
      * @param clientConnection client da aggiungere
      */
     public boolean addClient(Connection clientConnection){
-        if(clientConnections.size() <= 4){
-            clientConnections.add(clientConnection);
-            return true;
-        }else{
-            return false;
+        if(connectionMap.size() <= 4 && lobbyWaiting){
+            ClientMessage clientMessage;
+            clientMessage = clientConnection.waitInitializationMessage();
+            if(clientMessage != null){
+                connectionMap.put(clientMessage.getId(),clientConnection);
+                return true;
+            }
+        }else if(connectionMap.size() <= 4 && !lobbyWaiting) {
+            ClientMessage clientMessage;
+            clientMessage = clientConnection.waitInitializationMessage();
+            if(connectionMap.get(clientMessage.getId()) != null){
+                if(!connectionMap.get(clientMessage.getId()).isConnected()){
+                    connectionMap.put(clientMessage.getId(),clientConnection);
+                    return true;
+                }
+            }
         }
+        clientConnection.close();
+        return false;
 
     }
 
-    /**
-     * Rimuove un client dalla lista delle connessioni
-     * @param clientConnection client da rimuovere
-     */
-    public void removeConnection(Connection clientConnection){
-        clientConnections.remove(clientConnection);
-    }
 
     /**
      * Invia un messaggio ad un client
@@ -75,7 +86,7 @@ public class ServerNetwork implements NetworkHandler {
      * @param connection connessione al client
      */
     public boolean sendMessage(Message message, Connection connection){
-        if(clientConnections.contains(connection)){
+        if(connectionMap.containsValue(connection) && connection.isConnected()){
             return connection.sendMessage(message);
         }else{
             return false;
@@ -87,8 +98,10 @@ public class ServerNetwork implements NetworkHandler {
      * @param message messaggio
      */
     public void sendAll(Message message){
-        for(Connection connection : clientConnections){
-            connection.sendMessage(message);
+        for(Connection connection : connectionMap.values()){
+            if(connection.isConnected()){
+                connection.sendMessage(message);
+            }
         }
     }
 

@@ -1,9 +1,8 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.controller.Controller;
-import it.polimi.se2018.rmi.client.ClientRMIImplementation;
-import it.polimi.se2018.rmi.server.ServerRMIImplementation;
-import it.polimi.se2018.rmi.server.ServerRMIInterface;
+import it.polimi.se2018.server.RMIConnection;
+import it.polimi.se2018.server.ServerRMIInterface;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.NetworkHandler;
@@ -66,9 +65,9 @@ public class ClientNetwork implements NetworkHandler {
             try {
                 server = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
-                connection = new ClientRMIImplementation();
+                connection = new RMIConnection();
 
-                ClientRMIImplementation remoteRef = (ClientRMIImplementation) UnicastRemoteObject.exportObject((Remote) connection, 0);
+                RMIConnection remoteRef = (RMIConnection) UnicastRemoteObject.exportObject((Remote) connection, 0);
 
                 return server.addClient(remoteRef);
 

@@ -1,5 +1,7 @@
 package it.polimi.se2018.utils.network;
 
+import it.polimi.se2018.utils.ClientMessage;
+import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 
@@ -17,6 +19,7 @@ public class SocketConnection extends Thread implements Connection {
     private NetworkHandler networkHandler;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private boolean connected = true;
 
     /**
      * Costruttore
@@ -49,6 +52,22 @@ public class SocketConnection extends Thread implements Connection {
         }
     }
 
+    public ClientMessage waitInitializationMessage(){
+        ClientMessage clientMessage;
+        Boolean waiting = true;
+        while (waiting){
+            try{
+                clientMessage = (ClientMessage) in.readObject();
+                if(clientMessage.getMessageType() == MessageType.INITIALCONFIG){
+                    return clientMessage;
+                }
+            }catch (IOException | ClassNotFoundException e){
+                close();
+                return null;
+            }
+        }
+        return null;
+    }
     /**
      * Chiude connessione
      */
@@ -65,18 +84,22 @@ public class SocketConnection extends Thread implements Connection {
             socket.close();
         }catch (IOException e){}
 
-        networkHandler.removeConnection(this);
+        this.connected = false;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     @Override
     public void run() {
         Message message;
-        while (true) {
+        while (connected) {
             try{
                 message = (Message) in.readObject();
                 networkHandler.reciveMessage(message,this);
             }catch (IOException | ClassNotFoundException e){
-                break;
+                connected = false;
             }
 
         }

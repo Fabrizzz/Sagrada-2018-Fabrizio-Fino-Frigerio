@@ -9,12 +9,6 @@ import it.polimi.se2018.utils.Message;
 public interface NetworkHandler {
 
     /**
-     * Rimuove connessione
-     * @param connection connessione da rimuovere
-     */
-    public void removeConnection(Connection connection);
-
-    /**
      * Metodo chiamato quando viene ricevuto un messaggio
      * @param message messaggio ricevuto
      * @param connection connessione

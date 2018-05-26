@@ -1,4 +1,4 @@
-package it.polimi.se2018.rmi.server;
+package it.polimi.se2018.server;
 
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;

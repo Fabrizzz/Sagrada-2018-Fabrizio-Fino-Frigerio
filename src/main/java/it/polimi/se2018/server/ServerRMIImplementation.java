@@ -1,6 +1,5 @@
-package it.polimi.se2018.rmi.server;
+package it.polimi.se2018.server;
 
-import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 

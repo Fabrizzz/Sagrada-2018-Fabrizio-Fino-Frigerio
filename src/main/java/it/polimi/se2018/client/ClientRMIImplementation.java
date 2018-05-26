@@ -1,25 +1,25 @@
-package it.polimi.se2018.rmi.client;
+package it.polimi.se2018.client;
 
-import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  * Classe remote del client
  * @author Alessio
  */
-public class ClientRMIImplementation implements Remote,Connection{
+public class ClientRMIImplementation implements Remote{
 
     /**
      * Metodo richiamato in remoto dal server quando deve inviare un messaggio al client
      * @param message messaggio da inviare
-     * @return true se viene inviato, false altrimenti
      */
-    public boolean sendMessage(Message message) {
+    public void sendMessage(Message message) throws RemoteException {
         //gestione messaggio lato client
-        return false;
     }
 
-    public void close(){}//todo
+    public void close() throws RemoteException{
+        //il client chiude la connessione
+    }
 }

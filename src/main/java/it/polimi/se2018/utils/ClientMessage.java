@@ -28,20 +28,20 @@ public class ClientMessage extends Message {
     }
 
 
-    public Optional<PlayerMove> getPlayerMove() {
-        return Optional.ofNullable(playerMove);
+    public PlayerMove getPlayerMove() {
+        return playerMove;
     }
 
-    public Optional<String> getNick() {
-        return Optional.ofNullable(nick);
+    public String getNick() {
+        return nick;
     }
 
-    public Optional<Long> getId() {
-        return Optional.ofNullable(id);
+    public Long getId() {
+        return id;
     }
 
-    public Optional<BoardName> getBoardName() {
-        return Optional.ofNullable(boardName);
+    public BoardName getBoardName() {
+        return boardName;
     }
 
 }

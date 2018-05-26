@@ -1,4 +1,4 @@
-package it.polimi.se2018.socket.server;
+package it.polimi.se2018.server;
 
 import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.network.Connection;
@@ -7,6 +7,7 @@ import it.polimi.se2018.utils.network.SocketConnection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Gestore connessione client socket in entrata
@@ -17,6 +18,7 @@ public class SocketConnectionGatherer extends Thread {
     private ServerNetwork serverNetwork;
     private int port;
     private ServerSocket serverSocket;
+    private Boolean run = true;
 
     /**
      * Costruttore
@@ -33,10 +35,17 @@ public class SocketConnectionGatherer extends Thread {
             e.printStackTrace();
         }
     }
+    public void terminate(){
+        try {
+            serverSocket.close();
+        }catch (IOException e) {}
+
+        run = false;
+    }
 
     @Override
     public void run() {
-        while(true) {
+        while(run) {
 
             Socket clientSocket;
             Connection client;
