@@ -1,5 +1,6 @@
 package it.polimi.se2018.server;
 
+import it.polimi.se2018.utils.ClientMessage;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 
@@ -33,11 +34,12 @@ public class ServerRMIImplementation extends UnicastRemoteObject implements Serv
     }
 
     /**
-      * Method called by the clinet to send a message to the server
+      * Method called by the client to send a message to the server
       * @param message message to send
      * @param connection connection
      */
     public void reciveMessage(Message message,Connection connection) throws RemoteException{
         serverNetwork.reciveMessage(message,connection);
     }
+
 }

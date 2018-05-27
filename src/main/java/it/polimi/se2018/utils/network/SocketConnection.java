@@ -1,14 +1,18 @@
 package it.polimi.se2018.utils.network;
 
+import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.utils.ClientMessage;
 import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
+import javafx.beans.InvalidationListener;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.rmi.Remote;
+import java.util.ArrayList;
 
 /**
  * Socket connection
@@ -20,6 +24,7 @@ public class SocketConnection extends Thread implements Connection {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean connected = true;
+    private ArrayList<RemoteView> observers = new ArrayList<>();
 
     /**
      * Costructor

@@ -1,5 +1,6 @@
 package it.polimi.se2018.server;
 
+import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.utils.ClientMessage;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
@@ -15,11 +16,12 @@ import java.util.*;
  * Manages the connections with the clients
  * @author Alessio
  */
-public class ServerNetwork implements NetworkHandler {
+public class ServerNetwork extends Observable implements NetworkHandler {
     private SocketConnectionGatherer connectionGatherer;
     private ServerRMIImplementation serverRMIImplementation;
     private boolean lobbyWaiting = true;
     private Map<Long,Connection> connectionMap = new HashMap<>();
+    private Map<Connection,RemoteView> remoteMap = new HashMap<>();
 
     /**
      * Costructor
@@ -49,7 +51,7 @@ public class ServerNetwork implements NetworkHandler {
             public void run() {
                 lobbyWaiting = false;
             }
-        }, 60*1000);
+        }, (long) 60*1000);
     }
 
     /**
@@ -62,6 +64,7 @@ public class ServerNetwork implements NetworkHandler {
             clientMessage = clientConnection.waitInitializationMessage();
             if(clientMessage != null){
                 connectionMap.put(clientMessage.getId(),clientConnection);
+                //aggiungi remoteview
                 return true;
             }
         }else if(connectionMap.size() <= 4 && !lobbyWaiting) {
@@ -70,6 +73,7 @@ public class ServerNetwork implements NetworkHandler {
             if(connectionMap.get(clientMessage.getId()) != null){
                 if(!connectionMap.get(clientMessage.getId()).isConnected()){
                     connectionMap.put(clientMessage.getId(),clientConnection);
+                    //aggiungi remoteview
                     return true;
                 }
             }
@@ -111,7 +115,10 @@ public class ServerNetwork implements NetworkHandler {
      * @param clientConnection connection
      */
     public void reciveMessage(Message message,Connection clientConnection){
-        //notifica remoteView
+        /**if(remoteMap.containsKey(clientConnection)){
+            remoteMap.get(clientConnection).handleMessage(message);
+        }*/
+
     }
 
 }
