@@ -24,7 +24,8 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClientNetwork implements NetworkHandler {
     private Controller controller;
     private Connection connection;
-
+    private ServerRMIInterface serverRMIInterface;
+    private int connectionType = 0;
     /**
      * Constructor
      * @param controller controller
@@ -45,8 +46,10 @@ public class ClientNetwork implements NetworkHandler {
             try {
                 socket = new Socket(hostname, port);
                 connection = new SocketConnection(this, socket);
+                connectionType = 1;
                 return true;
             } catch (IOException e) {
+                connectionType = 0;
                 return false;
             }
         }else{
@@ -61,18 +64,19 @@ public class ClientNetwork implements NetworkHandler {
      */
     public boolean connectRMI(String hostname){
         if(!isConnected()){
-            ServerRMIInterface server;
             try {
-                server = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
+                serverRMIInterface = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
                 connection = new RMIConnection(new ClientRMIImplementation());
 
                 RMIConnection remoteRef = (RMIConnection) UnicastRemoteObject.exportObject((Remote) connection, 0);
 
-                return server.addClient(remoteRef);
+                connectionType = 2;
+                return serverRMIInterface.addClient(remoteRef);
 
             } catch (MalformedURLException | RemoteException | NotBoundException e) {
                 System.out.println(e);
+                connectionType = 0;
                 return false;
             }
         }else{
@@ -109,10 +113,20 @@ public class ClientNetwork implements NetworkHandler {
      */
     public boolean sendMessage(Message message){
         if(isConnected()){
-            return connection.sendMessage(message);
+            if(connectionType == 1){
+                return connection.sendMessage(message);
+            }else if(connectionType == 2){
+                try{
+                    serverRMIInterface.reciveMessage(message,connection);
+                    return true;
+                }catch (RemoteException e){
+                    return false;
+                }
+            }
         }else{
             return false;
         }
+        return false;
     }
 
     /**
@@ -121,6 +135,9 @@ public class ClientNetwork implements NetworkHandler {
      */
     public void removeConnection(Connection connection) {
         this.connection = null;
+        if(connectionType == 2){
+            serverRMIInterface = null;
+        }
     }
 
 }
