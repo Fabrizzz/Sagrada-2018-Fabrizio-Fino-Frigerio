@@ -14,7 +14,7 @@ import java.util.List;
 public class DraftPool implements Serializable {
 
     private List<Die> dice = new ArrayList<>(9);    //Lista contenente tutti i dadi pescati
-    private int numberOfDices;  //Numero di dadi da pescare a ogni round
+    private int numberOfDice;  //Numero di dadi da pescare a ogni round
 
     /**
      * Costruttore
@@ -22,8 +22,8 @@ public class DraftPool implements Serializable {
      * @param diceBag Sacchetto dei dadi
      */
     public DraftPool(int lenght, DiceBag diceBag) {
-        numberOfDices = lenght * 2 + 1; //Inizializzazione del numero di dadi da pescare ogni round
-        for (int i = 0; i < numberOfDices; i++)
+        numberOfDice = lenght * 2 + 1; //Inizializzazione del numero di dadi da pescare ogni round
+        for (int i = 0; i < numberOfDice; i++)
             addDie(diceBag.takeDie());  //Si pescano i dadi dal sacchetto
     }
 
@@ -32,7 +32,7 @@ public class DraftPool implements Serializable {
      * @param diceBag Sacchetto dei dadi
      */
     public void rollDice(DiceBag diceBag) {
-        for (int i = 0; i < numberOfDices; i++) {
+        for (int i = 0; i < numberOfDice; i++) {
             dice.add(diceBag.takeDie());
         }
     }

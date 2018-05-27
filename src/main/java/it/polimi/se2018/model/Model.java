@@ -119,7 +119,7 @@ public class Model extends Observable {
      * Ritorna se e' stata fatta una mossa normale
      * @return true se e' stata effettuata una mossa normale, false altrimenti
      */
-    public boolean HasUsedNormalMove() {
+    public boolean hasUsedNormalMove() {
         return normalMove;
     }
 
@@ -230,7 +230,7 @@ public class Model extends Observable {
     /**
      * Termina il round reimpostando le variabili di round
      */
-    public void endRound() {
+    private void endRound() {
         turn = 0;
         firstTurn = true;
         roundTrack.addDice(round, draftPool.removeAll());
@@ -272,6 +272,14 @@ public class Model extends Observable {
             if (!players.get(playerPosition).isYourTurn())
                 nextTurn();
         }
+    }
+
+    public synchronized boolean startTurn() {
+        if (isTimerScaduto())
+            return false;
+        else
+            setTimerScaduto(true);
+        return true;
     }
 
     public synchronized boolean isTimerScaduto() {
