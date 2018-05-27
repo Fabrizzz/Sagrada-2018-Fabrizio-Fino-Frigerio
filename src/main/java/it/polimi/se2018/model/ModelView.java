@@ -47,7 +47,7 @@ public class ModelView implements Observer, Serializable {
         round = model.getRound();
         firstTurn = model.isFirstTurn();
         usedTool = model.hasUsedTool();
-        normalMove = model.HasUsedNormalMove();
+        normalMove = model.hasUsedNormalMove();
 
 
         model.addObserver(this);
@@ -59,7 +59,7 @@ public class ModelView implements Observer, Serializable {
         round = model.getRound();
         firstTurn = model.isFirstTurn();
         usedTool = model.hasUsedTool();
-        normalMove = model.HasUsedNormalMove();
+        normalMove = model.hasUsedNormalMove();
 
     }
 
