@@ -8,12 +8,11 @@ import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 import java.util.*;
 
 /**
- * Modello
+ * Game model
  * @author Giampietro
  */
 public class Model extends Observable {
 
-    //Define
     private static final int numberOfToolCards = 3;
     private static final int numberOfPublicObjectives = 3;
     private static final int numberOfDicePerColor = 18;     //Nei 90 dadi ho 18 dadi per colore; passo 18 al costruttore del diceBag
@@ -37,11 +36,11 @@ public class Model extends Observable {
 
 
     /**
-     * Costruttore
-     * @param players Array dei giocatori
-     * @param publicObjectives Lista degli obiettivi pubblici
-     * @param boardMap Mappa tra i player e le loro plancie
-     * @param privateObjectiveMap mappa tra i player e i loro obiettivi privati
+     * Constructor
+     * @param players array of the players
+     * @param publicObjectives list of the public objective
+     * @param boardMap map between the players and the boards
+     * @param privateObjectiveMap map between the players and their private objectives
      */
     public Model(Player[] players, List<PublicObjective> publicObjectives, Map<Player, PlayerBoard> boardMap, Map<Player, PrivateObjective> privateObjectiveMap) {
         if (players.length >= 4)
@@ -68,121 +67,121 @@ public class Model extends Observable {
     }
 
     /**
-     * Restituisce il giro corrente
-     * @return il giro corrente
+     * Return the current round number
+     * @return the number of the current round
      */
     public int getRound() {
         return round;
     }
 
     /**
-     * Imposta il giro di gioco
-     * @param round nuovo valore del giro
+     * Set the round number
+     * @param round new round number
      */
     public void setRound(int round) {
         this.round = round;
     }
 
     /**
-     * Ritorna se e' il primo turno del giro
-     * @return true se e' il primo turno del giro, false altrimenti
+     * Return if is the first turn in the round
+     * @return true if is the first turn, false otherwise
      */
     public boolean isFirstTurn() {
         return firstTurn;
     }
 
     /**
-     * Imposta il valore di firstTurn
-     * @param firstTurn nuovo valore di firstTurn
+     * Set the value of firtTurn
+     * @param firstTurn new value of firstTurn
      */
     public void setFirstTurn(boolean firstTurn) {
         this.firstTurn = firstTurn;
     }
 
     /**
-     * Ritorna se e' stato usato una carta tool
-     * @return true se e' stata usata nel giro, false altrimenti
+     * Return if a player has used a tool card in this round
+     * @return true if a player has userd a tool card in this round
      */
     public boolean hasUsedTool() {
         return usedTool;
     }
 
     /**
-     * Imposta il valore di usedTool
-     * @param usedTool nuovo valore di usedTool
+     * Set the value of usedTool
+     * @param usedTool new value of usedTool
      */
     public void setUsedTool(boolean usedTool) {
         this.usedTool = usedTool;
     }
 
     /**
-     * Ritorna se e' stata fatta una mossa normale
-     * @return true se e' stata effettuata una mossa normale, false altrimenti
+     * Return if a player has done a normal move this round
+     * @return true if a player has done a normal move this round, false otherwise
      */
     public boolean hasUsedNormalMove() {
         return normalMove;
     }
 
     /**
-     * Imposta il valore di normalMove
-     * @param normalMove nuovo valore di normalMove
+     * Set the value of normalMove
+     * @param normalMove new value of normalMove
      */
     public void setNormalMove(boolean normalMove) {
         this.normalMove = normalMove;
     }
 
     /**
-     * Restituisce la mappa boardMap
-     * @return mappa tra i giocatori e le plancie
+     * Return the boardMap between players and boards
+     * @return map between plauyers and boards
      */
     protected Map<Player, PlayerBoard> getBoardMap() {
         return boardMap;
     }
 
     /**
-     * Restituisce la plancia di un giocatore
-     * @param player giocatore
-     * @return plancia del giocatore
+     * Return the board of a player
+     * @param player player
+     * @return board
      */
     public PlayerBoard getBoard(Player player) {
         return boardMap.get(player);
     }
 
     /**
-     * Restituisce il sacchetto dei dadi
-     * @return il sacchetto dei dadi
+     * Return the diceBag
+     * @return diceBag
      */
     public DiceBag getDiceBag() {
         return diceBag;
     }
 
     /**
-     * Restituisce la riserva dei dadi
-     * @return riserva dei dadi
+     * Return the draftpool
+     * @return draftpool
      */
     public DraftPool getDraftPool() {
         return draftPool;
     }
 
     /**
-     * Restituisce il tracciato dei dadi
-     * @return tracciato dei dadi
+     * Return the round tack
+     * @return roundTrack
      */
     public RoundTrack getRoundTrack() {
         return roundTrack;
     }
 
     /**
-     * Restituisce la lista dei giocatori
-     * @return  lista dei giocatori
+     * Return the list of the players
+     * @return list of the players
      */
     public List<Player> getPlayers() {
         return players;
     }
 
     /**
-     * Restituisce la lista delle carte tool
-     * @return la lista delle carte tool
+     * Return the list of the toolcards
+     * @return the list of the toolcards
      */
     public List<Tool> getTools() {
         return tools;
@@ -195,10 +194,10 @@ public class Model extends Observable {
     public abstract int calculateUnusedCellPoints(Player player);*/
 
     /**
-     * Restituisce l'obiettivo privato di un giocatore
-     * @param player giocatore
-     * @return  obiettivo privato del giocatore
-     * @throws IllegalArgumentException se il giocatore non e' prensente nella lista dei giocatori
+     * Return the private objective of a player
+     * @param player player
+     * @return  private objective of player
+     * @throws IllegalArgumentException if plauyer is not contained in the player list
      */
     public PrivateObjective getPrivateObjective(Player player) throws IllegalArgumentException{
         if(players.contains(player)) {
@@ -209,17 +208,17 @@ public class Model extends Observable {
     }
 
     /**
-     * Restituisce la lista degli obiettivi pubblici
-     * @return la lista degli obiettivi pubblici
+     * Return the list of the public objectives
+     * @return list of the public objectives
      */
     public List<PublicObjective> getPublicObjectives() {
         return publicObjective;
     }
 
     /**
-     * Aggiunge un obiettivo pubblico alla lista
-     * @param publicObjective obiettivo da aggiungere
-     * @throws SizeLimitExceededException se e'stato raggiunto in numero massimo di obiettivi pubblici
+     * Add a objective to the public objective list
+     * @param publicObjective objective to be added
+     * @throws SizeLimitExceededException if the list is full
      */
     public void setPublicObjective(PublicObjective publicObjective) throws SizeLimitExceededException {
         if (this.publicObjective.size() >= numberOfPublicObjectives)
@@ -228,7 +227,7 @@ public class Model extends Observable {
     }
 
     /**
-     * Termina il round reimpostando le variabili di round
+     * End the round and update the round variables
      */
     private void endRound() {
         turn = 0;
@@ -245,12 +244,12 @@ public class Model extends Observable {
     }
 
     /**
-     * Termina la partita
+     * End the game
      */
     public void endGame() {}
 
     /**
-     * Passa al turno del giocatore successivo
+     * Change the current player turn
      */
     public void nextTurn() {
         usedTool = false;

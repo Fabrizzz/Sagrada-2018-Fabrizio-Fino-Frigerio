@@ -6,7 +6,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import java.io.Serializable;
 
 /**
- * Classe cella della plancia
+ * Cells in the player board
  * @author Giampietro
  */
 public class Cell implements Serializable {
@@ -15,24 +15,24 @@ public class Cell implements Serializable {
     private boolean isUsed = false;
 
     /**
-     * Costruttore
-     * @param restriction restrizione da applicare alla cella
+     * Constructor
+     * @param restriction restriction rule to be applied to the cell
      */
     public Cell(Restriction restriction) {
         this.restriction = restriction;
     }
 
     /**
-     * Ritorna se nella cella c'e' un dado.
-     * @return Boolean utilizzo cella
+     * Return if the cell contains a die.
+     * @return Boolean If the cell contains a dia.
      */
     public boolean isUsed() {
         return isUsed;
     }
 
     /**
-     * Rimuove il dado dalla cella
-     * @throws NoDieException se la cella e' vuota
+     * Remove the die from the cell
+     * @throws NoDieException if the cell is empty
      */
     public void removeDie() throws NoDieException {
 
@@ -43,9 +43,9 @@ public class Cell implements Serializable {
     }
 
     /**
-     * Ritorna il dado presente nella cella
-     * @return il dado della cella
-     * @throws NoDieException se la cella e' vuota
+     * Return the die contained in the cell
+     * @return the die 
+     * @throws NoDieException if the cell is empty
      */
     public Die getDie() throws NoDieException {
         if (!isUsed())
@@ -54,9 +54,9 @@ public class Cell implements Serializable {
     }
 
     /**
-     * Inserisce un dado nella cella
-     * @param die dado da inserire
-     * @throws AlredySetDie se e' gia presente un dado nella cella
+     * Insert a die in the cell
+     * @param die die to insert
+     * @throws AlredySetDie if the cell already contains a die
      */
     public void setDie(Die die) throws AlredySetDie {
         if (isUsed)
@@ -66,17 +66,17 @@ public class Cell implements Serializable {
     }
 
     /**
-     * Verifica se il dado rispetta le restrizioni della cella
-     * @param die dado da verificare
-     * @return se il dado rispetta le restrizioni
+     * Check if the die respect the cell restriction
+     * @param die die to use in the verification
+     * @return return if the die respect the restriction
      */
     public boolean verifyRestriction(Die die) {
         return restriction.verifyRestriction(die);
     }
 
     /**
-     * Restituisce la restrizione presente nella cella
-     * @return la restrizione della cella
+     * Return the restriction applied to the cell
+     * @return the restriction
      */
     public Restriction getRestriction() {
         return restriction;

@@ -1,5 +1,7 @@
 package it.polimi.se2018.utils.network;
 
+import it.polimi.se2018.utils.ClientMessage;
+import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 
@@ -9,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * Connessione socket con il client
+ * Socket connection
  * @author Alessio
  */
 public class SocketConnection extends Thread implements Connection {
@@ -17,11 +19,12 @@ public class SocketConnection extends Thread implements Connection {
     private NetworkHandler networkHandler;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private boolean connected = true;
 
     /**
-     * Costruttore
-     * @param networkHandler server
-     * @param socket socket della connessione istaurata con il client
+     * Costructor
+     * @param networkHandler server connection manager
+     * @param socket connection socket
      */
     public SocketConnection(NetworkHandler networkHandler, Socket socket) {
         this.networkHandler = networkHandler;
@@ -35,8 +38,8 @@ public class SocketConnection extends Thread implements Connection {
     }
 
     /**
-     * Invia messaggio
-     * @param message messaggio da inviare
+     * Send message
+     * @param message message to send
      */
     public boolean sendMessage(Message message){
         try{
@@ -50,7 +53,31 @@ public class SocketConnection extends Thread implements Connection {
     }
 
     /**
-     * Chiude connessione
+     * Wait for the initialization message
+     * @return the initializzation message
+     */
+    public ClientMessage waitInitializationMessage(){
+        ClientMessage clientMessage;
+        Boolean waiting = true;
+        while (waiting){
+            try{
+                clientMessage = (ClientMessage) in.readObject();
+                if(clientMessage.getMessageType() == MessageType.INITIALCONFIG){
+                    return clientMessage;
+                }else{
+                    close();
+                    return null;
+                }
+            }catch (IOException | ClassNotFoundException e){
+                close();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Close the connection
      */
     public void close(){
         try{
@@ -65,18 +92,26 @@ public class SocketConnection extends Thread implements Connection {
             socket.close();
         }catch (IOException e){}
 
-        networkHandler.removeConnection(this);
+        this.connected = false;
+    }
+
+    /**
+     * Return the status of the connection
+     * @return true if the client is connected, false otherwise
+     */
+    public boolean isConnected() {
+        return connected;
     }
 
     @Override
     public void run() {
         Message message;
-        while (true) {
+        while (connected) {
             try{
                 message = (Message) in.readObject();
                 networkHandler.reciveMessage(message,this);
             }catch (IOException | ClassNotFoundException e){
-                break;
+                connected = false;
             }
 
         }

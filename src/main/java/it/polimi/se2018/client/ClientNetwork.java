@@ -1,9 +1,8 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.controller.Controller;
-import it.polimi.se2018.rmi.client.ClientRMIImplementation;
-import it.polimi.se2018.rmi.server.ServerRMIImplementation;
-import it.polimi.se2018.rmi.server.ServerRMIInterface;
+import it.polimi.se2018.server.RMIConnection;
+import it.polimi.se2018.server.ServerRMIInterface;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.NetworkHandler;
@@ -19,7 +18,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
- * Gestore connessione client
+ * Client connection manager
  * @author Alessio
  */
 public class ClientNetwork implements NetworkHandler {
@@ -27,7 +26,7 @@ public class ClientNetwork implements NetworkHandler {
     private Connection connection;
 
     /**
-     * Costruttore
+     * Constructor
      * @param controller controller
      */
     public ClientNetwork(Controller controller){
@@ -35,10 +34,10 @@ public class ClientNetwork implements NetworkHandler {
     }
 
     /**
-     * Connetti al server usando un socket
+     * Connect to the server using a socket connection
      * @param hostname hostname server
-     * @param port porta del server
-     * @return true se la connessione viene instaurata, false altrimenti
+     * @param port server port
+     * @return true if the connection can be created, fase otherwise
      */
     public boolean connectSocket(String hostname, int port){
         Socket socket;
@@ -56,8 +55,9 @@ public class ClientNetwork implements NetworkHandler {
     }
 
     /**
-     * Connetti al server tramite rmi
-     * @return true se la connessione avviene correttamente, false altrimenti
+     * Connect to the server using rmi
+     * @param hostname hostname del server
+     * @return true if the connection can be created, false otherwise
      */
     public boolean connectRMI(String hostname){
         if(!isConnected()){
@@ -65,9 +65,9 @@ public class ClientNetwork implements NetworkHandler {
             try {
                 server = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
-                connection = new ClientRMIImplementation();
+                connection = new RMIConnection(new ClientRMIImplementation());
 
-                ClientRMIImplementation remoteRef = (ClientRMIImplementation) UnicastRemoteObject.exportObject((Remote) connection, 0);
+                RMIConnection remoteRef = (RMIConnection) UnicastRemoteObject.exportObject((Remote) connection, 0);
 
                 return server.addClient(remoteRef);
 
@@ -82,8 +82,8 @@ public class ClientNetwork implements NetworkHandler {
     }
 
     /**
-     * Ritorna lo stato di connessione del client
-     * @return true se esiste una connessione, false altrimenti
+     * Return the status of the connection to the server
+     * @return true if a connection exist and i active, false otherwise
      */
     public boolean isConnected(){
         if(connection == null){
@@ -94,18 +94,18 @@ public class ClientNetwork implements NetworkHandler {
     }
 
     /**
-     * Metodo richiamato dalla connessione alla ricezione di un messaggio dal server
-     * @param message messaggio ricevuto
-     * @param connection connessione
+     * Called by the connection when a message is recived from the server
+     * @param message message recived
+     * @param connection connection
      */
     public void reciveMessage(Message message, Connection connection) {
         //notifica controller
     }
 
     /**
-     * Invia messaggio al server
-     * @param message messaggio da inviare
-     * @return true se l'invio avviene correttamente, false altrimenti
+     * Send a message to the server
+     * @param message message to send
+     * @return true if the message has been sent correctly
      */
     public boolean sendMessage(Message message){
         if(isConnected()){
@@ -116,8 +116,8 @@ public class ClientNetwork implements NetworkHandler {
     }
 
     /**
-     * Rimuovi la connessione
-     * @param connection
+     * Remove the connection
+     * @param connection connection
      */
     public void removeConnection(Connection connection) {
         this.connection = null;

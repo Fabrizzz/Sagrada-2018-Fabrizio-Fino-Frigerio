@@ -1,4 +1,4 @@
-package it.polimi.se2018.socket.server;
+package it.polimi.se2018.server;
 
 import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.network.Connection;
@@ -7,9 +7,10 @@ import it.polimi.se2018.utils.network.SocketConnection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
- * Gestore connessione client socket in entrata
+ * Socket connection gatherer
  * @author Alessio
  */
 public class SocketConnectionGatherer extends Thread {
@@ -17,11 +18,12 @@ public class SocketConnectionGatherer extends Thread {
     private ServerNetwork serverNetwork;
     private int port;
     private ServerSocket serverSocket;
+    private Boolean run = true;
 
     /**
-     * Costruttore
-     * @param serverNetwork server
-     * @param port porta su cui ricevere le connessioni
+     * Costructor
+     * @param serverNetwork server network manager
+     * @param port listening port
      */
     public SocketConnectionGatherer(ServerNetwork serverNetwork, int port){
         this.serverNetwork = serverNetwork;
@@ -34,9 +36,20 @@ public class SocketConnectionGatherer extends Thread {
         }
     }
 
+    /**
+     * Stop listening for connections
+     */
+    public void terminate(){
+        try {
+            serverSocket.close();
+        }catch (IOException e) {}
+
+        run = false;
+    }
+
     @Override
     public void run() {
-        while(true) {
+        while(run) {
 
             Socket clientSocket;
             Connection client;
