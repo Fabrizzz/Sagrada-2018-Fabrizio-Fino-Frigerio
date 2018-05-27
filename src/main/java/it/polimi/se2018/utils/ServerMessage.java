@@ -1,13 +1,23 @@
 package it.polimi.se2018.utils;
 
+import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
 
-import java.util.Optional;
-
-public class ServerMessage {
+public class ServerMessage extends Message {
 
     private MessageType messageType;
-    private Optional<ErrorType> errorType;
-    //da completare
+    private ErrorType errorType;
+    private ModelView modelView;
+
+
+    public ServerMessage(ErrorType errorType) {
+        super(MessageType.ERROR);
+        this.errorType = errorType;
+    }
+
+    public ServerMessage(MessageType messageType, ModelView modelView) {
+        super(messageType);
+        this.modelView = modelView;
+    }
 }
