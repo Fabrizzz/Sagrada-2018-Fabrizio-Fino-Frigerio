@@ -273,13 +273,6 @@ public class Model extends Observable {
         }
     }
 
-    public synchronized boolean startTurn() {
-        if (isTimerScaduto())
-            return false;
-        else
-            setTimerScaduto(true);
-        return true;
-    }
 
     public synchronized boolean isTimerScaduto() {
         return timerScaduto;
