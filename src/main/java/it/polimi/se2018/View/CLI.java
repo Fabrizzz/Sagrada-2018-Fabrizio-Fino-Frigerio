@@ -1,14 +1,13 @@
 package it.polimi.se2018.View;
 
-import it.polimi.se2018.model.DiceBag;
-import it.polimi.se2018.model.DraftPool;
-import it.polimi.se2018.model.PlayerBoard;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
+import it.polimi.se2018.utils.ClientMessage;
+import it.polimi.se2018.utils.PlayerMove;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
@@ -23,52 +22,9 @@ public class CLI implements View{
     private final String ANSI_BLUE = "\u001B[34m";
     private final String ANSI_PURPLE = "\u001B[35m";
     private Scanner input;
+    private ModelView modelView;
+    private Long localID;
 
-    public static void main(String[] args){
-        CLI cli = new CLI();
-        System.out.print(cli.getNickname());
-        PlayerBoard playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),0,0);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),0,1);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),0,2);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),0,3);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),0,4);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),0,0);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),1,1);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),1,2);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),1,3);
-        }catch(AlredySetDie e){}
-        try{
-            playerBoard.setDie(new Die(Color.BLUE),3,4);
-        }catch(AlredySetDie e){}
-
-        cli.printBoard(playerBoard);
-
-        DiceBag diceBag = new DiceBag(19);
-        DraftPool draftPool = new DraftPool(4,diceBag);
-        cli.showDraftPool(draftPool);
-
-        Map<Tool, Boolean> tools = new EnumMap<>(Tool.class);
-        Tool.getRandTools(3).forEach(k -> tools.put(k, false));
-        cli.showToolCards(tools);
-    }
     public CLI(){
         input = new Scanner(System.in);
     }
@@ -98,7 +54,7 @@ public class CLI implements View{
                 return ANSI_RESET;
         }
     }
-    public void printBoard(PlayerBoard playerBoard){
+    public void showBoard(PlayerBoard playerBoard){
         System.out.println("\nDice board");
         System.out.println("___________");
 
@@ -135,19 +91,19 @@ public class CLI implements View{
         System.out.println("‾‾‾‾‾‾‾‾‾‾");
     }
 
-    public void showDraftPool(DraftPool draftPool){
+    public void showDraftPool(){
         System.out.println("Draftpool");
 
         System.out.print("Positione:");
-        for(int i = 0; i < draftPool.size();i++){
+        for(int i = 0; i <  modelView.DraftPoolSize();i++){
             System.out.print("|"+(i+1));
         }
         System.out.println("|");
 
         System.out.print("Dadi:     ");
-        for(int i = 0; i < draftPool.size(); i++){
+        for(int i = 0; i < modelView.DraftPoolSize(); i++){
             try{
-                System.out.print("|" + getColor(draftPool.getDie(i).getColor()) + draftPool.getDie(i).getNumber().getInt() + ANSI_RESET);
+                System.out.print("|" + getColor(modelView.getDraftPoolDie(i).getColor()) + modelView.getDraftPoolDie(i).getNumber().getInt() + ANSI_RESET);
             }catch(NoDieException e){
                 System.out.print("| ");
             }
@@ -155,13 +111,30 @@ public class CLI implements View{
         System.out.println("|");
     }
 
-    public void showToolCards(Map<Tool, Boolean> tools){
+    public void showToolCards(){
         System.out.println("Tool cards");
-        for (int i = 0; i < tools.size(); i++) {
-            System.out.println("Nome:");
-            System.out.println(tools.keySet().toArray()[i].toString());
-            System.out.println("Descrizione:");
-            System.out.println("Usato: "+tools.get(tools.keySet().toArray()[i]) + "\n");
+        for (int i = 0; i < modelView.getTools().size(); i++) {
+            System.out.print("Nome: ");
+            System.out.println(modelView.getTools().keySet().toArray()[i].toString());
+            System.out.print("Descrizione: ");
+            System.out.println(((Tool) modelView.getTools().keySet().toArray()[i]).getDescription());
+            System.out.println("Usato: "+modelView.getTools().get(modelView.getTools().keySet().toArray()[i]) + "\n");
         }
+    }
+
+    public void normalMove(){
+
+        System.out.println("Scegli il dado dalla riserva");
+        showDraftPool();
+        System.out.println("Inserisci la posizione del dado scelto");
+        int i = input.nextInt();
+        while(i < 1 || i > modelView.DraftPoolSize()){
+            System.out.println("Errore, inserisci una posizione corretta");
+            i = input.nextInt();
+        }
+
+        showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+
+        //ClientMessage clientMessage = new ClientMessage(new PlayerMove(i,));
     }
 }
