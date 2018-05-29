@@ -6,12 +6,13 @@ import it.polimi.se2018.utils.PlayerMove;
 import it.polimi.se2018.utils.ServerMessage;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 
 public class FirstCheck extends Handler {
 
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) {
+    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         int temp;
         if (remoteView.getPlayer().isYourTurn()) {
             if (playerMove.getColumn().filter(k -> k < 0 || k > 4).isPresent() ||
@@ -20,9 +21,9 @@ public class FirstCheck extends Handler {
                     playerMove.getFinalRow().filter(k -> k < 0 || k > 3).isPresent() ||
                     playerMove.getRoundTrackRound().filter(k -> k >= model.getRound()).isPresent() ||
                     playerMove.getRow().filter(k -> k < 0 || k > 3).isPresent() ||
-                    (!model.getTools().contains(playerMove.getTool()) && playerMove.getTool() != Tool.MOSSASTANDARD))
+                    (!model.getTools().containsKey(playerMove.getTool()) && playerMove.getTool() != Tool.MOSSASTANDARD))
 
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                throw new InvalidParameterException();
             else
                 nextHandler.process(playerMove, remoteView, model);
 

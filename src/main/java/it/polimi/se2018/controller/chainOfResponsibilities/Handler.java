@@ -3,6 +3,7 @@ package it.polimi.se2018.controller.chainOfResponsibilities;
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.utils.PlayerMove;
+import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 
 
 public abstract class Handler {
@@ -13,5 +14,5 @@ public abstract class Handler {
         nextHandler = handler;
     }
 
-    public abstract void process(PlayerMove playerMove, RemoteView remoteView, Model model);
+    public abstract void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException;
 }

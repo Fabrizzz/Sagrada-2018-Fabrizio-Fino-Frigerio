@@ -4,6 +4,7 @@ import it.polimi.se2018.controller.chainOfResponsibilities.Handler;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.utils.PlayerMove;
 import it.polimi.se2018.utils.enums.BoardName;
+import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 
 import java.util.*;
 
@@ -35,12 +36,17 @@ public class Controller implements Observer {
         return model;
     }
 
+    //private void startGame()
+
 
     @Override
     public synchronized void update(Observable o, Object arg) {
         PlayerMove playerMove = (PlayerMove) arg;
         RemoteView remoteView = (RemoteView) o;
-        firstHandler.process(playerMove, remoteView, getModel());
-        //start next timer
+        try {
+            firstHandler.process(playerMove, remoteView, getModel());
+        } catch (InvalidParameterException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -9,6 +9,7 @@ import it.polimi.se2018.utils.ServerMessage;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 public class NormalMoveHandler extends Handler {
@@ -20,14 +21,17 @@ public class NormalMoveHandler extends Handler {
     }
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) {
+    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         PlayerBoard board;
         int row;
         int column;
         int pos;
         Die die;
+
         if (playerMove.getTool() == Tool.MOSSASTANDARD) {
-            try {
+            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent())
+                throw new InvalidParameterException();
+            else try {
                 board = model.getBoard(remoteView.getPlayer());
                 row = playerMove.getRow().get();
                 column = playerMove.getColumn().get();
@@ -47,10 +51,14 @@ public class NormalMoveHandler extends Handler {
                     if (!model.isTimerScaduto()) {
                         board.setDie(die, row, column);
                         model.getDraftPool().removeDie(die);
-                        process(playerMove, remoteView, model);
                         model.setNormalMove(true);
-                        if (model.hasUsedTool())
-                            model.nextTurn();
+
+                        if (remoteView.getPlayer().isCanDoTwoTurn())
+                            remoteView.getPlayer().setCanDoTwoTurn(false);
+                        else
+                            model.setNormalMove(true);
+
+                        nextHandler.process(playerMove, remoteView, model);
                     } else
                         remoteView.sendBack(new ServerMessage(ErrorType.TIMERSCADUTO));
                 }
