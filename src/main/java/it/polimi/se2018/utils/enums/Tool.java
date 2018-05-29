@@ -3,7 +3,6 @@ package it.polimi.se2018.utils.enums;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 //aggiungere le description
 public enum Tool {
     MOSSASTANDARD("Mossa Standard", ""),
