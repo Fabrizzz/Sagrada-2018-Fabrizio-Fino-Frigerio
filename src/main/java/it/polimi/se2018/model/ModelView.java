@@ -18,7 +18,7 @@ import java.util.Observer;
  */
 public class ModelView implements Observer, Serializable {
 
-    private final List<Tool> tools;
+    private final Map<Tool, Boolean> tools;
     private final List<PublicObjective> publicObjective;
     private final DiceBag diceBag;    //Il sacchetto contenente i dadi
     private final DraftPool draftPool;  //Dadi pescati del round
@@ -140,7 +140,7 @@ public class ModelView implements Observer, Serializable {
      * Return the tool card list
      * @return tool card list
      */
-    public List<Tool> getTools() {
+    public Map<Tool, Boolean> getTools() {
         return tools;
     }
 

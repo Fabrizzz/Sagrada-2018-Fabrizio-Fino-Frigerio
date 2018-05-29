@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.RoundTimer;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.enums.Tool;
@@ -13,14 +14,16 @@ import java.util.*;
  */
 public class Model extends Observable {
 
-    private static final int numberOfToolCards = 3;
-    private static final int numberOfPublicObjectives = 3;
-    private static final int numberOfDicePerColor = 18;     //Nei 90 dadi ho 18 dadi per colore; passo 18 al costruttore del diceBag
+    private static final int NUMBER_OF_TOOL_CARDS = 3;
+    private static final int NUMBER_OF_PUBLIC_OBJECTIVES = 3;
+    private static final int NUMBER_OF_DICE_PER_COLOR = 18;     //Nei 90 dadi ho 18 dadi per colore; passo 18 al costruttore del diceBag
+    private static final int MINUTES_PER_TURN = 1;
 
     private final Map<Player, PlayerBoard> boardMap;
     private final Map<Player, PrivateObjective> privateObjectiveMap;
-    private final List<Tool> tools;
-    private final List<PublicObjective> publicObjective = new ArrayList<>(numberOfPublicObjectives);
+    private final Map<Tool, Boolean> tools;
+    private final List<PublicObjective> publicObjective = new ArrayList<>(NUMBER_OF_PUBLIC_OBJECTIVES);
+
 
     private final DiceBag diceBag;    //Il sacchetto contenente i dadi
     private final DraftPool draftPool;  //Dadi pescati del round
@@ -34,6 +37,8 @@ public class Model extends Observable {
     private boolean normalMove = false;
     private boolean timerScaduto = false;
 
+    private Timer timer = new Timer();
+
 
     /**
      * Constructor
@@ -46,10 +51,11 @@ public class Model extends Observable {
         if (players.length >= 4)
             throw new IllegalArgumentException("Too many players");
         this.players = new ArrayList<>(Arrays.asList(players)); //Creazione di un arraylist che conterrà i player
-        diceBag = new DiceBag(numberOfDicePerColor);    //Creazione del sacchetto; viene passato 18 così verranno generati i 90 dadi, 18 per colore
+        diceBag = new DiceBag(NUMBER_OF_DICE_PER_COLOR);    //Creazione del sacchetto; viene passato 18 così verranno generati i 90 dadi, 18 per colore
         draftPool = new DraftPool(players.length, diceBag); //Creazione della variabile draftPool per i dadi pescati; viene passato il numero di dadi da pescare (numplayer  2 +1) e il sacchetto da cui pescare
-        tools = Tool.getRandTools(numberOfToolCards);
-        if (publicObjectives.size() != numberOfPublicObjectives)
+        tools = new EnumMap<>(Tool.class);
+        Tool.getRandTools(NUMBER_OF_TOOL_CARDS).forEach(k -> tools.put(k, false));
+        if (publicObjectives.size() != NUMBER_OF_PUBLIC_OBJECTIVES)
             throw new IllegalArgumentException("Wrong number of public Objectives");
         publicObjective.addAll(publicObjectives);
         roundTrack = new RoundTrack();
@@ -183,7 +189,7 @@ public class Model extends Observable {
      * Return the list of the toolcards
      * @return the list of the toolcards
      */
-    public List<Tool> getTools() {
+    public Map<Tool, Boolean> getTools() {
         return tools;
     }
 
@@ -221,7 +227,7 @@ public class Model extends Observable {
      * @throws SizeLimitExceededException if the list is full
      */
     public void setPublicObjective(PublicObjective publicObjective) throws SizeLimitExceededException {
-        if (this.publicObjective.size() >= numberOfPublicObjectives)
+        if (this.publicObjective.size() >= NUMBER_OF_PUBLIC_OBJECTIVES)
             throw new SizeLimitExceededException();
         this.publicObjective.add(publicObjective);
     }
@@ -246,12 +252,16 @@ public class Model extends Observable {
     /**
      * End the game
      */
-    public void endGame() {}
+    public void endGame() {
+        timer.purge();
+        timer.cancel();
+    }
 
     /**
      * Change the current player turn
      */
-    public void nextTurn() {
+    public void nextTurn() { //da spostare nel controller
+        //aggiungere che se rimane un solo giocatore, ha vinto
         usedTool = false;
         normalMove = false;
         int playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
@@ -262,15 +272,25 @@ public class Model extends Observable {
             endRound();
         else if (turn == players.size())
             firstTurn = false;
+
+
         if (round != 10) {
             
             playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
-            players.get(playerPosition).setYourTurn(true);
-
-
-            if (!players.get(playerPosition).isYourTurn())
+            if (players.get(playerPosition).isSkipSecondTurn()) {
+                players.get(playerPosition).setSkipSecondTurn(false);
                 nextTurn();
-        }
+            } else {
+                players.get(playerPosition).setYourTurn(true);
+                if (!players.get(playerPosition).isConnected())
+                    nextTurn();
+                else {
+                    timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
+                    notifyObs();
+                }
+            }
+        } else
+            endGame();
     }
 
 
@@ -278,8 +298,17 @@ public class Model extends Observable {
         return timerScaduto;
     }
 
-    public synchronized void setTimerScaduto(boolean timerScaduto) {
-        this.timerScaduto = timerScaduto;
+    public synchronized void setTimerScadutoOff() {
+        this.timerScaduto = false;
+    }
+
+    public synchronized void setTimerScadutoOn(int turn, int round) {
+        if (getTurn() == turn && this.getRound() == round)
+            timerScaduto = true;
+    }
+
+    public int getTurn() {
+        return turn;
     }
 
     public void notifyObs() {
