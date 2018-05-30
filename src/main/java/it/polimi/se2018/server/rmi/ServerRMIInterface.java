@@ -1,4 +1,4 @@
-package it.polimi.se2018.server;
+package it.polimi.se2018.server.rmi;
 
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
@@ -11,6 +11,5 @@ import java.rmi.RemoteException;
  * @author Alessio
  */
 public interface ServerRMIInterface extends Remote {
-    boolean addClient(Connection connection)  throws RemoteException;
-    void reciveMessage(Message message, Connection connection)  throws RemoteException;
+    ServerRmiConnection addClient(Connection connection)  throws RemoteException;
 }

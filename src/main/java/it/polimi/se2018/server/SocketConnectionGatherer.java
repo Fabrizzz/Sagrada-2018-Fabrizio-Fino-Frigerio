@@ -58,7 +58,7 @@ public class SocketConnectionGatherer extends Thread {
                 clientSocket = serverSocket.accept();
                 client = new SocketConnection(serverNetwork,clientSocket);
                 serverNetwork.addClient(client);
-
+                //aggiungere la remote view al client
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -22,7 +22,7 @@ public class TestSocket {
     private Controller controller;
     private ClientNetwork clientNetwork;
 
-    @Before
+   /* @Before
     public void initialize(){
         serverNetwork = new ServerNetwork();
 

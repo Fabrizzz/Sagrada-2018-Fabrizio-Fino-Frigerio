@@ -14,7 +14,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.util.*;
 
-public class CLI implements View{
+public class CLI extends View{
     private final String ANSI_RESET = "\u001B[0m";
     private final String ANSI_RED = "\u001B[31m";
     private final String ANSI_GREEN = "\u001B[32m";
@@ -136,5 +136,10 @@ public class CLI implements View{
         showBoard(modelView.getBoard(modelView.getPlayer(localID)));
 
         //ClientMessage clientMessage = new ClientMessage(new PlayerMove(i,));
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

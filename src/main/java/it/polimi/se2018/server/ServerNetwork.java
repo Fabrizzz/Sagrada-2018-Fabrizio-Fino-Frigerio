@@ -1,7 +1,7 @@
 package it.polimi.se2018.server;
 
 import it.polimi.se2018.controller.RemoteView;
-import it.polimi.se2018.utils.ClientMessage;
+import it.polimi.se2018.server.rmi.ServerRMIImplementation;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.NetworkHandler;
@@ -44,56 +44,30 @@ public class ServerNetwork extends Observable implements NetworkHandler {
             //System.err.println("Errore di connessione: " + e.getMessage() + "!");
             e.printStackTrace();
         }
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                lobbyWaiting = false;
-            }
-        }, (long) 60*1000);
     }
 
     /**
      * Add a connection to the connection map
      * @param clientConnection connection to add
      */
-    public boolean addClient(Connection clientConnection){
-        if(connectionMap.size() <= 4 && lobbyWaiting){
-            ClientMessage clientMessage;
-            clientMessage = clientConnection.waitInitializationMessage();
-            if(clientMessage != null){
-                connectionMap.put(clientMessage.getId(),clientConnection);
-                //aggiungi remoteview
-                return true;
+    public RemoteView addClient(Connection clientConnection){
+        if(connectionMap.size() < 4 && lobbyWaiting){
+            RemoteView remoteView = new RemoteView();
+            clientConnection.addObserver(remoteView);
+            remoteMap.put(clientConnection,remoteView);
+
+            if(connectionMap.size() >= 2){
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        lobbyWaiting = false;
+                    }
+                }, (long) 60*1000);
             }
-        }else if(connectionMap.size() <= 4 && !lobbyWaiting) {
-            ClientMessage clientMessage;
-            clientMessage = clientConnection.waitInitializationMessage();
-            if(connectionMap.get(clientMessage.getId()) != null){
-                if(!connectionMap.get(clientMessage.getId()).isConnected()){
-                    connectionMap.put(clientMessage.getId(),clientConnection);
-                    //aggiungi remoteview
-                    return true;
-                }
-            }
-        }
-        clientConnection.close();
-        return false;
-
-    }
-
-
-    /**
-     * Send a message to the client
-     * @param message message
-     * @param connection client connection
-     */
-    public boolean sendMessage(Message message, Connection connection){
-        if(connectionMap.containsValue(connection) && connection.isConnected()){
-            return connection.sendMessage(message);
+            return remoteView;
         }else{
-            return false;
+            return null;
         }
     }
 
@@ -109,16 +83,7 @@ public class ServerNetwork extends Observable implements NetworkHandler {
         }
     }
 
-    /**
-     * Method called when a message is recived from a client
-     * @param message message recived
-     * @param clientConnection connection
-     */
-    public void reciveMessage(Message message,Connection clientConnection){
-        /**if(remoteMap.containsKey(clientConnection)){
-            remoteMap.get(clientConnection).handleMessage(message);
-        }*/
-
+    public void closeConnection(Connection connection){
+        //chiudi connessione
     }
-
 }

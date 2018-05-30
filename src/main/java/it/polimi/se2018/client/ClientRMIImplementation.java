@@ -1,30 +1,51 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.network.Connection;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Observable;
 
 /**
  * Remote class of the client
  * @author Alessio
  */
-public class ClientRMIImplementation implements Remote{
+public class ClientRMIImplementation extends Connection implements Remote {
 
-    /**
-     * Called when the server wants to send a message to the client
-     * @param message message to send
-     * @throws RemoteException rmi error
-     */
-    public void sendMessage(Message message) throws RemoteException {
-        //gestione messaggio lato client
+    private ClientNetwork clientNetwork;
+    private Boolean connected = true;
+
+    public ClientRMIImplementation(ClientNetwork clientNetwork){
+        this.clientNetwork = clientNetwork;
+    }
+
+    public boolean sendMessage(Message message){
+        if(connected){
+            setChanged();
+            notifyObservers(message);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     /**
      * Signal the client to close the connection
      * @throws RemoteException rmi error
      */
-    public void close() throws RemoteException{
-        //il client chiude la connessione
+    public void close(){
+        this.connected = false;
+        clientNetwork.closeConnection(this);
+    }
+
+
+    @Override
+    public void update(Observable o, Object arg) {
+        sendMessage((Message) arg);
     }
 }
