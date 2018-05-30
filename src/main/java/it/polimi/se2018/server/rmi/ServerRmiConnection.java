@@ -33,6 +33,7 @@ public class ServerRmiConnection extends Connection implements Remote {
 
     public void close() {
         connected = false;
+        this.deleteObservers();
         serverNetwork.closeConnection(this);
     }
 

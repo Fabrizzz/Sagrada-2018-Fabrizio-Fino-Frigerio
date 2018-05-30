@@ -40,6 +40,7 @@ public class ClientRMIImplementation extends Connection implements Remote {
      */
     public void close(){
         this.connected = false;
+        this.deleteObservers();
         clientNetwork.closeConnection(this);
     }
 

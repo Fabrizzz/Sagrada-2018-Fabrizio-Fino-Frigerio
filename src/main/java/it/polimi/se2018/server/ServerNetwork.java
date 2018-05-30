@@ -84,6 +84,6 @@ public class ServerNetwork extends Observable implements NetworkHandler {
     }
 
     public void closeConnection(Connection connection){
-        //chiudi connessione
+        remoteMap.get(connection).deleteObservers();
     }
 }
