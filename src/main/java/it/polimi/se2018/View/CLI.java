@@ -56,7 +56,7 @@ public class CLI extends View{
     }
     public void showBoard(PlayerBoard playerBoard){
         System.out.println("\nDice board");
-        System.out.println("___________");
+        System.out.println("___________|| Riga");
 
         for(int j = 0; j < 4; j ++){
             for(int i = 0; i < 5; i++){
@@ -66,9 +66,10 @@ public class CLI extends View{
                     System.out.print("| ");
                 }
             }
-            System.out.println("|");
+            System.out.println("|| "+(j+1));
         }
         System.out.println("‾‾‾‾‾‾‾‾‾");
+        System.out.println("|1|2|3|4|5|| Colonna");
 
         System.out.println("\nRestriction board");
         System.out.println("___________");
@@ -122,21 +123,91 @@ public class CLI extends View{
         }
     }
 
-    public void normalMove(){
-
+    public int chooseDraftpoolDie(){
         System.out.println("Scegli il dado dalla riserva");
         showDraftPool();
         System.out.println("Inserisci la posizione del dado scelto");
         int i = input.nextInt();
-        while(i < 1 || i > modelView.DraftPoolSize()){
+        while (i < 1 || i > modelView.DraftPoolSize()) {
             System.out.println("Errore, inserisci una posizione corretta");
             i = input.nextInt();
         }
+        return i;
+    }
+
+    public int[] chooseBoardDie(){
+        int[] position = new int[2];
 
         showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+        System.out.println("Inserisci l'indice di riga in cui vuoi positionare il dado: ");
+        position[0] = input.nextInt();
+        while (position[0] < 1 || position[0] > 4) {
+            System.out.println("Errore, inserisci un indice corretto");
+            position[0] = input.nextInt();
+        }
 
-        //ClientMessage clientMessage = new ClientMessage(new PlayerMove(i,));
+        System.out.println("Inserisci l'indice di colonna in cui vuoi positionare il dado: ");
+        position[1] = input.nextInt();
+        while (position[1] < 1 || position[1] > 5) {
+            System.out.println("Errore, inserisci un indice corretto");
+            position[1] = input.nextInt();
+        }
+
+        return position;
     }
+
+    public void normalSugheroMove(Tool tool){
+        if(tool == Tool.MOSSASTANDARD || tool == Tool.RIGAINSUGHERO) {
+
+            int i = chooseDraftpoolDie();
+
+            int[] position = chooseBoardDie();
+
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
+            setChanged();
+            notifyObservers(clientMessage);
+            System.out.println("Mossa inviata");
+        }
+    }
+
+    public void skipMartellettoTenagliaMove(Tool tool){
+        if(tool == Tool.SKIPTURN || tool == Tool.MARTELLETTO || tool == Tool.TENAGLIAAROTELLE) {
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
+            setChanged();
+            notifyObservers();
+            System.out.println("Mossa inviata");
+        }
+    }
+
+    public boolean sgrossatriceMove(){
+       int position = chooseDraftpoolDie();
+       try {
+            System.out.println("Valore del dado selezionato: " + modelView.getDraftPoolDie(position).getNumber().getInt());
+            int scelta = 3;
+            while(scelta != 0 && scelta != 1){
+                System.out.println("Inserisci 0 per diminuire il valore del dado selezionato, 1 per aumentare il valore del dado");
+                scelta = input.nextInt();
+            }
+
+            Boolean aumento = false;
+            if(scelta == 0){
+                aumento = false;
+            }else{
+                aumento = true;
+            }
+
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.PINZASGROSSATRICE,position,aumento));
+            setChanged();
+            notifyObservers(clientMessage);
+
+            return true;
+       }catch(NoDieException e){
+           return false;
+       }
+
+    }
+
+    
 
     @Override
     public void update(Observable o, Object arg) {
