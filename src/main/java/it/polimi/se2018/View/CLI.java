@@ -123,6 +123,33 @@ public class CLI extends View{
         }
     }
 
+    public void showRoundTrack(){
+        System.out.println("Tracciato dadi:");
+        for(int i = 0; i < modelView.getRound(); i ++){
+            System.out.println("Round " + (i+1));
+            for(int j = 0; j < modelView.getRoundTrack().numberOfDice(i); j ++){
+                System.out.println("|" + modelView.getRoundTrackDie(i,j));
+            }
+            System.out.println("|||");
+        }
+    }
+
+    public int[] chooseRoundTrackDie(){
+        int[] position = new int[2];
+        showRoundTrack();
+        System.out.println("Inserisci il numero del round: ");
+        do {
+            position[0] = input.nextInt();
+        }while (position[0] > 0 && position[0] < modelView.getRound());
+
+        System.out.println("Inserisci la posizione del dado: ");
+        do {
+            position[1] = input.nextInt();
+        }while (position[1] > 0 && position[1] < modelView.getRoundTrack().numberOfDice(position[0] - 1));
+
+        return position;
+    }
+    
     public int chooseDraftpoolDie(){
         System.out.println("Scegli il dado dalla riserva");
         showDraftPool();
@@ -228,12 +255,12 @@ public class CLI extends View{
 
     }
 
-    public void pennelloMove(Tool tool){
+    public void pennelloAlesatoreLeathekinManualeMove(Tool tool){
         if(tool == Tool.PENNELLOPEREGLOMISE || tool == Tool.ALESATOREPERLAMINADIRAME || tool == Tool.TAGLIERINAMANUALE) {
             boolean secondaMossa = false;
             System.out.println("Scegli il primo dado da muovere");
             int[] position = chooseBoardCell(true);
-            System.out.println("Scelgi dove piazzare primo il dado");
+            System.out.println("Scegli dove piazzare primo il dado");
             int[] newPosition = chooseBoardCell(false);
             ClientMessage clientMessage;
 
@@ -256,7 +283,7 @@ public class CLI extends View{
             if(secondaMossa){
                 System.out.println("Scegli il secondo dado da muovere");
                 int[] position2 = chooseBoardCell(true);
-                System.out.println("Scelgi dove piazzare il secondo dado");
+                System.out.println("Scegli dove piazzare il secondo dado");
                 int[] newPosition2 = chooseBoardCell(false);
                 clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
             }else{
@@ -267,6 +294,10 @@ public class CLI extends View{
             notifyObservers(clientMessage);
             System.out.println("Mossa inviata");
         }
+    }
+
+    public void taglierinaCircolareMove(){
+
     }
 
 
