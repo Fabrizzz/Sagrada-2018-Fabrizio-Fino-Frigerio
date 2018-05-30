@@ -126,32 +126,51 @@ public class CLI extends View{
     public int chooseDraftpoolDie(){
         System.out.println("Scegli il dado dalla riserva");
         showDraftPool();
-        System.out.println("Inserisci la posizione del dado scelto");
+        System.out.println("Inserisci la posizione del dado scelto:");
         int i = input.nextInt();
         while (i < 1 || i > modelView.DraftPoolSize()) {
             System.out.println("Errore, inserisci una posizione corretta");
             i = input.nextInt();
         }
         return i;
+
     }
 
-    public int[] chooseBoardDie(){
+    public int[] chooseBoardCell(Boolean withDie){
         int[] position = new int[2];
-
-        showBoard(modelView.getBoard(modelView.getPlayer(localID)));
-        System.out.println("Inserisci l'indice di riga in cui vuoi positionare il dado: ");
-        position[0] = input.nextInt();
-        while (position[0] < 1 || position[0] > 4) {
-            System.out.println("Errore, inserisci un indice corretto");
+        boolean repeat = true;
+        do {
+            showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+            System.out.println("Inserisci l'indice di riga: ");
             position[0] = input.nextInt();
-        }
+            while (position[0] < 1 || position[0] > 4) {
+                System.out.println("Errore, inserisci un indice corretto");
+                position[0] = input.nextInt();
+            }
 
-        System.out.println("Inserisci l'indice di colonna in cui vuoi positionare il dado: ");
-        position[1] = input.nextInt();
-        while (position[1] < 1 || position[1] > 5) {
-            System.out.println("Errore, inserisci un indice corretto");
+            System.out.println("Inserisci l'indice di colonna: ");
             position[1] = input.nextInt();
-        }
+            while (position[1] < 1 || position[1] > 5) {
+                System.out.println("Errore, inserisci un indice corretto");
+                position[1] = input.nextInt();
+            }
+            if(withDie){
+                if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0],position[1])){
+                    repeat = false;
+                }else{
+                    repeat = true;
+                    System.out.println("Errore: nessun dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
+                }
+            }else{
+                if(!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0],position[1])){
+                    repeat = false;
+                }else{
+                    repeat = true;
+                    System.out.println("Errore: dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
+                }
+
+            }
+        }while(repeat);
 
         return position;
     }
@@ -161,7 +180,8 @@ public class CLI extends View{
 
             int i = chooseDraftpoolDie();
 
-            int[] position = chooseBoardDie();
+            System.out.println("Scelgi la dove piazzare il dado");
+            int[] position = chooseBoardCell(false);
 
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
             setChanged();
@@ -199,6 +219,7 @@ public class CLI extends View{
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.PINZASGROSSATRICE,position,aumento));
             setChanged();
             notifyObservers(clientMessage);
+            System.out.println("Mossa inviata");
 
             return true;
        }catch(NoDieException e){
@@ -207,7 +228,47 @@ public class CLI extends View{
 
     }
 
-    
+    public void pennelloMove(Tool tool){
+        if(tool == Tool.PENNELLOPEREGLOMISE || tool == Tool.ALESATOREPERLAMINADIRAME || tool == Tool.TAGLIERINAMANUALE) {
+            boolean secondaMossa = false;
+            System.out.println("Scegli il primo dado da muovere");
+            int[] position = chooseBoardCell(true);
+            System.out.println("Scelgi dove piazzare primo il dado");
+            int[] newPosition = chooseBoardCell(false);
+            ClientMessage clientMessage;
+
+            if(tool == Tool.LATHEKIN){
+                secondaMossa = true;
+            }else if(tool == Tool.TAGLIERINAMANUALE){
+                System.out.println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
+                int scelta = 2;
+                do{
+                    scelta = input.nextInt();
+                }while(scelta != 0 || scelta != 1);
+
+                if(scelta == 1) {
+                    secondaMossa = true;
+                }else {
+                    secondaMossa = false;
+                }
+            }
+
+            if(secondaMossa){
+                System.out.println("Scegli il secondo dado da muovere");
+                int[] position2 = chooseBoardCell(true);
+                System.out.println("Scelgi dove piazzare il secondo dado");
+                int[] newPosition2 = chooseBoardCell(false);
+                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
+            }else{
+                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
+            }
+
+            setChanged();
+            notifyObservers(clientMessage);
+            System.out.println("Mossa inviata");
+        }
+    }
+
 
     @Override
     public void update(Observable o, Object arg) {
