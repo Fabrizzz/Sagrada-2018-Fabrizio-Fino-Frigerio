@@ -46,6 +46,7 @@ public class PlayerMove implements Serializable {
         this.aumentaValoreDado = aumentaDiUno;
     }
 
+    //in caso di taglierina manuale o lathekin, questa è la prima mossa
     public PlayerMove(Tool tool, int row, int column, int finalRow, int finalColumn) {
 
         if (tool != Tool.PENNELLOPEREGLOMISE && tool != Tool.ALESATOREPERLAMINADIRAME && tool != Tool.LATHEKIN && tool != Tool.TAGLIERINAMANUALE)
@@ -57,6 +58,7 @@ public class PlayerMove implements Serializable {
         this.finalColumn = finalColumn;
     }
 
+    //questa è la seconda playermove
     public PlayerMove(Tool tool, int row, int column, int finalRow, int finalColumn, PlayerMove nextMove) {
 
         if (tool != Tool.TAGLIERINAMANUALE && tool != Tool.LATHEKIN)
@@ -98,7 +100,7 @@ public class PlayerMove implements Serializable {
 
     public PlayerMove(int draftPosition, NumberEnum newDiceValue, Tool tool) {
 
-        if (tool != Tool.PENNELLOPERPASTASALDA)
+        if (tool != Tool.PENNELLOPERPASTASALDA && tool != Tool.DILUENTEPERPASTASALDA)
             throw new IllegalArgumentException();
 
 
