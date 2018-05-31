@@ -12,17 +12,18 @@ import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
-public class NormalMoveHandler extends Handler {
+public class RigaInSugheroHandler extends ToolHandler {
 
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+
         PlayerBoard board;
         int row;
         int column;
         int pos;
         Die die;
 
-        if (playerMove.getTool() == Tool.MOSSASTANDARD) {
+        if (playerMove.getTool() == Tool.RIGAINSUGHERO) {
             if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent())
                 throw new InvalidParameterException();
             try {
@@ -32,26 +33,21 @@ public class NormalMoveHandler extends Handler {
                 pos = playerMove.getDraftPosition().get();
                 die = model.getDraftPool().getDie(pos);
                 if (
-                        model.hasUsedNormalMove() ||
+                        cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                                 (board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
                                 board.containsDie(row, column) ||
                                 !board.verifyColorRestriction(die, row, column) ||
                                 !board.verifyNumberRestriction(die, row, column) ||
                                 !board.verifyNearCellsRestriction(die, row, column) ||
-                                !board.verifyPositionRestriction(row, column))
+                                board.verifyPositionRestriction(row, column))
 
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 else {
 
                     board.setDie(die, row, column);
-                        model.getDraftPool().removeDie(die);
-
-                        if (remoteView.getPlayer().isCanDoTwoTurn())
-                            remoteView.getPlayer().setCanDoTwoTurn(false);
-                        else
-                            model.setNormalMove(true);
-
-                        nextHandler.process(playerMove, remoteView, model);
+                    model.getDraftPool().removeDie(die);
+                    completeTool(remoteView.getPlayer(), model, playerMove.getTool());
+                    nextHandler.process(playerMove, remoteView, model);
 
                 }
             } catch (NoDieException e) {
@@ -61,6 +57,5 @@ public class NormalMoveHandler extends Handler {
             }
         } else
             this.nextHandler.process(playerMove, remoteView, model);
-
     }
 }

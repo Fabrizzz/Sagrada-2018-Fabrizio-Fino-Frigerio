@@ -9,11 +9,8 @@ public class EndOfTurnHandler extends Handler {
 
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) {
-        if ((playerMove.getTool() == Tool.SKIPTURN) || (model.hasUsedTool() && model.hasUsedNormalMove()) || (model.isTimerScaduto())) {
+        if ((playerMove.getTool() == Tool.SKIPTURN) || (model.hasUsedTool() && model.hasUsedNormalMove())) {
             model.nextTurn();
-            //start timer
         }
-
-
     }
 }

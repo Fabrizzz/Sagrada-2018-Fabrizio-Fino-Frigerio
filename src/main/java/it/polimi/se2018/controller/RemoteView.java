@@ -8,6 +8,11 @@ import java.util.Observable;
 public class RemoteView extends Observable {
 
     private Player player;
+
+    public RemoteView(Player player) {
+        this.player = player;
+    }
+
     //private Connection connection;
 
     public Player getPlayer() {

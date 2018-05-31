@@ -12,7 +12,7 @@ import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
-public class PinzaSgrossatriceHandler extends Handler {
+public class PinzaSgrossatriceHandler extends ToolHandler {
 
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException
@@ -21,7 +21,6 @@ public class PinzaSgrossatriceHandler extends Handler {
         DraftPool draftPool;
         int draftPosition;
         boolean aumentaDiUno;
-        boolean alreadyUsed;
         Die die;
 
         //controlla fiches e aggiorna map
@@ -29,30 +28,22 @@ public class PinzaSgrossatriceHandler extends Handler {
         if (playerMove.getTool() == Tool.PINZASGROSSATRICE) {
             if (!playerMove.getDraftPosition().isPresent() || !playerMove.getAumentaValoreDado().isPresent())
                 throw new InvalidParameterException();
-            else try {
+            try {
                 draftPosition = playerMove.getDraftPosition().get();
                 aumentaDiUno = playerMove.getAumentaValoreDado().get();
                 draftPool = model.getDraftPool();
                 die = draftPool.getDie(draftPosition);  //non dovrebbe lanciare eccezioni perchè ho già fatto il controllo nel first check
-                alreadyUsed = model.getTools().get(playerMove.getTool());
 
-
-                if (model.hasUsedTool() || (die.getNumber() == NumberEnum.ONE && !aumentaDiUno) || (die.getNumber() == NumberEnum.SIX && aumentaDiUno) ||
-                        (alreadyUsed && remoteView.getPlayer().getFavorTokens() < 2) || (!alreadyUsed && remoteView.getPlayer().getFavorTokens() < 1))
+                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || (die.getNumber() == NumberEnum.ONE && !aumentaDiUno) || (die.getNumber() == NumberEnum.SIX && aumentaDiUno))
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 else {
-                    if (!model.isTimerScaduto()) {
                         if (aumentaDiUno)
                             die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() + 1));
                         else
                             die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() - 1));
 
-                        remoteView.getPlayer().setFavorTokens(remoteView.getPlayer().getFavorTokens() - (alreadyUsed ? 2 : 1));
-                        model.getTools().put(playerMove.getTool(), true);
-                        model.setUsedTool(true);
+                    completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                         nextHandler.process(playerMove, remoteView, model);
-                    } else
-                        remoteView.sendBack(new ServerMessage(ErrorType.TIMERSCADUTO));
                 }
 
             } catch (NoDieException e) {

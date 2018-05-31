@@ -12,7 +12,7 @@ import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
-public class Tool2_3Handler extends Handler {
+public class Tool2_3Handler extends ToolHandler {
     Tool toolname;
 
     public Tool2_3Handler(Tool toolname) {
@@ -29,10 +29,10 @@ public class Tool2_3Handler extends Handler {
         int finalColumn;
         Die die;
         PlayerBoard board;
-        boolean alreadyUsed;
 
         if (playerMove.getTool() == toolname) {
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getFinalColumn().isPresent() || !playerMove.getFinalRow().isPresent())
+            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() ||
+                    !playerMove.getFinalColumn().isPresent() || !playerMove.getFinalRow().isPresent())
                 throw new InvalidParameterException();
             else {
                 board = model.getBoard(remoteView.getPlayer());
@@ -40,11 +40,10 @@ public class Tool2_3Handler extends Handler {
                 column = playerMove.getColumn().get();
                 finalColumn = playerMove.getFinalColumn().get();
                 finalRow = playerMove.getFinalRow().get();
-                alreadyUsed = model.getTools().get(playerMove.getTool());
 
 
-                if (model.hasUsedTool() || !board.containsDie(row, column) || board.containsDie(finalRow, finalColumn) ||
-                        (alreadyUsed && remoteView.getPlayer().getFavorTokens() < 2) || (!alreadyUsed && remoteView.getPlayer().getFavorTokens() < 1))
+                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
+                        !board.containsDie(row, column) || board.containsDie(finalRow, finalColumn))
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 else try {
                     die = board.getDie(row, column);
@@ -53,21 +52,15 @@ public class Tool2_3Handler extends Handler {
                             (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn)))
                         remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                     else {
-                        if (!model.isTimerScaduto()) {
+
                             board.removeDie(row, column);
                             board.setDie(die, finalRow, finalColumn);
-                            remoteView.getPlayer().setFavorTokens(remoteView.getPlayer().getFavorTokens() - (alreadyUsed ? 2 : 1));
-                            model.getTools().put(playerMove.getTool(), true);
-                            model.setUsedTool(true);
+                        completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                             nextHandler.process(playerMove, remoteView, model);
-                        } else
-                            remoteView.sendBack(new ServerMessage(ErrorType.TIMERSCADUTO));
                     }
 
-                } catch (NoDieException e) {
+                } catch (NoDieException | AlredySetDie e) {
                     e.printStackTrace();
-                } catch (AlredySetDie alredySetDie) {
-                    alredySetDie.printStackTrace();
                 }
 
             }

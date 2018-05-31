@@ -21,7 +21,9 @@ public class FirstCheck extends Handler {
                     playerMove.getFinalRow().filter(k -> k < 0 || k > 3).isPresent() ||
                     playerMove.getRoundTrackRound().filter(k -> k >= model.getRound()).isPresent() ||
                     playerMove.getRow().filter(k -> k < 0 || k > 3).isPresent() ||
-                    (!model.getTools().containsKey(playerMove.getTool()) && playerMove.getTool() != Tool.MOSSASTANDARD))
+                    (!model.getTools().containsKey(playerMove.getTool()) &&
+                            playerMove.getTool() != Tool.MOSSASTANDARD &&
+                            playerMove.getTool() != Tool.SKIPTURN))
 
                 throw new InvalidParameterException();
             else

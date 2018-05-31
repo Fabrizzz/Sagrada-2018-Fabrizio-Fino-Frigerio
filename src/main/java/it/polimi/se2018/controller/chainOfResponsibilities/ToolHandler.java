@@ -6,9 +6,9 @@ import it.polimi.se2018.utils.enums.Tool;
 
 public abstract class ToolHandler extends Handler {
 
-    protected boolean canUseTool(Player player, Model model, Tool tool) {
+    protected boolean cantUseTool(Player player, Model model, Tool tool) {
         boolean alreadyUsed = model.getTools().get(tool);
-        return !(model.hasUsedTool() || (alreadyUsed && player.getFavorTokens() < 2) || (!alreadyUsed && player.getFavorTokens() < 1));
+        return (model.hasUsedTool() || (alreadyUsed && player.getFavorTokens() < 2) || (!alreadyUsed && player.getFavorTokens() < 1));
     }
 
     protected void completeTool(Player player, Model model, Tool tool) {
