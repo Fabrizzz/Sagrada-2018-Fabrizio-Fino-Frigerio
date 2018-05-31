@@ -8,6 +8,6 @@ import it.polimi.se2018.utils.Message;
  */
 public interface NetworkHandler {
 
-    public void reciveMessage(Message message,Connection connection);
-
+    //public void reciveMessage(Message message,Connection connection);
+    public void closeConnection(Connection connection);
 }

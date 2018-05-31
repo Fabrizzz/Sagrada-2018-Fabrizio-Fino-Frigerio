@@ -1,8 +1,7 @@
 package it.polimi.se2018.client;
 
-import it.polimi.se2018.controller.Controller;
-import it.polimi.se2018.server.RMIConnection;
-import it.polimi.se2018.server.ServerRMIInterface;
+import it.polimi.se2018.View.View;
+import it.polimi.se2018.server.rmi.ServerRMIInterface;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.NetworkHandler;
@@ -22,16 +21,12 @@ import java.rmi.server.UnicastRemoteObject;
  * @author Alessio
  */
 public class ClientNetwork implements NetworkHandler {
-    private Controller controller;
+    private View view;
     private Connection connection;
-    private ServerRMIInterface serverRMIInterface;
-    private int connectionType = 0;
-    /**
-     * Constructor
-     * @param controller controller
-     */
-    public ClientNetwork(Controller controller){
-        this.controller = controller;
+
+
+    public ClientNetwork(View view){
+        this.view = view;
     }
 
     /**
@@ -40,16 +35,15 @@ public class ClientNetwork implements NetworkHandler {
      * @param port server port
      * @return true if the connection can be created, fase otherwise
      */
-    public boolean connectSocket(String hostname, int port){
+    public Boolean connectSocket(String hostname, int port){
         Socket socket;
         if(!isConnected()) {
             try {
                 socket = new Socket(hostname, port);
                 connection = new SocketConnection(this, socket);
-                connectionType = 1;
+                connection.addObserver(view);
                 return true;
             } catch (IOException e) {
-                connectionType = 0;
                 return false;
             }
         }else{
@@ -62,27 +56,41 @@ public class ClientNetwork implements NetworkHandler {
      * @param hostname hostname del server
      * @return true if the connection can be created, false otherwise
      */
-    public boolean connectRMI(String hostname){
+    public Boolean connectRMI(String hostname){
         if(!isConnected()){
             try {
-                serverRMIInterface = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
+                ServerRMIInterface serverRMIInterface = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
-                connection = new RMIConnection(new ClientRMIImplementation());
+                Connection connectionIn = new ClientRMIImplementation(this);
 
-                RMIConnection remoteRef = (RMIConnection) UnicastRemoteObject.exportObject((Remote) connection, 0);
+                ClientRMIImplementation remoteRef = (ClientRMIImplementation) UnicastRemoteObject.exportObject((Remote) connectionIn, 0);
 
-                connectionType = 2;
-                return serverRMIInterface.addClient(remoteRef);
+                connection = serverRMIInterface.addClient(remoteRef);
+
+                if(connection != null){
+                    connectionIn.addObserver(view);
+                    view.addObserver(connection);
+                    return true;
+                }else{
+                    return true;
+                }
 
             } catch (MalformedURLException | RemoteException | NotBoundException e) {
                 System.out.println(e);
-                connectionType = 0;
                 return false;
             }
         }else{
             return false;
         }
 
+    }
+
+    public Boolean sendMessage(Message message){
+        if(isConnected()){
+            return connection.sendMessage(message);
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -97,47 +105,8 @@ public class ClientNetwork implements NetworkHandler {
         }
     }
 
-    /**
-     * Called by the connection when a message is recived from the server
-     * @param message message recived
-     * @param connection connection
-     */
-    public void reciveMessage(Message message, Connection connection) {
-        //notifica controller
-    }
-
-    /**
-     * Send a message to the server
-     * @param message message to send
-     * @return true if the message has been sent correctly
-     */
-    public boolean sendMessage(Message message){
-        if(isConnected()){
-            if(connectionType == 1){
-                return connection.sendMessage(message);
-            }else if(connectionType == 2){
-                try{
-                    serverRMIInterface.reciveMessage(message,connection);
-                    return true;
-                }catch (RemoteException e){
-                    return false;
-                }
-            }
-        }else{
-            return false;
-        }
-        return false;
-    }
-
-    /**
-     * Remove the connection
-     * @param connection connection
-     */
-    public void removeConnection(Connection connection) {
+    public void closeConnection(Connection connection) {
         this.connection = null;
-        if(connectionType == 2){
-            serverRMIInterface = null;
-        }
     }
 
 }

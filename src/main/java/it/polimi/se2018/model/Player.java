@@ -85,4 +85,6 @@ public class Player implements Serializable { //da completare
     public void setConnected(boolean connected) {
         isConnected = connected;
     }
+
+    public Long getId(){return id;}
 }

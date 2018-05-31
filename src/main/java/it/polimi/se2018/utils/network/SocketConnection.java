@@ -1,30 +1,24 @@
 package it.polimi.se2018.utils.network;
 
-import it.polimi.se2018.controller.RemoteView;
-import it.polimi.se2018.utils.ClientMessage;
-import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
-import javafx.beans.InvalidationListener;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.rmi.Remote;
-import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * Socket connection
  * @author Alessio
  */
-public class SocketConnection extends Thread implements Connection {
+public class SocketConnection extends Connection implements Runnable {
     private Socket socket;
     private NetworkHandler networkHandler;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean connected = true;
-    private ArrayList<RemoteView> observers = new ArrayList<>();
 
     /**
      * Costructor
@@ -57,29 +51,6 @@ public class SocketConnection extends Thread implements Connection {
         }
     }
 
-    /**
-     * Wait for the initialization message
-     * @return the initializzation message
-     */
-    public ClientMessage waitInitializationMessage(){
-        ClientMessage clientMessage;
-        Boolean waiting = true;
-        while (waiting){
-            try{
-                clientMessage = (ClientMessage) in.readObject();
-                if(clientMessage.getMessageType() == MessageType.INITIALCONFIG){
-                    return clientMessage;
-                }else{
-                    close();
-                    return null;
-                }
-            }catch (IOException | ClassNotFoundException e){
-                close();
-                return null;
-            }
-        }
-        return null;
-    }
 
     /**
      * Close the connection
@@ -98,6 +69,8 @@ public class SocketConnection extends Thread implements Connection {
         }catch (IOException e){}
 
         this.connected = false;
+        networkHandler.closeConnection(this);
+        this.deleteObservers();
     }
 
     /**
@@ -114,12 +87,18 @@ public class SocketConnection extends Thread implements Connection {
         while (connected) {
             try{
                 message = (Message) in.readObject();
-                networkHandler.reciveMessage(message,this);
+                setChanged();
+                notifyObservers(message);
             }catch (IOException | ClassNotFoundException e){
                 connected = false;
             }
 
         }
         close();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        sendMessage((Message) arg);
     }
 }

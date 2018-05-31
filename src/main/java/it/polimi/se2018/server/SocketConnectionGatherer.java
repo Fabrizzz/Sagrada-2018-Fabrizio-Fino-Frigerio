@@ -1,5 +1,6 @@
 package it.polimi.se2018.server;
 
+import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.SocketConnection;
@@ -52,13 +53,13 @@ public class SocketConnectionGatherer extends Thread {
         while(run) {
 
             Socket clientSocket;
-            Connection client;
+            Connection connection;
             try {
 
                 clientSocket = serverSocket.accept();
-                client = new SocketConnection(serverNetwork,clientSocket);
-                serverNetwork.addClient(client);
-
+                connection = new SocketConnection(serverNetwork,clientSocket);
+                RemoteView remoteView = serverNetwork.addClient(connection);
+                remoteView.addObserver(connection);
             } catch (IOException e) {
                 e.printStackTrace();
             }

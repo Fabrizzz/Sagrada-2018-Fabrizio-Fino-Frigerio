@@ -100,7 +100,7 @@ public class ModelView implements Observer, Serializable {
      * @param player player
      * @return playerBoard
      */
-    private PlayerBoard getBoard(Player player) {
+    public PlayerBoard getBoard(Player player) {
         return boardMap.get(player);
     }
 
@@ -108,7 +108,7 @@ public class ModelView implements Observer, Serializable {
      * Return the dicebag
      * @return diceBag
      */
-    private DiceBag getDiceBag() {
+    public DiceBag getDiceBag() {
         return diceBag;
     }
 
@@ -116,7 +116,7 @@ public class ModelView implements Observer, Serializable {
      * Return the draftPool
      * @return draftPool
      */
-    private DraftPool getDraftPool() {
+    public DraftPool getDraftPool() {
         return draftPool;
     }
 
@@ -124,7 +124,7 @@ public class ModelView implements Observer, Serializable {
      * Return the roundTrack
      * @return roundTrack
      */
-    private RoundTrack getRoundTrack() {
+    public RoundTrack getRoundTrack() {
         return roundTrack;
     }
 
@@ -136,6 +136,14 @@ public class ModelView implements Observer, Serializable {
         return players;
     }
 
+    public Player getPlayer(Long id){
+        for(int i = 0; i < players.size(); i++){
+            if(players.get(i).getId() == id){
+                return players.get(i);
+            }
+        }
+        return null;
+    }
     /**
      * Return the tool card list
      * @return tool card list
