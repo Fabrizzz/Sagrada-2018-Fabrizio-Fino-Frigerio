@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.controller.RoundTimer;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.enums.Tool;
@@ -35,9 +34,6 @@ public class Model extends Observable {
     private boolean firstTurn = true; //ogni round è fatto da due turni, è importante tenerne conto anche per l' uso di certe tool
     private boolean usedTool = false;
     private boolean normalMove = false;
-    private boolean timerScaduto = false;
-
-    private Timer timer = new Timer();
 
 
     /**
@@ -249,12 +245,15 @@ public class Model extends Observable {
 
     }
 
+    public static int getMinutesPerTurn() {
+        return MINUTES_PER_TURN;
+    }
+
     /**
      * End the game
      */
     public void endGame() {
-        timer.purge();
-        timer.cancel();
+        //chiudere i timer
     }
 
     /**
@@ -275,7 +274,7 @@ public class Model extends Observable {
 
 
         if (round != 10) {
-            
+
             playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
             if (players.get(playerPosition).isSkipSecondTurn()) {
                 players.get(playerPosition).setSkipSecondTurn(false);
@@ -285,26 +284,12 @@ public class Model extends Observable {
                 if (!players.get(playerPosition).isConnected())
                     nextTurn();
                 else {
-                    timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
+                    //timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
                     notifyObs();
                 }
             }
         } else
             endGame();
-    }
-
-
-    public synchronized boolean isTimerScaduto() {
-        return timerScaduto;
-    }
-
-    public synchronized void setTimerScadutoOff() {
-        this.timerScaduto = false;
-    }
-
-    public synchronized void setTimerScadutoOn(int turn, int round) {
-        if (getTurn() == turn && this.getRound() == round)
-            timerScaduto = true;
     }
 
     public int getTurn() {

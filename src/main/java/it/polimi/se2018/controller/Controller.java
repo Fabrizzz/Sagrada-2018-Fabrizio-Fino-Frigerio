@@ -15,6 +15,7 @@ public class Controller implements Observer {
     private Model model;
     private LinkedList<BoardName> availableBoards = new LinkedList<>();
     private Handler firstHandler;
+    private Timer timer = new Timer();
 
     public Controller() {
         availableBoards.addAll(Arrays.asList(BoardName.values()));
@@ -36,6 +37,17 @@ public class Controller implements Observer {
         return model;
     }
 
+    public synchronized void timerScaduto(int turn, int round) {
+        if (model.getTurn() == turn && model.getRound() == round) {
+            model.nextTurn();
+            setTimer(model.getTurn(), model.getRound());
+        }
+    }
+
+    public void setTimer(int turn, int round) {
+        timer.schedule(new RoundTimer(turn, round, this), Model.getMinutesPerTurn() * 60 * 1000);
+    }
+
     //private void startGame()
 
 
@@ -44,7 +56,10 @@ public class Controller implements Observer {
         PlayerMove playerMove = (PlayerMove) arg;
         RemoteView remoteView = (RemoteView) o;
         try {
+            int turn = model.getTurn();
             firstHandler.process(playerMove, remoteView, getModel());
+            if (model.getTurn() != turn)
+                setTimer(model.getTurn(), model.getRound());
         } catch (InvalidParameterException e) {
             e.printStackTrace();
         }

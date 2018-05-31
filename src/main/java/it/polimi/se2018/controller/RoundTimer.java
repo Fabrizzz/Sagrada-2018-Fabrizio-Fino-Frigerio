@@ -1,23 +1,21 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.Model;
-
 import java.util.TimerTask;
 
 public class RoundTimer extends TimerTask {
 
     private int round;
     private int turn;
-    private Model model;
+    private Controller controller;
 
-    public RoundTimer(int turn, int round, Model model) {
+    public RoundTimer(int turn, int round, Controller controller) {
         this.round = round;
         this.turn = turn;
-        this.model = model;
+        this.controller = controller;
     }
 
     @Override
     public void run() {
-        model.setTimerScadutoOn(turn, round);
+        controller.timerScaduto(turn, round);
     }
 }
