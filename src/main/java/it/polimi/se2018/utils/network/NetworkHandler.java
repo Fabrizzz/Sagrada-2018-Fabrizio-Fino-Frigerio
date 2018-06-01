@@ -1,5 +1,6 @@
 package it.polimi.se2018.utils.network;
 
+import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.utils.Message;
 
 /**
@@ -7,7 +8,5 @@ import it.polimi.se2018.utils.Message;
  * @author Alessio
  */
 public interface NetworkHandler {
-
-    //public void reciveMessage(Message message,Connection connection);
     public void closeConnection(Connection connection);
 }

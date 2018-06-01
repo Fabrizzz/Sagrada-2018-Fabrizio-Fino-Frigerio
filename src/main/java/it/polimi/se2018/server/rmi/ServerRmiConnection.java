@@ -1,7 +1,9 @@
 package it.polimi.se2018.server.rmi;
 
+import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.network.Connection;
 
 import java.rmi.Remote;
@@ -18,8 +20,13 @@ public class ServerRmiConnection extends Connection implements Remote {
 
     public boolean sendMessage(Message message) {
         if(isConnected()){
-            setChanged();
-            notifyObservers(message);
+            if(message.getMessageType() == MessageType.INITIALCONFIG){
+                RemoteView remoteView = this.serverNetwork.initializeConnection(this,message);
+                addObserver(remoteView);
+            }else {
+                setChanged();
+                notifyObservers(message);
+            }
             return true;
         }else{
             return false;

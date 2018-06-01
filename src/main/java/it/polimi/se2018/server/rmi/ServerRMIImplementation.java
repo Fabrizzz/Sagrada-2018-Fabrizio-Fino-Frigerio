@@ -29,9 +29,8 @@ public class ServerRMIImplementation extends UnicastRemoteObject implements Serv
 
     public ServerRmiConnection addClient(Connection clientRmiConnection) throws RemoteException{
         ServerRmiConnection serverRmiConnection = new ServerRmiConnection(serverNetwork);
-        RemoteView remoteView = serverNetwork.addClient(clientRmiConnection);
-        if(remoteView != null){
-            remoteView.addObserver(serverRmiConnection);
+
+        if(serverNetwork.addClient(clientRmiConnection)){
             return ((ServerRmiConnection) UnicastRemoteObject.exportObject(serverRmiConnection, 0));
         }else{
             return null;

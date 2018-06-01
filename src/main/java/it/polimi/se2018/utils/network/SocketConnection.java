@@ -1,5 +1,8 @@
 package it.polimi.se2018.utils.network;
 
+import it.polimi.se2018.controller.RemoteView;
+import it.polimi.se2018.server.ServerNetwork;
+import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.Message;
 
@@ -87,8 +90,13 @@ public class SocketConnection extends Connection implements Runnable {
         while (connected) {
             try{
                 message = (Message) in.readObject();
-                setChanged();
-                notifyObservers(message);
+                if(message.getMessageType() == MessageType.INITIALCONFIG){
+                    RemoteView remoteView = ((ServerNetwork) this.networkHandler).initializeConnection(this,message);
+                    addObserver(remoteView);
+                }else {
+                    setChanged();
+                    notifyObservers(message);
+                }
             }catch (IOException | ClassNotFoundException e){
                 connected = false;
             }
