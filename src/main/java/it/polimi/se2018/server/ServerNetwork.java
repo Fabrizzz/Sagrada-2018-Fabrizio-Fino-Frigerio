@@ -25,7 +25,7 @@ public class ServerNetwork extends Observable implements NetworkHandler {
     private ServerRMIImplementation serverRMIImplementation;
     private boolean lobbyWaiting = true;
     private Map<Long,Connection> connectionMap = new HashMap<>();
-    private Map<Connection,RemoteView> remoteMap = new HashMap<>();
+    private Map<Long,RemoteView> remoteMap = new HashMap<>();
     private ArrayList<Connection> waitingInitializationList = new ArrayList<>();
     private ArrayList<Player> playerList = new ArrayList<>();
 
@@ -71,6 +71,9 @@ public class ServerNetwork extends Observable implements NetworkHandler {
                 }, (long) 60*1000);
             }
             return true;
+        }else if(!lobbyWaiting){
+            waitingInitializationList.add(clientConnection);
+            return true;
         }
 
         return false;
@@ -85,14 +88,26 @@ public class ServerNetwork extends Observable implements NetworkHandler {
         //Crea model??
     }
 
-    public RemoteView initializeConnection(Connection connection,Message message){
-        if(waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG){
-            playerList.add(new Player(((ClientMessage) message).getNick(),((ClientMessage) message).getId()));
-            RemoteView remoteView = new RemoteView(playerList.get(playerList.size()-1));
-            connectionMap.put(((ClientMessage) message).getId(),connection);
-            remoteMap.put(connection,remoteView);
+    public RemoteView initializeConnection(Connection connection,Message message) {
+        if (waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && lobbyWaiting) {
+            playerList.add(new Player(((ClientMessage) message).getNick(), ((ClientMessage) message).getId()));
+
+            RemoteView remoteView = new RemoteView(playerList.get(playerList.size() - 1));
+            connectionMap.put(((ClientMessage) message).getId(), connection);
+            remoteMap.put(((ClientMessage) message).getId(), remoteView);
+
             remoteView.addObserver(connection);
+
             return remoteView;
+        } else if(waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && !lobbyWaiting){
+            if(connectionMap.containsKey(((ClientMessage) message).getId()) && connectionMap.get(((ClientMessage) message).getId()) == null){
+                connectionMap.put(((ClientMessage) message).getId(), connection);
+                remoteMap.get(((ClientMessage) message).getId()).addObserver(connection);
+
+                return remoteMap.get(((ClientMessage) message).getId());
+            }else{
+                return null;
+            }
         }else{
             return null;
         }
@@ -111,6 +126,11 @@ public class ServerNetwork extends Observable implements NetworkHandler {
     }
 
     public void closeConnection(Connection connection){
-        remoteMap.get(connection).deleteObservers();
+        for(Long key : connectionMap.keySet()){
+            if(connectionMap.get(key).equals(connection)){
+                connectionMap.replace(key,connection,null);
+                remoteMap.get(key).deleteObserver(connection);
+            }
+        }
     }
 }

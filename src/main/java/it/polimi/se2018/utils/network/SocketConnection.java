@@ -59,6 +59,8 @@ public class SocketConnection extends Connection implements Runnable {
      * Close the connection
      */
     public void close(){
+        this.deleteObservers();
+
         try{
             out.close();
         }catch (IOException e){}
@@ -73,7 +75,7 @@ public class SocketConnection extends Connection implements Runnable {
 
         this.connected = false;
         networkHandler.closeConnection(this);
-        this.deleteObservers();
+
     }
 
     /**
