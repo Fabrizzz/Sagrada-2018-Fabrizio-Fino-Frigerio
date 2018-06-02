@@ -18,7 +18,6 @@ import static javafx.fxml.FXMLLoader.*;
  */
 public class GUI extends Application {
 
-
     /**
      * Contains the code for the JavaFX Application
      * @param primaryStage
@@ -27,18 +26,19 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-       Parent root = null;
-       try{
-           root = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
-       }
-       catch (Exception e){
-           System.out.println("File FXML not found");
-       }
-       Scene scene = new Scene(root);
-       primaryStage.setTitle("Sagrada");
-       primaryStage.setScene(scene);
-       primaryStage.show();
+        Parent root;
+        Scene scene = null;
+        try{
+            root = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
+            scene = new Scene(root);
+        }
+        catch (Exception e){
+            System.out.println("File FXML not found");
+        }
 
+        primaryStage.setTitle("Sagrada");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     /*
