@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="root" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="it.polimi.se2018.View.GUIController">
+  <children>
+    <VBox fx:id="vbox" alignment="TOP_CENTER" layoutX="0.0" layoutY="0.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="-1.0" spacing="15.0">
+      <children>
+        <ImageView fx:id="imageView" fitHeight="0.0" fitWidth="0.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@Title%20Sagrada.jpg" />
+          </image>
+        </ImageView>
+        <Label fx:id="labelSocketRMI" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" text="Scegliere il tipo di connessione con il server:">
+          <font>
+            <Font size="14.0" />
+          </font>
+        </Label>
+        <Button fx:id="buttonSocket" mnemonicParsing="false" onAction="#handleButtonSocket" text="Socket" />
+        <Button id="RMI" fx:id="buttonRMI" minHeight="-1.0" mnemonicParsing="false" onAction="#handleButtonRMI" prefHeight="25.0" prefWidth="56.0" text="RMI" />
+        <Label text="" />
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>
