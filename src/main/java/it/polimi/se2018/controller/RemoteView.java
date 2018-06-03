@@ -28,4 +28,9 @@ public class RemoteView extends View {
     public void update(Observable o, Object arg) {
 
     }
+
+    @Override
+    public void connectionClosed() {
+
+    }
 }
