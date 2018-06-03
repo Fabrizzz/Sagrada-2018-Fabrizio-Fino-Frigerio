@@ -127,11 +127,11 @@ public class ServerNetwork extends Observable implements NetworkHandler {
         }
     }
 
-    public void closeConnection(Connection connection){
+    public void closeConnection(Object connection){
         for(Long key : connectionMap.keySet()){
             if(connectionMap.get(key).equals(connection)){
-                connectionMap.replace(key,connection,null);
-                remoteMap.get(key).deleteObserver(connection);
+                connectionMap.replace(key,(Connection) connection,null);
+                remoteMap.get(key).deleteObserver((Connection) connection);
             }
         }
     }

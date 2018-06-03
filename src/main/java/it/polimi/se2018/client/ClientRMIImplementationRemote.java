@@ -11,12 +11,12 @@ import java.util.Observable;
  * Remote class of the client
  * @author Alessio
  */
-public class ClientRMIImplementation extends Connection implements Remote {
+public class ClientRMIImplementationRemote extends Observable implements RMIInterfaceRemote {
 
     private ClientNetwork clientNetwork;
     private Boolean connected = true;
 
-    public ClientRMIImplementation(ClientNetwork clientNetwork){
+    public ClientRMIImplementationRemote(ClientNetwork clientNetwork){
         this.clientNetwork = clientNetwork;
     }
 
@@ -34,18 +34,13 @@ public class ClientRMIImplementation extends Connection implements Remote {
         return connected;
     }
 
-    /**
-     * Signal the client to close the connection
-     * @throws RemoteException rmi error
-     */
+
     public void close(){
         this.connected = false;
         this.deleteObservers();
         clientNetwork.closeConnection(this);
     }
 
-
-    @Override
     public void update(Observable o, Object arg) {
         sendMessage((Message) arg);
     }

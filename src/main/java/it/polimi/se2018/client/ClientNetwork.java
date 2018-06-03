@@ -1,6 +1,7 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.View.View;
+import it.polimi.se2018.server.rmi.ServerRMIConnection;
 import it.polimi.se2018.server.rmi.ServerRMIInterface;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
@@ -62,11 +63,12 @@ public class ClientNetwork implements NetworkHandler {
             try {
                 ServerRMIInterface serverRMIInterface = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
-                Connection connectionIn = new ClientRMIImplementation(this);
+                ClientRMIImplementationRemote connectionIn = new ClientRMIImplementationRemote(this);
 
-                ClientRMIImplementation remoteRef = (ClientRMIImplementation) UnicastRemoteObject.exportObject((Remote) connectionIn, 0);
+                RMIInterfaceRemote remoteRef = (RMIInterfaceRemote) UnicastRemoteObject.exportObject((Remote) connectionIn, 0);
 
-                connection = serverRMIInterface.addClient(remoteRef);
+                RMIInterfaceRemote serverRMIInterfaceRemote = serverRMIInterface.addClient(remoteRef);
+                connection = new ServerRMIConnection(serverRMIInterfaceRemote);
 
                 if(connection != null){
                     connectionIn.addObserver(view);
@@ -77,7 +79,7 @@ public class ClientNetwork implements NetworkHandler {
                 }
 
             } catch (MalformedURLException | RemoteException | NotBoundException e) {
-                System.out.println(e);
+               e.printStackTrace();
                 return false;
             }
         }else{
@@ -106,7 +108,7 @@ public class ClientNetwork implements NetworkHandler {
         }
     }
 
-    public void closeConnection(Connection connection) {
+    public void closeConnection(Object connection) {
         this.connection = null;
         view.connectionClosed();
     }

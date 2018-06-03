@@ -1,27 +1,30 @@
 package it.polimi.se2018.server.rmi;
 
+import it.polimi.se2018.client.ClientRMIConnection;
+import it.polimi.se2018.client.RMIInterfaceRemote;
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.enums.MessageType;
-import it.polimi.se2018.utils.network.Connection;
 
 import java.rmi.Remote;
 import java.util.Observable;
 
-public class ServerRmiConnection extends Connection implements Remote {
+public class ServerRMIImplementationRemote extends Observable implements RMIInterfaceRemote {
 
     private ServerNetwork serverNetwork;
+    private ClientRMIConnection clientRMIConnection;
     private Boolean connected = true;
 
-    public ServerRmiConnection(ServerNetwork serverNetwork){
+    public ServerRMIImplementationRemote(ServerNetwork serverNetwork, ClientRMIConnection clientRMIConnection){
         this.serverNetwork = serverNetwork;
+        this.clientRMIConnection = clientRMIConnection;
     }
 
     public boolean sendMessage(Message message) {
         if(isConnected()){
             if(message.getMessageType() == MessageType.INITIALCONFIG){
-                RemoteView remoteView = this.serverNetwork.initializeConnection(this,message);
+                RemoteView remoteView = this.serverNetwork.initializeConnection(clientRMIConnection,message);
                 addObserver(remoteView);
             }else {
                 setChanged();
@@ -44,7 +47,6 @@ public class ServerRmiConnection extends Connection implements Remote {
         serverNetwork.closeConnection(this);
     }
 
-    @Override
     public void update(Observable o, Object arg) {
         sendMessage((Message) arg);
     }

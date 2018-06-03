@@ -8,5 +8,5 @@ import it.polimi.se2018.utils.Message;
  * @author Alessio
  */
 public interface NetworkHandler {
-    public void closeConnection(Connection connection);
+    public void closeConnection(Object connection);
 }
