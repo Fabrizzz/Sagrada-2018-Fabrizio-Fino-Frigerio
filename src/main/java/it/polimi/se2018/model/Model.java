@@ -6,6 +6,7 @@ import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Game model
@@ -21,7 +22,7 @@ public class Model extends Observable {
     private final Map<Player, PlayerBoard> boardMap;
     private final Map<Player, PrivateObjective> privateObjectiveMap;
     private final Map<Tool, Boolean> tools;
-    private final List<PublicObjective> publicObjective = new ArrayList<>(NUMBER_OF_PUBLIC_OBJECTIVES);
+    private final List<PublicObjective> publicObjective;
 
 
     private final DiceBag diceBag;    //Il sacchetto contenente i dadi
@@ -43,29 +44,22 @@ public class Model extends Observable {
      * @param boardMap map between the players and the boards
      * @param privateObjectiveMap map between the players and their private objectives
      */
-    public Model(Player[] players, List<PublicObjective> publicObjectives, Map<Player, PlayerBoard> boardMap, Map<Player, PrivateObjective> privateObjectiveMap) {
-        if (players.length >= 4)
-            throw new IllegalArgumentException("Too many players");
-        this.players = new ArrayList<>(Arrays.asList(players)); //Creazione di un arraylist che conterrà i player
+    public Model(List<Player> players, List<PublicObjective> publicObjectives, Map<Player, PlayerBoard> boardMap,
+                 Map<Player, PrivateObjective> privateObjectiveMap, List<Tool> tools) {
+        if (players.size() >= 4 || tools.size() != NUMBER_OF_TOOL_CARDS || publicObjectives.size() != NUMBER_OF_PUBLIC_OBJECTIVES ||
+                boardMap.size() != players.size() ||
+                privateObjectiveMap.size() != players.size())
+            throw new IllegalArgumentException();
+
+        this.players = new ArrayList<>(players); //Creazione di un arraylist che conterrà i player
         diceBag = new DiceBag(NUMBER_OF_DICE_PER_COLOR);    //Creazione del sacchetto; viene passato 18 così verranno generati i 90 dadi, 18 per colore
-        draftPool = new DraftPool(players.length, diceBag); //Creazione della variabile draftPool per i dadi pescati; viene passato il numero di dadi da pescare (numplayer  2 +1) e il sacchetto da cui pescare
-        tools = new EnumMap<>(Tool.class);
-        Tool.getRandTools(NUMBER_OF_TOOL_CARDS).forEach(k -> tools.put(k, false));
-        if (publicObjectives.size() != NUMBER_OF_PUBLIC_OBJECTIVES)
-            throw new IllegalArgumentException("Wrong number of public Objectives");
-        publicObjective.addAll(publicObjectives);
+        draftPool = new DraftPool(players.size(), diceBag); //Creazione della variabile draftPool per i dadi pescati; viene passato il numero di dadi da pescare (numplayer  2 +1) e il sacchetto da cui pescare
+        this.tools = new EnumMap<Tool, Boolean>(Tool.getRandTools(3).stream().collect(Collectors.toMap(k -> k, t -> false)));
+        publicObjective = new ArrayList<>(publicObjectives);
         roundTrack = new RoundTrack();
-        if (boardMap.size() != players.length)
-            throw new IllegalArgumentException("Wrong number of boardMaps");
-
-        this.boardMap = boardMap;
-        if (privateObjectiveMap.size() != players.length)
-            throw new IllegalArgumentException("Wrong number of Private Objectives");
-
+        this.boardMap = new HashMap<>(boardMap);
         this.privateObjectiveMap = privateObjectiveMap;
-        players[0].setYourTurn(true);
-
-
+        this.players.get(0).setYourTurn(true);
     }
 
     /**
