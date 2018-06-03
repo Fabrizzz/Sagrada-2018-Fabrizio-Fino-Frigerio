@@ -7,6 +7,13 @@ public class Client {
     private View view;
     private ClientNetwork clientNetwork;
 
+    public Client(){
+        System.out.println("Scegli l'interfaccia grafica");
+        System.out.println("1) CLI");
+        clientCLI();
+
+    }
+
     public void clientCLI(){
         view = new CLI();
         clientNetwork = new ClientNetwork(view);

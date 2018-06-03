@@ -66,6 +66,7 @@ public class ServerNetwork extends Observable implements NetworkHandler {
                     @Override
                     public void run() {
                         lobbyWaiting = false;
+                        System.out.println("Timer scaduto, inizializzazione gioco");
                         initializeGame();
                     }
                 }, (long) 60*1000);
@@ -89,6 +90,7 @@ public class ServerNetwork extends Observable implements NetworkHandler {
     }
 
     public RemoteView initializeConnection(Connection connection,Message message) {
+        System.out.println("Inizializzazione ricevuta, nick " + ((ClientMessage) message).getNick() + ((ClientMessage) message).getId());
         if (waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && lobbyWaiting) {
             playerList.add(new Player(((ClientMessage) message).getNick(), ((ClientMessage) message).getId()));
 

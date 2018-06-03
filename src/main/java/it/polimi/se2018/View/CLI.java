@@ -144,6 +144,9 @@ public class CLI extends View{
             position[1] = input.nextInt();
         }while (position[1] > 0 && position[1] < modelView.getRoundTrack().numberOfDice(position[0] - 1));
 
+        position[0] --;
+        position[1] --;
+
         return position;
     }
     
@@ -156,7 +159,7 @@ public class CLI extends View{
             System.out.println("Errore, inserisci una posizione corretta");
             i = input.nextInt();
         }
-        return i;
+        return i - 1;
 
     }
 
@@ -179,14 +182,14 @@ public class CLI extends View{
                 position[1] = input.nextInt();
             }
             if(withDie){
-                if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0],position[1])){
+                if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0] - 1,position[1] - 1)){
                     repeat = false;
                 }else{
                     repeat = true;
                     System.out.println("Errore: nessun dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
                 }
             }else{
-                if(!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0],position[1])){
+                if(!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0] - 1,position[1] - 1)){
                     repeat = false;
                 }else{
                     repeat = true;
@@ -196,6 +199,8 @@ public class CLI extends View{
             }
         }while(repeat);
 
+        position[0] --;
+        position[1] --;
         return position;
     }
 
@@ -445,7 +450,7 @@ public class CLI extends View{
             case ERROR:
                 System.out.println("Errore: " + ((ServerMessage) arg).getErrorType().toString());
                 break;
-            case INITIALCONFIG:
+            case INITIALCONFIGSERVER:
                 this.modelView = ((ServerMessage) arg).getModelView();
                 if(modelView.getPlayer(localID).isYourTurn()){
                     chooseMove();
@@ -476,18 +481,20 @@ public class CLI extends View{
         String address = "";
         if(i == 1){
             int port = 0;
-            do{
+            while(!clientNetwork.isConnected()) {
                 System.out.println("Inserisci l'indirizzo del server: ");
                 address = input.next();
                 System.out.println("Inserisci la porta: ");
                 port = input.nextInt();
-            }while(clientNetwork.connectSocket(address,port));
+                clientNetwork.connectSocket(address, port);
+            }
             System.out.println("Connessione accettata");
         }else{
-            do{
+            while(!clientNetwork.isConnected()) {
                 System.out.println("Inserisci l'indirizzo del server: ");
                 address = input.next();
-            }while (clientNetwork.connectRMI(address));
+                clientNetwork.connectRMI(address);
+            }
             System.out.println("Connessione accettata");
         }
         String nick = "";

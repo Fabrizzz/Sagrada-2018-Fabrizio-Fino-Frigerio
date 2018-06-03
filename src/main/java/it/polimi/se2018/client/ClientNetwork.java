@@ -42,6 +42,7 @@ public class ClientNetwork implements NetworkHandler {
                 socket = new Socket(hostname, port);
                 connection = new SocketConnection(this, socket);
                 connection.addObserver(view);
+                (new Thread((SocketConnection) connection)).start();
                 return true;
             } catch (IOException e) {
                 return false;
