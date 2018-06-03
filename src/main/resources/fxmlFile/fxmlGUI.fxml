@@ -24,8 +24,8 @@
             <Font size="14.0" />
           </font>
         </Label>
-        <Button fx:id="buttonSocket" mnemonicParsing="false" onAction="#handleButtonSocket" text="Socket" />
-        <Button id="RMI" fx:id="buttonRMI" minHeight="-1.0" mnemonicParsing="false" onAction="#handleButtonRMI" prefHeight="25.0" prefWidth="56.0" text="RMI" />
+        <Button fx:id="buttonSocket" mnemonicParsing="false" onAction="#handleButton" text="Socket" />
+        <Button id="RMI" fx:id="buttonRMI" minHeight="-1.0" mnemonicParsing="false" onAction="#handleButton" prefHeight="25.0" prefWidth="56.0" text="RMI" />
         <Label text="" />
       </children>
     </VBox>

@@ -24,7 +24,7 @@ public class GUI extends Application {
      * @throws Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         Parent root;
         Scene scene = null;
