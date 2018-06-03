@@ -1,5 +1,6 @@
 package it.polimi.se2018.View;
 
+import it.polimi.se2018.client.ClientNetwork;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
@@ -461,5 +462,46 @@ public class CLI extends View{
 
     public void connectionClosed(){
         System.out.println("Connessione al server chiusa");
+    }
+
+    public void createConnection(ClientNetwork clientNetwork){
+        System.out.println("Benvenuto, scegli il metodo di connessione: ");
+        System.out.println("1) Socket");
+        System.out.println("2) RMI");
+        int i = 0;
+        do{
+            i = input.nextInt();
+        }while(i < 1 || i > 2);
+
+        String address = "";
+        if(i == 1){
+            int port = 0;
+            do{
+                System.out.println("Inserisci l'indirizzo del server: ");
+                address = input.next();
+                System.out.println("Inserisci la porta: ");
+                port = input.nextInt();
+            }while(clientNetwork.connectSocket(address,port));
+            System.out.println("Connessione accettata");
+        }else{
+            do{
+                System.out.println("Inserisci l'indirizzo del server: ");
+                address = input.next();
+            }while (clientNetwork.connectRMI(address));
+            System.out.println("Connessione accettata");
+        }
+        String nick = "";
+        System.out.println("Inserisci il tuo nome: ");
+        do{
+            nick = input.next();
+        }while(nick.equals(""));
+        localID = (new Random()).nextLong();
+
+        ClientMessage clientMessage = new ClientMessage(nick,localID);
+        if(clientNetwork.sendMessage(clientMessage)){
+            System.out.println("Nome utente inviato");
+        }else{
+            System.out.println("Errore connessione");
+        }
     }
 }

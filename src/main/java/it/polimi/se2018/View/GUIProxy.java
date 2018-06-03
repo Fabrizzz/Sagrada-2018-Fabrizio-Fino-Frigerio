@@ -19,4 +19,9 @@ public class GUIProxy extends View {
     public void update(Observable o, Object arg) {
 
     }
+
+    @Override
+    public void connectionClosed() {
+
+    }
 }
