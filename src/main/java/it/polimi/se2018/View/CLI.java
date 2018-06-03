@@ -203,28 +203,69 @@ public class CLI extends View{
         return position;
     }
 
-    public void normalSugheroMove(Tool tool){
-        if(tool == Tool.MOSSASTANDARD || tool == Tool.RIGAINSUGHERO) {
-
-            int i = chooseDraftpoolDie();
-
-            System.out.println("Scelgi la dove piazzare il dado");
-            int[] position = chooseBoardCell(false);
-
-            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
-            setChanged();
-            notifyObservers(clientMessage);
-            System.out.println("Mossa inviata");
+    public void move(Tool tool){
+        switch (tool) {
+            case MOSSASTANDARD:
+                normalSugheroMove(tool);
+                break;
+            case RIGAINSUGHERO:
+                normalSugheroMove(tool);
+                break;
+            case SKIPTURN:
+                skipMartellettoTenagliaMove(tool);
+                break;
+            case MARTELLETTO:
+                skipMartellettoTenagliaMove(tool);
+                break;
+            case TENAGLIAAROTELLE:
+                skipMartellettoTenagliaMove(tool);
+                break;
+            case PINZASGROSSATRICE:
+                sgrossatriceMove();
+                break;
+            case PENNELLOPEREGLOMISE:
+                pennelloAlesatoreLeathekinManualeMove(tool);
+                break;
+            case ALESATOREPERLAMINADIRAME:
+                pennelloAlesatoreLeathekinManualeMove(tool);
+                break;
+            case TAGLIERINAMANUALE:
+                pennelloAlesatoreLeathekinManualeMove(tool);
+                break;
+            case TAGLIERINACIRCOLARE:
+                taglierinaCircolareMove();
+                break;
+            case PENNELLOPERPASTASALDA:
+                pennelloPastaSaldaMove();
+                break;
+            case DILUENTEPERPASTASALDA:
+                diluentePerPastaSaldaMove();
+                break;
+            case TAMPONEDIAMANTATO:
+                tamponeDiamantato();
+                break;
+            default:
+                break;
         }
     }
 
+    public void normalSugheroMove(Tool tool){
+        int i = chooseDraftpoolDie();
+
+        System.out.println("Scelgi la dove piazzare il dado");
+        int[] position = chooseBoardCell(false);
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
+    }
+
     public void skipMartellettoTenagliaMove(Tool tool){
-        if(tool == Tool.SKIPTURN || tool == Tool.MARTELLETTO || tool == Tool.TENAGLIAAROTELLE) {
-            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
-            setChanged();
-            notifyObservers();
-            System.out.println("Mossa inviata");
-        }
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
+        setChanged();
+        notifyObservers();
+        System.out.println("Mossa inviata");
     }
 
     public boolean sgrossatriceMove(){
@@ -257,44 +298,42 @@ public class CLI extends View{
     }
 
     public void pennelloAlesatoreLeathekinManualeMove(Tool tool){
-        if(tool == Tool.PENNELLOPEREGLOMISE || tool == Tool.ALESATOREPERLAMINADIRAME || tool == Tool.TAGLIERINAMANUALE) {
-            boolean secondaMossa = false;
-            System.out.println("Scegli il primo dado da muovere");
-            int[] position = chooseBoardCell(true);
-            System.out.println("Scegli dove piazzare primo il dado");
-            int[] newPosition = chooseBoardCell(false);
-            ClientMessage clientMessage;
+        boolean secondaMossa = false;
+        System.out.println("Scegli il primo dado da muovere");
+        int[] position = chooseBoardCell(true);
+        System.out.println("Scegli dove piazzare primo il dado");
+        int[] newPosition = chooseBoardCell(false);
+        ClientMessage clientMessage;
 
-            if(tool == Tool.LATHEKIN){
+        if(tool == Tool.LATHEKIN){
+            secondaMossa = true;
+        }else if(tool == Tool.TAGLIERINAMANUALE){
+            System.out.println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
+            int scelta = 2;
+            do{
+                scelta = input.nextInt();
+            }while(scelta != 0 || scelta != 1);
+
+            if(scelta == 1) {
                 secondaMossa = true;
-            }else if(tool == Tool.TAGLIERINAMANUALE){
-                System.out.println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
-                int scelta = 2;
-                do{
-                    scelta = input.nextInt();
-                }while(scelta != 0 || scelta != 1);
-
-                if(scelta == 1) {
-                    secondaMossa = true;
-                }else {
-                    secondaMossa = false;
-                }
+            }else {
+                secondaMossa = false;
             }
-
-            if(secondaMossa){
-                System.out.println("Scegli il secondo dado da muovere");
-                int[] position2 = chooseBoardCell(true);
-                System.out.println("Scegli dove piazzare il secondo dado");
-                int[] newPosition2 = chooseBoardCell(false);
-                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
-            }else{
-                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
-            }
-
-            setChanged();
-            notifyObservers(clientMessage);
-            System.out.println("Mossa inviata");
         }
+
+        if(secondaMossa){
+            System.out.println("Scegli il secondo dado da muovere");
+            int[] position2 = chooseBoardCell(true);
+            System.out.println("Scegli dove piazzare il secondo dado");
+            int[] newPosition2 = chooseBoardCell(false);
+            clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
+        }else{
+            clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
+        }
+
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
     }
 
     public void taglierinaCircolareMove(){
@@ -341,7 +380,44 @@ public class CLI extends View{
         System.out.println("Mossa inviata");
     }
 
+    public void chooseMove(){
+        System.out.println("E' il tuo turno, scelgi la mossa da effettuare:");
+        System.out.println("0) Salta turno");
+        System.out.println("1) Piazza un dado dalla riserva");
+        System.out.println("2) Usa una carta strumento");
+        System.out.print("Scelta: ");
+        int i = 3;
+        do{
+            i = input.nextInt();
+        }while(i < 0 || i > 2);
+        System.out.println("");
 
+        switch (i){
+            case 0:
+                setChanged();
+                notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
+                System.out.println("Mossa inviata");
+                return;
+            case 1:
+                move(Tool.MOSSASTANDARD);
+                break;
+            case 2:
+                showToolCards();
+                System.out.println("Carta strumento scelta: ");
+                i = 4;
+                do{
+                    i = input.nextInt();
+                }while(i < 1 || i > 3);
+
+                move((Tool) modelView.getTools().keySet().toArray()[i]);
+                break;
+            default:
+                setChanged();
+                notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
+                System.out.println("Mossa inviata");
+
+        }
+    }
     @Override
     public void update(Observable o, Object arg) {
 
