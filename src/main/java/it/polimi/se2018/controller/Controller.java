@@ -69,7 +69,7 @@ public class Controller implements Observer {
     }
 
     public void setTimer(int turn, int round) {
-        timer.schedule(new RoundTimer(turn, round, this), Model.getMinutesPerTurn() * 60 * 1000);
+        timer.schedule(new RoundTimer(turn, round, this), (long) (Model.getMinutesPerTurn() * 60 * 1000));
     }
 
     //private void startGame()

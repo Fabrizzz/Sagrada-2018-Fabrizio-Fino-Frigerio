@@ -60,7 +60,12 @@ public class SocketConnectionGatherer extends Thread {
                 connection = new SocketConnection(serverNetwork,clientSocket);
                 if(!serverNetwork.addClient(connection)){
                     connection.close();
+                    System.out.println("Nuova connessione rifiutata");
+                }else{
+                    (new Thread((SocketConnection) connection)).start();
+                    System.out.println("Nuova connessione accettata");
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

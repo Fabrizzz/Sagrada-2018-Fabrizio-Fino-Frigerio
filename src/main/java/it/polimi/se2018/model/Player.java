@@ -52,7 +52,7 @@ public class Player implements Serializable { //da completare
         this.canDoTwoTurn = canDoTwoTurn;
     }
 
-
+    public String getNick(){return nick;}
 
     /**
      * Return if is the player turn

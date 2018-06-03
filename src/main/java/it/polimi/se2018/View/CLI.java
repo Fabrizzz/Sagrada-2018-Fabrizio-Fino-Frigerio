@@ -1,15 +1,16 @@
 package it.polimi.se2018.View;
 
+import it.polimi.se2018.client.ClientNetwork;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.ClientMessage;
 import it.polimi.se2018.utils.PlayerMove;
-import it.polimi.se2018.utils.enums.BoardName;
-import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.ServerMessage;
+import it.polimi.se2018.utils.enums.*;
+
+import java.util.Random;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.util.*;
@@ -29,12 +30,8 @@ public class CLI extends View{
         input = new Scanner(System.in);
     }
 
-    public void print(String string){
-        System.out.println(string);
-    }
-
     public String getNickname(){
-        print("Inserire nickname:");
+        System.out.println("Inserire nickname:");
         return(input.next());
     }
 
@@ -147,6 +144,9 @@ public class CLI extends View{
             position[1] = input.nextInt();
         }while (position[1] > 0 && position[1] < modelView.getRoundTrack().numberOfDice(position[0] - 1));
 
+        position[0] --;
+        position[1] --;
+
         return position;
     }
     
@@ -159,7 +159,7 @@ public class CLI extends View{
             System.out.println("Errore, inserisci una posizione corretta");
             i = input.nextInt();
         }
-        return i;
+        return i - 1;
 
     }
 
@@ -182,14 +182,14 @@ public class CLI extends View{
                 position[1] = input.nextInt();
             }
             if(withDie){
-                if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0],position[1])){
+                if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0] - 1,position[1] - 1)){
                     repeat = false;
                 }else{
                     repeat = true;
                     System.out.println("Errore: nessun dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
                 }
             }else{
-                if(!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0],position[1])){
+                if(!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0] - 1,position[1] - 1)){
                     repeat = false;
                 }else{
                     repeat = true;
@@ -199,31 +199,74 @@ public class CLI extends View{
             }
         }while(repeat);
 
+        position[0] --;
+        position[1] --;
         return position;
     }
 
-    public void normalSugheroMove(Tool tool){
-        if(tool == Tool.MOSSASTANDARD || tool == Tool.RIGAINSUGHERO) {
-
-            int i = chooseDraftpoolDie();
-
-            System.out.println("Scelgi la dove piazzare il dado");
-            int[] position = chooseBoardCell(false);
-
-            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
-            setChanged();
-            notifyObservers(clientMessage);
-            System.out.println("Mossa inviata");
+    public void move(Tool tool){
+        switch (tool) {
+            case MOSSASTANDARD:
+                normalSugheroMove(tool);
+                break;
+            case RIGAINSUGHERO:
+                normalSugheroMove(tool);
+                break;
+            case SKIPTURN:
+                skipMartellettoTenagliaMove(tool);
+                break;
+            case MARTELLETTO:
+                skipMartellettoTenagliaMove(tool);
+                break;
+            case TENAGLIAAROTELLE:
+                skipMartellettoTenagliaMove(tool);
+                break;
+            case PINZASGROSSATRICE:
+                sgrossatriceMove();
+                break;
+            case PENNELLOPEREGLOMISE:
+                pennelloAlesatoreLeathekinManualeMove(tool);
+                break;
+            case ALESATOREPERLAMINADIRAME:
+                pennelloAlesatoreLeathekinManualeMove(tool);
+                break;
+            case TAGLIERINAMANUALE:
+                pennelloAlesatoreLeathekinManualeMove(tool);
+                break;
+            case TAGLIERINACIRCOLARE:
+                taglierinaCircolareMove();
+                break;
+            case PENNELLOPERPASTASALDA:
+                pennelloPastaSaldaMove();
+                break;
+            case DILUENTEPERPASTASALDA:
+                diluentePerPastaSaldaMove();
+                break;
+            case TAMPONEDIAMANTATO:
+                tamponeDiamantato();
+                break;
+            default:
+                break;
         }
     }
 
+    public void normalSugheroMove(Tool tool){
+        int i = chooseDraftpoolDie();
+
+        System.out.println("Scelgi la dove piazzare il dado");
+        int[] position = chooseBoardCell(false);
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
+    }
+
     public void skipMartellettoTenagliaMove(Tool tool){
-        if(tool == Tool.SKIPTURN || tool == Tool.MARTELLETTO || tool == Tool.TENAGLIAAROTELLE) {
-            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
-            setChanged();
-            notifyObservers();
-            System.out.println("Mossa inviata");
-        }
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
+        setChanged();
+        notifyObservers();
+        System.out.println("Mossa inviata");
     }
 
     public boolean sgrossatriceMove(){
@@ -256,53 +299,219 @@ public class CLI extends View{
     }
 
     public void pennelloAlesatoreLeathekinManualeMove(Tool tool){
-        if(tool == Tool.PENNELLOPEREGLOMISE || tool == Tool.ALESATOREPERLAMINADIRAME || tool == Tool.TAGLIERINAMANUALE) {
-            boolean secondaMossa = false;
-            System.out.println("Scegli il primo dado da muovere");
-            int[] position = chooseBoardCell(true);
-            System.out.println("Scegli dove piazzare primo il dado");
-            int[] newPosition = chooseBoardCell(false);
-            ClientMessage clientMessage;
+        boolean secondaMossa = false;
+        System.out.println("Scegli il primo dado da muovere");
+        int[] position = chooseBoardCell(true);
+        System.out.println("Scegli dove piazzare primo il dado");
+        int[] newPosition = chooseBoardCell(false);
+        ClientMessage clientMessage;
 
-            if(tool == Tool.LATHEKIN){
+        if(tool == Tool.LATHEKIN){
+            secondaMossa = true;
+        }else if(tool == Tool.TAGLIERINAMANUALE){
+            System.out.println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
+            int scelta = 2;
+            do{
+                scelta = input.nextInt();
+            }while(scelta != 0 || scelta != 1);
+
+            if(scelta == 1) {
                 secondaMossa = true;
-            }else if(tool == Tool.TAGLIERINAMANUALE){
-                System.out.println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
-                int scelta = 2;
-                do{
-                    scelta = input.nextInt();
-                }while(scelta != 0 || scelta != 1);
-
-                if(scelta == 1) {
-                    secondaMossa = true;
-                }else {
-                    secondaMossa = false;
-                }
+            }else {
+                secondaMossa = false;
             }
-
-            if(secondaMossa){
-                System.out.println("Scegli il secondo dado da muovere");
-                int[] position2 = chooseBoardCell(true);
-                System.out.println("Scegli dove piazzare il secondo dado");
-                int[] newPosition2 = chooseBoardCell(false);
-                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
-            }else{
-                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
-            }
-
-            setChanged();
-            notifyObservers(clientMessage);
-            System.out.println("Mossa inviata");
         }
+
+        if(secondaMossa){
+            System.out.println("Scegli il secondo dado da muovere");
+            int[] position2 = chooseBoardCell(true);
+            System.out.println("Scegli dove piazzare il secondo dado");
+            int[] newPosition2 = chooseBoardCell(false);
+            clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
+        }else{
+            clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
+        }
+
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
     }
 
     public void taglierinaCircolareMove(){
+        int i = chooseDraftpoolDie();
+        int[] roundPosition = chooseRoundTrackDie();
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(i,roundPosition[0],roundPosition[1],Tool.TAGLIERINACIRCOLARE));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
+    }
+
+    public void pennelloPastaSaldaMove(){
+        int i = chooseDraftpoolDie();
+        NumberEnum newNum = NumberEnum.values()[(new Random()).nextInt(NumberEnum.values().length)];
+        System.out.println("Il nuovo valore del dado e': " + newNum.getInt());
+        int[] position = chooseBoardCell(false);
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(position[0],position[1],i,newNum,Tool.PENNELLOPERPASTASALDA));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
+    }
+
+    public void diluentePerPastaSaldaMove(){
+        int i = chooseDraftpoolDie();
+        try {
+            modelView.getDiceBag().addDie(modelView.getDraftPoolDie(i));
+        }catch (NoDieException e){
+            System.out.println("Errore: dado non presente");
+            return;
+        }
+
+        //problema, come passo il valore di colore del nuovo dado??
 
     }
 
+    public void tamponeDiamantato(){
+        int i = chooseDraftpoolDie();
 
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
+    }
+
+    public void chooseMove(){
+        System.out.println("E' il tuo turno, scelgi la mossa da effettuare:");
+        System.out.println("0) Salta turno");
+        System.out.println("1) Piazza un dado dalla riserva");
+        System.out.println("2) Usa una carta strumento");
+        System.out.println("3) Visualizza la tua plancia");
+        System.out.println("4) Visualizza le plancie degli avversari");
+        System.out.println("5) Visualizza la riserva dei dadi");
+        System.out.println("6) Visualizza il tracciato dei dadi");
+        System.out.print("Scelta: ");
+        int i = 3;
+        do{
+            i = input.nextInt();
+        }while(i < 0 || i > 6);
+        System.out.println("");
+
+        switch (i){
+            case 0:
+                setChanged();
+                notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
+                System.out.println("Mossa inviata");
+                return;
+            case 1:
+                move(Tool.MOSSASTANDARD);
+                break;
+            case 2:
+                showToolCards();
+                System.out.println("Carta strumento scelta: ");
+                int k = 4;
+                do{
+                    k = input.nextInt();
+                }while(k < 1 || k > 3);
+
+                move((Tool) modelView.getTools().keySet().toArray()[k]);
+                break;
+            case 3:
+                showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+                chooseMove();
+                break;
+            case 4:
+                for(int j = 0; j < modelView.getPlayers().size(); j ++){
+                    if(modelView.getPlayers().get(j).getId() != localID){
+                        System.out.println("Board del player " + modelView.getPlayers().get(j).getNick());
+                        showBoard(modelView.getBoard(modelView.getPlayers().get(j)));
+                    }
+                }
+                chooseMove();
+                break;
+            case 5:
+                showDraftPool();
+                chooseMove();
+                break;
+            case 6:
+                showRoundTrack();
+                chooseMove();
+                break;
+            default:
+                setChanged();
+                notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
+                System.out.println("Mossa inviata");
+
+        }
+    }
     @Override
     public void update(Observable o, Object arg) {
+        switch (((ServerMessage) arg).getMessageType()){
+            case ERROR:
+                System.out.println("Errore: " + ((ServerMessage) arg).getErrorType().toString());
+                break;
+            case INITIALCONFIGSERVER:
+                this.modelView = ((ServerMessage) arg).getModelView();
+                if(modelView.getPlayer(localID).isYourTurn()){
+                    chooseMove();
+                }
+                break;
+            case CHOSENBOARD:
+                //da aggiungere
+                break;
+            case MODELVIEWUPDATE:
+                //da aggiungere
+                break;
+        }
+    }
 
+    public void connectionClosed(){
+        System.out.println("Connessione al server chiusa");
+    }
+
+    public void createConnection(ClientNetwork clientNetwork){
+        System.out.println("Benvenuto, scegli il metodo di connessione: ");
+        System.out.println("1) Socket");
+        System.out.println("2) RMI");
+        int i = 0;
+        do{
+            i = input.nextInt();
+        }while(i < 1 || i > 2);
+
+        String address = "";
+        if(i == 1){
+            int port = 0;
+            while(!clientNetwork.isConnected()) {
+                System.out.println("Inserisci l'indirizzo del server: ");
+                address = input.next();
+                System.out.println("Inserisci la porta: ");
+                port = input.nextInt();
+                clientNetwork.connectSocket(address, port);
+            }
+            System.out.println("Connessione accettata");
+        }else{
+            while(!clientNetwork.isConnected()) {
+                System.out.println("Inserisci l'indirizzo del server: ");
+                address = input.next();
+                clientNetwork.connectRMI(address);
+            }
+            System.out.println("Connessione accettata");
+        }
+        String nick = "";
+        System.out.println("Inserisci il tuo nome: ");
+        do{
+            nick = input.next();
+        }while(nick.equals(""));
+        localID = (new Random()).nextLong();
+
+        ClientMessage clientMessage = new ClientMessage(nick,localID);
+        if(clientNetwork.sendMessage(clientMessage)){
+            System.out.println("Nome utente inviato");
+        }else{
+            System.out.println("Errore connessione");
+        }
+
+        ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
+        clientNetwork.sendMessage(testMessage);
     }
 }

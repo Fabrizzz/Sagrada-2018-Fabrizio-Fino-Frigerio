@@ -1,10 +1,12 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.View.View;
+import it.polimi.se2018.server.rmi.ServerRMIConnection;
 import it.polimi.se2018.server.rmi.ServerRMIInterface;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.NetworkHandler;
+import it.polimi.se2018.utils.network.RMIInterfaceRemote;
 import it.polimi.se2018.utils.network.SocketConnection;
 
 import java.io.IOException;
@@ -42,6 +44,7 @@ public class ClientNetwork implements NetworkHandler {
                 socket = new Socket(hostname, port);
                 connection = new SocketConnection(this, socket);
                 connection.addObserver(view);
+                (new Thread((SocketConnection) connection)).start();
                 return true;
             } catch (IOException e) {
                 return false;
@@ -61,11 +64,12 @@ public class ClientNetwork implements NetworkHandler {
             try {
                 ServerRMIInterface serverRMIInterface = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
-                Connection connectionIn = new ClientRMIImplementation(this);
+                ClientRMIImplementationRemote connectionIn = new ClientRMIImplementationRemote(this);
 
-                ClientRMIImplementation remoteRef = (ClientRMIImplementation) UnicastRemoteObject.exportObject((Remote) connectionIn, 0);
+                RMIInterfaceRemote remoteRef = (RMIInterfaceRemote) UnicastRemoteObject.exportObject((Remote) connectionIn, 0);
 
-                connection = serverRMIInterface.addClient(remoteRef);
+                RMIInterfaceRemote serverRMIInterfaceRemote = serverRMIInterface.addClient(remoteRef);
+                connection = new ServerRMIConnection(serverRMIInterfaceRemote);
 
                 if(connection != null){
                     connectionIn.addObserver(view);
@@ -76,7 +80,7 @@ public class ClientNetwork implements NetworkHandler {
                 }
 
             } catch (MalformedURLException | RemoteException | NotBoundException e) {
-                System.out.println(e);
+               e.printStackTrace();
                 return false;
             }
         }else{
@@ -105,8 +109,9 @@ public class ClientNetwork implements NetworkHandler {
         }
     }
 
-    public void closeConnection(Connection connection) {
+    public void closeConnection(Object connection) {
         this.connection = null;
+        view.connectionClosed();
     }
 
 }
