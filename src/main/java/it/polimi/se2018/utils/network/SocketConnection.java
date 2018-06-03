@@ -95,7 +95,11 @@ public class SocketConnection extends Connection implements Runnable {
                 if(message.getMessageType() == MessageType.INITIALCONFIG){
                     System.out.println("Messaggio INITIALCONFIG ricevuto");
                     RemoteView remoteView = ((ServerNetwork) this.networkHandler).initializeConnection(this,message);
-                    addObserver(remoteView);
+                    if(remoteView != null){
+                        addObserver(remoteView);
+                    }else{
+                        close();
+                    }
                 }else {
                     System.out.println("Messaggio ricevuto");
                     setChanged();

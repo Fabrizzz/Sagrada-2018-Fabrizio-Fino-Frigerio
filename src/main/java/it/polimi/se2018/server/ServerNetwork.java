@@ -59,18 +59,6 @@ public class ServerNetwork extends Observable implements NetworkHandler {
     public boolean addClient(Connection clientConnection){
         if(waitingInitializationList.size() < 4 && lobbyWaiting){
             waitingInitializationList.add(clientConnection);
-
-            if(connectionMap.size() >= 2){
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        lobbyWaiting = false;
-                        System.out.println("Timer scaduto, inizializzazione gioco");
-                        initializeGame();
-                    }
-                }, (long) 60*1000);
-            }
             return true;
         }else if(!lobbyWaiting){
             waitingInitializationList.add(clientConnection);
@@ -99,6 +87,18 @@ public class ServerNetwork extends Observable implements NetworkHandler {
             remoteMap.put(((ClientMessage) message).getId(), remoteView);
 
             remoteView.addObserver(connection);
+
+            if(connectionMap.size() >= 2){
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        lobbyWaiting = false;
+                        System.out.println("Timer scaduto, inizializzazione gioco");
+                        initializeGame();
+                    }
+                }, (long) 60*1000);
+            }
 
             return remoteView;
         } else if(waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && !lobbyWaiting){
