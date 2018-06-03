@@ -29,12 +29,8 @@ public class CLI extends View{
         input = new Scanner(System.in);
     }
 
-    public void print(String string){
-        System.out.println(string);
-    }
-
     public String getNickname(){
-        print("Inserire nickname:");
+        System.out.println("Inserire nickname:");
         return(input.next());
     }
 
@@ -384,11 +380,15 @@ public class CLI extends View{
         System.out.println("0) Salta turno");
         System.out.println("1) Piazza un dado dalla riserva");
         System.out.println("2) Usa una carta strumento");
+        System.out.println("3) Visualizza la tua plancia");
+        System.out.println("4) Visualizza le plancie degli avversari");
+        System.out.println("5) Visualizza la riserva dei dadi");
+        System.out.println("6) Visualizza il tracciato dei dadi");
         System.out.print("Scelta: ");
         int i = 3;
         do{
             i = input.nextInt();
-        }while(i < 0 || i > 2);
+        }while(i < 0 || i > 6);
         System.out.println("");
 
         switch (i){
@@ -410,6 +410,27 @@ public class CLI extends View{
 
                 move((Tool) modelView.getTools().keySet().toArray()[i]);
                 break;
+            case 3:
+                showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+                chooseMove();
+                break;
+            case 4:
+                for(int j = 0; j < modelView.getPlayers().size(); j ++){
+                    if(modelView.getPlayers().get(j).getId() != localID){
+                        System.out.println("Board del player " + modelView.getPlayers().get(j).getNick());
+                        showBoard(modelView.getBoard(modelView.getPlayers().get(j)));
+                    }
+                }
+                chooseMove();
+                break;
+            case 5:
+                showDraftPool();
+                chooseMove();
+                break;
+            case 6:
+                showRoundTrack();
+                chooseMove();
+                break;
             default:
                 setChanged();
                 notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
@@ -425,6 +446,9 @@ public class CLI extends View{
                 break;
             case INITIALCONFIG:
                 this.modelView = ((ServerMessage) arg).getModelView();
+                if(modelView.getPlayer(localID).isYourTurn()){
+                    chooseMove();
+                }
                 break;
             case CHOSENBOARD:
                 //da aggiungere

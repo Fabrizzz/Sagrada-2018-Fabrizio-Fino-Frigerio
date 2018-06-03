@@ -138,7 +138,7 @@ public class ModelView implements Observer, Serializable {
 
     public Player getPlayer(Long id){
         for(int i = 0; i < players.size(); i++){
-            if(players.get(i).getId() == id){
+            if(players.get(i).getId().equals(id)){
                 return players.get(i);
             }
         }
