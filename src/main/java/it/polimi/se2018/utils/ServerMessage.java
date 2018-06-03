@@ -20,4 +20,12 @@ public class ServerMessage extends Message {
         super(messageType);
         this.modelView = modelView;
     }
+
+    public ErrorType getErrorType(){
+        return errorType;
+    }
+
+    public ModelView getModelView() {
+        return modelView;
+    }
 }

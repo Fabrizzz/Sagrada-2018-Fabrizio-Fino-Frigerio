@@ -6,10 +6,9 @@ import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.ClientMessage;
 import it.polimi.se2018.utils.PlayerMove;
-import it.polimi.se2018.utils.enums.BoardName;
-import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.NumberEnum;
-import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.ServerMessage;
+import it.polimi.se2018.utils.enums.*;
+
 import java.util.Random;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
@@ -420,6 +419,19 @@ public class CLI extends View{
     }
     @Override
     public void update(Observable o, Object arg) {
-
+        switch (((ServerMessage) arg).getMessageType()){
+            case ERROR:
+                System.out.println("Errore: " + ((ServerMessage) arg).getErrorType().toString());
+                break;
+            case INITIALCONFIG:
+                this.modelView = ((ServerMessage) arg).getModelView();
+                break;
+            case CHOSENBOARD:
+                //da aggiungere
+                break;
+            case MODELVIEWUPDATE:
+                //da aggiungere
+                break;
+        }
     }
 }
