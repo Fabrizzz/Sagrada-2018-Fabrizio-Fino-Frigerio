@@ -8,8 +8,9 @@ import it.polimi.se2018.utils.ClientMessage;
 import it.polimi.se2018.utils.PlayerMove;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import java.util.Random;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.util.*;
@@ -297,7 +298,47 @@ public class CLI extends View{
     }
 
     public void taglierinaCircolareMove(){
+        int i = chooseDraftpoolDie();
+        int[] roundPosition = chooseRoundTrackDie();
 
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(i,roundPosition[0],roundPosition[1],Tool.TAGLIERINACIRCOLARE));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
+    }
+
+    public void pennelloPastaSaldaMove(){
+        int i = chooseDraftpoolDie();
+        NumberEnum newNum = NumberEnum.values()[(new Random()).nextInt(NumberEnum.values().length)];
+        System.out.println("Il nuovo valore del dado e': " + newNum.getInt());
+        int[] position = chooseBoardCell(false);
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(position[0],position[1],i,newNum,Tool.PENNELLOPERPASTASALDA));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
+    }
+
+    public void diluentePerPastaSaldaMove(){
+        int i = chooseDraftpoolDie();
+        try {
+            modelView.getDiceBag().addDie(modelView.getDraftPoolDie(i));
+        }catch (NoDieException e){
+            System.out.println("Errore: dado non presente");
+            return;
+        }
+
+        //problema, come passo il valore di colore del nuovo dado??
+
+    }
+
+    public void tamponeDiamantato(){
+        int i = chooseDraftpoolDie();
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
+        setChanged();
+        notifyObservers(clientMessage);
+        System.out.println("Mossa inviata");
     }
 
 
