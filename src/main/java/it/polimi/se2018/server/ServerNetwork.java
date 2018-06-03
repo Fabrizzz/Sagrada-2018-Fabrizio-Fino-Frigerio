@@ -100,11 +100,15 @@ public class ServerNetwork extends Observable implements NetworkHandler {
                 }, (long) 60*1000);
             }
 
+            waitingInitializationList.remove(connection);
+
             return remoteView;
         } else if(waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && !lobbyWaiting){
             if(connectionMap.containsKey(((ClientMessage) message).getId()) && connectionMap.get(((ClientMessage) message).getId()) == null){
                 connectionMap.put(((ClientMessage) message).getId(), connection);
                 remoteMap.get(((ClientMessage) message).getId()).addObserver(connection);
+
+                waitingInitializationList.remove(connection);
 
                 return remoteMap.get(((ClientMessage) message).getId());
             }else{

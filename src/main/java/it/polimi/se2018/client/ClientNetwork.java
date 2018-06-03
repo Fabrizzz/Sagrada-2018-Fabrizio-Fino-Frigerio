@@ -6,6 +6,7 @@ import it.polimi.se2018.server.rmi.ServerRMIInterface;
 import it.polimi.se2018.utils.Message;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.NetworkHandler;
+import it.polimi.se2018.utils.network.RMIInterfaceRemote;
 import it.polimi.se2018.utils.network.SocketConnection;
 
 import java.io.IOException;

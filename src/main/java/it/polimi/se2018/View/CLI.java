@@ -510,5 +510,8 @@ public class CLI extends View{
         }else{
             System.out.println("Errore connessione");
         }
+
+        ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
+        clientNetwork.sendMessage(testMessage);
     }
 }

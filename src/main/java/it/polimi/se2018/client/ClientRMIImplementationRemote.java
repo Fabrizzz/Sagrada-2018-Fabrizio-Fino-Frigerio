@@ -1,10 +1,8 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.utils.Message;
-import it.polimi.se2018.utils.network.Connection;
+import it.polimi.se2018.utils.network.RMIInterfaceRemote;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
 import java.util.Observable;
 
 /**
