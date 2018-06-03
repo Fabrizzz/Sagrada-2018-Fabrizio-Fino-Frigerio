@@ -107,6 +107,7 @@ public class ClientNetwork implements NetworkHandler {
 
     public void closeConnection(Connection connection) {
         this.connection = null;
+        view.connectionClosed();
     }
 
 }

@@ -403,12 +403,12 @@ public class CLI extends View{
             case 2:
                 showToolCards();
                 System.out.println("Carta strumento scelta: ");
-                i = 4;
+                int k = 4;
                 do{
-                    i = input.nextInt();
-                }while(i < 1 || i > 3);
+                    k = input.nextInt();
+                }while(k < 1 || k > 3);
 
-                move((Tool) modelView.getTools().keySet().toArray()[i]);
+                move((Tool) modelView.getTools().keySet().toArray()[k]);
                 break;
             case 3:
                 showBoard(modelView.getBoard(modelView.getPlayer(localID)));
@@ -457,5 +457,9 @@ public class CLI extends View{
                 //da aggiungere
                 break;
         }
+    }
+
+    public void connectionClosed(){
+        System.out.println("Connessione al server chiusa");
     }
 }
