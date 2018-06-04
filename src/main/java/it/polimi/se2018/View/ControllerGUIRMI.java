@@ -1,5 +1,7 @@
 package it.polimi.se2018.View;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +21,8 @@ import java.util.ResourceBundle;
  * @author Matteo
  */
 public class ControllerGUIRMI implements Initializable {
+
+    private static final int limitIPRMI= 15;
 
     @FXML
     private Label labelIPRMI;
@@ -61,6 +65,19 @@ public class ControllerGUIRMI implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        //Max length textfield ip
+        textIPRMI.lengthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(newValue.intValue() > oldValue.intValue()){
+                    if (textIPRMI.getText().length() >= limitIPRMI ){
+                        textIPRMI.setText(textIPRMI.getText().substring(0, limitIPRMI));
+                    }
+                }
+
+            }
+        });
 
     }
 }

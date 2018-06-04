@@ -29,7 +29,7 @@
               <children>
                 <Label id="labelIPSocket" fx:id="labelIPRMI" prefHeight="68.0" text="IP server:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Label id="labelNickSocket" fx:id="labelNickRMI" text="Nickname giocatore:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField fx:id="textIPRMI" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <TextField fx:id="textIPRMI" prefWidth="-1.0" promptText="0.0.0.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                 <TextField fx:id="textNickRMI" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
               </children>
               <columnConstraints>

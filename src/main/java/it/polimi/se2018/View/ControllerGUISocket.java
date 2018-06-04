@@ -1,5 +1,7 @@
 package it.polimi.se2018.View;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,9 @@ import java.util.ResourceBundle;
  * @author Matteo
  */
 public class ControllerGUISocket implements Initializable {
+
+    private static final int limitIPSocket= 15;
+    private static final int limitIPPort= 5;
 
     @FXML
     private Label labelIPSocket;
@@ -70,5 +75,31 @@ public class ControllerGUISocket implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        //Max length textfield ip
+        textIPSocket.lengthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(newValue.intValue() > oldValue.intValue()){
+                    if (textIPSocket.getText().length() >= limitIPSocket ){
+                        textIPSocket.setText(textIPSocket.getText().substring(0, limitIPSocket));
+                    }
+                }
+
+            }
+        });
+
+        //Max length textfield port
+        textPortaSocket.lengthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(newValue.intValue() > oldValue.intValue()){
+                    if (textPortaSocket.getText().length() >= limitIPPort ){
+                        textPortaSocket.setText(textPortaSocket.getText().substring(0, limitIPPort));
+                    }
+                }
+
+            }
+        });
     }
+
 }
