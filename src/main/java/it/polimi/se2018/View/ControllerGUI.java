@@ -1,13 +1,3 @@
-
-
-/*
-
-Aggiungere altre controller per gestire le varie finestre; sistemare resize finestre; sistemare file FXML di socket e rmi
-
-
- */
-
-
 package it.polimi.se2018.View;
 
 import javafx.event.ActionEvent;
@@ -31,13 +21,7 @@ import java.util.ResourceBundle;
  * Controller GUI
  * @author Matteo
  */
-public class GUIController implements Initializable {
-
-    /*
-    @FXML
-    private VBox vBox;
-    */
-
+public class ControllerGUI implements Initializable {
 
     @FXML
     private AnchorPane root;
@@ -51,11 +35,15 @@ public class GUIController implements Initializable {
     @FXML
     private Button buttonRMI;
 
+    /**
+     * Switch scene
+     * @param event
+     */
     @FXML
     public void handleButton(ActionEvent event) {
 
         Stage stage;
-        Parent newScene = null;
+        Parent newScene;
         Scene scene = null;
 
         if (event.getSource() == buttonSocket){
@@ -83,6 +71,7 @@ public class GUIController implements Initializable {
             stage.setTitle("RMI");
             stage.setScene(scene);
         }
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -90,8 +79,8 @@ public class GUIController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //imageView.fitHeightProperty().bind(root.heightProperty());
-        //imageView.fitWidthProperty().bind(root.widthProperty());
+        imageView.fitHeightProperty().bind(root.heightProperty());
+        imageView.fitWidthProperty().bind(root.widthProperty());
     }
 
 }
