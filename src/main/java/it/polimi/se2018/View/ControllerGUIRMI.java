@@ -61,6 +61,29 @@ public class ControllerGUIRMI implements Initializable {
     }
 
     public void handleButtonAvantiRMI(ActionEvent event) {
+
+        /*
+
+        Sistemare tutta la parte di collegamento al server
+
+         */
+
+        Stage stage;
+        Parent newScene;
+        Scene scene = null;
+
+        stage = (Stage) buttonAvantiRMI.getScene().getWindow();
+        try{
+            newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlWaiting.fxml"));
+            scene = new Scene(newScene);
+        }
+        catch (Exception e){
+            System.out.println("File FXML not found");
+        }
+        stage.setTitle("Preparazione gioco");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
     }
 
     @Override
