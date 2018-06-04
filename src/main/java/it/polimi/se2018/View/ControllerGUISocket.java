@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -21,15 +23,28 @@ import java.util.ResourceBundle;
 public class ControllerGUISocket implements Initializable {
 
     @FXML
+    private Label labelIPSocket;
+
+    @FXML
+    private Label labelPortaSocket;
+
+    @FXML
+    private Label labelNickSocket;
+
+    @FXML
+    private TextField textIPSocket;
+
+    @FXML
+    private TextField textPortaSocket;
+
+    @FXML
+    private TextField textNickSocket;
+
+    @FXML
     private Button buttonIndietroSocket;
 
     @FXML
     private Button buttonAvantiSocket;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 
     public void handleButtonIndietroSocket(ActionEvent event) {
         Stage stage;
@@ -44,11 +59,16 @@ public class ControllerGUISocket implements Initializable {
         catch (Exception e){
             System.out.println("File FXML not found");
         }
-        stage.setTitle("GUI");
+        stage.setTitle("Sagrada");
         stage.setScene(scene);
         stage.show();
     }
 
     public void handleButtonAvantiSocket(ActionEvent event) {
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 }

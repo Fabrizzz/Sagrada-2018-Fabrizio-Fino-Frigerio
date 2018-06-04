@@ -33,9 +33,9 @@
                 <Label fx:id="labelIPSocket" prefHeight="68.0" text="IP server:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Label fx:id="labelPortaSocket" text="Porta server:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <Label fx:id="labelNickSocket" text="Nickname giocatore:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <TextField prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <TextField prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="textIPSocket" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <TextField fx:id="textPortaSocket" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="textNickSocket" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
               </children>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" />
