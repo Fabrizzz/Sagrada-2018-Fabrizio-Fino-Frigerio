@@ -1,5 +1,10 @@
 package it.polimi.se2018.View;
 
+import it.polimi.se2018.client.ClientNetwork;
+import it.polimi.se2018.model.ModelView;
+import it.polimi.se2018.utils.ClientMessage;
+import it.polimi.se2018.utils.PlayerMove;
+import it.polimi.se2018.utils.enums.Tool;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,7 +21,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Observable;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 /**
  * Controller GUI Socket
@@ -124,5 +132,54 @@ public class ControllerGUISocket implements Initializable {
             }
         });
     }
+
+
+/*
+
+    //Metodo che crea la connessione con il server .... Presa dalla CLI e sistemata ... Da finire e chiedere ad Alessio
+
+
+    public void createConnection(){
+
+        ClientNetwork clientNetwork = new ClientNetwork( ... ci va la View ...);
+
+        Long localID;
+        String address = "";
+        int port = 0;
+        String nick = "";
+
+        //SOCKET
+        while(!clientNetwork.isConnected()) {
+            address = textIPSocket.getText();
+            port = Integer.parseInt(textPortaSocket.getText());
+            clientNetwork.connectSocket(address, port);
+        }
+        System.out.println("Connessione accettata");
+
+        //RMI (Da mettere in RMI)
+        while(!clientNetwork.isConnected()) {
+            address = textIPSocket.getText();
+            clientNetwork.connectRMI(address);
+        }
+        System.out.println("Connessione accettata");
+
+        //NICKNAME
+        nick = textNickSocket.getText();
+
+        localID = (new Random()).nextLong();
+
+        ClientMessage clientMessage = new ClientMessage(nick,localID);
+        if(clientNetwork.sendMessage(clientMessage)){
+            System.out.println("Nome utente inviato");
+        }else{
+            System.out.println("Errore connessione");
+        }
+
+        ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
+        clientNetwork.sendMessage(testMessage);
+    }
+
+*/
+
 
 }
