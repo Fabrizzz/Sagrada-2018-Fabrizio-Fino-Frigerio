@@ -6,6 +6,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Observable;
 
+/**
+ * Interface used by the remote object in the clinet and server
+ * @author Alessio
+ */
 public interface RMIInterfaceRemote extends Remote{
     public boolean sendMessage(Message message) throws RemoteException;
 
