@@ -15,6 +15,10 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.util.*;
 
+/**
+ * Command Line Interface
+ * @author Alessio
+ */
 public class CLI extends View{
     private final String ANSI_RESET = "\u001B[0m";
     private final String ANSI_RED = "\u001B[31m";
@@ -26,15 +30,18 @@ public class CLI extends View{
     private ModelView modelView;
     private Long localID;
 
+    /**
+     * Constructor
+     */
     public CLI(){
         input = new Scanner(System.in);
     }
 
-    public String getNickname(){
-        System.out.println("Inserire nickname:");
-        return(input.next());
-    }
-
+    /**
+     * Return a string containing the characters necessary to change the color of the text printed in the command line
+     * @param color color
+     * @return the string of characters to change the color of the command line text
+     */
     public String getColor(Color color){
         switch (color) {
             case BLUE:
@@ -51,6 +58,11 @@ public class CLI extends View{
                 return ANSI_RESET;
         }
     }
+
+    /**
+     * Show a playerboard to the player
+     * @param playerBoard playerboard to show
+     */
     public void showBoard(PlayerBoard playerBoard){
         System.out.println("\nDice board");
         System.out.println("___________|| Riga");
@@ -89,6 +101,9 @@ public class CLI extends View{
         System.out.println("‾‾‾‾‾‾‾‾‾‾");
     }
 
+    /**
+     * Show the draftpool to the player
+     */
     public void showDraftPool(){
         System.out.println("Draftpool");
 
@@ -109,6 +124,9 @@ public class CLI extends View{
         System.out.println("|");
     }
 
+    /**
+     * Show the toolcards to the player
+     */
     public void showToolCards(){
         System.out.println("Tool cards");
         for (int i = 0; i < modelView.getTools().size(); i++) {
@@ -120,6 +138,9 @@ public class CLI extends View{
         }
     }
 
+    /**
+     * Show the round track to the player
+     */
     public void showRoundTrack(){
         System.out.println("Tracciato dadi:");
         for(int i = 0; i < modelView.getRound(); i ++){
@@ -149,7 +170,11 @@ public class CLI extends View{
 
         return position;
     }
-    
+
+    /**
+     * Let the player choose a die from the draftpool
+     * @return the index of the chosen die
+     */
     public int chooseDraftpoolDie(){
         System.out.println("Scegli il dado dalla riserva");
         showDraftPool();
@@ -163,6 +188,11 @@ public class CLI extends View{
 
     }
 
+    /**
+     * Let the player choose a cell in his playerboard
+     * @param withDie Require the player to choose a cell containing a die or not
+     * @return  the array containing the row and column coordinates to identify the cell
+     */
     public int[] chooseBoardCell(Boolean withDie){
         int[] position = new int[2];
         boolean repeat = true;
@@ -204,6 +234,10 @@ public class CLI extends View{
         return position;
     }
 
+    /**
+     * Execute an action
+     * @param tool type of action to be executed
+     */
     public void move(Tool tool){
         switch (tool) {
             case MOSSASTANDARD:
@@ -250,6 +284,10 @@ public class CLI extends View{
         }
     }
 
+    /**
+     * Execute a normal move or a riga in sughero action
+     * @param tool tool to use
+     */
     public void normalSugheroMove(Tool tool){
         int i = chooseDraftpoolDie();
 
@@ -262,6 +300,10 @@ public class CLI extends View{
         System.out.println("Mossa inviata");
     }
 
+    /**
+     * Execute one of the following actions: skip turn, martelletto tool, tenaglia a rotelle tool
+     * @param tool tool to use
+     */
     public void skipMartellettoTenagliaMove(Tool tool){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
         setChanged();
@@ -269,6 +311,10 @@ public class CLI extends View{
         System.out.println("Mossa inviata");
     }
 
+    /**
+     * Use the pinza sgrossatrice tool
+     * @return
+     */
     public boolean sgrossatriceMove(){
        int position = chooseDraftpoolDie();
        try {
@@ -298,6 +344,10 @@ public class CLI extends View{
 
     }
 
+    /**
+     * Use one of the following tools: pennello per eglomise, alesatore per lamina di rame,lathekin, taglierina manuale
+     * @param tool tool to use
+     */
     public void pennelloAlesatoreLeathekinManualeMove(Tool tool){
         boolean secondaMossa = false;
         System.out.println("Scegli il primo dado da muovere");
@@ -337,6 +387,9 @@ public class CLI extends View{
         System.out.println("Mossa inviata");
     }
 
+    /**
+     * Use one the taglierina circolare tool
+     */
     public void taglierinaCircolareMove(){
         int i = chooseDraftpoolDie();
         int[] roundPosition = chooseRoundTrackDie();
@@ -347,6 +400,9 @@ public class CLI extends View{
         System.out.println("Mossa inviata");
     }
 
+    /**
+     * Use the pennello per pasta salda tool
+     */
     public void pennelloPastaSaldaMove(){
         int i = chooseDraftpoolDie();
         NumberEnum newNum = NumberEnum.values()[(new Random()).nextInt(NumberEnum.values().length)];
@@ -359,6 +415,9 @@ public class CLI extends View{
         System.out.println("Mossa inviata");
     }
 
+    /**
+     * Use the diluente per pasta salda tool
+     */
     public void diluentePerPastaSaldaMove(){
         int i = chooseDraftpoolDie();
         try {
@@ -372,6 +431,9 @@ public class CLI extends View{
 
     }
 
+    /**
+     * Use the tamponeDiamantato tool
+     */
     public void tamponeDiamantato(){
         int i = chooseDraftpoolDie();
 
@@ -381,6 +443,9 @@ public class CLI extends View{
         System.out.println("Mossa inviata");
     }
 
+    /**
+     * Asck the player to chose a action
+     */
     public void chooseMove(){
         System.out.println("E' il tuo turno, scelgi la mossa da effettuare:");
         System.out.println("0) Salta turno");
@@ -465,10 +530,17 @@ public class CLI extends View{
         }
     }
 
+    /**
+     * Called when the connection is closed
+     */
     public void connectionClosed(){
         System.out.println("Connessione al server chiusa");
     }
 
+    /**
+     * Prompt the user for the connection detail to initialize the connection
+     * @param clientNetwork the connection manager of the client
+     */
     public void createConnection(ClientNetwork clientNetwork){
         System.out.println("Benvenuto, scegli il metodo di connessione: ");
         System.out.println("1) Socket");
