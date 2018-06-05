@@ -21,7 +21,6 @@ public class GUI extends Application {
     /**
      * Contains the code for the JavaFX Application
      * @param primaryStage
-     * @throws Exception
      */
     @Override
     public void start(Stage primaryStage) {
