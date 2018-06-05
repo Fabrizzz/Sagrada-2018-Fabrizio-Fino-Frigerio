@@ -26,7 +26,10 @@ public class ClientNetwork implements NetworkHandler {
     private View view;
     private Connection connection;
 
-
+    /**
+     * Constructor
+     * @param view client view
+     */
     public ClientNetwork(View view){
         this.view = view;
     }
@@ -89,6 +92,11 @@ public class ClientNetwork implements NetworkHandler {
 
     }
 
+    /**
+     * Send a message to the server
+     * @param message message to send
+     * @return if the message has been sent correctly
+     */
     public Boolean sendMessage(Message message){
         if(isConnected()){
             return connection.sendMessage(message);
@@ -109,6 +117,10 @@ public class ClientNetwork implements NetworkHandler {
         }
     }
 
+    /**
+     * Remove the current connection and notify the view
+     * @param connection
+     */
     public void closeConnection(Object connection) {
         this.connection = null;
         view.connectionClosed();

@@ -24,7 +24,12 @@ public class ServerRMIImplementation extends UnicastRemoteObject implements Serv
         this.serverNetwork = serverNetwork;
     }
 
-
+    /**
+     * Add a client to the server connection list
+     * @param rmiInterfaceRemote client remote object reference
+     * @return   if the server has accepted the client
+     * @throws RemoteException if a rmi error occours
+     */
     public RMIInterfaceRemote addClient(RMIInterfaceRemote rmiInterfaceRemote) throws RemoteException{
 
         ClientRMIConnection clientRMIConnection = new ClientRMIConnection(rmiInterfaceRemote);

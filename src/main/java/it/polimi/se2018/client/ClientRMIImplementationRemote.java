@@ -14,10 +14,19 @@ public class ClientRMIImplementationRemote extends Observable implements RMIInte
     private ClientNetwork clientNetwork;
     private Boolean connected = true;
 
+    /**
+     * Costructor
+     * @param clientNetwork client network manager
+     */
     public ClientRMIImplementationRemote(ClientNetwork clientNetwork){
         this.clientNetwork = clientNetwork;
     }
 
+    /**
+     * Method called by the server to send a message to the client
+     * @param message message sent
+     * @return if the message has been correctly recived
+     */
     public boolean sendMessage(Message message){
         if(connected){
             setChanged();
@@ -28,11 +37,17 @@ public class ClientRMIImplementationRemote extends Observable implements RMIInte
         }
     }
 
+    /**
+     * Return the status of the connection
+     * @return the status of the connection
+     */
     public boolean isConnected() {
         return connected;
     }
 
-
+    /**
+     * Close the connection
+     */
     public void close(){
         this.connected = false;
         this.deleteObservers();

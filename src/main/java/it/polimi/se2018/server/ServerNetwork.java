@@ -68,6 +68,9 @@ public class ServerNetwork extends Observable implements NetworkHandler {
         return false;
     }
 
+    /**
+     * Start the game and remove the connection still waiting for initializzation
+     */
     public void initializeGame(){
         for(int i = 0; i < waitingInitializationList.size(); i ++){
             waitingInitializationList.get(i).close();
@@ -77,6 +80,12 @@ public class ServerNetwork extends Observable implements NetworkHandler {
         //Crea model??
     }
 
+    /**
+     * Initialize a connection with the nickname and id recive from the client
+     * @param connection connection to initialize
+     * @param message initializzation message recived from the client
+     * @return if the initializzation has been correctly completed
+     */
     public RemoteView initializeConnection(Connection connection,Message message) {
         System.out.println("Inizializzazione ricevuta, nick " + ((ClientMessage) message).getNick() + ((ClientMessage) message).getId());
         if (waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && lobbyWaiting) {
@@ -131,6 +140,10 @@ public class ServerNetwork extends Observable implements NetworkHandler {
         }
     }
 
+    /**
+     * Remove e connection from the active connection list
+     * @param connection connection to remove
+     */
     public void closeConnection(Object connection){
         for(Long key : connectionMap.keySet()){
             if(connectionMap.get(key).equals(connection)){
