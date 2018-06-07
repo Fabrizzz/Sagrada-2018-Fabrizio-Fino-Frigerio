@@ -29,7 +29,7 @@ public class ControllerWaiting implements Initializable {
 
         stage = (Stage) buttonWaiting.getScene().getWindow();
         try{
-            newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
+            newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGame.fxml"));
             scene = new Scene(newScene);
         }
         catch (Exception e){
@@ -37,6 +37,8 @@ public class ControllerWaiting implements Initializable {
         }
         stage.setTitle("Sagrada");
         stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setMaximized(true);
         stage.show();
     }
 
