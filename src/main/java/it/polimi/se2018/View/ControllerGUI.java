@@ -79,8 +79,12 @@ public class ControllerGUI implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        //if stage is resizable
         imageView.fitHeightProperty().bind(root.heightProperty());
         imageView.fitWidthProperty().bind(root.widthProperty());
+
+
+
     }
 
 }
