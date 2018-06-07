@@ -8,6 +8,11 @@
 
 <AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="it.polimi.se2018.View.ControllerWaiting">
   <children>
-    <Label layoutX="228.0" layoutY="192.0" text="Attesa preparazione partita" />
+    <VBox fx:id="vboxWaiting" alignment="CENTER" layoutX="14.0" layoutY="21.0" prefHeight="365.0" prefWidth="572.0" spacing="50.0">
+      <children>
+        <Label text="Attesa preparazione partita (da sistemare con timer)" />
+        <Button fx:id="buttonWaiting" mnemonicParsing="false" onAction="#handleButton" text="LanciaSagrada" />
+      </children>
+    </VBox>
   </children>
 </AnchorPane>

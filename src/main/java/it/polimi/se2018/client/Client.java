@@ -51,5 +51,7 @@ public class Client {
      */
     private void clientGUI() {
         view = new GUIProxy();
+        clientNetwork = new ClientNetwork(view);
+        ((GUIProxy) view).setClientNetwork(clientNetwork);
     }
 }

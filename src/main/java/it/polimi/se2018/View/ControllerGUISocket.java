@@ -79,10 +79,9 @@ public class ControllerGUISocket implements Initializable {
 
     public void handleButtonAvantiSocket(ActionEvent event) {
 
+        createConnection();
         /*
-
-        Sistemare tutta la parte di collegamento al server
-
+        Aggiungere controllo se la connessione è riuscita o fallita
          */
 
         Stage stage;
@@ -134,12 +133,13 @@ public class ControllerGUISocket implements Initializable {
     }
 
 
-/*
-
-    //Metodo che crea la connessione con il server .... Presa dalla CLI e sistemata ... Da finire e chiedere ad Alessio
 
 
     public void createConnection(){
+
+        /*
+        Scrivere questo metodo (e anche in ControllerGUIRMI che crea la connessione; capire come passare il ClientNetwork che sta in GUIProxy
+
 
         ClientNetwork clientNetwork = new ClientNetwork( ... ci va la View ...);
 
@@ -177,9 +177,11 @@ public class ControllerGUISocket implements Initializable {
 
         ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
         clientNetwork.sendMessage(testMessage);
+
+        */
     }
 
-*/
+
 
 
 }

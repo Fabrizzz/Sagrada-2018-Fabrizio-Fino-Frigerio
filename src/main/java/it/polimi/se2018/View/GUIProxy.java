@@ -10,6 +10,8 @@ import java.util.Observable;
 public class GUIProxy extends View {
 
 
+    private ClientNetwork clientNetwork;
+
 
     public GUIProxy(){
         launchGUI();
@@ -28,6 +30,9 @@ public class GUIProxy extends View {
         startUpTest.messageStartUpGUI();
     }
 
+    public void setClientNetwork(ClientNetwork temp) {
+        clientNetwork = temp;
+    }
 
     /**
      *
@@ -42,9 +47,5 @@ public class GUIProxy extends View {
     @Override
     public void connectionClosed() {
 
-    }
-
-    //Potrebbe servire
-    public void createConnection(ClientNetwork clientNetwork) {
     }
 }
