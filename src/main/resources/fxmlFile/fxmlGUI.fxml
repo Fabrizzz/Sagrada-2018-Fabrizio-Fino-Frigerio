@@ -16,10 +16,10 @@
       <children>
         <ImageView fx:id="imageView" fitHeight="0.0" fitWidth="0.0" pickOnBounds="true" preserveRatio="true">
           <image>
-            <Image url="@Title%20Sagrada.jpg" />
+            <Image url="@../utilsGUI/Title%20Sagrada.jpg" />
           </image>
         </ImageView>
-        <Region prefHeight="30.0"/>
+        <Region prefHeight="30.0" />
         <Label fx:id="labelSocketRMI" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" text="Scegliere il tipo di connessione con il server:">
           <font>
             <Font size="14.0" />

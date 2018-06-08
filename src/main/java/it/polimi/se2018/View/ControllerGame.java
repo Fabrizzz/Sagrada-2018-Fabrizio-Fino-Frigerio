@@ -19,8 +19,7 @@ public class ControllerGame implements Initializable {
     @FXML
     GridPane gridPane;
 
-    @FXML
-    Region regionTop;
+
 
     @FXML
     Region regionLeft;
@@ -37,12 +36,13 @@ public class ControllerGame implements Initializable {
 
         gridPane.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
         borderPane.setStyle("-fx-border-color: black");
-        regionTop.setStyle("-fx-border-color: black");
         regionLeft.setStyle("-fx-border-color: black");
         flowPane.setStyle("-fx-border-color: black");
         hbox.setStyle("-fx-border-color: black");
 
         borderPane.prefWidthProperty().bind(root.widthProperty());
         borderPane.prefHeightProperty().bind(root.heightProperty());
+
+        //root.setMinSize(800,800);
     }
 }
