@@ -55,7 +55,7 @@ public class GUI extends Application {
         Scene scene = null;
         try{
             root = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
-            scene = new Scene(root);
+            scene = new Scene(root,600,400);
         }
         catch (Exception e){
             System.out.println("File FXML not found");
