@@ -22,7 +22,7 @@ public class TestCard5LightShades {
 
     @Before
     public void setUp() {
-
+        BoardList.loadJSONBoards();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATURECHIARE);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 

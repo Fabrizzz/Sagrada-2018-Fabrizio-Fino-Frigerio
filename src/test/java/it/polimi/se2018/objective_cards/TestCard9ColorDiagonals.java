@@ -22,7 +22,7 @@ public class TestCard9ColorDiagonals {
 
     @Before
     public void setUp() throws Exception {
-
+        BoardList.loadJSONBoards();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.DIAGONALICOLORATE);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 

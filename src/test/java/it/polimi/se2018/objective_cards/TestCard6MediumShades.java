@@ -22,7 +22,7 @@ public class TestCard6MediumShades {
 
     @Before
     public void setUp() {
-
+        BoardList.loadJSONBoards();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATUREMEDIE);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 
