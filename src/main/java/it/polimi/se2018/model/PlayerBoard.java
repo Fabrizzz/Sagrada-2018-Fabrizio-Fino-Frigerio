@@ -32,7 +32,6 @@ public class PlayerBoard implements Serializable {
         String[] restrictions = boardName.getRestrictions();
         Restriction restrizione;
 
-
         for (int i = 0; i < restrictions.length; i++) {
             String temp = restrictions[i];
 

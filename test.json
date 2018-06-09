@@ -1,0 +1,23 @@
+{
+  "boards" : [
+  {
+    "coppia" : [{
+    "name" : "Virtus",
+  "difficulty": 5,
+  "mappa": [
+    ["4","","2","5","GREEN"],
+    ["","","6","GREEN","2"],
+    ["","3","GREEN","4",""],
+    ["5","GREEN","1","",""]
+  ]},
+  {"name" : "Kaleidoscopic Dream",
+  "difficulty": 4,
+  "mappa": [
+    ["YELLOW","BLUE","","","1"],
+    ["GREEN","","5","","4"],
+    ["3","","3","","5"],
+    ["2","","","BLUE","YELLOW"]
+  ]}
+  ]}
+  ]
+}
