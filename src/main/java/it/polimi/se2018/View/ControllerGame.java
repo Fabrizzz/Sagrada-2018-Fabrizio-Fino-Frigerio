@@ -2,6 +2,7 @@ package it.polimi.se2018.View;
 
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.ColorRestriction;
+import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.model.cell.Restriction;
 import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
@@ -10,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.net.URL;
@@ -34,6 +37,9 @@ public class ControllerGame implements Initializable {
 
     @FXML
     HBox hbox;
+
+    @FXML
+    Pane pane00;
 
 
     @Override
@@ -67,11 +73,13 @@ public class ControllerGame implements Initializable {
 
         Restriction restriction;
         ColorRestriction colorRestriction;
+        NumberRestriction numberRestriction;
         int i,j;
         PlayerBoard playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
         ObservableList<Node> childrens = gridPane.getChildren();
+        ImageView image;
 
-        //ColorRestriction
+        //insert ColorRestriction and NumberRestriction
         for (i = 0; i < 4; i++){
             for(j = 0; j < 5; j++){
                 restriction = playerBoard.getRestriction(i,j);
@@ -97,7 +105,49 @@ public class ControllerGame implements Initializable {
                             break;
                         }
                     }
-                }
+                }/*
+
+                Da migliorare resizable
+
+                else if (restriction.isNumberRestriction()){
+                    numberRestriction = (NumberRestriction) restriction;
+                    if(numberRestriction.getNumber().getInt() == 1){
+                        image = new ImageView(new Image("utilsGUI/numberRestriction1.png"));
+                        image.fitWidthProperty().bind(pane00.widthProperty());
+                        image.fitHeightProperty().bind(pane00.heightProperty());
+                        gridPane.add(image,i,j);
+                    }
+                    else if(numberRestriction.getNumber().getInt() == 2){
+                        image = new ImageView(new Image("utilsGUI/numberRestriction2.png"));
+                        image.fitWidthProperty().bind(pane00.widthProperty());
+                        image.fitHeightProperty().bind(pane00.heightProperty());
+                        gridPane.add(image,i,j);
+                    }
+                    else if(numberRestriction.getNumber().getInt() == 3){
+                        image = new ImageView(new Image("utilsGUI/numberRestriction3.png"));
+                        image.fitWidthProperty().bind(pane00.widthProperty());
+                        image.fitHeightProperty().bind(pane00.heightProperty());
+                        gridPane.add(image,i,j);
+                    }
+                    else if(numberRestriction.getNumber().getInt() == 4){
+                        image = new ImageView(new Image("utilsGUI/numberRestriction4.png"));
+                        image.fitWidthProperty().bind(pane00.widthProperty());
+                        image.fitHeightProperty().bind(pane00.heightProperty());
+                        gridPane.add(image,i,j);
+                    }
+                    else if(numberRestriction.getNumber().getInt() == 5){
+                        image = new ImageView(new Image("utilsGUI/numberRestriction5.png"));
+                        image.fitWidthProperty().bind(pane00.widthProperty());
+                        image.fitHeightProperty().bind(pane00.heightProperty());
+                        gridPane.add(image,i,j);
+                    }
+                    else if(numberRestriction.getNumber().getInt() == 6){
+                        image = new ImageView(new Image("utilsGUI/numberRestriction6.png"));
+                        image.fitWidthProperty().bind(pane00.widthProperty());
+                        image.fitHeightProperty().bind(pane00.heightProperty());
+                        gridPane.add(image,i,j);
+                    }
+                }*/
             }
         }
 
