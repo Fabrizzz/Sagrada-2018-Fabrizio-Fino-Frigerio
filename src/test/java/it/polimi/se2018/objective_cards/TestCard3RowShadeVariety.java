@@ -1,9 +1,9 @@
 package it.polimi.se2018.objective_cards;
 
+import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
-import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
@@ -24,10 +24,10 @@ public class TestCard3RowShadeVariety {
 
     @Before
     public void setUp() {
-
+        BoardList.loadJSONBoards();
         rowNum = new ArrayList<>();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATUREDIVERSERIGA);
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getCouple()[1]);
 
         //Row 0
 
@@ -200,7 +200,7 @@ public class TestCard3RowShadeVariety {
         point = card.getPoints(playerBoard);
         assertEquals(5, point);
 
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getCouple()[1]);
         point = card.getPoints(playerBoard);
         assertEquals(0, point);
 

@@ -1,12 +1,14 @@
 package it.polimi.se2018;
 
+import it.polimi.se2018.model.Board;
+import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -14,12 +16,16 @@ import static org.junit.Assert.*;
 public class TestPlayerBoard {
     private PlayerBoard playerBoard;
 
+    @Before
+    public void init(){
+        BoardList.loadJSONBoards();
+    }
 
     @Test
     public void testGetDie(){
         Die die = new Die(Color.BLUE);
 
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
 
@@ -51,7 +57,7 @@ public class TestPlayerBoard {
     @Test
     public void testContainsDie() {
 
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
 
@@ -74,7 +80,7 @@ public class TestPlayerBoard {
 
     @Test
     public void testRemoveDice(){
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -110,7 +116,7 @@ public class TestPlayerBoard {
     @Test
     public void testVerifyColorRestriction(){
 
-        for (BoardName boardName : BoardName.values()) {
+        for (Board boardName : BoardList.values()) {
 
             playerBoard = new PlayerBoard(boardName);
             for (int i = 0; i < 4; i++) {
@@ -131,7 +137,7 @@ public class TestPlayerBoard {
     @Test
     public void testVerifyNumberRestriction(){
         Die die = new Die(Color.BLUE);
-        for (BoardName boardName : BoardName.values()) {
+        for (Board boardName : BoardList.values()) {
 
             playerBoard = new PlayerBoard(boardName);
             for (int i = 0; i < 4; i++) {
@@ -150,7 +156,7 @@ public class TestPlayerBoard {
 
     @Test
     public void testVerifyPositionRestriction(){
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
                 assertFalse(playerBoard.verifyPositionRestriction(i, j));
@@ -169,7 +175,7 @@ public class TestPlayerBoard {
 
     @Test
     public void testVerifyNearCellsRestriction(){
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
         Die die = new Die(Color.BLUE);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -200,7 +206,7 @@ public class TestPlayerBoard {
 
     @Test
     public void testInitialPositionRestriction(){
-        playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 5; j++) {
                 if (i == 0 || i == 3 || j == 0 || j == 4)

@@ -58,6 +58,37 @@ public final class BoardList {
     }
 
     public static Board[] getCouple(){
-        return boardList.remove((new Random()).nextInt(boardList.size()));
+        if(boardList.size() == 0){
+            return null;
+        }else{
+
+            return boardList.remove((new Random()).nextInt(boardList.size()));
+        }
     }
+
+    public static Board getBoard(String name){
+        for(int i = 0; i < boardList.size(); i ++){
+            for(int j = 0; j < 2; j++) {
+                if (boardList.get(i)[j].getName().equals(name)){
+                    return boardList.get(i)[j];
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Board[] values(){
+        ArrayList<Board> boardValues = new ArrayList<>();
+        for(int i = 0; i < boardList.size(); i ++){
+            for(int j = 0; j < 2; j++){
+                boardValues.add(boardList.get(i)[j]);
+            }
+        }
+
+        Board[] boardArray = new Board[boardValues.size()];
+        boardArray = boardValues.toArray(boardArray);
+
+        return boardArray;
+    }
+
 }

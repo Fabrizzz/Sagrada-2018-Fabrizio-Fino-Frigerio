@@ -21,8 +21,14 @@ public class Board {
         return tockens;
     }
 
+    public String getRestriction(int row,int column){
+        return restrictions.get(column + row*5);
+    }
+
     public String[] getRestrictions() {
-        return (String[]) restrictions.toArray();
+        String[] stringArray = new String[restrictions.size()];
+        stringArray = restrictions.toArray(stringArray);
+        return stringArray;
     }
 
 }
