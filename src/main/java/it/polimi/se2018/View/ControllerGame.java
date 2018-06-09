@@ -1,15 +1,14 @@
 package it.polimi.se2018.View;
 
+import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Restriction;
-import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.layout.*;
 
 import java.net.URL;
@@ -68,7 +67,7 @@ public class ControllerGame implements Initializable {
         Restriction restriction;
         ColorRestriction colorRestriction;
         int i,j;
-        PlayerBoard playerBoard = new PlayerBoard(BoardName.KALEIDOSCOPICDREAM);
+        PlayerBoard playerBoard = new PlayerBoard(BoardList.getCouple()[0]);
         ObservableList<Node> childrens = gridPane.getChildren();
 
         //ColorRestriction

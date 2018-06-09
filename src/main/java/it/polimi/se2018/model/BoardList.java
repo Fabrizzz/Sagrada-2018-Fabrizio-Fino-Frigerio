@@ -25,7 +25,6 @@ public final class BoardList {
             Object obj2 = parser.parse(new FileReader("mappe.json"));
 
             JSONObject jsonObject = (JSONObject) obj2;
-            System.out.println(jsonObject);
 
             JSONArray boards = (JSONArray) jsonObject.get("boards");
             JSONArray coppia;
@@ -59,6 +58,6 @@ public final class BoardList {
     }
 
     public static Board[] getCouple(){
-        return boardList.get((new Random()).nextInt(boardList.size()));
+        return boardList.remove((new Random()).nextInt(boardList.size()));
     }
 }

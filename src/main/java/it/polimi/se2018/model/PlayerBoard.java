@@ -4,7 +4,6 @@ import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
 import it.polimi.se2018.model.cell.Cell;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.Restriction;
-import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
@@ -18,18 +17,18 @@ import java.util.Arrays;
  * @author Giampietro
  */
 public class PlayerBoard implements Serializable {
-    private BoardName boardName;
+    private Board board;
     private Cell[] cells = new Cell[20];
     boolean isEmpty = true;
 
     /**
      * Costructor
-     * @param boardName name of the board
+     * @param board name of the board
      */
-    public PlayerBoard(BoardName boardName) {
+    public PlayerBoard(Board board) {
         AbstractRestrictionFactory factory = AbstractRestrictionFactory.getFactory();
-        this.boardName = boardName;
-        String[] restrictions = boardName.getRestrictions();
+        this.board = board;
+        String[] restrictions = board.getRestrictions();
         Restriction restrizione;
 
         for (int i = 0; i < restrictions.length; i++) {

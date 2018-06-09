@@ -1,15 +1,12 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.controller.chainOfResponsibilities.Handler;
-import it.polimi.se2018.model.Model;
-import it.polimi.se2018.model.Player;
-import it.polimi.se2018.model.PlayerBoard;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.PlayerMove;
-import it.polimi.se2018.utils.enums.BoardName;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
@@ -22,23 +19,21 @@ public class Controller implements Observer {
 
     private boolean partitaIniziata = false;
     private Model model;
-    private LinkedList<BoardName> availableBoards = new LinkedList<>();
     private Handler firstHandler;
     private Timer timer = new Timer();
 
-    public Controller() {
-        availableBoards.addAll(Arrays.asList(BoardName.values()));
-        Collections.shuffle(availableBoards);
-    }
+    public Controller() {}
 
 
-    public List<BoardName> getBoards() {
-        LinkedList<BoardName> boards = new LinkedList<>();
-        for (int i = 0; i < 2; i++) {
-            boards.add(availableBoards.getFirst());
-            boards.addLast(boards.getLast().getCoppia());
-            availableBoards.removeAll(boards);
-        }
+    public List<Board> getBoards() {
+        LinkedList<Board> boards = new LinkedList<>();
+        Board[] coppia = new Board[2];
+        coppia = BoardList.getCouple();
+        boards.add(coppia[0]);
+        boards.add(coppia[1]);
+        coppia = BoardList.getCouple();
+        boards.add(coppia[0]);
+        boards.add(coppia[1]);
         return boards;
     }
 
