@@ -71,6 +71,8 @@ public class ControllerGame implements Initializable {
         Caricamento di una playerBoard che in questo caso è la KALEIDOSCOPICDREAM ma le istruzioni sono generali per qualsiasi altra
         */
 
+        BoardList.loadJSONBoards();
+
         Restriction restriction;
         ColorRestriction colorRestriction;
         NumberRestriction numberRestriction;
@@ -83,32 +85,26 @@ public class ControllerGame implements Initializable {
         for (i = 0; i < 4; i++){
             for(j = 0; j < 5; j++){
                 restriction = playerBoard.getRestriction(i,j);
-                if (restriction.isColorRestriction()){
+                if (restriction.isColorRestriction()) {
                     colorRestriction = (ColorRestriction) restriction;
                     for (Node node : childrens) {
-                        if(gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
-                            if(colorRestriction.getColor() == Color.BLUE){
+                        if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
+                            if (colorRestriction.getColor() == Color.BLUE) {
                                 node.setStyle("-fx-background-color: blue");
-                            }
-                            else if(colorRestriction.getColor() == Color.RED){
+                            } else if (colorRestriction.getColor() == Color.RED) {
                                 node.setStyle("-fx-background-color: red");
-                            }
-                            else if(colorRestriction.getColor() == Color.YELLOW){
+                            } else if (colorRestriction.getColor() == Color.YELLOW) {
                                 node.setStyle("-fx-background-color: yellow");
-                            }
-                            else if(colorRestriction.getColor() == Color.PURPLE){
+                            } else if (colorRestriction.getColor() == Color.PURPLE) {
                                 node.setStyle("-fx-background-color: purple");
-                            }
-                            else if(colorRestriction.getColor() == Color.GREEN){
+                            } else if (colorRestriction.getColor() == Color.GREEN) {
                                 node.setStyle("-fx-background-color: green");
                             }
                             break;
                         }
                     }
-                }/*
-
-                Da migliorare resizable
-
+                }
+/*
                 else if (restriction.isNumberRestriction()){
                     numberRestriction = (NumberRestriction) restriction;
                     if(numberRestriction.getNumber().getInt() == 1){
