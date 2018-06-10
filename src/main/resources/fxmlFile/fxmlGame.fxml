@@ -15,41 +15,122 @@
         <HBox fx:id="hbox" prefHeight="100.0" prefWidth="200.0" />
       </bottom>
       <center>
-        <GridPane id="gridPaneGame" fx:id="gridPane" maxHeight="-Infinity" maxWidth="600.0" minHeight="300.0" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" snapToPixel="true" BorderPane.alignment="CENTER">
+        <GridPane id="gridPaneGame" fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="600.0" prefHeight="300.0" prefWidth="400.0" snapToPixel="true" BorderPane.alignment="CENTER">
           <children>
-            <Pane fx:id="pane00" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <Pane fx:id="pane01" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <Pane fx:id="pane02" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <Pane fx:id="pane03" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <Pane fx:id="pane04" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-            <Pane fx:id="pane10" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <Pane fx:id="pane11" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Pane fx:id="pane12" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Pane fx:id="pane13" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Pane fx:id="pane14" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-            <Pane fx:id="pane20" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <Pane fx:id="pane21" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Pane fx:id="pane22" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Pane fx:id="pane23" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Pane fx:id="pane24" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-            <Pane fx:id="pane30" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <Pane fx:id="pane32" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Pane fx:id="pane33" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Pane fx:id="pane34" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-            <Pane fx:id="pane31" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <!-- PANE 00 -->
+            <Pane fx:id="pane00" disable="false" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image00" disable="false" fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" smooth="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane01" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image01" fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane02" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image02" fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane03" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane04" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image04" fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane10" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image10" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane11" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image11" fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane12" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image12" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane13" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image13" fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane14" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image14" fitHeight="100.0" fitWidth="100.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane20" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image20" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane21" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image21" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane22" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image22" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane23" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image23" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane24" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image24" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane30" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image03" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane32" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image32" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane33" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image33" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane34" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image34" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
+            <Pane fx:id="pane31" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
+              <children>
+                <ImageView fx:id="image31" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+              </children>
+            </Pane>
           </children>
           <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="100.0" />
+            <ColumnConstraints fillWidth="true" hgrow="NEVER" minWidth="70.0" prefWidth="-1.0" />
+            <ColumnConstraints hgrow="NEVER" minWidth="70.0" prefWidth="-1.0" />
+            <ColumnConstraints hgrow="NEVER" minWidth="70.0" prefWidth="-1.0" />
+            <ColumnConstraints hgrow="NEVER" minWidth="70.0" prefWidth="-1.0" />
+            <ColumnConstraints hgrow="NEVER" minWidth="70.0" prefWidth="-1.0" />
           </columnConstraints>
           <rowConstraints>
-            <RowConstraints maxHeight="170.0" minHeight="-Infinity" prefHeight="-1.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="170.0" minHeight="-Infinity" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="170.0" minHeight="-Infinity" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="170.0" minHeight="-Infinity" percentHeight="-1.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="170.0" minHeight="-Infinity" prefHeight="-1.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="170.0" minHeight="-Infinity" vgrow="NEVER" />
+            <RowConstraints maxHeight="170.0" minHeight="-Infinity" vgrow="NEVER" />
+            <RowConstraints maxHeight="170.0" minHeight="-Infinity" percentHeight="-1.0" vgrow="NEVER" />
           </rowConstraints>
         </GridPane>
       </center>

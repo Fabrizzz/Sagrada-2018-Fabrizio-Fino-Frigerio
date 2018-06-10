@@ -38,10 +38,6 @@ public class ControllerGame implements Initializable {
     @FXML
     HBox hbox;
 
-    @FXML
-    Pane pane00;
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeLayout();
@@ -51,7 +47,6 @@ public class ControllerGame implements Initializable {
 
     private void initializeLayout(){
 
-        gridPane.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
         borderPane.setStyle("-fx-border-color: black");
         regionLeft.setStyle("-fx-border-color: black");
         flowPane.setStyle("-fx-border-color: black");
@@ -79,12 +74,20 @@ public class ControllerGame implements Initializable {
         int i,j;
         PlayerBoard playerBoard = new PlayerBoard(BoardList.getCouple()[0]);
         ObservableList<Node> childrens = gridPane.getChildren();
+        ObservableList<Node> child;
         ImageView image;
+        Pane pane;
 
-        //insert ColorRestriction and NumberRestriction
+
+        for (Node node : childrens) {
+            node.setStyle("-fx-background-color: white");
+        }
+
+        //Insert ColorRestriction and NumberRestriction
         for (i = 0; i < 4; i++){
             for(j = 0; j < 5; j++){
                 restriction = playerBoard.getRestriction(i,j);
+                //ColorRestriction
                 if (restriction.isColorRestriction()) {
                     colorRestriction = (ColorRestriction) restriction;
                     for (Node node : childrens) {
@@ -104,46 +107,48 @@ public class ControllerGame implements Initializable {
                         }
                     }
                 }
-/*
-                else if (restriction.isNumberRestriction()){
+
+                //NumberRestriction
+                if (restriction.isNumberRestriction()) {
                     numberRestriction = (NumberRestriction) restriction;
-                    if(numberRestriction.getNumber().getInt() == 1){
-                        image = new ImageView(new Image("utilsGUI/numberRestriction1.png"));
-                        image.fitWidthProperty().bind(pane00.widthProperty());
-                        image.fitHeightProperty().bind(pane00.heightProperty());
-                        gridPane.add(image,i,j);
+                    for (Node node : childrens) {
+                        if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
+                            pane = (Pane) node;
+                            if(numberRestriction.getNumber().getInt() == 1){
+                                child = pane.getChildren();
+                                image = (ImageView) child.get(0);;
+                                image.setImage(new Image("utilsGUI/numberRestriction1.png"));
+                                image.setVisible(true);
+                            }else if (numberRestriction.getNumber().getInt() == 2){
+                                child = pane.getChildren();
+                                image = (ImageView) child.get(0);;
+                                image.setImage(new Image("utilsGUI/numberRestriction2.png"));
+                                image.setVisible(true);
+                            } else if (numberRestriction.getNumber().getInt() == 3){
+                                child = pane.getChildren();
+                                image = (ImageView) child.get(0);;
+                                image.setImage(new Image("utilsGUI/numberRestriction3.png"));
+                                image.setVisible(true);
+                            } else if (numberRestriction.getNumber().getInt() == 4){
+                                child = pane.getChildren();
+                                image = (ImageView) child.get(0);;
+                                image.setImage(new Image("utilsGUI/numberRestriction4.png"));
+                                image.setVisible(true);
+                            } else if (numberRestriction.getNumber().getInt() == 5){
+                                child = pane.getChildren();
+                                image = (ImageView) child.get(0);;
+                                image.setImage(new Image("utilsGUI/numberRestriction5.png"));
+                                image.setVisible(true);
+                            } else if (numberRestriction.getNumber().getInt() == 6){
+                                child = pane.getChildren();
+                                image = (ImageView) child.get(0);;
+                                image.setImage(new Image("utilsGUI/numberRestriction6.png"));
+                                image.setVisible(true);
+                            }
+                            break;
+                        }
                     }
-                    else if(numberRestriction.getNumber().getInt() == 2){
-                        image = new ImageView(new Image("utilsGUI/numberRestriction2.png"));
-                        image.fitWidthProperty().bind(pane00.widthProperty());
-                        image.fitHeightProperty().bind(pane00.heightProperty());
-                        gridPane.add(image,i,j);
-                    }
-                    else if(numberRestriction.getNumber().getInt() == 3){
-                        image = new ImageView(new Image("utilsGUI/numberRestriction3.png"));
-                        image.fitWidthProperty().bind(pane00.widthProperty());
-                        image.fitHeightProperty().bind(pane00.heightProperty());
-                        gridPane.add(image,i,j);
-                    }
-                    else if(numberRestriction.getNumber().getInt() == 4){
-                        image = new ImageView(new Image("utilsGUI/numberRestriction4.png"));
-                        image.fitWidthProperty().bind(pane00.widthProperty());
-                        image.fitHeightProperty().bind(pane00.heightProperty());
-                        gridPane.add(image,i,j);
-                    }
-                    else if(numberRestriction.getNumber().getInt() == 5){
-                        image = new ImageView(new Image("utilsGUI/numberRestriction5.png"));
-                        image.fitWidthProperty().bind(pane00.widthProperty());
-                        image.fitHeightProperty().bind(pane00.heightProperty());
-                        gridPane.add(image,i,j);
-                    }
-                    else if(numberRestriction.getNumber().getInt() == 6){
-                        image = new ImageView(new Image("utilsGUI/numberRestriction6.png"));
-                        image.fitWidthProperty().bind(pane00.widthProperty());
-                        image.fitHeightProperty().bind(pane00.heightProperty());
-                        gridPane.add(image,i,j);
-                    }
-                }*/
+                }
             }
         }
 
