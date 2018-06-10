@@ -25,7 +25,6 @@ public final class BoardList {
             Object obj2 = parser.parse(new FileReader("mappe.json"));
 
             JSONObject jsonObject = (JSONObject) obj2;
-
             JSONArray boards = (JSONArray) jsonObject.get("boards");
             JSONArray coppia;
             JSONObject board;

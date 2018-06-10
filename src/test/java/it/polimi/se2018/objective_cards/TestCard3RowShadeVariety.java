@@ -1,5 +1,6 @@
 package it.polimi.se2018.objective_cards;
 
+import it.polimi.se2018.model.Board;
 import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
@@ -27,7 +28,7 @@ public class TestCard3RowShadeVariety {
         BoardList.loadJSONBoards();
         rowNum = new ArrayList<>();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATUREDIVERSERIGA);
-        playerBoard = new PlayerBoard(BoardList.getCouple()[1]);
+        playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 
         //Row 0
 

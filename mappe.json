@@ -18,6 +18,25 @@
     ["THREE","","RED","","FIVE"],
     ["TWO","","","BLUE","YELLOW"]
   ]}
+  ]},
+  {
+    "coppia" : [{
+    "name" : "Via Lux",
+  "difficulty": 4,
+  "mappa": [
+    ["YELLOW","","SIX","",""],
+    ["","ONE","FIVE","","TWO"],
+    ["THREE","YELLOW","RED","PURPLE",""],
+    ["","","FOUR","THREE","RED"]
+  ]},
+  {"name" : "Aurorae Magnificus",
+  "difficulty": 5,
+  "mappa": [
+    ["FIVE","GREEN","BLUE","PURPLE","TWO"],
+    ["PURPLE","","","","YELLOW"],
+    ["YELLOW","","SIX","","PURPLE"],
+    ["ONE","","","GREEN","FOUR"]
+  ]}
   ]}
   ]
 }
