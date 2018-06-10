@@ -41,6 +41,7 @@ public class PlayerBoard implements Serializable {
             else if (restrictions[i].length() == 0)
                 restrizione = factory.createNoRestriction();
             else
+                System.err.println("Sintassi mappe JSON errata");
                 throw new IllegalArgumentException();
             cells[i] = new Cell(restrizione);
 

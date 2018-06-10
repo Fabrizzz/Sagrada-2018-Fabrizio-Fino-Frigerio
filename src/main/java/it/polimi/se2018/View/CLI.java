@@ -20,11 +20,7 @@ import java.util.*;
  */
 public class CLI extends View{
     private final String ANSI_RESET = "\u001B[0m";
-    private final String ANSI_RED = "\u001B[31m";
-    private final String ANSI_GREEN = "\u001B[32m";
-    private final String ANSI_YELLOW = "\u001B[33m";
-    private final String ANSI_BLUE = "\u001B[34m";
-    private final String ANSI_PURPLE = "\u001B[35m";
+    private Map<Color,String> colorMap = new HashMap<>();
     private Scanner input;
     private ModelView modelView;
     private Long localID;
@@ -34,28 +30,11 @@ public class CLI extends View{
      */
     public CLI(){
         input = new Scanner(System.in);
-    }
-
-    /**
-     * Return a string containing the characters necessary to change the color of the text printed in the command line
-     * @param color color
-     * @return the string of characters to change the color of the command line text
-     */
-    public String getColor(Color color){
-        switch (color) {
-            case BLUE:
-                return ANSI_BLUE;
-            case RED:
-                return ANSI_RED;
-            case GREEN:
-                return ANSI_GREEN;
-            case YELLOW:
-                return ANSI_YELLOW;
-            case PURPLE:
-                return ANSI_PURPLE;
-            default:
-                return ANSI_RESET;
-        }
+        colorMap.put(Color.BLUE,"\u001B[34m");
+        colorMap.put(Color.RED,"\u001B[31m");
+        colorMap.put(Color.GREEN, "\u001B[32m");
+        colorMap.put(Color.YELLOW,"\u001B[33m");
+        colorMap.put(Color.PURPLE, "\u001B[35m");
     }
 
     /**
@@ -69,7 +48,7 @@ public class CLI extends View{
         for(int j = 0; j < 4; j ++){
             for(int i = 0; i < 5; i++){
                 try{
-                    System.out.print("|" + getColor(playerBoard.getDie(j,i).getColor()) + playerBoard.getDie(j,i).getNumber().getInt() + ANSI_RESET);
+                    System.out.print("|" + colorMap.get(playerBoard.getDie(j,i).getColor()) + playerBoard.getDie(j,i).getNumber().getInt() + ANSI_RESET);
                 }catch(NoDieException e) {
                     System.out.print("| ");
                 }
@@ -89,7 +68,7 @@ public class CLI extends View{
                 if(playerBoard.getRestriction(j,i).isNumberRestriction()){
                     System.out.print("|" + (((NumberRestriction) (playerBoard.getRestriction(j,i))).getNumber()).getInt());
                 }else if(playerBoard.getRestriction(j,i).isColorRestriction()){
-                    System.out.print("|" + getColor(((ColorRestriction) playerBoard.getRestriction(j,i)).getColor()) + "x" + ANSI_RESET);
+                    System.out.print("|" + colorMap.get(((ColorRestriction) playerBoard.getRestriction(j,i)).getColor()) + "x" + ANSI_RESET);
                 }else{
                     System.out.print("| ");
                 }
@@ -115,7 +94,7 @@ public class CLI extends View{
         System.out.print("Dadi:     ");
         for(int i = 0; i < modelView.DraftPoolSize(); i++){
             try{
-                System.out.print("|" + getColor(modelView.getDraftPoolDie(i).getColor()) + modelView.getDraftPoolDie(i).getNumber().getInt() + ANSI_RESET);
+                System.out.print("|" + colorMap.get(modelView.getDraftPoolDie(i).getColor()) + modelView.getDraftPoolDie(i).getNumber().getInt() + ANSI_RESET);
             }catch(NoDieException e){
                 System.out.print("| ");
             }
