@@ -8,6 +8,10 @@ import org.junit.Test;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * PlayerMove test
+ * @author Alessio
+ */
 public class TestPlayerMove {
 
     private PlayerMove playerMove;

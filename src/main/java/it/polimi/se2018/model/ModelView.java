@@ -182,7 +182,7 @@ public class ModelView implements Observer, Serializable {
      * @param pos position of the die in the roundTrack
      * @return die in the roundTrack
      */
-    public Die getRoundTrackDie(int round, int pos) {
+    public Die getRoundTrackDie(int round, int pos) throws NoDieException {
         return getRoundTrack().getDie(round, pos);
     }
 

@@ -27,7 +27,11 @@ public class TestRoundTrack {
         Die die = new Die(Color.BLUE);
         i = roundtrack.numberOfDice(round);
         roundtrack.addDie(round, die);
-        assertEquals(die, roundtrack.getDie(round, i));
+        try{
+            assertEquals(die, roundtrack.getDie(round, i));
+        }catch (NoDieException e){
+            fail();
+        }
     }
 
     @Test
@@ -36,7 +40,11 @@ public class TestRoundTrack {
         Die die = new Die(Color.BLUE);
         i = roundtrack.numberOfDice(round);
         roundtrack.addDie(round, die);
-        assertEquals(die, roundtrack.getDie(round, i));
+        try{
+            assertEquals(die, roundtrack.getDie(round, i));
+        }catch (NoDieException e){
+            fail();
+        }
         assertEquals(i+1, roundtrack.numberOfDice(round));
     }
 

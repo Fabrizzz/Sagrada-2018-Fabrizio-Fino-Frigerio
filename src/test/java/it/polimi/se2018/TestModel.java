@@ -1,5 +1,6 @@
 package it.polimi.se2018;
 
+import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.model.PlayerBoard;
@@ -38,6 +39,10 @@ public class TestModel {
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         playerBoard = new PlayerBoard[3];
+        BoardList.loadJSONBoards();
+        for(int j = 0; j < 3; j ++){
+            playerBoard[j] = new PlayerBoard(BoardList.getBoard("Virtus"));
+        }
         boardMap = new HashMap<>();
         for (int i = 0; i < 3; i++) {
             players.add(new Player("Player " + i, (long) i));

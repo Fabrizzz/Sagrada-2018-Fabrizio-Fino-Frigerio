@@ -5,9 +5,7 @@ import it.polimi.se2018.server.Server;
 
 import java.util.Scanner;
 
-/**
- * Hello world!
- */
+
 public class App {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);

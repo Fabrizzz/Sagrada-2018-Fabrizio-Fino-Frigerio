@@ -30,8 +30,14 @@ public class RoundTrack implements Serializable {
      * @param pos posizione del dado nel round
      * @return il dado del giro nella posizione pos
      */
-    public Die getDie(int round, int pos) {
-        return tracks.get(round).get(pos);
+    public Die getDie(int round, int pos) throws NoDieException{
+        try{
+            Die die = tracks.get(round).get(pos);
+            return die;
+        }catch (IndexOutOfBoundsException e){
+            throw new NoDieException();
+        }
+
     }
 
     /**

@@ -124,7 +124,9 @@ public class CLI extends View{
         for(int i = 0; i < modelView.getRound(); i ++){
             System.out.println("Round " + (i+1));
             for(int j = 0; j < modelView.getRoundTrack().numberOfDice(i); j ++){
-                System.out.println("|" + modelView.getRoundTrackDie(i,j));
+                try{
+                    System.out.println("|" + modelView.getRoundTrackDie(i,j));
+                }catch (NoDieException e){}
             }
             System.out.println("|||");
         }
