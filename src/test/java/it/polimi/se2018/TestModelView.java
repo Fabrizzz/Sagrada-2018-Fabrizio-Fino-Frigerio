@@ -21,7 +21,7 @@ import java.util.Map;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
 
-public class ModelViewTest {
+public class TestModelView {
     private ModelView modelView;
     private  Model model;
     private List<Player> players;
