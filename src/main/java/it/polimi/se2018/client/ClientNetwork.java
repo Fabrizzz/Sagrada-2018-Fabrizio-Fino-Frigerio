@@ -72,9 +72,9 @@ public class ClientNetwork implements NetworkHandler {
                 RMIInterfaceRemote remoteRef = (RMIInterfaceRemote) UnicastRemoteObject.exportObject((Remote) connectionIn, 0);
 
                 RMIInterfaceRemote serverRMIInterfaceRemote = serverRMIInterface.addClient(remoteRef);
-                connection = new ServerRMIConnection(serverRMIInterfaceRemote);
 
-                if(connection != null){
+                if(serverRMIInterfaceRemote != null){
+                    connection = new ServerRMIConnection(serverRMIInterfaceRemote);
                     connectionIn.addObserver(view);
                     view.addObserver(connection);
                     return true;

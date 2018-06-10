@@ -19,6 +19,9 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * @author Alessio
+ */
 public class TestServerMessage {
     private ModelView modelView;
     private Model model;

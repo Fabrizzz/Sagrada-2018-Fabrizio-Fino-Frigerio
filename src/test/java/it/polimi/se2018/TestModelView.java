@@ -23,6 +23,9 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * @author Alessio
+ */
 public class TestModelView {
     private ModelView modelView;
     private  Model model;
