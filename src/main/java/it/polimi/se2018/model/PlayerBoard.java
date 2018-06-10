@@ -40,9 +40,10 @@ public class PlayerBoard implements Serializable {
                 restrizione = factory.createColorRestriction(Color.valueOf(restrictions[i]));
             else if (restrictions[i].length() == 0)
                 restrizione = factory.createNoRestriction();
-            else
+            else {
                 System.err.println("Sintassi mappe JSON errata");
                 throw new IllegalArgumentException();
+            }
             cells[i] = new Cell(restrizione);
 
         }

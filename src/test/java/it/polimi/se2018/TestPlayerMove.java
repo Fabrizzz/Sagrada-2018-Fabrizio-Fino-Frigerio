@@ -22,11 +22,16 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
-   /* @Test
-    public void standardRigaTest(){
-        playerMove = new PlayerMove(Tool.MOSSASTANDARD,0,1,2);
-        assertEquals(0,playerMove.getRow());
-        assertEquals(1,playerMove.getColumn());
-        assertEquals(2,playerMove.getDraftPosition());
+  /*  @Test
+    public void standardSugheroTest(){
+        playerMove = new PlayerMove(Tool.MOSSASTANDARD);
+        assertEquals(Tool.MOSSASTANDARD,playerMove.getTool());
+
+        try{
+            playerMove = new PlayerMove(Tool.ALESATOREPERLAMINADIRAME);
+            fail();
+        }catch (IllegalArgumentException e){}
     }*/
+
+
 }
