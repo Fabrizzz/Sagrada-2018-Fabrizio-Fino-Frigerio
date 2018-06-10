@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.fail;
+import static org.junit.Assert.assertTrue;
 
 public class TestModelView {
     private ModelView modelView;
@@ -130,7 +132,7 @@ public class TestModelView {
         }
 
         modelView.update(model,model);
-        assertEquals(true,modelView.boardContainsDie(modelView.getPlayers().get(1),1,1));
+        assertTrue(modelView.boardContainsDie(modelView.getPlayers().get(1),1,1));
     }
 
     @Test
@@ -177,13 +179,13 @@ public class TestModelView {
 
     @Test
     public void roundTrackCOntainsColorTest(){
-        assertEquals(false,modelView.roundTrackContainsColor(Color.BLUE));
+        assertFalse(modelView.roundTrackContainsColor(Color.BLUE));
 
         Die die = new Die(Color.BLUE);
         model.getRoundTrack().addDie(1,die);
         modelView.update(model,model);
 
-        assertEquals(true,modelView.roundTrackContainsColor(Color.BLUE));
+        assertTrue(modelView.roundTrackContainsColor(Color.BLUE));
     }
 
     @Test

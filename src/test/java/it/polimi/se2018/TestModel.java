@@ -164,16 +164,6 @@ public class TestModel {
         }catch(SizeLimitExceededException e){}
     }
 
-    /*@Test
-    public void testEndRound(){
-        int round = model.getRound();
-        DraftPool draftPool = model.getDraftPool();
-        model.endRound();
-        assertEquals(round + 1,model.getRound());
-        assertTrue(model.isFirstTurn());
-        //da completare
-    }*/
-
     @Test
     public void testNextTurn(){
         model.setUsedTool(true);
@@ -181,5 +171,12 @@ public class TestModel {
         assertFalse(model.hasUsedTool());
         //da completare
 
+    }
+
+    @Test
+    public void setNormalMoveTest(){
+        assertFalse(model.hasUsedNormalMove());
+        model.setNormalMove(true);
+        assertTrue(model.hasUsedNormalMove());
     }
 }
