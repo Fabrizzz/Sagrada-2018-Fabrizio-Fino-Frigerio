@@ -15,7 +15,7 @@
   "mappa": [
     ["YELLOW","BLUE","","","ONE"],
     ["GREEN","","FIVE","","FOUR"],
-    ["THREE","","RED","","FIVE"],
+    ["THREE","","RED","","GREEN"],
     ["TWO","","","BLUE","YELLOW"]
   ]}
   ]},
