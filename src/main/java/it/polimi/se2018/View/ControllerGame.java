@@ -43,6 +43,7 @@ public class ControllerGame implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeLayout();
         initializeRestrictionPlayerBoard();
+
         //Prova per la rimozione
         removeDie(0,3);
         removeDie(0,4);
@@ -89,79 +90,7 @@ public class ControllerGame implements Initializable {
         //Insert ColorRestriction and NumberRestriction
         for (i = 0; i < 4; i++) {
             for (j = 0; j < 5; j++) {
-                restriction = playerBoard.getRestriction(i, j);
-                //ColorRestriction
-                if (restriction.isColorRestriction()) {
-                    colorRestriction = (ColorRestriction) restriction;
-                    for (Node node : childrens) {
-                        if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
-                            if (colorRestriction.getColor() == Color.BLUE) {
-                                node.setStyle("-fx-background-color: blue");
-                                node.setOpacity(0.3);
-                            } else if (colorRestriction.getColor() == Color.RED) {
-                                node.setStyle("-fx-background-color: red");
-                                node.setOpacity(0.3);
-                            } else if (colorRestriction.getColor() == Color.YELLOW) {
-                                node.setStyle("-fx-background-color: yellow");
-                                node.setOpacity(0.3);
-                            } else if (colorRestriction.getColor() == Color.PURPLE) {
-                                node.setStyle("-fx-background-color: purple");
-                                node.setOpacity(0.3);
-                            } else if (colorRestriction.getColor() == Color.GREEN) {
-                                node.setStyle("-fx-background-color: green");
-                                node.setOpacity(0.3);
-                            }
-                            break;
-                        }
-                    }
-                }
-                //NumberRestriction
-                if (restriction.isNumberRestriction()) {
-                    numberRestriction = (NumberRestriction) restriction;
-                    for (Node node : childrens) {
-                        if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
-                            pane = (Pane) node;
-                            if (numberRestriction.getNumber().getInt() == 1) {
-                                child = pane.getChildren();
-                                image = (ImageView) child.get(0);
-                                image.setImage(new Image("utilsGUI/numberRestriction1.png"));
-                                image.setVisible(true);
-                                image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 2) {
-                                child = pane.getChildren();
-                                image = (ImageView) child.get(0);
-                                image.setImage(new Image("utilsGUI/numberRestriction2.png"));
-                                image.setVisible(true);
-                                image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 3) {
-                                child = pane.getChildren();
-                                image = (ImageView) child.get(0);
-                                image.setImage(new Image("utilsGUI/numberRestriction3.png"));
-                                image.setVisible(true);
-                                image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 4) {
-                                child = pane.getChildren();
-                                image = (ImageView) child.get(0);
-                                image.setImage(new Image("utilsGUI/numberRestriction4.png"));
-                                image.setVisible(true);
-                                image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 5) {
-                                child = pane.getChildren();
-                                image = (ImageView) child.get(0);
-                                image.setImage(new Image("utilsGUI/numberRestriction5.png"));
-                                image.setVisible(true);
-                                image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 6) {
-                                child = pane.getChildren();
-                                image = (ImageView) child.get(0);
-                                image.setImage(new Image("utilsGUI/numberRestriction6.png"));
-                                image.setVisible(true);
-                                image.setOpacity(0.3);
-                            }
-                            break;
-                        }
-                    }
-                }
+                insertRestriction(i,j);
             }
         }
         initializeDicePlayerBoard();
@@ -204,11 +133,11 @@ public class ControllerGame implements Initializable {
         ImageView image;
         Pane pane;
         int i, j;
-        String name, character;
+        String nameColor, character;
         int num;
 
-        name = die.getColor().toString();
-        character = name.substring(0, 1);
+        nameColor = die.getColor().toString();
+        character = nameColor.substring(0, 1);
         num = die.getNumber().getInt();
         i = row;
         j = column;
@@ -234,8 +163,6 @@ public class ControllerGame implements Initializable {
         ImageView image;
         Pane pane;
         int i, j;
-        String name, character;
-        int num;
 
         i = row;
         j = column;
@@ -263,6 +190,8 @@ public class ControllerGame implements Initializable {
         ObservableList<Node> child;
         ImageView image;
         Pane pane;
+        String nameColor;
+        int num;
 
         i = row;
         j = column;
@@ -272,22 +201,10 @@ public class ControllerGame implements Initializable {
             colorRestriction = (ColorRestriction) restriction;
             for (Node node : childrens) {
                 if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
-                    if (colorRestriction.getColor() == Color.BLUE) {
-                        node.setStyle("-fx-background-color: blue");
-                        node.setOpacity(0.3);
-                    } else if (colorRestriction.getColor() == Color.RED) {
-                        node.setStyle("-fx-background-color: red");
-                        node.setOpacity(0.3);
-                    } else if (colorRestriction.getColor() == Color.YELLOW) {
-                        node.setStyle("-fx-background-color: yellow");
-                        node.setOpacity(0.3);
-                    } else if (colorRestriction.getColor() == Color.PURPLE) {
-                        node.setStyle("-fx-background-color: purple");
-                        node.setOpacity(0.3);
-                    } else if (colorRestriction.getColor() == Color.GREEN) {
-                        node.setStyle("-fx-background-color: green");
-                        node.setOpacity(0.3);
-                    }
+                    nameColor = colorRestriction.getColor().toString();
+                    nameColor.toLowerCase();
+                    node.setStyle("-fx-background-color:"+nameColor);
+                    node.setOpacity(0.3);
                     break;
                 }
             }
@@ -297,44 +214,13 @@ public class ControllerGame implements Initializable {
             numberRestriction = (NumberRestriction) restriction;
             for (Node node : childrens) {
                 if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
+                    num =  numberRestriction.getNumber().getInt();
                     pane = (Pane) node;
-                    if (numberRestriction.getNumber().getInt() == 1) {
-                        child = pane.getChildren();
-                        image = (ImageView) child.get(0);
-                        image.setImage(new Image("utilsGUI/numberRestriction1.png"));
-                        image.setVisible(true);
-                        image.setOpacity(0.3);
-                    } else if (numberRestriction.getNumber().getInt() == 2) {
-                        child = pane.getChildren();
-                        image = (ImageView) child.get(0);
-                        image.setImage(new Image("utilsGUI/numberRestriction2.png"));
-                        image.setVisible(true);
-                        image.setOpacity(0.3);
-                    } else if (numberRestriction.getNumber().getInt() == 3) {
-                        child = pane.getChildren();
-                        image = (ImageView) child.get(0);
-                        image.setImage(new Image("utilsGUI/numberRestriction3.png"));
-                        image.setVisible(true);
-                        image.setOpacity(0.3);
-                    } else if (numberRestriction.getNumber().getInt() == 4) {
-                        child = pane.getChildren();
-                        image = (ImageView) child.get(0);
-                        image.setImage(new Image("utilsGUI/numberRestriction4.png"));
-                        image.setVisible(true);
-                        image.setOpacity(0.3);
-                    } else if (numberRestriction.getNumber().getInt() == 5) {
-                        child = pane.getChildren();
-                        image = (ImageView) child.get(0);
-                        image.setImage(new Image("utilsGUI/numberRestriction5.png"));
-                        image.setVisible(true);
-                        image.setOpacity(0.3);
-                    } else if (numberRestriction.getNumber().getInt() == 6) {
-                        child = pane.getChildren();
-                        image = (ImageView) child.get(0);
-                        image.setImage(new Image("utilsGUI/numberRestriction6.png"));
-                        image.setVisible(true);
-                        image.setOpacity(0.3);
-                    }
+                    child = pane.getChildren();
+                    image = (ImageView) child.get(0);
+                    image.setImage(new Image("utilsGUI/numberRestriction"+num+".png"));
+                    image.setVisible(true);
+                    image.setOpacity(0.3);
                     break;
                 }
             }
