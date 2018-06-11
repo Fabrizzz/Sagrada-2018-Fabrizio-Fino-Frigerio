@@ -168,66 +168,26 @@ public class ControllerGame implements Initializable {
 
     private void initializeDicePlayerBoard(){
 
-        ObservableList<Node> childrens = gridPane.getChildren();
-        ObservableList<Node> child;
-        ImageView image;
-        Pane pane;
         Die die;
-
-        pane = (Pane) childrens.get(0);
-        pane.setOpacity(1);
-        child = pane.getChildren();
-        image = (ImageView) child.get(0);;
-        image.setImage(new Image("utilsGUI/B1.png"));
-        image.setVisible(true);
-        image.setOpacity(1);
-
-        pane = (Pane) childrens.get(1);
-        pane.setOpacity(1);
-        child = pane.getChildren();
-        image = (ImageView) child.get(0);;
-        image.setImage(new Image("utilsGUI/Y2.png"));
-        image.setVisible(true);
-        image.setOpacity(1);
-
-        pane = (Pane) childrens.get(2);
-        pane.setOpacity(1);
-        child = pane.getChildren();
-        image = (ImageView) child.get(0);;
-        image.setImage(new Image("utilsGUI/G3.png"));
-        image.setVisible(true);
-        image.setOpacity(1);
-
-        pane = (Pane) childrens.get(3);
-        pane.setOpacity(1);
-        child = pane.getChildren();
-        image = (ImageView) child.get(0);;
-        image.setImage(new Image("utilsGUI/P4.png"));
-        image.setVisible(true);
-        image.setOpacity(1);
-
-        pane = (Pane) childrens.get(4);
-        pane.setOpacity(1);
-        child = pane.getChildren();
-        image = (ImageView) child.get(0);;
-        image.setImage(new Image("utilsGUI/R5.png"));
-        image.setVisible(true);
-        image.setOpacity(1);
-
-        pane = (Pane) childrens.get(5);
-        pane.setOpacity(1);
-        child = pane.getChildren();
-        image = (ImageView) child.get(0);;
-        image.setImage(new Image("utilsGUI/B6.png"));
-        image.setVisible(true);
-        image.setOpacity(1);
 
         die = new Die(Color.PURPLE);
         die.setNumber(NumberEnum.SIX);
-        //insertDice(3,3,die);
+        insertDice(3,3,die);
+
+        die = new Die(Color.GREEN);
+        die.setNumber(NumberEnum.THREE);
+        insertDice(2,1,die);
+
+        die = new Die(Color.BLUE);
+        die.setNumber(NumberEnum.ONE);
+        insertDice(3,1,die);
+
+        die = new Die(Color.RED);
+        die.setNumber(NumberEnum.TWO);
+        insertDice(0,0,die);
+
     }
 
-    /*
     private void insertDice(int row, int column, Die die){
 
         ObservableList<Node> childrens = gridPane.getChildren();
@@ -255,5 +215,5 @@ public class ControllerGame implements Initializable {
                 break;
             }
         }
-    }*/
+    }
 }
