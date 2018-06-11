@@ -168,27 +168,33 @@ public class ControllerGame implements Initializable {
 
     private void initializeDicePlayerBoard(){
 
+        //Prende la playerboard del player dal server e la stampa a video; in questo caso provo il funzionamento inserendo io i dadi
+
         Die die;
 
         die = new Die(Color.PURPLE);
         die.setNumber(NumberEnum.SIX);
-        insertDice(3,3,die);
+        insertDie(3,3,die);
 
         die = new Die(Color.GREEN);
         die.setNumber(NumberEnum.THREE);
-        insertDice(2,1,die);
+        insertDie(2,1,die);
 
         die = new Die(Color.BLUE);
         die.setNumber(NumberEnum.ONE);
-        insertDice(3,1,die);
+        insertDie(3,1,die);
 
         die = new Die(Color.RED);
         die.setNumber(NumberEnum.TWO);
-        insertDice(0,0,die);
+        insertDie(0,0,die);
+
+        die = new Die(Color.YELLOW);
+        die.setNumber(NumberEnum.TWO);
+        insertDie(0,4,die);
 
     }
 
-    private void insertDice(int row, int column, Die die){
+    private void insertDie(int row, int column, Die die){
 
         ObservableList<Node> childrens = gridPane.getChildren();
         ObservableList<Node> child;
@@ -212,6 +218,30 @@ public class ControllerGame implements Initializable {
                 image.setImage(new Image("utilsGUI/"+character+""+num+".png"));
                 image.setVisible(true);
                 image.setOpacity(1);
+                break;
+            }
+        }
+    }
+
+    private void removeDie(int row, int column){
+
+        ObservableList<Node> childrens = gridPane.getChildren();
+        ObservableList<Node> child;
+        ImageView image;
+        Pane pane;
+        int i,j;
+        String name,character;
+        int num;
+
+        i = row;
+        j = column;
+        for (Node node : childrens) {
+            if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
+                pane = (Pane) node;
+                child = pane.getChildren();
+                image = (ImageView) child.get(0);
+                image.setImage(null);
+                image.setVisible(false);
                 break;
             }
         }
