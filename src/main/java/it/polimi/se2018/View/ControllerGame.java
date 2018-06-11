@@ -2,10 +2,7 @@ package it.polimi.se2018.View;
 
 import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.PlayerBoard;
-import it.polimi.se2018.model.cell.ColorRestriction;
-import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.model.cell.NumberRestriction;
-import it.polimi.se2018.model.cell.Restriction;
+import it.polimi.se2018.model.cell.*;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import javafx.collections.ObservableList;
@@ -40,14 +37,19 @@ public class ControllerGame implements Initializable {
     @FXML
     HBox hbox;
 
+    PlayerBoard playerBoard; // Messa globale per provare i metodi; in seguito da togliere perchè viene richiesta al server
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeLayout();
         initializeRestrictionPlayerBoard();
+        //Prova per la rimozione
+        removeDie(0,3);
+        removeDie(0,4);
 
     }
 
-    private void initializeLayout(){
+    private void initializeLayout() {
 
         borderPane.setStyle("-fx-border-color: black");
         regionLeft.setStyle("-fx-border-color: black");
@@ -60,7 +62,7 @@ public class ControllerGame implements Initializable {
 
     }
 
-    private void initializeRestrictionPlayerBoard(){
+    private void initializeRestrictionPlayerBoard() {
 
         /*
         Da fare la parte di scelta della playerBoard e comunicazione con il server
@@ -73,8 +75,8 @@ public class ControllerGame implements Initializable {
         Restriction restriction;
         ColorRestriction colorRestriction;
         NumberRestriction numberRestriction;
-        int i,j;
-        PlayerBoard playerBoard = new PlayerBoard(BoardList.getCouple()[0]);    //0 for the first PlayerBoard, 1 for the second one
+        playerBoard = new PlayerBoard(BoardList.getCouple()[0]);    //0 for the first PlayerBoard, 1 for the second one
+        int i, j;
         ObservableList<Node> childrens = gridPane.getChildren();
         ObservableList<Node> child;
         ImageView image;
@@ -85,9 +87,9 @@ public class ControllerGame implements Initializable {
         }
 
         //Insert ColorRestriction and NumberRestriction
-        for (i = 0; i < 4; i++){
-            for(j = 0; j < 5; j++){
-                restriction = playerBoard.getRestriction(i,j);
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 5; j++) {
+                restriction = playerBoard.getRestriction(i, j);
                 //ColorRestriction
                 if (restriction.isColorRestriction()) {
                     colorRestriction = (ColorRestriction) restriction;
@@ -119,39 +121,39 @@ public class ControllerGame implements Initializable {
                     for (Node node : childrens) {
                         if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
                             pane = (Pane) node;
-                            if(numberRestriction.getNumber().getInt() == 1){
+                            if (numberRestriction.getNumber().getInt() == 1) {
                                 child = pane.getChildren();
-                                image = (ImageView) child.get(0);;
+                                image = (ImageView) child.get(0);
                                 image.setImage(new Image("utilsGUI/numberRestriction1.png"));
                                 image.setVisible(true);
                                 image.setOpacity(0.3);
-                            }else if (numberRestriction.getNumber().getInt() == 2){
+                            } else if (numberRestriction.getNumber().getInt() == 2) {
                                 child = pane.getChildren();
-                                image = (ImageView) child.get(0);;
+                                image = (ImageView) child.get(0);
                                 image.setImage(new Image("utilsGUI/numberRestriction2.png"));
                                 image.setVisible(true);
                                 image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 3){
+                            } else if (numberRestriction.getNumber().getInt() == 3) {
                                 child = pane.getChildren();
-                                image = (ImageView) child.get(0);;
+                                image = (ImageView) child.get(0);
                                 image.setImage(new Image("utilsGUI/numberRestriction3.png"));
                                 image.setVisible(true);
                                 image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 4){
+                            } else if (numberRestriction.getNumber().getInt() == 4) {
                                 child = pane.getChildren();
-                                image = (ImageView) child.get(0);;
+                                image = (ImageView) child.get(0);
                                 image.setImage(new Image("utilsGUI/numberRestriction4.png"));
                                 image.setVisible(true);
                                 image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 5){
+                            } else if (numberRestriction.getNumber().getInt() == 5) {
                                 child = pane.getChildren();
-                                image = (ImageView) child.get(0);;
+                                image = (ImageView) child.get(0);
                                 image.setImage(new Image("utilsGUI/numberRestriction5.png"));
                                 image.setVisible(true);
                                 image.setOpacity(0.3);
-                            } else if (numberRestriction.getNumber().getInt() == 6){
+                            } else if (numberRestriction.getNumber().getInt() == 6) {
                                 child = pane.getChildren();
-                                image = (ImageView) child.get(0);;
+                                image = (ImageView) child.get(0);
                                 image.setImage(new Image("utilsGUI/numberRestriction6.png"));
                                 image.setVisible(true);
                                 image.setOpacity(0.3);
@@ -166,7 +168,7 @@ public class ControllerGame implements Initializable {
     }
 
 
-    private void initializeDicePlayerBoard(){
+    private void initializeDicePlayerBoard() {
 
         //Prende la playerboard del player dal server e la stampa a video; in questo caso provo il funzionamento inserendo io i dadi
 
@@ -174,38 +176,39 @@ public class ControllerGame implements Initializable {
 
         die = new Die(Color.PURPLE);
         die.setNumber(NumberEnum.SIX);
-        insertDie(3,3,die);
+        insertDie(3, 3, die);
 
         die = new Die(Color.GREEN);
         die.setNumber(NumberEnum.THREE);
-        insertDie(2,1,die);
+        insertDie(2, 1, die);
 
         die = new Die(Color.BLUE);
         die.setNumber(NumberEnum.ONE);
-        insertDie(3,1,die);
+        insertDie(3, 1, die);
 
         die = new Die(Color.RED);
         die.setNumber(NumberEnum.TWO);
-        insertDie(0,0,die);
+        insertDie(0, 0, die);
 
         die = new Die(Color.YELLOW);
         die.setNumber(NumberEnum.TWO);
-        insertDie(0,4,die);
+        insertDie(0, 3, die);
+        insertDie(0, 4, die);
 
     }
 
-    private void insertDie(int row, int column, Die die){
+    private void insertDie(int row, int column, Die die) {
 
         ObservableList<Node> childrens = gridPane.getChildren();
         ObservableList<Node> child;
         ImageView image;
         Pane pane;
-        int i,j;
-        String name,character;
+        int i, j;
+        String name, character;
         int num;
 
         name = die.getColor().toString();
-        character = name.substring(0,1);
+        character = name.substring(0, 1);
         num = die.getNumber().getInt();
         i = row;
         j = column;
@@ -214,8 +217,9 @@ public class ControllerGame implements Initializable {
                 pane = (Pane) node;
                 pane.setOpacity(1);
                 child = pane.getChildren();
-                image = (ImageView) child.get(0);;
-                image.setImage(new Image("utilsGUI/"+character+""+num+".png"));
+                image = (ImageView) child.get(0);
+                ;
+                image.setImage(new Image("utilsGUI/" + character + "" + num + ".png"));
                 image.setVisible(true);
                 image.setOpacity(1);
                 break;
@@ -223,14 +227,14 @@ public class ControllerGame implements Initializable {
         }
     }
 
-    private void removeDie(int row, int column){
+    private void removeDie(int row, int column) {
 
         ObservableList<Node> childrens = gridPane.getChildren();
         ObservableList<Node> child;
         ImageView image;
         Pane pane;
-        int i,j;
-        String name,character;
+        int i, j;
+        String name, character;
         int num;
 
         i = row;
@@ -242,8 +246,109 @@ public class ControllerGame implements Initializable {
                 image = (ImageView) child.get(0);
                 image.setImage(null);
                 image.setVisible(false);
+                //image.setOpacity(0.3);
                 break;
             }
         }
+        insertRestriction(i, j);
     }
+
+    private void insertRestriction(int row, int column) {
+
+        Restriction restriction;
+        ColorRestriction colorRestriction;
+        NumberRestriction numberRestriction;
+        int i, j;
+        ObservableList<Node> childrens = gridPane.getChildren();
+        ObservableList<Node> child;
+        ImageView image;
+        Pane pane;
+
+        i = row;
+        j = column;
+        restriction = playerBoard.getRestriction(i, j);
+        //ColorRestriction
+        if (restriction.isColorRestriction()) {
+            colorRestriction = (ColorRestriction) restriction;
+            for (Node node : childrens) {
+                if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
+                    if (colorRestriction.getColor() == Color.BLUE) {
+                        node.setStyle("-fx-background-color: blue");
+                        node.setOpacity(0.3);
+                    } else if (colorRestriction.getColor() == Color.RED) {
+                        node.setStyle("-fx-background-color: red");
+                        node.setOpacity(0.3);
+                    } else if (colorRestriction.getColor() == Color.YELLOW) {
+                        node.setStyle("-fx-background-color: yellow");
+                        node.setOpacity(0.3);
+                    } else if (colorRestriction.getColor() == Color.PURPLE) {
+                        node.setStyle("-fx-background-color: purple");
+                        node.setOpacity(0.3);
+                    } else if (colorRestriction.getColor() == Color.GREEN) {
+                        node.setStyle("-fx-background-color: green");
+                        node.setOpacity(0.3);
+                    }
+                    break;
+                }
+            }
+        }
+        //NumberRestriction
+        else if (restriction.isNumberRestriction()) {
+            numberRestriction = (NumberRestriction) restriction;
+            for (Node node : childrens) {
+                if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
+                    pane = (Pane) node;
+                    if (numberRestriction.getNumber().getInt() == 1) {
+                        child = pane.getChildren();
+                        image = (ImageView) child.get(0);
+                        image.setImage(new Image("utilsGUI/numberRestriction1.png"));
+                        image.setVisible(true);
+                        image.setOpacity(0.3);
+                    } else if (numberRestriction.getNumber().getInt() == 2) {
+                        child = pane.getChildren();
+                        image = (ImageView) child.get(0);
+                        image.setImage(new Image("utilsGUI/numberRestriction2.png"));
+                        image.setVisible(true);
+                        image.setOpacity(0.3);
+                    } else if (numberRestriction.getNumber().getInt() == 3) {
+                        child = pane.getChildren();
+                        image = (ImageView) child.get(0);
+                        image.setImage(new Image("utilsGUI/numberRestriction3.png"));
+                        image.setVisible(true);
+                        image.setOpacity(0.3);
+                    } else if (numberRestriction.getNumber().getInt() == 4) {
+                        child = pane.getChildren();
+                        image = (ImageView) child.get(0);
+                        image.setImage(new Image("utilsGUI/numberRestriction4.png"));
+                        image.setVisible(true);
+                        image.setOpacity(0.3);
+                    } else if (numberRestriction.getNumber().getInt() == 5) {
+                        child = pane.getChildren();
+                        image = (ImageView) child.get(0);
+                        image.setImage(new Image("utilsGUI/numberRestriction5.png"));
+                        image.setVisible(true);
+                        image.setOpacity(0.3);
+                    } else if (numberRestriction.getNumber().getInt() == 6) {
+                        child = pane.getChildren();
+                        image = (ImageView) child.get(0);
+                        image.setImage(new Image("utilsGUI/numberRestriction6.png"));
+                        image.setVisible(true);
+                        image.setOpacity(0.3);
+                    }
+                    break;
+                }
+            }
+        }
+        //NoRestriction
+        else {
+            for (Node node : childrens) {
+                if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
+                    node.setStyle("-fx-background-color: white");
+                    node.setOpacity(1);
+                    break;
+                }
+            }
+        }
+    }
+
 }
