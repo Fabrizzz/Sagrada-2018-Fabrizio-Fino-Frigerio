@@ -29,19 +29,40 @@ public class ControllerGame implements Initializable {
     GridPane gridPane;
 
     @FXML
-    GridPane gridPaneCard;
+    ImageView tool1;
 
     @FXML
-    ImageView tool1;
+    ImageView tool2;
+
+    @FXML
+    ImageView objective1;
+
+    @FXML
+    ImageView objective2;
+
+    @FXML
+    VBox vboxBoard;
+
+    @FXML
+    VBox vboxCard;
+
+    @FXML
+    HBox hbox;
+
+    @FXML
+    HBox hboxUsaTool;
 
     @FXML
     Pane paneTool1;
 
     @FXML
-    Region regionLeft;
+    Pane paneTool2;
 
     @FXML
-    HBox hbox;
+    Pane paneObjective1;
+
+    @FXML
+    Pane paneObjective2;
 
     PlayerBoard playerBoard; // Messa globale per provare i metodi; in seguito da togliere perchè viene richiesta al server
 
@@ -58,13 +79,37 @@ public class ControllerGame implements Initializable {
 
     private void initializeLayout() {
 
-        borderPane.setStyle("-fx-border-color: black");
-        regionLeft.setStyle("-fx-border-color: black");
-        hbox.setStyle("-fx-border-color: black");
+        vboxCard.setStyle("-fx-border-color: black");
+        vboxBoard.setStyle("-fx-border-color: black");
+
+        hbox.prefHeightProperty().bind(root.heightProperty());
+        hbox.prefWidthProperty().bind(root.widthProperty());
+        vboxBoard.prefHeightProperty().bind(root.heightProperty());
+        vboxBoard.prefWidthProperty().bind(root.widthProperty());
+        vboxCard.prefHeightProperty().bind(root.heightProperty());
+        vboxCard.prefWidthProperty().bind(root.widthProperty());
+
+        hboxUsaTool.prefWidthProperty().bind(vboxCard.widthProperty());
+
+        paneTool1.prefHeightProperty().bind(vboxCard.heightProperty());
+        paneTool1.prefWidthProperty().bind(vboxCard.widthProperty());
+        paneTool2.prefHeightProperty().bind(vboxCard.heightProperty());
+        paneTool2.prefWidthProperty().bind(vboxCard.widthProperty());
+
+        paneObjective1.prefHeightProperty().bind(vboxCard.heightProperty());
+        paneObjective1.prefWidthProperty().bind(vboxCard.widthProperty());
+        paneObjective2.prefHeightProperty().bind(vboxCard.heightProperty());
+        paneObjective2.prefWidthProperty().bind(vboxCard.widthProperty());
 
         tool1.fitWidthProperty().bind(paneTool1.widthProperty());
         tool1.fitHeightProperty().bind(paneTool1.heightProperty());
+        tool2.fitWidthProperty().bind(paneTool2.widthProperty());
+        tool2.fitHeightProperty().bind(paneTool2.heightProperty());
 
+        objective1.fitWidthProperty().bind(paneObjective1.widthProperty());
+        objective1.fitHeightProperty().bind(paneObjective1.heightProperty());
+        objective2.fitWidthProperty().bind(paneObjective2.widthProperty());
+        objective2.fitHeightProperty().bind(paneObjective2.heightProperty());
     }
 
     private void initializeRestrictionPlayerBoard() {

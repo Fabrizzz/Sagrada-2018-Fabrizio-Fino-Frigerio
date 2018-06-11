@@ -39,7 +39,7 @@ public class ControllerWaiting implements Initializable {
         stage.setScene(scene);
         stage.setResizable(true);
         stage.setMaximized(true);
-        stage.setMinWidth(950);
+        stage.setMinWidth(1000);
         stage.setMinHeight(600);
         stage.show();
     }
