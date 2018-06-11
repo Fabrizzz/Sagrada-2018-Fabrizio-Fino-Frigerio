@@ -7,6 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="root" minHeight="600.0" minWidth="800.0" prefHeight="665.0" prefWidth="869.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="it.polimi.se2018.View.ControllerGame">
   <children>
@@ -15,7 +16,7 @@
         <HBox fx:id="hbox" prefHeight="100.0" prefWidth="200.0" />
       </bottom>
       <center>
-        <GridPane id="gridPaneGame" fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="600.0" prefHeight="300.0" prefWidth="400.0" snapToPixel="true" BorderPane.alignment="CENTER">
+        <GridPane id="gridPaneGame" fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" maxHeight="-1.0" maxWidth="-1.0" minWidth="500.0" prefHeight="-1.0" prefWidth="-1.0" snapToPixel="true" BorderPane.alignment="CENTER">
           <children>
             <!-- PANE 00 -->
             <Pane fx:id="pane00" disable="false" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.vgrow="NEVER">
@@ -135,17 +136,67 @@
         </GridPane>
       </center>
       <left>
-        <Region fx:id="regionLeft" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="60.0" />
+        <Region fx:id="regionLeft" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="50.0" />
       </left>
       <right>
-        <FlowPane fx:id="flowPane" maxHeight="+Infinity" maxWidth="+Infinity" minHeight="300.0" minWidth="150.0" prefHeight="300.0" prefWidth="350.0">
+        <GridPane id="gridPaneright" fx:id="gridPaneCard" alignment="CENTER" disable="false" focusTraversable="false" gridLinesVisible="false" maxHeight="-1.0" maxWidth="750.0" minWidth="-1.0" mouseTransparent="false" pickOnBounds="true" prefHeight="-1.0" BorderPane.alignment="CENTER">
           <children>
-            <ImageView fitHeight="200.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="200.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="200.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="200.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+            <Pane fx:id="paneTool1" maxHeight="180.0" maxWidth="120.0" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+              <children>
+                <ImageView fx:id="tool1" fitHeight="180.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="false">
+                  <image>
+                    <Image url="@../toolCard/toolCard01.jpeg" />
+                  </image>
+                </ImageView>
+              </children>
+            </Pane>
+            <ImageView fx:id="tool2" fitHeight="180.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" smooth="false" GridPane.columnIndex="2" GridPane.rowIndex="0">
+              <image>
+                <Image url="@../toolCard/toolCard02.jpeg" />
+              </image>
+            </ImageView>
+            <Button fx:id="buttonTool1" mnemonicParsing="false" text="Utilizza" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Button fx:id="buttonTool2" mnemonicParsing="false" text="Utilizza" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <ImageView fx:id="objective1" fitHeight="180.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="4">
+              <image>
+                <Image url="@../publicObjective/publicObjective01.jpeg" />
+              </image>
+            </ImageView>
+            <ImageView fx:id="objective2" fitHeight="180.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
+              <image>
+                <Image url="@../publicObjective/publicObjective02.jpeg" />
+              </image>
+            </ImageView>
+            <Label id="privateObjective" fx:id="privateObjectiveText" text="Obiettivo privato:" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="6">
+              <font>
+                <Font name="System Bold" size="16.0" />
+              </font>
+            </Label>
+            <Label fx:id="privateObjectiveColor" text="Color" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="6">
+              <font>
+                <Font size="16.0" />
+              </font>
+            </Label>
           </children>
-        </FlowPane>
+          <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-1.0" minWidth="-1.0" percentWidth="-1.0" prefWidth="-1.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="-1.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-1.0" prefWidth="-1.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="-1.0" minHeight="-1.0" prefHeight="-1.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="-1.0" minHeight="-1.0" prefHeight="-1.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="-1.0" minHeight="10.0" prefHeight="-1.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-1.0" minHeight="-1.0" prefHeight="-1.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-1.0" minHeight="10.0" prefHeight="-1.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="-1.0" minHeight="10.0" prefHeight="-1.0" vgrow="NEVER" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+          <BorderPane.margin>
+            <Insets left="10.0" right="10.0" top="30.0" />
+          </BorderPane.margin>
+        </GridPane>
       </right>
     </BorderPane>
   </children>

@@ -29,10 +29,16 @@ public class ControllerGame implements Initializable {
     GridPane gridPane;
 
     @FXML
-    Region regionLeft;
+    GridPane gridPaneCard;
 
     @FXML
-    FlowPane flowPane;
+    ImageView tool1;
+
+    @FXML
+    Pane paneTool1;
+
+    @FXML
+    Region regionLeft;
 
     @FXML
     HBox hbox;
@@ -54,12 +60,10 @@ public class ControllerGame implements Initializable {
 
         borderPane.setStyle("-fx-border-color: black");
         regionLeft.setStyle("-fx-border-color: black");
-        flowPane.setStyle("-fx-border-color: black");
         hbox.setStyle("-fx-border-color: black");
 
-        //BorderPane resizable
-        borderPane.prefWidthProperty().bind(root.widthProperty());
-        borderPane.prefHeightProperty().bind(root.heightProperty());
+        tool1.fitWidthProperty().bind(paneTool1.widthProperty());
+        tool1.fitHeightProperty().bind(paneTool1.heightProperty());
 
     }
 
