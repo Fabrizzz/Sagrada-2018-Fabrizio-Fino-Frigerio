@@ -142,24 +142,45 @@
           <children>
             <HBox fx:id="hboxTool" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
               <children>
-                <Pane fx:id="paneTool1" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0">
+                <Separator minWidth="40.0" prefWidth="-1.0" visible="false" />
+                <VBox fx:id="vboxTool1" alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
                   <children>
-                    <ImageView fx:id="tool1" fitHeight="220.0" fitWidth="180.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
-                      <image>
-                        <Image url="@../toolCard/toolCard01.jpeg" />
-                      </image>
-                    </ImageView>
+                    <Pane fx:id="paneTool1" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0">
+                      <children>
+                        <ImageView fx:id="tool1" fitHeight="220.0" fitWidth="180.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                            <Image url="@../toolCard/toolCard01.jpeg" />
+                          </image>
+                        </ImageView>
+                      </children>
+                    </Pane>
+                    <HBox alignment="TOP_LEFT" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
+                      <children>
+                        <Button id="buttonTool2" fx:id="buttonTool1" maxWidth="-1.0" minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Utilizza" translateX="0.0" />
+                        <Button fx:id="buttonZoomTool1" minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Ingrandisci" />
+                      </children>
+                    </HBox>
                   </children>
-                </Pane>
-                <Pane fx:id="paneTool2" prefHeight="-1.0" prefWidth="-1.0">
+                </VBox>
+                <VBox fx:id="VboxTool2" alignment="CENTER_LEFT" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
                   <children>
-                    <ImageView fx:id="tool2" fitHeight="220.0" fitWidth="180.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
-                      <image>
-                        <Image url="@../toolCard/toolCard02.jpeg" />
-                      </image>
-                    </ImageView>
+                    <Pane fx:id="paneTool2" prefHeight="-1.0" prefWidth="-1.0">
+                      <children>
+                        <ImageView fx:id="tool2" fitHeight="220.0" fitWidth="180.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true" smooth="true">
+                          <image>
+                            <Image url="@../toolCard/toolCard02.jpeg" />
+                          </image>
+                        </ImageView>
+                      </children>
+                    </Pane>
+                    <HBox alignment="TOP_LEFT" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
+                      <children>
+                        <Button id="buttonTool1" fx:id="buttonTool2" maxWidth="-1.0" minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Utilizza" />
+                        <Button fx:id="buttonZoomTool2" minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Ingrandisci" />
+                      </children>
+                    </HBox>
                   </children>
-                </Pane>
+                </VBox>
               </children>
               <padding>
                 <Insets />
@@ -168,17 +189,9 @@
                 <Insets />
               </VBox.margin>
             </HBox>
-            <HBox fx:id="hboxUsaTool" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
-              <children>
-                <Separator id="SeparatorButton1" fx:id="separatorButton1" prefWidth="-1.0" />
-                <Button id="buttonTool2" fx:id="buttonTool1" minHeight="30.0" minWidth="80.0" mnemonicParsing="false" text="Utilizza" />
-                <Separator id="separatorButton" fx:id="separatorButton2" prefWidth="-1.0" />
-                <Button id="buttonTool1" fx:id="buttonTool2" minHeight="30.0" minWidth="80.0" mnemonicParsing="false" text="Utilizza" />
-                <Separator fx:id="separatorButton3" prefWidth="-1.0" />
-              </children>
-            </HBox>
             <HBox fx:id="hboxObjective" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
               <children>
+                <Separator minWidth="40.0" prefWidth="-1.0" visible="false" />
                 <Pane fx:id="paneObjective1" prefHeight="-1.0" prefWidth="-1.0">
                   <children>
                     <ImageView fx:id="objective1" fitHeight="220.0" fitWidth="180.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
@@ -199,12 +212,12 @@
                 </Pane>
               </children>
               <VBox.margin>
-                <Insets />
+                <Insets top="10.0" />
               </VBox.margin>
             </HBox>
             <Separator prefWidth="-1.0">
               <VBox.margin>
-                <Insets right="60.0" />
+                <Insets right="30.0" />
               </VBox.margin>
             </Separator>
             <HBox alignment="CENTER" minWidth="500.0" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">

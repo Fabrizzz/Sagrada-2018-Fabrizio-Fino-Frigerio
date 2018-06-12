@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
@@ -68,13 +69,16 @@ public class ControllerGame implements Initializable {
     ImageView objective2;
 
     @FXML
-    Separator separatorButton1;
+    Button buttonTool1;
 
     @FXML
-    Separator separatorButton2;
+    Button buttonTool2;
 
     @FXML
-    Separator separatorButton3;
+    Button buttonZoomTool1;
+
+    @FXML
+    Button buttonZoomTool2;
 
     @FXML
     Label privateObjective;
@@ -94,9 +98,6 @@ public class ControllerGame implements Initializable {
     }
 
     private void initializeLayoutResizable() {
-
-        //vboxCard.setStyle("-fx-border-color: black");
-        //vboxBoard.setStyle("-fx-border-color: black");
 
         hbox.prefHeightProperty().bind(root.heightProperty());
         hbox.prefWidthProperty().bind(root.widthProperty());
@@ -124,10 +125,6 @@ public class ControllerGame implements Initializable {
         objective1.fitHeightProperty().bind(paneObjective1.heightProperty());
         objective2.fitWidthProperty().bind(paneObjective2.widthProperty());
         objective2.fitHeightProperty().bind(paneObjective2.heightProperty());
-
-        separatorButton1.prefWidthProperty().bind(vboxCard.widthProperty());
-        separatorButton2.prefWidthProperty().bind(vboxCard.widthProperty());
-        separatorButton3.prefWidthProperty().bind(vboxCard.widthProperty());
     }
 
     private void initializeRestrictionPlayerBoard() {
