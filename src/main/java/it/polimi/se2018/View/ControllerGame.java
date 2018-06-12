@@ -10,6 +10,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -23,10 +26,34 @@ public class ControllerGame implements Initializable {
     AnchorPane root;
 
     @FXML
-    BorderPane borderPane;
+    HBox hbox;
+
+    @FXML
+    VBox vboxBoard;
+
+    @FXML
+    VBox vboxCard;
 
     @FXML
     GridPane gridPane;
+
+    @FXML
+    HBox hboxTool;
+
+    @FXML
+    HBox hboxObjective;
+
+    @FXML
+    Pane paneTool1;
+
+    @FXML
+    Pane paneTool2;
+
+    @FXML
+    Pane paneObjective1;
+
+    @FXML
+    Pane paneObjective2;
 
     @FXML
     ImageView tool1;
@@ -41,35 +68,24 @@ public class ControllerGame implements Initializable {
     ImageView objective2;
 
     @FXML
-    VBox vboxBoard;
+    Separator separatorButton1;
 
     @FXML
-    VBox vboxCard;
+    Separator separatorButton2;
 
     @FXML
-    HBox hbox;
+    Separator separatorButton3;
 
     @FXML
-    HBox hboxUsaTool;
-
-    @FXML
-    Pane paneTool1;
-
-    @FXML
-    Pane paneTool2;
-
-    @FXML
-    Pane paneObjective1;
-
-    @FXML
-    Pane paneObjective2;
+    Label privateObjective;
 
     PlayerBoard playerBoard; // Messa globale per provare i metodi; in seguito da togliere perchè viene richiesta al server
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeLayout();
+        initializeLayoutResizable();
         initializeRestrictionPlayerBoard();
+        initializePrivateObjective();
 
         //Prova per la rimozione
         removeDie(0,3);
@@ -77,10 +93,10 @@ public class ControllerGame implements Initializable {
 
     }
 
-    private void initializeLayout() {
+    private void initializeLayoutResizable() {
 
-        vboxCard.setStyle("-fx-border-color: black");
-        vboxBoard.setStyle("-fx-border-color: black");
+        //vboxCard.setStyle("-fx-border-color: black");
+        //vboxBoard.setStyle("-fx-border-color: black");
 
         hbox.prefHeightProperty().bind(root.heightProperty());
         hbox.prefWidthProperty().bind(root.widthProperty());
@@ -88,8 +104,6 @@ public class ControllerGame implements Initializable {
         vboxBoard.prefWidthProperty().bind(root.widthProperty());
         vboxCard.prefHeightProperty().bind(root.heightProperty());
         vboxCard.prefWidthProperty().bind(root.widthProperty());
-
-        hboxUsaTool.prefWidthProperty().bind(vboxCard.widthProperty());
 
         paneTool1.prefHeightProperty().bind(vboxCard.heightProperty());
         paneTool1.prefWidthProperty().bind(vboxCard.widthProperty());
@@ -110,6 +124,10 @@ public class ControllerGame implements Initializable {
         objective1.fitHeightProperty().bind(paneObjective1.heightProperty());
         objective2.fitWidthProperty().bind(paneObjective2.widthProperty());
         objective2.fitHeightProperty().bind(paneObjective2.heightProperty());
+
+        separatorButton1.prefWidthProperty().bind(vboxCard.widthProperty());
+        separatorButton2.prefWidthProperty().bind(vboxCard.widthProperty());
+        separatorButton3.prefWidthProperty().bind(vboxCard.widthProperty());
     }
 
     private void initializeRestrictionPlayerBoard() {
@@ -284,6 +302,13 @@ public class ControllerGame implements Initializable {
                 }
             }
         }
+    }
+
+
+    private void initializePrivateObjective() {
+        //Da aggiungere richiesta al server
+        privateObjective.setText("Rosso");
+        privateObjective.setStyle("-fx-text-fill:red");
     }
 
 }

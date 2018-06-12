@@ -140,9 +140,9 @@
         </VBox>
         <VBox id="vbox" fx:id="vboxCard" alignment="CENTER" maxHeight="-1.0" maxWidth="-1.0" minWidth="400.0" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
           <children>
-            <HBox alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
+            <HBox fx:id="hboxTool" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
               <children>
-                <Pane fx:id="paneTool1" prefHeight="-1.0" prefWidth="-1.0">
+                <Pane fx:id="paneTool1" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0">
                   <children>
                     <ImageView fx:id="tool1" fitHeight="220.0" fitWidth="180.0" layoutX="0.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
                       <image>
@@ -168,13 +168,16 @@
                 <Insets />
               </VBox.margin>
             </HBox>
-            <HBox fx:id="hboxUsaTool" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="200.0" VBox.vgrow="NEVER">
+            <HBox fx:id="hboxUsaTool" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
               <children>
-                <Button id="buttonTool2" fx:id="buttonTool1" mnemonicParsing="false" text="Utilizza" />
-                <Button id="buttonTool1" fx:id="buttonTool2" mnemonicParsing="false" text="Utilizza" />
+                <Separator id="SeparatorButton1" fx:id="separatorButton1" prefWidth="-1.0" />
+                <Button id="buttonTool2" fx:id="buttonTool1" minHeight="30.0" minWidth="80.0" mnemonicParsing="false" text="Utilizza" />
+                <Separator id="separatorButton" fx:id="separatorButton2" prefWidth="-1.0" />
+                <Button id="buttonTool1" fx:id="buttonTool2" minHeight="30.0" minWidth="80.0" mnemonicParsing="false" text="Utilizza" />
+                <Separator fx:id="separatorButton3" prefWidth="-1.0" />
               </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
+            <HBox fx:id="hboxObjective" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
               <children>
                 <Pane fx:id="paneObjective1" prefHeight="-1.0" prefWidth="-1.0">
                   <children>
@@ -199,7 +202,11 @@
                 <Insets />
               </VBox.margin>
             </HBox>
-            <Separator prefWidth="200.0" />
+            <Separator prefWidth="-1.0">
+              <VBox.margin>
+                <Insets right="60.0" />
+              </VBox.margin>
+            </Separator>
             <HBox alignment="CENTER" minWidth="500.0" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0" VBox.vgrow="NEVER">
               <children>
                 <Label text="Obiettivo privato:">
@@ -207,7 +214,7 @@
                     <Font name="System Bold" size="16.0" />
                   </font>
                 </Label>
-                <Label text="Color" wrapText="false">
+                <Label id="PrivateObjective" fx:id="privateObjective" text="Color" wrapText="false">
                   <font>
                     <Font size="16.0" />
                   </font>
@@ -219,7 +226,7 @@
             <Insets bottom="10.0" top="10.0" />
           </padding>
           <HBox.margin>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+            <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
           </HBox.margin>
         </VBox>
       </children>
