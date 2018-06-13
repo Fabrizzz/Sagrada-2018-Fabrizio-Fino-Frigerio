@@ -1,4 +1,4 @@
-package it.polimi.se2018.utils;
+package it.polimi.se2018.utils.messages;
 
 import it.polimi.se2018.utils.enums.MessageType;
 

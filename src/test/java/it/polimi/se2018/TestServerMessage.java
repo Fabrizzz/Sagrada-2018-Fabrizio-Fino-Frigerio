@@ -5,11 +5,11 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
-import it.polimi.se2018.utils.ServerMessage;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.messages.ServerMessage;
 import org.junit.Test;
 
 import java.util.ArrayList;

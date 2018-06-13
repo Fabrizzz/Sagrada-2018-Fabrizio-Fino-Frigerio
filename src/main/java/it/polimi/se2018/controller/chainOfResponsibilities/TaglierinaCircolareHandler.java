@@ -5,12 +5,12 @@ import it.polimi.se2018.model.DraftPool;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.RoundTrack;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.utils.PlayerMove;
-import it.polimi.se2018.utils.ServerMessage;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
+import it.polimi.se2018.utils.messages.PlayerMove;
+import it.polimi.se2018.utils.messages.ServerMessage;
 
 public class TaglierinaCircolareHandler extends ToolHandler {
 

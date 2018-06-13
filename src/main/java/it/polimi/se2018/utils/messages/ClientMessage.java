@@ -1,9 +1,7 @@
-package it.polimi.se2018.utils;
+package it.polimi.se2018.utils.messages;
 
 import it.polimi.se2018.model.Board;
 import it.polimi.se2018.utils.enums.MessageType;
-
-import java.util.Optional;
 
 public class ClientMessage extends Message {
     private PlayerMove playerMove;

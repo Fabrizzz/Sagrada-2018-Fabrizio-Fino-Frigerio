@@ -2,8 +2,8 @@ package it.polimi.se2018.controller.chainOfResponsibilities;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.model.Model;
-import it.polimi.se2018.utils.PlayerMove;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.messages.PlayerMove;
 
 public class EndOfTurnHandler extends Handler {
 

@@ -1,8 +1,8 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.utils.PlayerMove;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.messages.PlayerMove;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;
