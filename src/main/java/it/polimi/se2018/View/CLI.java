@@ -1,18 +1,20 @@
 package it.polimi.se2018.View;
 
 import it.polimi.se2018.client.ClientNetwork;
-import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.ModelView;
+import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.NumberRestriction;
-import it.polimi.se2018.utils.ClientMessage;
-import it.polimi.se2018.utils.PlayerMove;
-import it.polimi.se2018.utils.ServerMessage;
-import it.polimi.se2018.utils.enums.*;
-
-import java.util.Random;
+import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
+import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.NoDieException;
+import it.polimi.se2018.utils.messages.ClientMessage;
+import it.polimi.se2018.utils.messages.PlayerMove;
+import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Command Line Interface
@@ -531,30 +533,35 @@ public class CLI extends View{
         }while(i < 1 || i > 2);
 
         String address = "";
-        if(i == 1){
-            int port = 0;
+        int port;
             while(!clientNetwork.isConnected()) {
                 System.out.println("Inserisci l'indirizzo del server: ");
-                address = input.next();
-                System.out.println("Inserisci la porta: ");
-                port = input.nextInt();
-                clientNetwork.connectSocket(address, port);
+                boolean prova = true;
+                Pattern pattern = Pattern.compile("((2[0-4]\\d|25[0-5]|[01]?\\d?\\d)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d?\\d)");
+                while (prova) {
+                    address = input.next();
+                    if (pattern.matcher(address).matches())
+                        prova = false;
+                    else
+                        System.out.println("Ip non corretto\nRiprova: ");
+
+                }
+
+                if (i == 1) {
+                    System.out.println("Inserisci la porta: ");
+                    port = input.nextInt();
+                    clientNetwork.connectSocket(address, port);
+                } else
+                    clientNetwork.connectRMI(address);
             }
             System.out.println("Connessione accettata");
-        }else{
-            while(!clientNetwork.isConnected()) {
-                System.out.println("Inserisci l'indirizzo del server: ");
-                address = input.next();
-                clientNetwork.connectRMI(address);
-            }
-            System.out.println("Connessione accettata");
-        }
-        String nick = "";
+
+        String nick;
         System.out.println("Inserisci il tuo nome: ");
         do{
             nick = input.next();
-        }while(nick.equals(""));
-        localID = (new Random()).nextLong();
+        } while (nick.isEmpty());
+        localID = (new Random()).nextLong(); //inserire lettura/scrittura su file
 
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(clientNetwork.sendMessage(clientMessage)){
