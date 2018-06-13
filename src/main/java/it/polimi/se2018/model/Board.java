@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Board {
     private String name;
-    private int tockens;
+    private int tokens;
     private ArrayList<String> restrictions;
 
-    public Board(String name, int tockens, ArrayList<String> restrictions){
+    public Board(String name, int tokens, ArrayList<String> restrictions) {
         this.name = name;
-        this.tockens = tockens;
+        this.tokens = tokens;
         this.restrictions = restrictions;
     }
 
@@ -17,8 +17,8 @@ public class Board {
         return name;
     }
 
-    public int getTockens() {
-        return tockens;
+    public int getTokens() {
+        return tokens;
     }
 
     public String getRestriction(int row,int column){
