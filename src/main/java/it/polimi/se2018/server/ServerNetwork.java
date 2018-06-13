@@ -1,155 +1,107 @@
 package it.polimi.se2018.server;
 
+import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.controller.RemoteView;
-import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.Player;
-import it.polimi.se2018.server.rmi.ServerRMIImplementation;
-import it.polimi.se2018.utils.ClientMessage;
+import it.polimi.se2018.server.rmi.ServerRMIController;
+import it.polimi.se2018.server.rmi.ServerRMIControllerInterface;
+import it.polimi.se2018.server.socket.SocketConnectionGatherer;
 import it.polimi.se2018.utils.enums.MessageType;
+import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.network.Connection;
-import it.polimi.se2018.utils.Message;
-import it.polimi.se2018.utils.network.NetworkHandler;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Manages the connections with the clients
  * @author Alessio
  */
-public class ServerNetwork extends Observable implements NetworkHandler {
-    private SocketConnectionGatherer connectionGatherer;
-    private ServerRMIImplementation serverRMIImplementation;
-    private boolean lobbyWaiting = true;
-    private Map<Long,Connection> connectionMap = new HashMap<>();
-    private Map<Long,RemoteView> remoteMap = new HashMap<>();
-    private ArrayList<Connection> waitingInitializationList = new ArrayList<>();
-    private ArrayList<Player> playerList = new ArrayList<>();
+public class ServerNetwork implements Observer {
+    private Map<Long, RemoteView> playingConnections = new HashMap<>();
+    private Map<Long, RemoteView> waitingConnections = new HashMap<>();
+    private ExecutorService executor = Executors.newCachedThreadPool();
+    private Timer timer = new Timer();
+    private int games = 0;
 
-    /**
-     * Costructor
-     */
-    public ServerNetwork(){
-        connectionGatherer = new SocketConnectionGatherer(this,8421);
-        connectionGatherer.start();
+
+    public void start(int port) {
+        executor.submit(new SocketConnectionGatherer(this, port));
 
         try {
-            LocateRegistry.createRegistry(8422);
+            LocateRegistry.createRegistry(port);
         } catch (RemoteException e) {}
 
         try {
-            serverRMIImplementation = new ServerRMIImplementation(this);
-
+            ServerRMIControllerInterface serverRMIImplementation = new ServerRMIController(this);
             Naming.rebind("//localhost/MyServer", serverRMIImplementation);
         } catch (MalformedURLException e) {
             System.err.println("Impossibile registrare l'oggetto indicato!");
         } catch (RemoteException e) {
-            //System.err.println("Errore di connessione: " + e.getMessage() + "!");
             e.printStackTrace();
         }
     }
 
     /**
-     * Add a connection to the connection map
-     * @param clientConnection connection to add
-     */
-    public boolean addClient(Connection clientConnection){
-        if(waitingInitializationList.size() < 4 && lobbyWaiting){
-            waitingInitializationList.add(clientConnection);
-            return true;
-        }else if(!lobbyWaiting){
-            waitingInitializationList.add(clientConnection);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Start the game and remove the connection still waiting for initializzation
      */
-    public void initializeGame(){
-        for(int i = 0; i < waitingInitializationList.size(); i ++){
-            waitingInitializationList.get(i).close();
-            waitingInitializationList.remove(i);
+    private synchronized void initializeGame() {
+        Controller controller = new Controller();
+        controller.startGame(waitingConnections.values());
+        playingConnections.putAll(waitingConnections);
+        waitingConnections.clear();
+        games++;
+    }
+
+    private synchronized int getGames() {
+        return games;
+    }
+
+    public synchronized void timerScaduto(int games) {
+        if (getGames() == games) {
+            System.out.println("Timer scaduto, inizializzazione gioco");
+            initializeGame();
         }
 
-        //Crea model??
     }
 
     /**
      * Initialize a connection with the nickname and id recive from the client
      * @param connection connection to initialize
      * @param message initializzation message recived from the client
-     * @return if the initializzation has been correctly completed
      */
-    public RemoteView initializeConnection(Connection connection,Message message) {
-        System.out.println("Inizializzazione ricevuta, nick " + ((ClientMessage) message).getNick() + ((ClientMessage) message).getId());
-        if (waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && lobbyWaiting) {
-            playerList.add(new Player(((ClientMessage) message).getNick(), ((ClientMessage) message).getId()));
+    public synchronized void initializeConnection(Connection connection, ClientMessage message) {
 
-            RemoteView remoteView = new RemoteView(playerList.get(playerList.size() - 1));
-            connectionMap.put(((ClientMessage) message).getId(), connection);
-            remoteMap.put(((ClientMessage) message).getId(), remoteView);
-
-            remoteView.addObserver(connection);
-
-            if(connectionMap.size() >= 2){
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        lobbyWaiting = false;
-                        System.out.println("Timer scaduto, inizializzazione gioco");
-                        initializeGame();
-                    }
-                }, (long) 60*1000);
-            }
-
-            waitingInitializationList.remove(connection);
-
-            return remoteView;
-        } else if(waitingInitializationList.contains(connection) && message.getMessageType() == MessageType.INITIALCONFIG && !lobbyWaiting){
-            if(connectionMap.containsKey(((ClientMessage) message).getId()) && connectionMap.get(((ClientMessage) message).getId()) == null){
-                connectionMap.put(((ClientMessage) message).getId(), connection);
-                remoteMap.get(((ClientMessage) message).getId()).addObserver(connection);
-
-                waitingInitializationList.remove(connection);
-
-                return remoteMap.get(((ClientMessage) message).getId());
-            }else{
-                return null;
-            }
-        }else{
-            return null;
-        }
-    }
-
-    /**
-     * Send a message to all the connected client
-     * @param message message
-     */
-    public void sendAll(Message message){
-        for(Connection connection : connectionMap.values()){
-            if(connection.isConnected()){
-                connection.sendMessage(message);
+        if (playingConnections.containsKey(message.getId())) {
+            playingConnections.get(message.getId()).changeConnection(connection);
+        } else {
+            RemoteView remoteView = new RemoteView(new Player(message.getNick(), message.getId()), connection);
+            waitingConnections.put(message.getId(), remoteView);
+            if (waitingConnections.size() == 2) {
+                timer.schedule(new ConnectionTimer(this, getGames()), (long) 60 * 1000);
+            } else if (waitingConnections.size() == 4) {
+                System.out.println("Inizializzazione gioco");
+                initializeGame();
             }
         }
+
+
+
+
     }
 
-    /**
-     * Remove e connection from the active connection list
-     * @param connection connection to remove
-     */
-    public void closeConnection(Object connection){
-        for(Long key : connectionMap.keySet()){
-            if(connectionMap.get(key).equals(connection)){
-                connectionMap.replace(key,(Connection) connection,null);
-                remoteMap.get(key).deleteObserver((Connection) connection);
-            }
+    @Override
+    public void update(Observable o, Object arg) {
+        Connection connection = (Connection) o;
+        ClientMessage message = (ClientMessage) arg;
+        if (message.getMessageType().equals(MessageType.INITIALCONFIG)) {
+            initializeConnection(connection, message);
+            o.deleteObserver(this);
         }
     }
 }

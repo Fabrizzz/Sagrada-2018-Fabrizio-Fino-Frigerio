@@ -1,12 +1,11 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.View.View;
-import it.polimi.se2018.server.rmi.ServerRMIConnection;
-import it.polimi.se2018.server.rmi.ServerRMIInterface;
-import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.server.rmi.ServerRMIControllerInterface;
+import it.polimi.se2018.utils.messages.Message;
 import it.polimi.se2018.utils.network.Connection;
-import it.polimi.se2018.utils.network.NetworkHandler;
-import it.polimi.se2018.utils.network.RMIInterfaceRemote;
+import it.polimi.se2018.utils.network.RMIConnection;
+import it.polimi.se2018.utils.network.RMIInterface;
 import it.polimi.se2018.utils.network.SocketConnection;
 
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.Socket;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -22,7 +20,7 @@ import java.rmi.server.UnicastRemoteObject;
  * Client connection manager
  * @author Alessio
  */
-public class ClientNetwork implements NetworkHandler {
+public class ClientNetwork {
     private View view;
     private Connection connection;
 
@@ -45,8 +43,9 @@ public class ClientNetwork implements NetworkHandler {
         if(!isConnected()) {
             try {
                 socket = new Socket(hostname, port);
-                connection = new SocketConnection(this, socket);
+                connection = new SocketConnection(socket);
                 connection.addObserver(view);
+                view.addObserver(connection);
                 (new Thread((SocketConnection) connection)).start();
                 return true;
             } catch (IOException e) {
@@ -63,23 +62,28 @@ public class ClientNetwork implements NetworkHandler {
      * @return true if the connection can be created, false otherwise
      */
     public Boolean connectRMI(String hostname){
+
         if(!isConnected()){
             try {
-                ServerRMIInterface serverRMIInterface = (ServerRMIInterface)Naming.lookup("//".concat(hostname.concat("/MyServer")));
+                ServerRMIControllerInterface serverRMIControllerInterface = (ServerRMIControllerInterface) Naming.lookup("//".concat(hostname.concat("/MyServer")));
 
-                ClientRMIImplementationRemote connectionIn = new ClientRMIImplementationRemote(this);
+                RMIConnection rmiConnection = new RMIConnection();
 
-                RMIInterfaceRemote remoteRef = (RMIInterfaceRemote) UnicastRemoteObject.exportObject((Remote) connectionIn, 0);
+                RMIInterface remoteRef = (RMIInterface) UnicastRemoteObject.exportObject(rmiConnection, 0);
 
-                RMIInterfaceRemote serverRMIInterfaceRemote = serverRMIInterface.addClient(remoteRef);
+                RMIInterface serverRMIInterface = serverRMIControllerInterface.addClient(remoteRef);
 
-                if(serverRMIInterfaceRemote != null){
-                    connection = new ServerRMIConnection(serverRMIInterfaceRemote);
-                    connectionIn.addObserver(view);
+                rmiConnection.setRmiInterface(serverRMIInterface);
+
+                connection = rmiConnection;
+
+                if (serverRMIInterface != null) {
+                    connection.addObserver(view);
                     view.addObserver(connection);
                     return true;
                 }else{
-                    return true;
+
+                    return false;
                 }
 
             } catch (MalformedURLException | RemoteException | NotBoundException e) {
@@ -113,7 +117,7 @@ public class ClientNetwork implements NetworkHandler {
         if(connection == null){
             return false;
         }else{
-            return true;
+            return connection.isConnected();
         }
     }
 

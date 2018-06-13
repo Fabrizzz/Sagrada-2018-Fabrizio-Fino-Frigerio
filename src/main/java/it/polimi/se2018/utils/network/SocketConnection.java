@@ -1,10 +1,6 @@
 package it.polimi.se2018.utils.network;
 
-import it.polimi.se2018.controller.RemoteView;
-import it.polimi.se2018.server.ServerNetwork;
-import it.polimi.se2018.utils.enums.MessageType;
-import it.polimi.se2018.utils.network.Connection;
-import it.polimi.se2018.utils.Message;
+import it.polimi.se2018.utils.messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,23 +14,21 @@ import java.util.Observable;
  */
 public class SocketConnection extends Connection implements Runnable {
     private Socket socket;
-    private NetworkHandler networkHandler;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean connected = true;
 
     /**
      * Costructor
-     * @param networkHandler server connection manager
      * @param socket connection socket
      */
-    public SocketConnection(NetworkHandler networkHandler, Socket socket) {
-        this.networkHandler = networkHandler;
+    public SocketConnection(Socket socket) {
         this.socket = socket;
         try {
             out = new ObjectOutputStream(this.socket.getOutputStream());
             in = new ObjectInputStream(this.socket.getInputStream());
         }catch(IOException e){
+            e.printStackTrace();
             close();
         }
     }
@@ -44,21 +38,23 @@ public class SocketConnection extends Connection implements Runnable {
      * @param message message to send
      */
     public boolean sendMessage(Message message){
-        try{
-            out.writeObject(message);
-            out.flush();
-            return true;
-        }catch (IOException e){
-            close();
-            return false;
-        }
+        if (isConnected())
+            try{
+                out.writeObject(message);
+                out.flush();
+                return true;
+            }catch (IOException e){
+                close();
+                return false;
+            }
+        return false;
     }
 
 
     /**
      * Close the connection
      */
-    public void close(){
+    public synchronized void close() {
         this.deleteObservers();
 
         try{
@@ -74,7 +70,6 @@ public class SocketConnection extends Connection implements Runnable {
         }catch (IOException e){}
 
         this.connected = false;
-        networkHandler.closeConnection(this);
 
     }
 
@@ -82,7 +77,7 @@ public class SocketConnection extends Connection implements Runnable {
      * Return the status of the connection
      * @return true if the client is connected, false otherwise
      */
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         return connected;
     }
 
@@ -92,21 +87,12 @@ public class SocketConnection extends Connection implements Runnable {
         while (connected) {
             try{
                 message = (Message) in.readObject();
-                if(message.getMessageType() == MessageType.INITIALCONFIG){
-                    System.out.println("Messaggio INITIALCONFIG ricevuto");
-                    RemoteView remoteView = ((ServerNetwork) this.networkHandler).initializeConnection(this,message);
-                    if(remoteView != null){
-                        addObserver(remoteView);
-                    }else{
-                        close();
-                    }
-                }else {
-                    System.out.println("Messaggio ricevuto");
-                    setChanged();
-                    notifyObservers(message);
-                }
+                System.out.println("Messaggio ricevuto");
+                setChanged();
+                notifyObservers(message);
+
             }catch (IOException | ClassNotFoundException e){
-                connected = false;
+                close();
             }
 
         }

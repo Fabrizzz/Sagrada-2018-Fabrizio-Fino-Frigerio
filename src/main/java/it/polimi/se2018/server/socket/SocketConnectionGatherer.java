@@ -1,6 +1,5 @@
-package it.polimi.se2018.server;
+package it.polimi.se2018.server.socket;
 
-import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.SocketConnection;
@@ -8,16 +7,14 @@ import it.polimi.se2018.utils.network.SocketConnection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 /**
  * Socket connection gatherer
  * @author Alessio
  */
-public class SocketConnectionGatherer extends Thread {
+public class SocketConnectionGatherer implements Runnable {
 
     private ServerNetwork serverNetwork;
-    private int port;
     private ServerSocket serverSocket;
     private Boolean run = true;
 
@@ -28,7 +25,6 @@ public class SocketConnectionGatherer extends Thread {
      */
     public SocketConnectionGatherer(ServerNetwork serverNetwork, int port){
         this.serverNetwork = serverNetwork;
-        this.port = port;
 
         try {
             this.serverSocket = new ServerSocket(port);
@@ -57,15 +53,8 @@ public class SocketConnectionGatherer extends Thread {
             try {
 
                 clientSocket = serverSocket.accept();
-                connection = new SocketConnection(serverNetwork,clientSocket);
-                if(!serverNetwork.addClient(connection)){
-                    connection.close();
-                    System.out.println("Nuova connessione rifiutata");
-                }else{
-                    (new Thread((SocketConnection) connection)).start();
-                    System.out.println("Nuova connessione accettata");
-                }
-
+                connection = new SocketConnection(clientSocket);
+                connection.addObserver(serverNetwork);
             } catch (IOException e) {
                 e.printStackTrace();
             }
