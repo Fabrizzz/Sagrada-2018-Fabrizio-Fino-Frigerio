@@ -1,18 +1,13 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.controller.chainOfResponsibilities.Handler;
-import it.polimi.se2018.model.*;
-import it.polimi.se2018.objective_cards.PrivateObjective;
-import it.polimi.se2018.objective_cards.PublicObjective;
-import it.polimi.se2018.objective_cards.PublicObjectiveName;
-import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
-import it.polimi.se2018.utils.PlayerMove;
-import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.model.Board;
+import it.polimi.se2018.model.BoardList;
+import it.polimi.se2018.model.Model;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
+import it.polimi.se2018.utils.messages.PlayerMove;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Controller implements Observer {
 
@@ -20,6 +15,7 @@ public class Controller implements Observer {
     private boolean partitaIniziata = false;
     private Model model;
     private Handler firstHandler;
+    private RemoteView views;
     private Timer timer = new Timer();
 
     public Controller() {}
@@ -37,7 +33,9 @@ public class Controller implements Observer {
         return boards;
     }
 
-    public void startGame(Map<Player, PlayerBoard> boards) {
+    public void startGame(Collection<RemoteView> views) {
+        /*if (views.size() < 2 || views.size() > 4)
+            throw new IllegalArgumentException();
         List publicObjectiveNames = Arrays.asList(PublicObjectiveName.values());
         Collections.shuffle(publicObjectiveNames);
         List<PublicObjective> publicObjectives = new ArrayList<>();
@@ -49,7 +47,7 @@ public class Controller implements Observer {
         Map<Player, PrivateObjective> privateObjectiveMap = boards.keySet().stream().collect(Collectors.toMap(k -> k, t -> new PrivateObjective(iterator.next())));
 
         this.model = new Model(new ArrayList<>(boards.keySet()), publicObjectives, boards, privateObjectiveMap, Tool.getRandTools(3));
-        setTimer(0, 0);
+        setTimer(0, 0);*/
     }
 
     private Model getModel() {
