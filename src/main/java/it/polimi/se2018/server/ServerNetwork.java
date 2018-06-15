@@ -17,33 +17,45 @@ import java.rmi.registry.LocateRegistry;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Manages the connections with the clients
  * @author Alessio
  */
 public class ServerNetwork implements Observer {
+    private static final Logger LOGGER = Logger.getLogger( ServerNetwork.class.getName() );
     private Map<Long, RemoteView> playingConnections = new HashMap<>();
     private Map<Long, RemoteView> waitingConnections = new HashMap<>();
     private ExecutorService executor = Executors.newCachedThreadPool();
     private Timer timer = new Timer();
     private int games = 0;
 
-
     public void start(int port) {
+        Handler handlerObj = new ConsoleHandler();
+        handlerObj.setLevel(Level.ALL);
+        LOGGER.addHandler(handlerObj);
+        LOGGER.setLevel(Level.ALL);
+        LOGGER.setUseParentHandlers(false);
+        LOGGER.log(Level.FINE,"avvio");
         executor.submit(new SocketConnectionGatherer(this, port));
 
         try {
             LocateRegistry.createRegistry(port);
-        } catch (RemoteException e) {}
+        } catch (RemoteException e) {
+            LOGGER.log(Level.SEVERE,"Errore creazione registry");
+        }
 
         try {
             ServerRMIControllerInterface serverRMIImplementation = new ServerRMIController(this);
             Naming.rebind("//localhost/MyServer", serverRMIImplementation);
         } catch (MalformedURLException e) {
-            System.err.println("Impossibile registrare l'oggetto indicato!");
+            LOGGER.log(Level.SEVERE,"Impossibile registrare l'oggetto indicato!");
         } catch (RemoteException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"Errore inizializzazione rmi");
         }
     }
 
@@ -64,7 +76,7 @@ public class ServerNetwork implements Observer {
 
     public synchronized void timerScaduto(int games) {
         if (getGames() == games) {
-            System.out.println("Timer scaduto, inizializzazione gioco");
+            LOGGER.log(Level.FINE,"Timer scaduto, inizializzazione gioco");
             initializeGame();
         }
 
@@ -76,7 +88,7 @@ public class ServerNetwork implements Observer {
      * @param message initializzation message recived from the client
      */
     public synchronized void initializeConnection(Connection connection, ClientMessage message) {
-
+        LOGGER.log( Level.FINE, "initialize connection con message id: " + message.getId() + " e nickname " + message.getNick());
         if (playingConnections.containsKey(message.getId())) {
             playingConnections.get(message.getId()).changeConnection(connection);
         } else {
@@ -85,7 +97,6 @@ public class ServerNetwork implements Observer {
             if (waitingConnections.size() == 2) {
                 timer.schedule(new ConnectionTimer(this, getGames()), (long) 60 * 1000);
             } else if (waitingConnections.size() == 4) {
-                System.out.println("Inizializzazione gioco");
                 initializeGame();
             }
         }
@@ -97,9 +108,11 @@ public class ServerNetwork implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        LOGGER.log( Level.FINE, "messaggio ricevuto");
         Connection connection = (Connection) o;
         ClientMessage message = (ClientMessage) arg;
         if (message.getMessageType().equals(MessageType.INITIALCONFIG)) {
+            LOGGER.log( Level.FINE, "Ricevuto messaggio INITIALCONFIG");
             initializeConnection(connection, message);
             o.deleteObserver(this);
         }

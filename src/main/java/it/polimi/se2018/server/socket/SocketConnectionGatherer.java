@@ -49,11 +49,12 @@ public class SocketConnectionGatherer implements Runnable {
         while(run) {
 
             Socket clientSocket;
-            Connection connection;
+            SocketConnection connection;
             try {
 
                 clientSocket = serverSocket.accept();
                 connection = new SocketConnection(clientSocket);
+                (new Thread(connection)).start();
                 connection.addObserver(serverNetwork);
             } catch (IOException e) {
                 e.printStackTrace();
