@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -571,6 +572,10 @@ public class CLI extends View{
                 break;
             case MODELVIEWUPDATE:
                 modelView = new ModelView(modelView, ((ServerMessage) arg).getModelView());
+                if(modelView.getPlayer(localID).isYourTurn()){
+                    System.out.println("E' il tuo turno");
+                    chooseMove();
+                }
                 break;
         }
     }
@@ -596,7 +601,7 @@ public class CLI extends View{
         }while(i < 1 || i > 2);
 
         String address = "";
-        int port;
+        int port = 0;
             while(!clientNetwork.isConnected()) {
                 System.out.println("Inserisci l'indirizzo del server: ");
                 boolean prova = true;
@@ -611,8 +616,14 @@ public class CLI extends View{
                 }
 
                 if (i == 1) {
-                    System.out.println("Inserisci la porta: ");
-                    port = input.nextInt();
+                    do {
+                        System.out.println("Inserisci la porta: ");
+                        if(input.hasNextInt()) {
+                            port = input.nextInt();
+                        }else{
+                            input.next();
+                        }
+                    }while(port == 0);
                     clientNetwork.connectSocket(address, port);
                 } else
                     clientNetwork.connectRMI(address);
@@ -624,7 +635,10 @@ public class CLI extends View{
         do{
             nick = input.next();
         } while (nick.isEmpty());
-        localID = (new Random()).nextLong(); //inserire lettura/scrittura su file
+
+
+        localID = readID();
+        System.out.println("Player id = " + localID);
 
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(clientNetwork.sendMessage(clientMessage)){
@@ -635,5 +649,56 @@ public class CLI extends View{
 
         //ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
         //clientNetwork.sendMessage(testMessage);
+    }
+
+    public Long readID(){
+        InputStream is = null;
+        DataInputStream dis = null;
+        try {
+            is = new FileInputStream("playerID");
+
+            dis = new DataInputStream(is);
+
+            if(dis.available()>0) {
+                return dis.readLong();
+            }
+        } catch(Exception e) {}finally {
+            try{
+                is.close();
+            }catch (Exception e){}
+            try{
+                dis.close();
+            }catch (Exception e){}
+        }
+
+        return writeID(generateID());
+    }
+
+    public Long writeID(Long id){
+        FileOutputStream fos = null;
+        DataOutputStream dos = null;
+
+        try {
+            fos = new FileOutputStream("playerID");
+            dos = new DataOutputStream(fos);
+
+            dos.writeLong(id);
+            dos.flush();
+        } catch(Exception e){
+            System.out.println("Errore scrittura id giocatore, controlla i permessi di scrittura della cartella");
+        }finally {
+            try{
+                fos.close();
+            }catch (Exception e){}
+            try{
+                dos.close();
+            }catch (Exception e){}
+        }
+
+        return id;
+    }
+
+    public Long generateID(){
+        return (new Random()).nextLong();
     }
 }
