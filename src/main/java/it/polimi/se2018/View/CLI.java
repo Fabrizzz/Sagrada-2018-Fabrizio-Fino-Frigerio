@@ -624,9 +624,13 @@ public class CLI extends View{
                             input.next();
                         }
                     }while(port == 0);
-                    clientNetwork.connectSocket(address, port);
+                    if(!clientNetwork.connectSocket(address, port)){
+                        System.out.println("Connessione fallita");
+                    }
                 } else
-                    clientNetwork.connectRMI(address);
+                    if(!clientNetwork.connectRMI(address)){
+                        System.out.println("Connessione fallita");
+                    }
             }
             System.out.println("Connessione accettata");
 
@@ -642,7 +646,7 @@ public class CLI extends View{
 
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(clientNetwork.sendMessage(clientMessage)){
-            System.out.println("Nome utente inviato");
+            System.out.println("Nome utente inviato, attendi l'inizio della partita");
         }else{
             System.out.println("Errore connessione");
         }
