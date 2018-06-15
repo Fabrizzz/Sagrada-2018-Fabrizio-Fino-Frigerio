@@ -6,12 +6,11 @@ import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.NoDieException;
-import it.polimi.se2018.utils.messages.ClientMessage;
-import it.polimi.se2018.utils.messages.PlayerMove;
-import it.polimi.se2018.utils.messages.ServerMessage;
+import it.polimi.se2018.utils.messages.*;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -501,10 +500,25 @@ public class CLI extends View{
                 this.modelView = ((ServerMessage) arg).getModelView();
                 if(modelView.getPlayer(localID).isYourTurn()){
                     chooseMove();
+                }else{
+                    System.out.println("Attendi il tuo turno");
                 }
                 break;
             case CHOSENBOARD:
-                //da aggiungere
+                System.out.println("Scegli la tua plancia di gioco");
+                for(int i = 0; i < ((SelectBoardMessage) arg).getBoards().length; i ++){
+                    System.out.println("Plancia " + (i+1));
+                    showBoard(new PlayerBoard(((SelectBoardMessage) arg).getBoards()[i]));
+                }
+
+                System.out.println("Inserisci il numero della plancia scelta: ");
+                int j = 0;
+                do{
+                    j = input.nextInt();
+                }while(j < 1 || j > ((SelectBoardMessage) arg).getBoards().length);
+
+                setChanged();
+                notifyObservers(new ChosenBoardMessage(MessageType.CHOSENBOARD,new PlayerBoard(((SelectBoardMessage) arg).getBoards()[j])));
                 break;
             case MODELVIEWUPDATE:
                 //da aggiungere
@@ -570,7 +584,7 @@ public class CLI extends View{
             System.out.println("Errore connessione");
         }
 
-        ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
-        clientNetwork.sendMessage(testMessage);
+        //ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
+        //clientNetwork.sendMessage(testMessage);
     }
 }

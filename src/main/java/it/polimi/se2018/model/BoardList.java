@@ -60,7 +60,6 @@ public final class BoardList {
         if(boardList.size() == 0){
             return null;
         }else{
-
             return boardList.remove((new Random()).nextInt(boardList.size()));
         }
     }
