@@ -43,7 +43,7 @@ public class CLI extends View{
      * @param playerBoard playerboard to show
      */
     public void showBoard(PlayerBoard playerBoard){
-        System.out.println("\nDice board");
+        System.out.println("\nPlancia dei dadi");
         System.out.println("___________|| Riga");
 
         for(int j = 0; j < 4; j ++){
@@ -59,7 +59,7 @@ public class CLI extends View{
         System.out.println("‾‾‾‾‾‾‾‾‾");
         System.out.println("|1|2|3|4|5|| Colonna");
 
-        System.out.println("\nRestriction board");
+        System.out.println("\nPlancia delle restrizioni");
         System.out.println("___________");
 
 
@@ -84,9 +84,9 @@ public class CLI extends View{
      * Show the draftpool to the player
      */
     public void showDraftPool(){
-        System.out.println("Draftpool");
+        System.out.println("Riserva dei dadi");
 
-        System.out.print("Positione:");
+        System.out.print("Posizione:");
         for(int i = 0; i <  modelView.DraftPoolSize();i++){
             System.out.print("|"+(i+1));
         }
@@ -107,7 +107,7 @@ public class CLI extends View{
      * Show the toolcards to the player
      */
     public void showToolCards(){
-        System.out.println("Tool cards");
+        System.out.println("Carte strumento:");
         for (int i = 0; i < modelView.getTools().size(); i++) {
             System.out.print("Nome: ");
             System.out.println(modelView.getTools().keySet().toArray()[i].toString());
@@ -118,10 +118,28 @@ public class CLI extends View{
     }
 
     /**
+     * Show the public objectives cards
+     */
+    public void showPublicObjectives(){
+        System.out.println("Carte obiettivo pubbliche:");
+        for(int i = 0; i < modelView.getPublicObjective().size(); i ++){
+            System.out.println("Numero " + (i+1));
+            System.out.println(modelView.getPublicObjective().get(i).getObjectiveName() + "\n");
+        }
+    }
+
+    /**
+     * Show the player private objective
+     */
+    private void showPrivateObjective(){
+        System.out.println("Colore obiettivo privato: " /*+ modelView.getPlayer(localID).*/);//TODO
+    }
+
+    /**
      * Show the round track to the player
      */
     public void showRoundTrack(){
-        System.out.println("Tracciato dadi:");
+        System.out.println("Tracciato dei dadi:");
         for(int i = 0; i < modelView.getRound(); i ++){
             System.out.println("Round " + (i+1));
             for(int j = 0; j < modelView.getRoundTrack().numberOfDice(i); j ++){
@@ -436,11 +454,14 @@ public class CLI extends View{
         System.out.println("4) Visualizza le plancie degli avversari");
         System.out.println("5) Visualizza la riserva dei dadi");
         System.out.println("6) Visualizza il tracciato dei dadi");
+        System.out.println("7) Visualizza il le carte strumento");
+        System.out.println("8) Visualizza il le carte obiettivo pubblico");
+        System.out.println("9) Visualizza il tuo obiettivo privato");
         System.out.print("Scelta: ");
         int i = 3;
         do{
             i = input.nextInt();
-        }while(i < 0 || i > 6);
+        }while(i < 0 || i > 9);
         System.out.println("");
 
         switch (i){
@@ -483,22 +504,50 @@ public class CLI extends View{
                 showRoundTrack();
                 chooseMove();
                 break;
+            case 7:
+                showToolCards();
+                chooseMove();
+                break;
+            case 8:
+                showPublicObjectives();
+                chooseMove();
+                break;
+            case 9:
+                showPrivateObjective();
+                chooseMove();
+                break;
             default:
                 setChanged();
                 notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
                 System.out.println("Mossa inviata");
 
         }
+
+        System.out.println("La tua plancia: ");
+        showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
     @Override
     public void update(Observable o, Object arg) {
         switch (((ServerMessage) arg).getMessageType()){
             case ERROR:
                 System.out.println("Errore: " + ((ServerMessage) arg).getErrorType().toString());
+                if(modelView.getPlayer(localID).isYourTurn()){
+                    System.out.println("Mossa inviata non valida, ripeti la scelta");
+                    chooseMove();
+                }
                 break;
             case INITIALCONFIGSERVER:
                 this.modelView = ((ServerMessage) arg).getModelView();
+
+                System.out.println("La tua board");
+                showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+                showDraftPool();
+                showToolCards();
+                showPrivateObjective();
+                showPublicObjectives();
+
                 if(modelView.getPlayer(localID).isYourTurn()){
+                    System.out.println("Sei il primo giocatore");
                     chooseMove();
                 }else{
                     System.out.println("Attendi il tuo turno");
