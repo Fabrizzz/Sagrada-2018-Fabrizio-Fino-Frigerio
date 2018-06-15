@@ -1,10 +1,5 @@
 package it.polimi.se2018.View;
 
-import it.polimi.se2018.client.ClientNetwork;
-import it.polimi.se2018.model.ModelView;
-import it.polimi.se2018.utils.ClientMessage;
-import it.polimi.se2018.utils.PlayerMove;
-import it.polimi.se2018.utils.enums.Tool;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;

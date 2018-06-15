@@ -504,7 +504,7 @@ public class CLI extends View{
                     System.out.println("Attendi il tuo turno");
                 }
                 break;
-            case CHOSENBOARD:
+            case BOARDTOCHOOSE:
                 System.out.println("Scegli la tua plancia di gioco");
                 for(int i = 0; i < ((SelectBoardMessage) arg).getBoards().length; i ++){
                     System.out.println("Plancia " + (i+1));
