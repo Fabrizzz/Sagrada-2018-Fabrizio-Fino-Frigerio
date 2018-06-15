@@ -53,6 +53,46 @@ public class ModelView implements Observer, Serializable {
         model.addObserver(this);
     }
 
+    /**
+     * Costructor used by the client to create a new modelView from the old view and the new modelView recived from the server in a update message
+     * @param oldView old modelView
+     * @param updateView new modelView sent by the server containing updated data
+     */
+    public ModelView(ModelView oldView, ModelView updateView){
+        tools = oldView.getTools();
+        publicObjective = oldView.getPublicObjective();
+
+        if(updateView.getPlayers() != null){
+            players = updateView.getPlayers();
+        }else{
+            players = oldView.getPlayers();
+        }
+
+        if(updateView.getDiceBag() != null){
+            diceBag = updateView.getDiceBag();
+        }else{
+            diceBag = oldView.getDiceBag();
+        }
+
+        if(updateView.getDraftPool() != null){
+            draftPool = updateView.getDraftPool();
+        }else{
+            draftPool = oldView.getDraftPool();
+        }
+
+        if(updateView.getRoundTrack() != null){
+            roundTrack = updateView.getRoundTrack();
+        }else{
+            roundTrack = oldView.getRoundTrack();
+        }
+
+        if(updateView.getBoardMap() != null){
+            boardMap = updateView.getBoardMap();
+        }else{
+            boardMap = oldView.getBoardMap();
+        }
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         Model model = (Model) o;
@@ -102,6 +142,14 @@ public class ModelView implements Observer, Serializable {
      */
     public PlayerBoard getBoard(Player player) {
         return boardMap.get(player);
+    }
+
+    /**
+     * Return the boardmap
+     * @return the board map
+     */
+    public Map<Player, PlayerBoard> getBoardMap() {
+        return boardMap;
     }
 
     /**

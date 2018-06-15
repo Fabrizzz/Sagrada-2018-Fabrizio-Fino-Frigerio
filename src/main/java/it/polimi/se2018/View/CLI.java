@@ -521,7 +521,7 @@ public class CLI extends View{
                 notifyObservers(new ChosenBoardMessage(MessageType.CHOSENBOARD,new PlayerBoard(((SelectBoardMessage) arg).getBoards()[j])));
                 break;
             case MODELVIEWUPDATE:
-                //da aggiungere
+                modelView = new ModelView(modelView, ((ServerMessage) arg).getModelView());
                 break;
         }
     }
