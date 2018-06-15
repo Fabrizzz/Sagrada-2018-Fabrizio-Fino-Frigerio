@@ -10,15 +10,18 @@
     ["","THREE","GREEN","FOUR",""],
     ["FIVE","GREEN","ONE","",""]
   ]},
-  {"name" : "Kaleidoscopic Dream",
-  "difficulty": 4,
+  {"name" : "Symphony of Light",
+  "difficulty": 6,
   "mappa": [
-    ["YELLOW","BLUE","","","ONE"],
-    ["GREEN","","FIVE","","FOUR"],
-    ["THREE","","RED","","GREEN"],
-    ["TWO","","","BLUE","YELLOW"]
+    ["TWO","","FIVE","","ONE"],
+    ["YELLOW","SIX","PURPLE","TWO","RED"],
+    ["","BLUE","FOUR","GREEN",""],
+    ["","THREE","","FIVE",""]
   ]}
   ]},
+
+
+
   {
     "coppia" : [{
     "name" : "Via Lux",
@@ -29,13 +32,234 @@
     ["THREE","YELLOW","RED","PURPLE",""],
     ["","","FOUR","THREE","RED"]
   ]},
-  {"name" : "Aurorae Magnificus",
+  {
+    "name" : "Aurora Sagradis",
+  "difficulty": 4,
+  "mappa": [
+    ["RED","","BLUE","","YELLOW"],
+    ["FOUR","PURPLE","THREE","GREEN","TWO"],
+    ["","ONE","","FIVE",""],
+    ["","","SIX","",""]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Bellesguard",
+  "difficulty": 3,
+  "mappa": [
+    ["BLUE","SIX","","","YELLOW"],
+    ["","THREE","BLUE","",""],
+    ["","FIVE","SIX","TWO",""],
+    ["","FOUR","","ONE","GREEN"]
+  ]},
+  {"name" : "Shadow Thief",
+  "difficulty": 5,
+  "mappa": [
+    ["SIX","PURPLE","","","FIVE"],
+    ["FIVE","","PURPLE","",""],
+    ["RED","SIX","","PURPLE",""],
+    ["YELLOW","RED","FIVE","FOUR","THREE"]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Batllo",
+  "difficulty": 5,
+  "mappa": [
+    ["","","SIX","",""],
+    ["","FIVE","BLUE","FOUR",""],
+    ["THREE","GREEN","YELLOW","PURPLE","TWO"],
+    ["ONE","FOUR","RED","FIVE","THREE"]
+  ]},
+  {"name" : "Sun catcher",
+  "difficulty": 3,
+  "mappa": [
+    ["","BLUE","TWO","","YELLOW"],
+    ["","FOUR","","RED",""],
+    ["","","FIVE","YELLOW",""],
+    ["GREEN","THREE","","","PURPLE"]
+  ]}  
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Aurorae Magnificus",
   "difficulty": 5,
   "mappa": [
     ["FIVE","GREEN","BLUE","PURPLE","TWO"],
     ["PURPLE","","","","YELLOW"],
     ["YELLOW","","SIX","","PURPLE"],
     ["ONE","","","GREEN","FOUR"]
+  ]},
+  {"name" : "Industria",
+  "difficulty": 5,
+  "mappa": [
+    ["ONE","RED","THREE","","SIX"],
+    ["FIVE","FOUR","RED","TWO",""],
+    ["","","FIVE","RED","ONE"],
+    ["","","","THREE","RED"]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Firmitas",
+  "difficulty": 5,
+  "mappa": [
+    ["PURPLE","SIX","","","THREE"],
+    ["FIVE","PURPLE","THREE","",""],
+    ["","TWO","PURPLE","ONE",""],
+    ["","ONE","FIVE","PURPLE","FOUR"]
+  ]},
+  {"name" : "Kaleidoscopic Dream",
+  "difficulty": 4,
+  "mappa": [
+    ["YELLOW","BLUE","","","ONE"],
+    ["GREEN","","FIVE","","FOUR"],
+    ["THREE","","RED","","GREEN"],
+    ["TWO","","","BLUE","YELLOW"]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Firelight",
+  "difficulty": 5,
+  "mappa": [
+    ["THREE","FOUR","ONE","FIVE",""],
+    ["","SIX","TWO","","YELLOW"],
+    ["","","","YELLOW","RED"],
+    ["FIVE","","YELLOW","RED","SIX"]
+  ]},
+  {"name" : "Sun's Glory",
+  "difficulty": 6,
+  "mappa": [
+    ["ONE","PURPLE","YELLOW","","FOUR"],
+    ["PURPLE","YELLOW","","","SIX"],
+    ["YELLOW","","","FIVE","THREE"],
+    ["","FIVE","FOUR","TWO","ONE"]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Lux Astram",
+  "difficulty": 5,
+  "mappa": [
+    ["","ONE","GREEN","PURPLE","FOUR"],
+    ["SIX","PURPLE","TWO","FIVE","GREEN"],
+    ["ONE","GREEN","FIVE","THREE","PURPLE"],
+    ["","","","",""]
+  ]},
+  {"name" : "Lux Mundi",
+  "difficulty": 6,
+  "mappa": [
+    ["","","ONE","",""],
+    ["ONE","GREEN","THREE","BLUE","TWO"],
+    ["BLUE","FIVE","FOUR","SIX","GREEN"],
+    ["","BLUE","FIVE","GREEN",""]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Gravitas",
+  "difficulty": 5,
+  "mappa": [
+    ["ONE","","THREE","BLUE",""],
+    ["","TWO","BLUE","",""],
+    ["SIX","BLUE","","FOUR",""],
+    ["BLUE","FIVE","TWO","","ONE"]
+  ]},
+  {"name" : "Water of life",
+  "difficulty": 6,
+  "mappa": [
+    ["SIX","BLUE","","","ONE"],
+    ["","FIVE","BLUE","",""],
+    ["FOUR","RED","TWO","BLUE",""],
+    ["GREEN","SIX","YELLOW","THREE","PURPLE"]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Ripples of Light",
+  "difficulty": 5,
+  "mappa": [
+    ["","","","RED","FIVE"],
+    ["","","PURPLE","FOUR","BLUE"],
+    ["","BLUE","THREE","YELLOW","SIX"],
+    ["YELLOW","TWO","GREEN","ONE","RED"]
+  ]},
+  {"name" : "Fractal Drops",
+  "difficulty": 3,
+  "mappa": [
+    ["","FOUR","","YELLOW","SIX"],
+    ["RED","","TWO","",""],
+    ["","","RED","PURPLE","ONE"],
+    ["BLUE","YELLOW","","",""]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Comitas",
+  "difficulty": 5,
+  "mappa": [
+    ["YELLOW","","TWO","","SIX"],
+    ["","FOUR","","FIVE","YELLOW"],
+    ["","","","YELLOW","FIVE"],
+    ["ONE","TWO","YELLOW","THREE",""]
+  ]},
+  {"name" : "Chromatic Splendor",
+  "difficulty": 4,
+  "mappa": [
+    ["","","GREEN","",""],
+    ["TWO","YELLOW","FIVE","BLUE","ONE"],
+    ["","RED","THREE","PURPLE",""],
+    ["ONE","","SIX","","FOUR"]
+  ]}
+  ]},
+
+
+
+  {
+    "coppia" : [{
+    "name" : "Fulgor del Cielo",
+  "difficulty": 5,
+  "mappa": [
+    ["","BLUE","RED","",""],
+    ["","FOUR","FIVE","","BLUE"],
+    ["BLUE","TWO","","RED","FIVE"],
+    ["SIX","RED","THREE","ONE",""]
+  ]},
+  {"name" : "Luz Celestial",
+  "difficulty": 3,
+  "mappa": [
+    ["","","RED","FIVE",""],
+    ["PURPLE","FOUR","","GREEN","THREE"],
+    ["SIX","","","BLUE",""],
+    ["","YELLOW","TWO","",""]
   ]}
   ]}
   ]
