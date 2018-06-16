@@ -7,12 +7,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Observable;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Socket connection
  * @author Alessio
  */
 public class SocketConnection extends Connection implements Runnable {
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -23,12 +28,13 @@ public class SocketConnection extends Connection implements Runnable {
      * @param socket connection socket
      */
     public SocketConnection(Socket socket) {
+        LOGGER.log(Level.FINE,"Creazione connessione");
         this.socket = socket;
         try {
             out = new ObjectOutputStream(this.socket.getOutputStream());
             in = new ObjectInputStream(this.socket.getInputStream());
         }catch(IOException e){
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"Errore creazione object stream");
             close();
         }
     }
@@ -38,10 +44,12 @@ public class SocketConnection extends Connection implements Runnable {
      * @param message message to send
      */
     public boolean sendMessage(Message message){
+        LOGGER.log(Level.FINE,"Invio messaggio");
         if (isConnected())
             try{
                 out.writeObject(message);
                 out.flush();
+                LOGGER.log(Level.FINE,"Messaggio inviato");
                 return true;
             }catch (IOException e){
                 close();

@@ -3,7 +3,9 @@ package it.polimi.se2018;
 import it.polimi.se2018.client.Client;
 import it.polimi.se2018.server.Server;
 
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.*;
 
 
 public class App {

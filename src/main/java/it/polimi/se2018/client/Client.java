@@ -4,7 +4,9 @@ import it.polimi.se2018.View.CLI;
 import it.polimi.se2018.View.GUIProxy;
 import it.polimi.se2018.View.View;
 
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.*;
 
 /**
  * Client main class
@@ -13,11 +15,32 @@ import java.util.Scanner;
 public class Client {
     private View view;
     private ClientNetwork clientNetwork;
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
      * Constructor
      */
     public Client(){
+        LOGGER.setLevel(Level.FINEST);
+
+        FileHandler fh;
+        try {
+            fh = new FileHandler("sagradaClient.log");
+            fh.setLevel(Level.FINEST);
+            LOGGER.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Handler handlerObj = new ConsoleHandler();
+        handlerObj.setLevel(Level.SEVERE);
+        LOGGER.addHandler(handlerObj);
+        LOGGER.setUseParentHandlers(false);
+
         int i;
         Scanner input = new Scanner(System.in);
         System.out.println("Scegli l'interfaccia grafica:");

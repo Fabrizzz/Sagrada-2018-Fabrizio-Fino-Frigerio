@@ -10,6 +10,7 @@ import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.network.Connection;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -17,17 +18,14 @@ import java.rmi.registry.LocateRegistry;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * Manages the connections with the clients
  * @author Alessio
  */
 public class ServerNetwork implements Observer {
-    private static final Logger LOGGER = Logger.getLogger( ServerNetwork.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private Map<Long, RemoteView> playingConnections = new HashMap<>();
     private Map<Long, RemoteView> waitingConnections = new HashMap<>();
     private ExecutorService executor = Executors.newCachedThreadPool();
@@ -35,18 +33,13 @@ public class ServerNetwork implements Observer {
     private int games = 0;
 
     public void start(int port) {
-        Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.ALL);
-        LOGGER.addHandler(handlerObj);
-        LOGGER.setLevel(Level.ALL);
-        LOGGER.setUseParentHandlers(false);
         LOGGER.log(Level.FINE,"avvio");
         executor.submit(new SocketConnectionGatherer(this, port));
 
         try {
-            LocateRegistry.createRegistry(port);
+            LocateRegistry.createRegistry(port+1);
         } catch (RemoteException e) {
-            LOGGER.log(Level.SEVERE,"Errore creazione registry");
+            LOGGER.log(Level.SEVERE,"Errore creazione registry, porta gia' in uso o rmiregistry non avviato");
         }
 
         try {
@@ -95,8 +88,10 @@ public class ServerNetwork implements Observer {
             RemoteView remoteView = new RemoteView(new Player(message.getNick(), message.getId()), connection);
             waitingConnections.put(message.getId(), remoteView);
             if (waitingConnections.size() == 2) {
+                LOGGER.log(Level.FINE,"Avviato timer avvio partita, tempo rimanente 60s");
                 timer.schedule(new ConnectionTimer(this, getGames()), (long) 60 * 1000);
             } else if (waitingConnections.size() == 4) {
+                LOGGER.log(Level.FINE,"Numero massimo di giocatori raggiunto, avvio inizializzazione");
                 initializeGame();
             }
         }
