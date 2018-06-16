@@ -32,14 +32,13 @@
     ["THREE","YELLOW","RED","PURPLE",""],
     ["","","FOUR","THREE","RED"]
   ]},
-  {
-    "name" : "Aurora Sagradis",
-  "difficulty": 4,
+  {"name" : "Industria",
+  "difficulty": 5,
   "mappa": [
-    ["RED","","BLUE","","YELLOW"],
-    ["FOUR","PURPLE","THREE","GREEN","TWO"],
-    ["","ONE","","FIVE",""],
-    ["","","SIX","",""]
+    ["ONE","RED","THREE","","SIX"],
+    ["FIVE","FOUR","RED","TWO",""],
+    ["","","FIVE","RED","ONE"],
+    ["","","","THREE","RED"]
   ]}
   ]},
 
@@ -55,20 +54,7 @@
     ["","FIVE","SIX","TWO",""],
     ["","FOUR","","ONE","GREEN"]
   ]},
-  {"name" : "Shadow Thief",
-  "difficulty": 5,
-  "mappa": [
-    ["SIX","PURPLE","","","FIVE"],
-    ["FIVE","","PURPLE","",""],
-    ["RED","SIX","","PURPLE",""],
-    ["YELLOW","RED","FIVE","FOUR","THREE"]
-  ]}
-  ]},
-
-
-
   {
-    "coppia" : [{
     "name" : "Batllo",
   "difficulty": 5,
   "mappa": [
@@ -76,7 +62,13 @@
     ["","FIVE","BLUE","FOUR",""],
     ["THREE","GREEN","YELLOW","PURPLE","TWO"],
     ["ONE","FOUR","RED","FIVE","THREE"]
+  ]}
   ]},
+
+
+
+  {
+    "coppia" : [,
   {"name" : "Sun catcher",
   "difficulty": 3,
   "mappa": [
@@ -84,6 +76,14 @@
     ["","FOUR","","RED",""],
     ["","","FIVE","YELLOW",""],
     ["GREEN","THREE","","","PURPLE"]
+  ]},
+  {"name" : "Shadow Thief",
+  "difficulty": 5,
+  "mappa": [
+    ["SIX","PURPLE","","","FIVE"],
+    ["FIVE","","PURPLE","",""],
+    ["RED","SIX","","PURPLE",""],
+    ["YELLOW","RED","FIVE","FOUR","THREE"]
   ]}  
   ]},
 
@@ -99,13 +99,14 @@
     ["YELLOW","","SIX","","PURPLE"],
     ["ONE","","","GREEN","FOUR"]
   ]},
-  {"name" : "Industria",
-  "difficulty": 5,
+  {
+    "name" : "Aurora Sagradis",
+  "difficulty": 4,
   "mappa": [
-    ["ONE","RED","THREE","","SIX"],
-    ["FIVE","FOUR","RED","TWO",""],
-    ["","","FIVE","RED","ONE"],
-    ["","","","THREE","RED"]
+    ["RED","","BLUE","","YELLOW"],
+    ["FOUR","PURPLE","THREE","GREEN","TWO"],
+    ["","ONE","","FIVE",""],
+    ["","","SIX","",""]
   ]}
   ]},
 
