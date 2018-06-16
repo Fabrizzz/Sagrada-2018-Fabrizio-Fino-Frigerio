@@ -1,8 +1,9 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements Serializable {
     private String name;
     private int tokens;
     private ArrayList<String> restrictions;
