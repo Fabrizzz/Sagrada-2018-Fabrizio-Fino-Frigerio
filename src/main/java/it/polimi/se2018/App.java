@@ -16,7 +16,12 @@ public class App {
         System.out.println("2) Server");
         int i = 0;
         do{
-            i = input.nextInt();
+            if(input.hasNextInt()) {
+                i = input.nextInt();
+            }else{
+                input.next();
+                System.out.println("Input non corretto");
+            }
         }while(i < 1 || i > 2);
 
         if(i == 1){

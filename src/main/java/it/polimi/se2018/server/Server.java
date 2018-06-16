@@ -1,6 +1,8 @@
 package it.polimi.se2018.server;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 import java.util.Scanner;
 import java.util.logging.*;
 
@@ -37,10 +39,65 @@ public class Server {
         handlerObj.setLevel(Level.SEVERE);
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
+        Scanner scanner = new  Scanner(System.in);
+        int start = 0;
+        int port = 0;
 
-        System.out.println("Inserire porta: ");
-        Scanner scanner = new Scanner(System.in);
-        int port = scanner.nextInt();
-        new ServerNetwork().start(port);
+        do{
+            do {
+                System.out.println("Inserire la porta: ");
+                if(scanner.hasNextInt()) {
+                    port = scanner.nextInt();
+                }else{
+                    scanner.next();
+                    System.out.println("Input non corretto");
+                }
+            }while(!available(port));
+
+            new ServerNetwork().start(port);
+            do{
+                System.out.println("Premi 1 per avviare una nuova istanza del server");
+                if(scanner.hasNextInt()) {
+                    start = scanner.nextInt();
+                }else{
+                    scanner.next();
+                    System.out.println("Input non corretto");
+                }
+            }while(start != 1);
+            port = 0;
+            start = 0;
+        }while(true);
+    }
+
+    private boolean available(int port) {
+        if (port < 1000 || port > 65535) {
+            System.out.println("Porta non in range(1000-65535)");
+            return false;
+        }
+
+        ServerSocket ss = null;
+        DatagramSocket ds = null;
+        try {
+            ss = new ServerSocket(port);
+            ss.setReuseAddress(true);
+            ds = new DatagramSocket(port);
+            ds.setReuseAddress(true);
+            return true;
+        } catch (IOException e) {
+        } finally {
+            if (ds != null) {
+                ds.close();
+            }
+
+            if (ss != null) {
+                try {
+                    ss.close();
+                } catch (IOException e) {
+                    /* should not be thrown */
+                }
+            }
+        }
+        System.out.println("Porta occupata");
+        return false;
     }
 }
