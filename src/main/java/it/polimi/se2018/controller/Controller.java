@@ -1,57 +1,96 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.controller.chainOfResponsibilities.Handler;
-import it.polimi.se2018.model.Board;
-import it.polimi.se2018.model.BoardList;
-import it.polimi.se2018.model.Model;
+import it.polimi.se2018.controller.chainOfResponsibilities.ToolFactory;
+import it.polimi.se2018.model.*;
+import it.polimi.se2018.objective_cards.PrivateObjective;
+import it.polimi.se2018.objective_cards.PublicObjective;
+import it.polimi.se2018.objective_cards.PublicObjectiveName;
+import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
+import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.MessageType;
+import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
+import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
+import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Controller implements Observer {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
-    private boolean partitaIniziata = false;
     private Model model;
     private Handler firstHandler;
-    private RemoteView views;
+    BoardList boardList = new BoardList();
+    private List<RemoteView> views;
+    private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
-    private BoardList boardList = new BoardList();
 
     public Controller() {}
 
-
-    public List<Board> getBoards() {
+    public Board[] getBoards() {
         LinkedList<Board> boards = new LinkedList<>();
-        Board[] coppia = new Board[2];
+        Board[] coppia;
         coppia = boardList.getCouple();
         boards.add(coppia[0]);
         boards.add(coppia[1]);
         coppia = boardList.getCouple();
         boards.add(coppia[0]);
         boards.add(coppia[1]);
-        return boards;
+        Board[] board = new Board[4];
+
+        return boards.toArray(board);
     }
 
-    public void startGame(Collection<RemoteView> views) {
-        LOGGER.log(Level.INFO,"Avvio gioco");
-        /*if (views.size() < 2 || views.size() > 4)
+    public synchronized void startGame(Collection<RemoteView> views) {
+        if (views.size() < 2 || views.size() > 4)
             throw new IllegalArgumentException();
-        List publicObjectiveNames = Arrays.asList(PublicObjectiveName.values());
-        Collections.shuffle(publicObjectiveNames);
-        List<PublicObjective> publicObjectives = new ArrayList<>();
-        publicObjectiveNames.subList(0, 3).forEach(k -> publicObjectives.add(PublicObjectiveFactory.createPublicObjective((PublicObjectiveName) k)));
 
-        List colors = Arrays.asList(Color.values());
-        Collections.shuffle(colors);
-        Iterator<Color> iterator = colors.iterator();
-        Map<Player, PrivateObjective> privateObjectiveMap = boards.keySet().stream().collect(Collectors.toMap(k -> k, t -> new PrivateObjective(iterator.next())));
+        this.views = new ArrayList<>(views);
+        this.views.stream().forEach(k -> k.addObserver(this));
+        this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
+        try {
+            while (choosenBoards.size() < views.size())
+                wait();
 
-        this.model = new Model(new ArrayList<>(boards.keySet()), publicObjectives, boards, privateObjectiveMap, Tool.getRandTools(3));
-        setTimer(0, 0);*/
+
+            LOGGER.log(Level.INFO, "Avvio gioco");
+
+            List publicObjectiveNames = Arrays.asList(PublicObjectiveName.values());
+            Collections.shuffle(publicObjectiveNames);
+            List<PublicObjective> publicObjectives = new ArrayList<>();
+            publicObjectiveNames.subList(0, 3).forEach(k -> publicObjectives.add(PublicObjectiveFactory.createPublicObjective((PublicObjectiveName) k)));
+            List colors = Arrays.asList(Color.values());
+            Collections.shuffle(colors);
+            Iterator<Color> iterator = colors.iterator();
+            Map<Player, PrivateObjective> privateObjectiveMap = views.stream().collect(Collectors.toMap(k -> k.getPlayer(), t -> new PrivateObjective(iterator.next())));
+            List<Tool> tools = Tool.getRandTools(3);
+
+            this.model = new Model(new ArrayList<>(choosenBoards.keySet()), publicObjectives, choosenBoards, privateObjectiveMap, tools);
+            //setta gli handler, setta i vari observer, invia a tutti la modelview
+            firstHandler = ToolFactory.createFirstHandler();
+            Handler temp = firstHandler;
+            for (Tool tool : tools) {
+                temp = temp.setNextHandler(ToolFactory.createToolHandler(tool));
+            }
+            temp.setNextHandler(ToolFactory.createLastHandler());
+            ModelView modelView = new ModelView(model);
+            model.addObserver(modelView);
+            System.out.println("Prova5");
+            for (RemoteView view : views) {
+                modelView.addObserver(view);
+                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, modelView));
+            }
+
+            setTimer(0, 0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Prova6");
     }
 
     private Model getModel() {
@@ -73,16 +112,26 @@ public class Controller implements Observer {
 
     @Override
     public synchronized void update(Observable o, Object arg) {
-        LOGGER.log(Level.INFO,"PlayerMove ricevuta");
-        PlayerMove playerMove = (PlayerMove) arg;
+        ClientMessage message = (ClientMessage) arg;
         RemoteView remoteView = (RemoteView) o;
-        try {
-            int turn = model.getTurn();
-            firstHandler.process(playerMove, remoteView, getModel());
-            if (model.getTurn() != turn)
-                setTimer(model.getTurn(), model.getRound());
-        } catch (InvalidParameterException e) {
-            e.printStackTrace();
+
+        if (message.getMessageType() == MessageType.PLAYERMOVE) {
+
+            PlayerMove playerMove = message.getPlayerMove();
+            LOGGER.log(Level.INFO, "PlayerMove ricevuta");
+
+            try {
+                int turn = model.getTurn();
+                firstHandler.process(playerMove, remoteView, getModel());
+                if (model.getTurn() != turn)
+                    setTimer(model.getTurn(), model.getRound());
+            } catch (InvalidParameterException e) {
+                e.printStackTrace();
+            }
+        } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
+            LOGGER.log(Level.INFO, "Board ricevuta");
+            choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
+            notify();
         }
     }
 }
