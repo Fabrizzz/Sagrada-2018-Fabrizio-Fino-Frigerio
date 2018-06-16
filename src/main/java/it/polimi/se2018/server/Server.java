@@ -41,23 +41,15 @@ public class Server {
         handlerObj.setLevel(Level.SEVERE);
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
-        int start = 0;
         int port = 0;
 
-        do{
-            do {
-                System.out.println("Inserire la porta: ");
-                port = InputUtils.getInt();
-            }while(!available(port));
+        do {
+            System.out.println("Inserire la porta: ");
+            port = InputUtils.getInt();
+        }while(!available(port));
 
-            new ServerNetwork().start(port);
-            do{
-                System.out.println("Premi 1 per avviare una nuova istanza del server");
-                start = InputUtils.getInt();
-            }while(start != 1);
-            port = 0;
-            start = 0;
-        }while(true);
+        new ServerNetwork().start(port);
+
     }
 
     public static boolean available(int port) {
@@ -67,19 +59,12 @@ public class Server {
         }
 
         ServerSocket ss = null;
-        DatagramSocket ds = null;
         try {
             ss = new ServerSocket(port);
             ss.setReuseAddress(true);
-            ds = new DatagramSocket(port);
-            ds.setReuseAddress(true);
             return true;
         } catch (IOException e) {
         } finally {
-            if (ds != null) {
-                ds.close();
-            }
-
             if (ss != null) {
                 try {
                     ss.close();
