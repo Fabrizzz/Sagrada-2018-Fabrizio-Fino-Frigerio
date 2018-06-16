@@ -22,10 +22,10 @@ public class TestCard3RowShadeVariety {
     private Die die;
     private ArrayList<Integer> rowNum;
     private PublicObjective card;
+    BoardList BoardList = new BoardList();
 
     @Before
     public void setUp() {
-        BoardList.loadJSONBoards();
         rowNum = new ArrayList<>();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATUREDIVERSERIGA);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));

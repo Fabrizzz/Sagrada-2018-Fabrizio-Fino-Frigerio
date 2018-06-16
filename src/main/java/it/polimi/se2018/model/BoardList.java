@@ -15,13 +15,15 @@ import java.util.logging.Logger;
 
 public final class BoardList {
 
-    private BoardList(){}
+    public BoardList(){
+        loadJSONBoards();
+    }
 
-    private static ArrayList<Board[]> boardList = new ArrayList<Board[]>();
+    private ArrayList<Board[]> boardList = new ArrayList<Board[]>();
     private static final Logger LOGGER = Logger.getLogger("Logger");
 
 
-    public static void loadJSONBoards(){
+    private void loadJSONBoards(){
         JSONParser parser = new JSONParser();
         try {
 
@@ -59,7 +61,7 @@ public final class BoardList {
         }
     }
 
-    public static Board[] getCouple(){
+    public Board[] getCouple(){
         if(boardList.isEmpty()){
             LOGGER.log(Level.INFO,"Nessuna coppia di mappe disponibile");
             return null;
@@ -68,7 +70,7 @@ public final class BoardList {
         }
     }
 
-    public static Board getBoard(String name){
+    public Board getBoard(String name){
         for(int i = 0; i < boardList.size(); i ++){
             for(int j = 0; j < 2; j++) {
                 if (boardList.get(i)[j].getName().equals(name)){
@@ -79,7 +81,7 @@ public final class BoardList {
         return null;
     }
 
-    public static Board[] values(){
+    public Board[] values(){
         ArrayList<Board> boardValues = new ArrayList<>();
         for(int i = 0; i < boardList.size(); i ++){
             for(int j = 0; j < 2; j++){

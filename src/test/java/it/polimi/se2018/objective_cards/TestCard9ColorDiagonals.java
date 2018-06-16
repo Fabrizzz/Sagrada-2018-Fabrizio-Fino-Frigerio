@@ -19,10 +19,10 @@ public class TestCard9ColorDiagonals {
     private PlayerBoard playerBoard;
     private Die die;
     private PublicObjective card;
+    private BoardList BoardList = new BoardList();
 
     @Before
     public void setUp() throws Exception {
-        BoardList.loadJSONBoards();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.DIAGONALICOLORATE);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 

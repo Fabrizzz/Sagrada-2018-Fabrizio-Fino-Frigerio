@@ -10,6 +10,6 @@ public class TestJSON {
 
     @Test
     public void testJson(){
-        BoardList.loadJSONBoards();
+        BoardList BoardList = new BoardList();
     }
 }

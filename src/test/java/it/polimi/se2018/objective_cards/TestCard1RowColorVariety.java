@@ -21,10 +21,10 @@ public class TestCard1RowColorVariety {
     private Die die;
     private ArrayList<Color> rowColor;
     private PublicObjective card;
+    private BoardList BoardList = new BoardList();
 
     @Before
     public void setUp() {
-        BoardList.loadJSONBoards();
         rowColor = new ArrayList<>();
         card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));

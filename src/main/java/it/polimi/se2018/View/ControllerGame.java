@@ -135,12 +135,12 @@ public class ControllerGame implements Initializable {
         In questo caso provo a caricare senza passare dal server
         */
 
-        BoardList.loadJSONBoards();
+        BoardList boardList = new BoardList();
 
         Restriction restriction;
         ColorRestriction colorRestriction;
         NumberRestriction numberRestriction;
-        playerBoard = new PlayerBoard(BoardList.getCouple()[0]);    //0 for the first PlayerBoard, 1 for the second one
+        playerBoard = new PlayerBoard(boardList.getCouple()[0]);    //0 for the first PlayerBoard, 1 for the second one
         int i, j;
         ObservableList<Node> childrens = gridPane.getChildren();
         ObservableList<Node> child;

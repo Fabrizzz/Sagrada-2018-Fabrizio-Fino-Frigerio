@@ -19,17 +19,20 @@ public class Controller implements Observer {
     private Handler firstHandler;
     private RemoteView views;
     private Timer timer = new Timer();
+    private BoardList boardList;
 
-    public Controller() {}
+    public Controller() {
+        boardList = new BoardList();
+    }
 
 
     public List<Board> getBoards() {
         LinkedList<Board> boards = new LinkedList<>();
         Board[] coppia = new Board[2];
-        coppia = BoardList.getCouple();
+        coppia = boardList.getCouple();
         boards.add(coppia[0]);
         boards.add(coppia[1]);
-        coppia = BoardList.getCouple();
+        coppia = boardList.getCouple();
         boards.add(coppia[0]);
         boards.add(coppia[1]);
         return boards;

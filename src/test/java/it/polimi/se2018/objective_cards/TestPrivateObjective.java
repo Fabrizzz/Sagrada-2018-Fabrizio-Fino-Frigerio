@@ -17,10 +17,10 @@ public class TestPrivateObjective {
     private Die die;
     private Color color;
     private PrivateObjective card;
+    private BoardList BoardList = new BoardList();
 
     @Before
     public void setUp() {
-        BoardList.loadJSONBoards();
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 
         //Row 0

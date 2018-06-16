@@ -20,10 +20,10 @@ public class TestCard8ShadeVariety {
     private Die die;
     private PublicObjective card;
     private int[] counter;
+    private BoardList BoardList = new BoardList();
 
     @Before
     public void setUp() {
-        BoardList.loadJSONBoards();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATUREDIVERSE);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
         counter = new int[6];

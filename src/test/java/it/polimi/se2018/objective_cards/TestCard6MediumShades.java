@@ -19,10 +19,10 @@ public class TestCard6MediumShades {
     private PlayerBoard playerBoard;
     private Die die;
     private PublicObjective card;
+    private BoardList BoardList = new BoardList();
 
     @Before
     public void setUp() {
-        BoardList.loadJSONBoards();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATUREMEDIE);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
 

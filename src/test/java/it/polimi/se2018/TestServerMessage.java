@@ -31,6 +31,7 @@ public class TestServerMessage {
     private Map<Player, PlayerBoard> boardMap;
     private  PrivateObjective[] privateObjective;
     private  Map<Player, PrivateObjective> privateObjectiveMap;
+    private BoardList BoardList = new BoardList();
 
     @Test
     public void getErrorTypeTest(){
@@ -47,7 +48,6 @@ public class TestServerMessage {
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         playerBoard = new PlayerBoard[3];
-        BoardList.loadJSONBoards();
         for(int j = 0; j < 3; j ++){
             playerBoard[j] = new PlayerBoard(BoardList.getBoard("Virtus"));
         }

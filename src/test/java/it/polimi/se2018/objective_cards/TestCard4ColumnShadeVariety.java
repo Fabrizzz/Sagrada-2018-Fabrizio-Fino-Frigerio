@@ -21,10 +21,10 @@ public class TestCard4ColumnShadeVariety {
     private Die die;
     private ArrayList<Integer> columnNum;
     private PublicObjective card;
+    private BoardList BoardList = new BoardList();
 
     @Before
     public void setUp() {
-        BoardList.loadJSONBoards();
         columnNum = new ArrayList<>();
         card = card = PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.SFUMATUREDIVERSECOLONNA);
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));

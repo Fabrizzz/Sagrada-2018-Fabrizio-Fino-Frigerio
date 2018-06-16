@@ -15,11 +15,8 @@ import static org.junit.Assert.*;
 
 public class TestPlayerBoard {
     private PlayerBoard playerBoard;
+    private BoardList BoardList = new BoardList();
 
-    @Before
-    public void init(){
-        BoardList.loadJSONBoards();
-    }
 
     @Test
     public void testGetDie(){
