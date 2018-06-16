@@ -101,10 +101,8 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
 
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in PENNELLOPERPASTASALDA");
-                e.printStackTrace();
             } catch (AlredySetDie alredySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in PENNELLOPERPASTASALDA");
-                alredySetDie.printStackTrace();
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' PENNELLOPERPASTASALDA, passaggio responsabilita' all'handler successivo");

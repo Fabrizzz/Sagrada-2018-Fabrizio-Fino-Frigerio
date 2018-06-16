@@ -12,6 +12,8 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class TaglierinaCircolareHandler extends ToolHandler {
 
     @Override
@@ -24,10 +26,12 @@ public class TaglierinaCircolareHandler extends ToolHandler {
         int roundTrackPosition;
 
         if (playerMove.getTool() == Tool.TAGLIERINACIRCOLARE) {
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa TAGLIERINACIRCOLARE");
             if (!playerMove.getRoundTrackPosition().isPresent() || !playerMove.getRoundTrackRound().isPresent() ||
-                    !playerMove.getDraftPosition().isPresent())
+                    !playerMove.getDraftPosition().isPresent()) {
+                LOGGER.log(Level.SEVERE,"Errore parametri TAGLIERINACIRCOLARE");
                 throw new InvalidParameterException();
-
+            }
             roundTrack = model.getRoundTrack();
             draftPool = model.getDraftPool();
             draftPoolPosition = playerMove.getDraftPosition().get();
@@ -35,9 +39,10 @@ public class TaglierinaCircolareHandler extends ToolHandler {
             roundTrackPosition = playerMove.getRoundTrackPosition().get();
 
 
-            if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || roundTrackPosition >= roundTrack.numberOfDice(roundTrackRound))
+            if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || roundTrackPosition >= roundTrack.numberOfDice(roundTrackRound)) {
+                LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAGLIERINACIRCOLARE");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-            else try {
+            } else try {
                 Die roundTrackDie = roundTrack.getDie(roundTrackRound, roundTrackPosition);
                 Die draftPoolDie = draftPool.getDie(draftPoolPosition);
 
@@ -48,9 +53,12 @@ public class TaglierinaCircolareHandler extends ToolHandler {
                 completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                 nextHandler.process(playerMove, remoteView, model);
             } catch (NoDieException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Dado non presente in TAGLIERINACIRCOLARE");
             }
-        } else
+        } else {
+            LOGGER.log(Level.FINEST, "La mossa non e' TAGLIERINACIRCOLARE, passaggio responsabilita' all'handler successivo");
             nextHandler.process(playerMove, remoteView, model);
+        }
+
     }
 }

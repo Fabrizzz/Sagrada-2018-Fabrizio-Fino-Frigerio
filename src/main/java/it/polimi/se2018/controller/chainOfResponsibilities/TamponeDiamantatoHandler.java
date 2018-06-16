@@ -10,6 +10,8 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class TamponeDiamantatoHandler extends ToolHandler {
 
 
@@ -19,23 +21,29 @@ public class TamponeDiamantatoHandler extends ToolHandler {
         int row, column;
         PlayerBoard playerBoard;
         if (playerMove.getTool() == Tool.TAMPONEDIAMANTATO) {
-            if (!playerMove.getColumn().isPresent() || !playerMove.getRow().isPresent())
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa TAMPONEDIAMANTATO");
+            if (!playerMove.getColumn().isPresent() || !playerMove.getRow().isPresent()){
+                LOGGER.log(Level.SEVERE,"Errore parametri TAMPONEDIAMANTATO");
                 throw new InvalidParameterException();
+            }
+
             row = playerMove.getRow().get();
             column = playerMove.getColumn().get();
             playerBoard = model.getBoard(remoteView.getPlayer());
-            if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || !playerBoard.containsDie(row, column))
+            if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || !playerBoard.containsDie(row, column)){
+                LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAMPONEDIAMANTATO");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-            else {
+            } else {
                 try {
                     playerBoard.getDie(row, column).flip();
                     completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                     nextHandler.process(playerMove, remoteView, model);
                 } catch (NoDieException e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, "Dado non presente in TAMPONEDIAMANTATO");
                 }
             }
         } else {
+            LOGGER.log(Level.FINEST, "La mossa non e' TAMPONEDIAMANTATO, passaggio responsabilita' all'handler successivo");
             nextHandler.process(playerMove, remoteView, model);
         }
     }

@@ -26,6 +26,7 @@ import java.util.logging.*;
  */
 public class ServerNetwork implements Observer {
     private static final Logger LOGGER = Logger.getLogger("Logger");
+
     private Map<Long, RemoteView> playingConnections = new HashMap<>();
     private Map<Long, RemoteView> waitingConnections = new HashMap<>();
     private ExecutorService executor = Executors.newCachedThreadPool();

@@ -12,6 +12,8 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class RigaInSugheroHandler extends ToolHandler {
 
     @Override
@@ -24,8 +26,11 @@ public class RigaInSugheroHandler extends ToolHandler {
         Die die;
 
         if (playerMove.getTool() == Tool.RIGAINSUGHERO) {
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent())
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa RIGAINSUGHERO");
+            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent()) {
+                LOGGER.log(Level.SEVERE,"Errore parametri RIGAINSUGHERO");
                 throw new InvalidParameterException();
+            }
             try {
                 board = model.getBoard(remoteView.getPlayer());
                 row = playerMove.getRow().get();
@@ -39,10 +44,10 @@ public class RigaInSugheroHandler extends ToolHandler {
                                 !board.verifyColorRestriction(die, row, column) ||
                                 !board.verifyNumberRestriction(die, row, column) ||
                                 !board.verifyNearCellsRestriction(die, row, column) ||
-                                board.verifyPositionRestriction(row, column))
-
+                                board.verifyPositionRestriction(row, column)) {
+                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare RIGAINSUGHERO");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-                else {
+                } else {
 
                     board.setDie(die, row, column);
                     model.getDraftPool().removeDie(die);
@@ -51,11 +56,13 @@ public class RigaInSugheroHandler extends ToolHandler {
 
                 }
             } catch (NoDieException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Dado non presente in RIGAINSUGHERO");
             } catch (AlredySetDie alredySetDie) {
-                alredySetDie.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Dado gia' presente in RIGAINSUGHERO");
             }
-        } else
+        } else {
+            LOGGER.log(Level.FINEST, "La mossa non e' RIGAINSUGHERO, passaggio responsabilita' all'handler successivo");
             this.nextHandler.process(playerMove, remoteView, model);
+        }
     }
 }

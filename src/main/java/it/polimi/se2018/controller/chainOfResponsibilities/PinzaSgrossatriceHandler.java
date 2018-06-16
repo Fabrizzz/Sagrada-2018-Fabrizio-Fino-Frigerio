@@ -55,7 +55,6 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
 
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in PINZASGROSSATRICE");
-                e.printStackTrace();
             }
 
         } else{

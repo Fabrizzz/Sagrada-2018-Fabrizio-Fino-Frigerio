@@ -12,14 +12,18 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class Tool4_12Handler extends ToolHandler {
 
     Tool tool;
 
     public Tool4_12Handler(Tool tool) {
         this.tool = tool;
-        if (tool != Tool.LATHEKIN && tool != Tool.TAGLIERINAMANUALE)
+        if (tool != Tool.LATHEKIN && tool != Tool.TAGLIERINAMANUALE){
+            LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");
             throw new IllegalArgumentException();
+        }
     }
 
     @Override
@@ -37,11 +41,13 @@ public class Tool4_12Handler extends ToolHandler {
         PlayerMove playerMove2;
 
         if (playerMove.getTool() == Tool.LATHEKIN || playerMove.getTool() == Tool.TAGLIERINAMANUALE) {
-
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa LATHEKIN TAGLIERINAMANUALE");
             if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() ||
                     !playerMove.getFinalRow().isPresent() || !playerMove.getFinalColumn().isPresent() ||
-                    (!playerMove.getNextMove().isPresent() && tool == Tool.LATHEKIN))
+                    (!playerMove.getNextMove().isPresent() && tool == Tool.LATHEKIN)){
+                LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");
                 throw new InvalidParameterException();
+            }
 
             firstRow = playerMove.getRow().get();
             firstColumn = playerMove.getColumn().get();
@@ -51,8 +57,10 @@ public class Tool4_12Handler extends ToolHandler {
             if (playerMove.getNextMove().isPresent()) {
                 playerMove2 = playerMove.getNextMove().get();
                 if (!playerMove2.getRow().isPresent() || !playerMove2.getColumn().isPresent() ||
-                        !playerMove2.getFinalRow().isPresent() || !playerMove2.getFinalColumn().isPresent())
+                        !playerMove2.getFinalRow().isPresent() || !playerMove2.getFinalColumn().isPresent()){
+                    LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");
                     throw new InvalidParameterException();
+                }
 
                 secondRow = playerMove2.getRow().get();
                 secondColumn = playerMove2.getColumn().get();
@@ -60,8 +68,10 @@ public class Tool4_12Handler extends ToolHandler {
                 secondFinalRow = playerMove2.getFinalRow().get();
 
                 if (secondColumn < 0 || secondColumn > 4 || secondRow < 0 || secondRow > 3 ||
-                        secondFinalColumn < 0 || secondFinalColumn > 4 || secondFinalRow < 0 || secondFinalRow > 3)
+                        secondFinalColumn < 0 || secondFinalColumn > 4 || secondFinalRow < 0 || secondFinalRow > 3){
+                    LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");
                     throw new InvalidParameterException();
+                }
             }
             board = model.getBoard(remoteView.getPlayer());
 
@@ -109,18 +119,19 @@ public class Tool4_12Handler extends ToolHandler {
                     }
                     nextHandler.process(playerMove, remoteView, model);
 
-                } else
+                } else{
+                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare LATHEKIN TAGLIERINAMANUALE");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-
-
+                }
             } catch (AlredySetDie alredySetDie) {
-                alredySetDie.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Dado gia' presente in LATHEKIN TAGLIERINAMANUALE");
             } catch (NoDieException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Dado non presente in LATHEKIN TAGLIERINAMANUALE");
             }
-        } else
+        } else{
+            LOGGER.log(Level.FINEST, "La mossa non e' LATHEKIN TAGLIERINAMANUALE, passaggio responsabilita' all'handler successivo");
             nextHandler.process(playerMove, remoteView, model);
-
+        }
     }
 }
 
