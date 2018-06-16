@@ -19,11 +19,9 @@ public class Controller implements Observer {
     private Handler firstHandler;
     private RemoteView views;
     private Timer timer = new Timer();
-    private BoardList boardList;
+    private BoardList boardList = new BoardList();
 
-    public Controller() {
-        boardList = new BoardList();
-    }
+    public Controller() {}
 
 
     public List<Board> getBoards() {
