@@ -90,7 +90,7 @@ public class Controller implements Observer {
             temp.setNextHandler(ToolFactory.createLastHandler());
             ModelView modelView = new ModelView(model);
             model.addObserver(modelView);
-            System.out.println("Prova5");
+            
             for (RemoteView view : views) {
                 modelView.addObserver(view);
                 view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, modelView));
@@ -100,7 +100,7 @@ public class Controller implements Observer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Prova6");
+
     }
 
     private Model getModel() {
