@@ -1,5 +1,7 @@
 package it.polimi.se2018.server;
 
+import it.polimi.se2018.utils.InputUtils;
+
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
@@ -39,37 +41,26 @@ public class Server {
         handlerObj.setLevel(Level.SEVERE);
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
-        Scanner scanner = new  Scanner(System.in);
         int start = 0;
         int port = 0;
 
         do{
             do {
                 System.out.println("Inserire la porta: ");
-                if(scanner.hasNextInt()) {
-                    port = scanner.nextInt();
-                }else{
-                    scanner.next();
-                    System.out.println("Input non corretto");
-                }
+                port = InputUtils.getInt();
             }while(!available(port));
 
             new ServerNetwork().start(port);
             do{
                 System.out.println("Premi 1 per avviare una nuova istanza del server");
-                if(scanner.hasNextInt()) {
-                    start = scanner.nextInt();
-                }else{
-                    scanner.next();
-                    System.out.println("Input non corretto");
-                }
+                start = InputUtils.getInt();
             }while(start != 1);
             port = 0;
             start = 0;
         }while(true);
     }
 
-    private boolean available(int port) {
+    public static boolean available(int port) {
         if (port < 1000 || port > 65535) {
             System.out.println("Porta non in range(1000-65535)");
             return false;

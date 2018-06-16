@@ -2,10 +2,9 @@ package it.polimi.se2018;
 
 import it.polimi.se2018.client.Client;
 import it.polimi.se2018.server.Server;
+import it.polimi.se2018.utils.InputUtils;
 
-import java.io.IOException;
 import java.util.Scanner;
-import java.util.logging.*;
 
 
 public class App {
@@ -16,12 +15,7 @@ public class App {
         System.out.println("2) Server");
         int i = 0;
         do{
-            if(input.hasNextInt()) {
-                i = input.nextInt();
-            }else{
-                input.next();
-                System.out.println("Input non corretto");
-            }
+            i = InputUtils.getInt();
         }while(i < 1 || i > 2);
 
         if(i == 1){

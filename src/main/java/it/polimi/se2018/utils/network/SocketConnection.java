@@ -96,7 +96,7 @@ public class SocketConnection extends Connection implements Runnable {
         while (connected) {
             try{
                 message = (Message) in.readObject();
-                System.out.println("Messaggio ricevuto");
+                LOGGER.log(Level.FINE,"Messaggio ricevuto");
                 setChanged();
                 notifyObservers(message);
 

@@ -5,6 +5,8 @@ import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.NumberRestriction;
+import it.polimi.se2018.server.Server;
+import it.polimi.se2018.utils.InputUtils;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.enums.NumberEnum;
@@ -23,7 +25,6 @@ import java.util.regex.Pattern;
 public class CLI extends View{
     private final String ANSI_RESET = "\u001B[0m";
     private Map<Color,String> colorMap = new HashMap<>();
-    private Scanner input;
     private ModelView modelView;
     private Long localID;
 
@@ -31,7 +32,6 @@ public class CLI extends View{
      * Constructor
      */
     public CLI(){
-        input = new Scanner(System.in);
         colorMap.put(Color.BLUE,"\u001B[34m");
         colorMap.put(Color.RED,"\u001B[31m");
         colorMap.put(Color.GREEN, "\u001B[32m");
@@ -157,12 +157,12 @@ public class CLI extends View{
         showRoundTrack();
         System.out.println("Inserisci il numero del round: ");
         do {
-            position[0] = input.nextInt();
+            position[0] = InputUtils.getInt();
         }while (position[0] > 0 && position[0] < modelView.getRound());
 
         System.out.println("Inserisci la posizione del dado: ");
         do {
-            position[1] = input.nextInt();
+            position[1] = InputUtils.getInt();
         }while (position[1] > 0 && position[1] < modelView.getRoundTrack().numberOfDice(position[0] - 1));
 
         position[0] --;
@@ -179,10 +179,10 @@ public class CLI extends View{
         System.out.println("Scegli il dado dalla riserva");
         showDraftPool();
         System.out.println("Inserisci la posizione del dado scelto:");
-        int i = input.nextInt();
+        int i = InputUtils.getInt();
         while (i < 1 || i > modelView.DraftPoolSize()) {
             System.out.println("Errore, inserisci una posizione corretta");
-            i = input.nextInt();
+            i = InputUtils.getInt();
         }
         return i - 1;
 
@@ -199,17 +199,17 @@ public class CLI extends View{
         do {
             showBoard(modelView.getBoard(modelView.getPlayer(localID)));
             System.out.println("Inserisci l'indice di riga: ");
-            position[0] = input.nextInt();
+            position[0] = InputUtils.getInt();
             while (position[0] < 1 || position[0] > 4) {
                 System.out.println("Errore, inserisci un indice corretto");
-                position[0] = input.nextInt();
+                position[0] = InputUtils.getInt();
             }
 
             System.out.println("Inserisci l'indice di colonna: ");
-            position[1] = input.nextInt();
+            position[1] = InputUtils.getInt();
             while (position[1] < 1 || position[1] > 5) {
                 System.out.println("Errore, inserisci un indice corretto");
-                position[1] = input.nextInt();
+                position[1] = InputUtils.getInt();
             }
             if(withDie){
                 if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0] - 1,position[1] - 1)){
@@ -322,7 +322,7 @@ public class CLI extends View{
             int scelta = 3;
             while(scelta != 0 && scelta != 1){
                 System.out.println("Inserisci 0 per diminuire il valore del dado selezionato, 1 per aumentare il valore del dado");
-                scelta = input.nextInt();
+                scelta = InputUtils.getInt();
             }
 
             Boolean aumento = false;
@@ -362,7 +362,7 @@ public class CLI extends View{
             System.out.println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
             int scelta = 2;
             do{
-                scelta = input.nextInt();
+                scelta = InputUtils.getInt();
             }while(scelta != 0 || scelta != 1);
 
             if(scelta == 1) {
@@ -461,7 +461,7 @@ public class CLI extends View{
         System.out.print("Scelta: ");
         int i = 3;
         do{
-            i = input.nextInt();
+            i = InputUtils.getInt();
         }while(i < 0 || i > 9);
         System.out.println("");
 
@@ -479,7 +479,7 @@ public class CLI extends View{
                 System.out.println("Carta strumento scelta: ");
                 int k = 4;
                 do{
-                    k = input.nextInt();
+                    k = InputUtils.getInt();
                 }while(k < 1 || k > 3);
 
                 move((Tool) modelView.getTools().keySet().toArray()[k]);
@@ -564,7 +564,7 @@ public class CLI extends View{
                 System.out.println("Inserisci il numero della plancia scelta: ");
                 int j = 0;
                 do{
-                    j = input.nextInt();
+                    j = InputUtils.getInt();
                 }while(j < 1 || j > ((SelectBoardMessage) arg).getBoards().length);
 
                 setChanged();
@@ -597,7 +597,7 @@ public class CLI extends View{
         System.out.println("2) RMI");
         int i = 0;
         do{
-            i = input.nextInt();
+            i = InputUtils.getInt();
         }while(i < 1 || i > 2);
 
         String address = "";
@@ -607,7 +607,7 @@ public class CLI extends View{
                 boolean prova = true;
                 Pattern pattern = Pattern.compile("((2[0-4]\\d|25[0-5]|[01]?\\d?\\d)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d?\\d)");
                 while (prova) {
-                    address = input.next();
+                    address = InputUtils.getString();
                     if (pattern.matcher(address).matches())
                         prova = false;
                     else
@@ -618,12 +618,8 @@ public class CLI extends View{
                 if (i == 1) {
                     do {
                         System.out.println("Inserisci la porta: ");
-                        if(input.hasNextInt()) {
-                            port = input.nextInt();
-                        }else{
-                            input.next();
-                        }
-                    }while(port == 0);
+                        port = InputUtils.getInt();
+                    }while(Server.available(port));
                     if(!clientNetwork.connectSocket(address, port)){
                         System.out.println("Connessione fallita");
                     }
@@ -637,7 +633,7 @@ public class CLI extends View{
         String nick;
         System.out.println("Inserisci il tuo nome: ");
         do{
-            nick = input.next();
+            nick = InputUtils.getString();
         } while (nick.isEmpty());
 
 
@@ -650,9 +646,6 @@ public class CLI extends View{
         }else{
             System.out.println("Errore connessione");
         }
-
-        //ClientMessage testMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
-        //clientNetwork.sendMessage(testMessage);
     }
 
     public Long readID(){
