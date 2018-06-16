@@ -16,7 +16,7 @@ import java.util.Observer;
  * ModelView
  * @author Giampietro
  */
-public class ModelView implements Observer, Serializable {
+public class ModelView extends Observable implements Observer, Serializable {
 
     private final Map<Tool, Boolean> tools;
     private final List<PublicObjective> publicObjective;
@@ -93,14 +93,14 @@ public class ModelView implements Observer, Serializable {
         }
     }
 
+
+    //da cambiare!!!
     @Override
     public void update(Observable o, Object arg) {
         Model model = (Model) o;
-        round = model.getRound();
-        firstTurn = model.isFirstTurn();
-        usedTool = model.hasUsedTool();
-        normalMove = model.hasUsedNormalMove();
-
+        ModelView modelView = new ModelView(model);
+        setChanged();
+        notifyObservers(modelView);
     }
 
     /**
