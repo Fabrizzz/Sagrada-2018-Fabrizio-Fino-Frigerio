@@ -16,14 +16,6 @@ import java.util.logging.Logger;
 public final class BoardList {
 
     public BoardList(){
-        loadJSONBoards();
-    }
-
-    private ArrayList<Board[]> boardList = new ArrayList<Board[]>();
-    private static final Logger LOGGER = Logger.getLogger("Logger");
-
-
-    private void loadJSONBoards(){
         JSONParser parser = new JSONParser();
         try {
 
@@ -45,7 +37,7 @@ public final class BoardList {
                     for(int k = 0; k < 4; k++){
                         row = (JSONArray)((JSONArray) board.get("mappa")).get(k);
                         for(int l = 0; l < 5; l++){
-                           restrictions.add(((String) row.get(l)));
+                            restrictions.add(((String) row.get(l)));
                         }
                         coppiaBoard[j] = new Board((String) board.get("name"),(int) (long) board.get("difficulty"),restrictions);
                     }
@@ -60,6 +52,10 @@ public final class BoardList {
             LOGGER.log(Level.SEVERE,"Errore parsing mappe.json");
         }
     }
+
+    private ArrayList<Board[]> boardList = new ArrayList<Board[]>();
+    private static final Logger LOGGER = Logger.getLogger("Logger");
+
 
     public Board[] getCouple(){
         if(boardList.isEmpty()){
