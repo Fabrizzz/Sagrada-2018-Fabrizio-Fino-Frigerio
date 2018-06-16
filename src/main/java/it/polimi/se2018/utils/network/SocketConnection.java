@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Observable;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,6 +100,7 @@ public class SocketConnection extends Connection implements Runnable {
 
             }catch (IOException | ClassNotFoundException e){
                 LOGGER.log(Level.INFO,"Errore ricezione oggetto");
+                e.printStackTrace();
                 close();
             }
 

@@ -48,4 +48,5 @@ public class GUIProxy extends View {
     public void connectionClosed() {
 
     }
+
 }

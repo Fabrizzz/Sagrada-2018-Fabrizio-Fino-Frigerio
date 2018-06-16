@@ -5,7 +5,6 @@ import it.polimi.se2018.utils.InputUtils;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
-import java.util.Scanner;
 import java.util.logging.*;
 
 /**
@@ -41,23 +40,22 @@ public class Server {
         handlerObj.setLevel(Level.SEVERE);
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
-        int start = 0;
-        int port = 0;
+        int start;
+        int port;
 
-        do{
+
             do {
                 System.out.println("Inserire la porta: ");
                 port = InputUtils.getInt();
             }while(!available(port));
 
             new ServerNetwork().start(port);
-            do{
+            /*do{
                 System.out.println("Premi 1 per avviare una nuova istanza del server");
                 start = InputUtils.getInt();
-            }while(start != 1);
-            port = 0;
-            start = 0;
-        }while(true);
+            }while(start != 1);*/
+
+
     }
 
     public static boolean available(int port) {

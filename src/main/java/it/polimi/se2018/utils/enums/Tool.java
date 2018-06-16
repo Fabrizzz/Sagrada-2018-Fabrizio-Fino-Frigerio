@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 //aggiungere le description
 public enum Tool {
-    MOSSASTANDARD("Mossa Standard", ""),
     PINZASGROSSATRICE("Pinza Sgrossatrice", "Dopo aver scelto un dado, aumenta o diminuisci il valore del dado scelto di 1\n" +
             "Non puoi cambiare un 6 in 1 o un 1 in 6"),
     PENNELLOPEREGLOMISE("Pennello Per Eglomise", "Muovi un qualsiasi dado nella tua vetrata ignorando le restrizioni di colore\n" +
@@ -28,6 +27,7 @@ public enum Tool {
             "Scegli il valore del nuovo dado e piazzalo, rispettando tutte le restrizioni di piazzamento"),
     TAGLIERINAMANUALE("Taglierina Manuale", "Muovi fino a due dadi dello stesso colore di un solo dado sul Tracciato dei Round\n" +
             "Devi rispettare tutte le restrizioni di piazzamento"),
+    MOSSASTANDARD("Mossa Standard", ""),
     SKIPTURN("Salta il turno", "");
 
     private String toolName;
@@ -39,7 +39,7 @@ public enum Tool {
     }
 
     public static List<Tool> getRandTools(int n) {
-        List<Tool> tools = Arrays.asList(Tool.values());
+        List<Tool> tools = Arrays.asList(Tool.values()).subList(0, 12);
         Collections.shuffle(tools);
         return tools.subList(0, n);
     }

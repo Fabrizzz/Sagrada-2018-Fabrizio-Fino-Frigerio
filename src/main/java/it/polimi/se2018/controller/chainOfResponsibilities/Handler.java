@@ -13,8 +13,13 @@ public abstract class Handler {
     protected Handler nextHandler;
     protected static final Logger LOGGER = Logger.getLogger("Logger");
 
-    public void setNextHandler(Handler handler) {
+    protected Handler() {
+
+    }
+
+    public Handler setNextHandler(Handler handler) {
         nextHandler = handler;
+        return nextHandler;
     }
 
     public abstract void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException;

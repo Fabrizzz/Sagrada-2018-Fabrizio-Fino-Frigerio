@@ -8,14 +8,18 @@ import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.server.Server;
 import it.polimi.se2018.utils.InputUtils;
 import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.NoDieException;
-import it.polimi.se2018.utils.messages.*;
+import it.polimi.se2018.utils.messages.ClientMessage;
+import it.polimi.se2018.utils.messages.PlayerMove;
+import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 /**
@@ -529,16 +533,17 @@ public class CLI extends View{
     }
     @Override
     public void update(Observable o, Object arg) {
-        switch (((ServerMessage) arg).getMessageType()){
+        ServerMessage message = (ServerMessage) arg;
+        switch (message.getMessageType()) {
             case ERROR:
-                System.out.println("Errore: " + ((ServerMessage) arg).getErrorType().toString());
+                System.out.println("Errore: " + message.getErrorType().toString());
                 if(modelView.getPlayer(localID).isYourTurn()){
                     System.out.println("Mossa inviata non valida, ripeti la scelta");
                     chooseMove();
                 }
                 break;
             case INITIALCONFIGSERVER:
-                this.modelView = ((ServerMessage) arg).getModelView();
+                this.modelView = message.getModelView();
 
                 System.out.println("La tua board");
                 showBoard(modelView.getBoard(modelView.getPlayer(localID)));
@@ -556,19 +561,19 @@ public class CLI extends View{
                 break;
             case BOARDTOCHOOSE:
                 System.out.println("Scegli la tua plancia di gioco");
-                for(int i = 0; i < ((SelectBoardMessage) arg).getBoards().length; i ++){
+                for (int i = 0; i < message.getBoards().length; i++) {
                     System.out.println("Plancia " + (i+1));
-                    showBoard(new PlayerBoard(((SelectBoardMessage) arg).getBoards()[i]));
+                    showBoard(new PlayerBoard(message.getBoards()[i]));
                 }
 
                 System.out.println("Inserisci il numero della plancia scelta: ");
-                int j = 0;
+                int j;
                 do{
                     j = InputUtils.getInt();
-                }while(j < 1 || j > ((SelectBoardMessage) arg).getBoards().length);
+                } while (j < 1 || j > message.getBoards().length);
 
                 setChanged();
-                notifyObservers(new ChosenBoardMessage(MessageType.CHOSENBOARD,new PlayerBoard(((SelectBoardMessage) arg).getBoards()[j])));
+                notifyObservers(new ClientMessage(message.getBoards()[j - 1]));
                 break;
             case MODELVIEWUPDATE:
                 modelView = new ModelView(modelView, ((ServerMessage) arg).getModelView());

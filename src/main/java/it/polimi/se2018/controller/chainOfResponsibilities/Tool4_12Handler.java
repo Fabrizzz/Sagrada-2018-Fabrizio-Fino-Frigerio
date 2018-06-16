@@ -18,7 +18,7 @@ public class Tool4_12Handler extends ToolHandler {
 
     Tool tool;
 
-    public Tool4_12Handler(Tool tool) {
+    protected Tool4_12Handler(Tool tool) {
         this.tool = tool;
         if (tool != Tool.LATHEKIN && tool != Tool.TAGLIERINAMANUALE){
             LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");

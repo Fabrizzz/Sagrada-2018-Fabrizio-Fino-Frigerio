@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class Tool2_3Handler extends ToolHandler {
     Tool toolname;
 
-    public Tool2_3Handler(Tool toolname) {
+    protected Tool2_3Handler(Tool toolname) {
         this.toolname = toolname;
         if (toolname != Tool.PENNELLOPEREGLOMISE && toolname != Tool.ALESATOREPERLAMINADIRAME){
             LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");

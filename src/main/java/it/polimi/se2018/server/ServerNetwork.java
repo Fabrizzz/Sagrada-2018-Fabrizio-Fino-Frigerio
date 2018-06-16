@@ -10,7 +10,6 @@ import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.network.Connection;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -18,7 +17,8 @@ import java.rmi.registry.LocateRegistry;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Manages the connections with the clients
@@ -38,7 +38,7 @@ public class ServerNetwork implements Observer {
         executor.submit(new SocketConnectionGatherer(this, port));
 
         try {
-            LocateRegistry.createRegistry(port+1);
+            LocateRegistry.createRegistry(1099);
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE,"Errore creazione registry, porta gia' in uso o rmiregistry non avviato");
         }
@@ -49,6 +49,7 @@ public class ServerNetwork implements Observer {
         } catch (MalformedURLException e) {
             LOGGER.log(Level.SEVERE,"Impossibile registrare l'oggetto indicato!");
         } catch (RemoteException e) {
+            e.printStackTrace();
             LOGGER.log(Level.SEVERE,"Errore inizializzazione rmi");
         }
     }
@@ -69,6 +70,7 @@ public class ServerNetwork implements Observer {
     }
 
     public synchronized void timerScaduto(int games) {
+        System.out.println("Timer scaduto");
         if (getGames() == games) {
             LOGGER.log(Level.FINE,"Timer scaduto, inizializzazione gioco");
             initializeGame();
@@ -90,7 +92,7 @@ public class ServerNetwork implements Observer {
             waitingConnections.put(message.getId(), remoteView);
             if (waitingConnections.size() == 2) {
                 LOGGER.log(Level.FINE,"Avviato timer avvio partita, tempo rimanente 60s");
-                timer.schedule(new ConnectionTimer(this, getGames()), (long) 60 * 1000);
+                timer.schedule(new ConnectionTimer(this, getGames()), (long) 10 * 1000);
             } else if (waitingConnections.size() == 4) {
                 LOGGER.log(Level.FINE,"Numero massimo di giocatori raggiunto, avvio inizializzazione");
                 initializeGame();

@@ -1,14 +1,14 @@
 package it.polimi.se2018.utils.messages;
 
+import it.polimi.se2018.model.Board;
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
 
 public class ServerMessage extends Message {
-
-    private MessageType messageType;
     private ErrorType errorType;
     private ModelView modelView;
+    private Board[] boards;
 
 
     public ServerMessage(ErrorType errorType) {
@@ -21,11 +21,21 @@ public class ServerMessage extends Message {
         this.modelView = modelView;
     }
 
+    public ServerMessage(Board[] boards) {
+        super(MessageType.BOARDTOCHOOSE);
+        this.boards = boards;
+
+    }
+
     public ErrorType getErrorType(){
         return errorType;
     }
 
     public ModelView getModelView() {
         return modelView;
+    }
+
+    public Board[] getBoards() {
+        return boards;
     }
 }

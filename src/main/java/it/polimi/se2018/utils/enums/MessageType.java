@@ -7,5 +7,6 @@ public enum MessageType {
     INITIALCONFIGSERVER,
     MODELVIEWUPDATE,
     BOARDTOCHOOSE,
-    ERROR;
+    ERROR,
+    HASDISCONNECTED;
 }
