@@ -39,7 +39,7 @@ public class RemoteView extends Observable implements Observer {
     }
 
     public void sendBack(Message message) {
-        LOGGER.log(Level.FINE,"Invio messaggio");
+        LOGGER.log(Level.FINE,"Invio messaggio dalla remoteview");
         connection.sendMessage(message);
 
     }
@@ -64,9 +64,9 @@ public class RemoteView extends Observable implements Observer {
 
 
     private class MessageReceiver implements Observer {
-
         @Override
         public void update(Observable o, Object arg) {
+            LOGGER.log(Level.INFO,"Messaggio ricevuto dal MessageReciver remoteView");
             process((ClientMessage) arg);
 
         }

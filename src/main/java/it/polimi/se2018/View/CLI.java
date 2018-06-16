@@ -673,7 +673,7 @@ public class CLI extends View{
             }catch (Exception e){}
         }
 
-        return writeID(generateID());
+        return generateID();//writeID(generateID());
     }
 
     public Long writeID(Long id){

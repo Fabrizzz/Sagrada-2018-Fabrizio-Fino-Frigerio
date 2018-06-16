@@ -4,13 +4,15 @@ import it.polimi.se2018.utils.messages.Message;
 
 import java.rmi.RemoteException;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class rapresenting the rmi connection from the server to the rmiInterface
  * @author Alessio
  */
 public class RMIConnection extends Connection implements RMIInterface {
-
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private RMIInterface rmiInterface;
     private boolean isConnected = true;
 
@@ -39,12 +41,15 @@ public class RMIConnection extends Connection implements RMIInterface {
     public boolean sendMessage(Message message) {
         if (isConnected())
             try {
+                LOGGER.log(Level.FINE,"Invio messaggio");
                 rmiInterface.remoteSend(message);
+                LOGGER.log(Level.FINE,"Messaggio inviato");
                 return true;
             }catch (RemoteException e){
+                LOGGER.log(Level.INFO,"Remote exception invio messaggio rmi");
                 close();
             }
-            return false;
+        return false;
     }
 
     /**
@@ -67,12 +72,18 @@ public class RMIConnection extends Connection implements RMIInterface {
 
     @Override
     public void remoteSend(Message message) throws RemoteException {
+        LOGGER.log(Level.FINE,"Remote message ricevuto");
         setChanged();
-        notifyObservers(message);
+        new Thread() {
+            public void run() {
+                notifyObservers(message);
+            }}.start();
+
     }
 
 
     public void update(Observable o, Object arg) {
+        LOGGER.log(Level.FINE,"update messaggio dalla view");
         sendMessage((Message) arg);
     }
 }

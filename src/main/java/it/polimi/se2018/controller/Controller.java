@@ -20,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
+
 public class Controller implements Observer {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
@@ -51,15 +53,22 @@ public class Controller implements Observer {
             throw new IllegalArgumentException();
 
         this.views = new ArrayList<>(views);
-        this.views.stream().forEach(k -> k.addObserver(this));
-        this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
+        for(int i = 0; i < this.views.size(); i++){
+            this.views.get(i).addObserver(this);
+        }
+
+        for(int i = 0; i < this.views.size(); i++){
+            LOGGER.log(Level.FINE,"Invio messaggio board");
+            this.views.get(i).sendBack(new ServerMessage(getBoards()));
+        }
+
+        //this.views.stream().forEach(k -> k.addObserver(this));
+        //this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
         try {
+            LOGGER.log(Level.INFO,"Attendo board");
             while (choosenBoards.size() < views.size())
                 wait();
-
-
-            LOGGER.log(Level.INFO, "Avvio gioco");
-
+            LOGGER.log(Level.INFO,"Avvio gioco");
             List publicObjectiveNames = Arrays.asList(PublicObjectiveName.values());
             Collections.shuffle(publicObjectiveNames);
             List<PublicObjective> publicObjectives = new ArrayList<>();
@@ -77,6 +86,7 @@ public class Controller implements Observer {
             for (Tool tool : tools) {
                 temp = temp.setNextHandler(ToolFactory.createToolHandler(tool));
             }
+            temp = temp.setNextHandler(ToolFactory.createToolHandler(Tool.MOSSASTANDARD));
             temp.setNextHandler(ToolFactory.createLastHandler());
             ModelView modelView = new ModelView(model);
             model.addObserver(modelView);
@@ -99,10 +109,12 @@ public class Controller implements Observer {
 
     public synchronized void timerScaduto(int turn, int round) {
         LOGGER.log(Level.FINE,"Timer scaduto");
+
         if (model.getTurn() == turn && model.getRound() == round) {
             model.nextTurn();
             setTimer(model.getTurn(), model.getRound());
         }
+
     }
 
     public void setTimer(int turn, int round) {
