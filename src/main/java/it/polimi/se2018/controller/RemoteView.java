@@ -3,8 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.enums.MessageType;
+import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.Message;
-import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 import it.polimi.se2018.utils.network.Connection;
 
@@ -24,7 +24,8 @@ public class RemoteView extends Observable implements Observer {
         LOGGER.log(Level.FINE,"RemoteView creata");
         this.player = player;
         this.connection = connection;
-        connection.addObserver(this);
+        connection.addObserver(new MessageReceiver());
+
     }
 
     public void changeConnection(Connection connection) {
@@ -40,7 +41,7 @@ public class RemoteView extends Observable implements Observer {
     public void sendBack(Message message) {
         LOGGER.log(Level.FINE,"Invio messaggio");
         connection.sendMessage(message);
-        // da scrivere
+
     }
 
     public boolean isConnected() {
@@ -56,14 +57,17 @@ public class RemoteView extends Observable implements Observer {
         sendBack(new ServerMessage(MessageType.MODELVIEWUPDATE, modelView));
     }
 
+    public void process(ClientMessage message) {
+        setChanged();
+        notifyObservers(message);
+    }
+
 
     private class MessageReceiver implements Observer {
 
         @Override
         public void update(Observable o, Object arg) {
-
-            PlayerMove playerMove = (PlayerMove) arg;
-            notifyObservers(playerMove);
+            process((ClientMessage) arg);
 
         }
 
