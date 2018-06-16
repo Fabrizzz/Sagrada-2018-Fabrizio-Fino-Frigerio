@@ -5,10 +5,13 @@ import it.polimi.se2018.model.Model;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 
+import java.util.logging.Logger;
+
 
 public abstract class Handler {
 
     protected Handler nextHandler;
+    protected static final Logger LOGGER = Logger.getLogger("Logger");
 
     public void setNextHandler(Handler handler) {
         nextHandler = handler;

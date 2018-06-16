@@ -7,6 +7,8 @@ import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Dice bag
@@ -14,6 +16,7 @@ import java.util.LinkedList;
  */
 public class DiceBag implements Serializable {
     private LinkedList<Die> bag = new LinkedList<>();
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
      * Constructor
@@ -26,6 +29,7 @@ public class DiceBag implements Serializable {
             }
         }
         Collections.shuffle(bag);
+        LOGGER.log(Level.FINE,"Dadi creati e mischiati, " + n + " dadi per colore");
     }
 
     /**
@@ -33,8 +37,10 @@ public class DiceBag implements Serializable {
      * @return die draw
      */
     public Die takeDie() {
-        if (bag.isEmpty())
+        if (bag.isEmpty()) {
+            LOGGER.log(Level.INFO, "Sacchetto dei dadi vuoto");
             throw new EmptyBagException();
+        }
         return bag.poll();
     }
 

@@ -9,6 +9,8 @@ import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class MartellettoHandler extends ToolHandler {
 
     @Override
@@ -17,15 +19,19 @@ public class MartellettoHandler extends ToolHandler {
         DraftPool draftPool;
 
         if (playerMove.getTool() == Tool.MARTELLETTO) {
-            if (model.isFirstTurn() || model.hasUsedNormalMove() || cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()))
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa MARTELLETTO");
+            if (model.isFirstTurn() || model.hasUsedNormalMove() || cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
+                LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare la mossa MARTELLETTO");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-            else {
+            } else {
                 draftPool = model.getDraftPool();
                 draftPool.reRollDice();
                 completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                 nextHandler.process(playerMove, remoteView, model);
             }
-        } else
+        } else{
+            LOGGER.log(Level.FINEST,"La mossa non e' MARTELLETTO, passaggio responsabilita' all'handler successivo");
             nextHandler.process(playerMove, remoteView, model);
+        }
     }
 }

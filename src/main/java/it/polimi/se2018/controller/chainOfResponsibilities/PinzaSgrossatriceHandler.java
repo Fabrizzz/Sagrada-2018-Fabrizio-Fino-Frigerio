@@ -12,6 +12,8 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class PinzaSgrossatriceHandler extends ToolHandler {
 
     @Override
@@ -26,17 +28,22 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
         //controlla fiches e aggiorna map
 
         if (playerMove.getTool() == Tool.PINZASGROSSATRICE) {
-            if (!playerMove.getDraftPosition().isPresent() || !playerMove.getAumentaValoreDado().isPresent())
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa PINZASGROSSATRICE");
+            if (!playerMove.getDraftPosition().isPresent() || !playerMove.getAumentaValoreDado().isPresent()){
+                LOGGER.log(Level.SEVERE,"Errore parametri PINZASGROSSATRICE");
                 throw new InvalidParameterException();
+            }
+
             try {
                 draftPosition = playerMove.getDraftPosition().get();
                 aumentaDiUno = playerMove.getAumentaValoreDado().get();
                 draftPool = model.getDraftPool();
                 die = draftPool.getDie(draftPosition);  //non dovrebbe lanciare eccezioni perchè ho già fatto il controllo nel first check
 
-                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || (die.getNumber() == NumberEnum.ONE && !aumentaDiUno) || (die.getNumber() == NumberEnum.SIX && aumentaDiUno))
+                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || (die.getNumber() == NumberEnum.ONE && !aumentaDiUno) || (die.getNumber() == NumberEnum.SIX && aumentaDiUno)){
+                    LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PINZASGROSSATRICE");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-                else {
+                }else {
                         if (aumentaDiUno)
                             die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() + 1));
                         else
@@ -47,11 +54,15 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
                 }
 
             } catch (NoDieException e) {
+                LOGGER.log(Level.SEVERE, "Dado non presente in PINZASGROSSATRICE");
                 e.printStackTrace();
             }
 
-        } else
+        } else{
+            LOGGER.log(Level.FINEST,"La mossa non e' PINZASGROSSATRICE, passaggio responsabilita' all'handler successivo");
             nextHandler.process(playerMove, remoteView, model);
+        }
+
 
     }
 }

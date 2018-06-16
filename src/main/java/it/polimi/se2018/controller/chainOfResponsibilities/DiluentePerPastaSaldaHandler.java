@@ -15,10 +15,13 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class DiluentePerPastaSaldaHandler extends ToolHandler {
 
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+
         DraftPool draftPool;
         NumberEnum newValue;
         PlayerBoard board;
@@ -29,8 +32,11 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
         Die dieToGet;
 
         if (playerMove.getTool() == Tool.DILUENTEPERPASTASALDA) {
-            if (!playerMove.getNewDiceValue().isPresent() || !playerMove.getDraftPosition().isPresent())
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa DILUENTEPERPASTASALDA");
+            if (!playerMove.getNewDiceValue().isPresent() || !playerMove.getDraftPosition().isPresent()) {
+                LOGGER.log(Level.INFO, "Parametri DILUENTEPERPASTASALDA mossa non validi");
                 throw new InvalidParameterException();
+            }
             try {
 
                 draftPool = model.getDraftPool();
@@ -39,9 +45,10 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                 diceBag = model.getDiceBag();
                 dieToGet = diceBag.getFirst();
                 dieToRemove = draftPool.getDie(draftPoolPosition);
-                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()))
+                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
+                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilzzare DILUENTEPERPASTASALDA");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-                else {
+                }else {
                     board = model.getBoard(remoteView.getPlayer());
 
                     if (playerMove.getRow().isPresent() && playerMove.getColumn().isPresent()) {
@@ -58,6 +65,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                                 !board.verifyNearCellsRestriction(dieToGet, row, column) ||
                                 !board.verifyPositionRestriction(row, column)) {
                             dieToGet.setNumber(num);
+                            LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                         } else {
                             diceBag.takeDie();
@@ -87,6 +95,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                             nextHandler.process(playerMove, remoteView, model);
                         } else {
+                            LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                         }
                     }
@@ -94,12 +103,17 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                 }
 
             } catch (NoDieException e) {
+                LOGGER.log(Level.SEVERE, "Dado non presente in DILUENTEPERPASTASALDA");
                 e.printStackTrace();
             } catch (AlredySetDie alredySetDie) {
+                LOGGER.log(Level.SEVERE, "Dado gia' presente in DILUENTEPERPASTASALDA");
                 alredySetDie.printStackTrace();
             }
-        } else
+        } else{
+            LOGGER.log(Level.FINEST,"La mossa non e' DILUENTEPERPASTASALDA, passaggio responsabilita' all'handler successivo");
             nextHandler.process(playerMove, remoteView, model);
+        }
+
 
     }
 }

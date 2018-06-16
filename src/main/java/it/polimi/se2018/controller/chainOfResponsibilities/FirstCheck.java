@@ -8,12 +8,15 @@ import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
-public class FirstCheck extends Handler {
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+public class FirstCheck extends Handler {
 
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         int temp;
+        LOGGER.log(Level.FINE,"FirstCheck della chain of responsabilities");
         if (remoteView.getPlayer().isYourTurn()) {
             if (playerMove.getColumn().filter(k -> k < 0 || k > 4).isPresent() ||
                     playerMove.getDraftPosition().filter(k -> (k >= model.getDraftPool().size())).isPresent() ||
@@ -26,10 +29,13 @@ public class FirstCheck extends Handler {
                             playerMove.getTool() != Tool.SKIPTURN))
 
                 throw new InvalidParameterException();
-            else
+            else{
                 nextHandler.process(playerMove, remoteView, model);
+            }
+
 
         } else {
+            LOGGER.log(Level.FINE,"Non e' il turno del giocatore, invio messaggio NOTYOURTURN");
             remoteView.sendBack(new ServerMessage(ErrorType.NOTYOURTURN));
         }
 

@@ -63,6 +63,7 @@ public class SocketConnection extends Connection implements Runnable {
      * Close the connection
      */
     public synchronized void close() {
+        LOGGER.log(Level.FINE,"Chiusura connessione");
         this.deleteObservers();
 
         try{
@@ -100,6 +101,7 @@ public class SocketConnection extends Connection implements Runnable {
                 notifyObservers(message);
 
             }catch (IOException | ClassNotFoundException e){
+                LOGGER.log(Level.INFO,"Errore ricezione oggetto");
                 close();
             }
 

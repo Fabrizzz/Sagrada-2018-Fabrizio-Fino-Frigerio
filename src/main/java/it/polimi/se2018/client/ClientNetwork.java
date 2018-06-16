@@ -15,6 +15,8 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Client connection manager
@@ -23,12 +25,14 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClientNetwork {
     private View view;
     private Connection connection;
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
      * Constructor
      * @param view client view
      */
     public ClientNetwork(View view){
+        LOGGER.log(Level.FINE,"Avvio");
         this.view = view;
     }
 
@@ -40,6 +44,7 @@ public class ClientNetwork {
      */
     public Boolean connectSocket(String hostname, int port){
         Socket socket;
+        LOGGER.log(Level.INFO,"Tentativo di connessione a " +  hostname +":" + port);
         if(!isConnected()) {
             try {
                 socket = new Socket(hostname, port);
@@ -47,11 +52,14 @@ public class ClientNetwork {
                 connection.addObserver(view);
                 view.addObserver(connection);
                 (new Thread((SocketConnection) connection)).start();
+                LOGGER.log(Level.INFO,"Connessione accettata");
                 return true;
             } catch (IOException e) {
+                LOGGER.log(Level.INFO,"Errore connessione, connessione rifiutata");
                 return false;
             }
         }else{
+            LOGGER.log(Level.INFO,"Client gia connesso, tentativo di connessione annullato");
             return false;
         }
     }
@@ -62,7 +70,7 @@ public class ClientNetwork {
      * @return true if the connection can be created, false otherwise
      */
     public Boolean connectRMI(String hostname){
-
+        LOGGER.log(Level.INFO,"Tentativo di connessione a " +  hostname);
         if(!isConnected()){
             try {
                 ServerRMIControllerInterface serverRMIControllerInterface = (ServerRMIControllerInterface) Naming.lookup("//".concat(hostname.concat("/MyServer")));
@@ -80,9 +88,10 @@ public class ClientNetwork {
                 if (serverRMIInterface != null) {
                     connection.addObserver(view);
                     view.addObserver(connection);
+                    LOGGER.log(Level.INFO,"Connessione accettata");
                     return true;
                 }else{
-
+                    LOGGER.log(Level.INFO,"Connessione rifiutata");
                     return false;
                 }
 
@@ -91,6 +100,7 @@ public class ClientNetwork {
                 return false;
             }
         }else{
+            LOGGER.log(Level.INFO,"Client gia connesso, tentativo di connessione annullato");
             return false;
         }
 
@@ -102,9 +112,11 @@ public class ClientNetwork {
      * @return if the message has been sent correctly
      */
     public Boolean sendMessage(Message message){
+        LOGGER.log(Level.FINE,"Invio messaggio");
         if(isConnected()){
             return connection.sendMessage(message);
         }else{
+            LOGGER.log(Level.FINE,"Client non connesso, invio annullato");
             return false;
         }
     }
@@ -126,6 +138,7 @@ public class ClientNetwork {
      * @param connection
      */
     public void closeConnection(Object connection) {
+        LOGGER.log(Level.INFO,"Chiusura connessione");
         this.connection = null;
         view.connectionClosed();
     }

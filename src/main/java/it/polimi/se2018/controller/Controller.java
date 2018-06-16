@@ -8,10 +8,12 @@ import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller implements Observer {
 
-
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private boolean partitaIniziata = false;
     private Model model;
     private Handler firstHandler;
@@ -34,6 +36,7 @@ public class Controller implements Observer {
     }
 
     public void startGame(Collection<RemoteView> views) {
+        LOGGER.log(Level.INFO,"Avvio gioco");
         /*if (views.size() < 2 || views.size() > 4)
             throw new IllegalArgumentException();
         List publicObjectiveNames = Arrays.asList(PublicObjectiveName.values());
@@ -55,6 +58,7 @@ public class Controller implements Observer {
     }
 
     public synchronized void timerScaduto(int turn, int round) {
+        LOGGER.log(Level.FINE,"Timer scaduto");
         if (model.getTurn() == turn && model.getRound() == round) {
             model.nextTurn();
             setTimer(model.getTurn(), model.getRound());
@@ -62,14 +66,13 @@ public class Controller implements Observer {
     }
 
     public void setTimer(int turn, int round) {
+        LOGGER.log(Level.FINE,"Timer impostato");
         timer.schedule(new RoundTimer(turn, round, this), (long) (Model.getMinutesPerTurn() * 60 * 1000));
     }
 
-    //private void startGame()
-
-
     @Override
     public synchronized void update(Observable o, Object arg) {
+        LOGGER.log(Level.INFO,"PlayerMove ricevuta");
         PlayerMove playerMove = (PlayerMove) arg;
         RemoteView remoteView = (RemoteView) o;
         try {

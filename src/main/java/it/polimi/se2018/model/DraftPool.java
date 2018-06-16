@@ -15,7 +15,6 @@ public class DraftPool implements Serializable {
 
     private List<Die> dice = new ArrayList<>(9);    //Lista contenente tutti i dadi pescati
     private int numberOfDice;  //Numero di dadi da pescare a ogni round
-
     /**
      * Constructor
      * @param lenght Number of turns

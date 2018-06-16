@@ -10,12 +10,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class BoardList {
 
     private BoardList(){}
 
     private static ArrayList<Board[]> boardList = new ArrayList<Board[]>();
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
 
     public static void loadJSONBoards(){
@@ -48,16 +51,17 @@ public final class BoardList {
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"File mappe.json non trovato");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"Errore lettura mappe.json");
         } catch (ParseException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"Errore parsing mappe.json");
         }
     }
 
     public static Board[] getCouple(){
-        if(boardList.size() == 0){
+        if(boardList.isEmpty()){
+            LOGGER.log(Level.INFO,"Nessuna coppia di mappe disponibile");
             return null;
         }else{
             return boardList.remove((new Random()).nextInt(boardList.size()));

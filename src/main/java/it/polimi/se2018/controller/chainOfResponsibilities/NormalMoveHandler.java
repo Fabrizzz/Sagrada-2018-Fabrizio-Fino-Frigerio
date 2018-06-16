@@ -12,6 +12,8 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.logging.Level;
+
 public class NormalMoveHandler extends Handler {
 
     @Override
@@ -23,8 +25,11 @@ public class NormalMoveHandler extends Handler {
         Die die;
 
         if (playerMove.getTool() == Tool.MOSSASTANDARD) {
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent())
+            LOGGER.log(Level.FINE,"Elaborazione validita' MOSSASTANDARD");
+            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent()){
+                LOGGER.log(Level.SEVERE,"Errore parametri MOSSASTANDARD");
                 throw new InvalidParameterException();
+            }
             try {
                 board = model.getBoard(remoteView.getPlayer());
                 row = playerMove.getRow().get();
@@ -38,10 +43,10 @@ public class NormalMoveHandler extends Handler {
                                 !board.verifyColorRestriction(die, row, column) ||
                                 !board.verifyNumberRestriction(die, row, column) ||
                                 !board.verifyNearCellsRestriction(die, row, column) ||
-                                !board.verifyPositionRestriction(row, column))
-
+                                !board.verifyPositionRestriction(row, column)) {
+                    LOGGER.log(Level.INFO,"Il giocatore non puo' eseguire MOSSASTANDARD");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-                else {
+                } else {
 
                     board.setDie(die, row, column);
                         model.getDraftPool().removeDie(die);
@@ -55,12 +60,15 @@ public class NormalMoveHandler extends Handler {
 
                 }
             } catch (NoDieException e) {
+                LOGGER.log(Level.SEVERE, "Dado non presente in MOSSASTANDARD");
                 e.printStackTrace();
             } catch (AlredySetDie alredySetDie) {
+                LOGGER.log(Level.SEVERE, "Dado gia' presente in MOSSASTANDARD");
                 alredySetDie.printStackTrace();
             }
-        } else
+        } else{
+            LOGGER.log(Level.FINEST,"La mossa non e' MOSSASTANDARD, passaggio responsabilita' all'handler successivo");
             this.nextHandler.process(playerMove, remoteView, model);
-
+        }
     }
 }
