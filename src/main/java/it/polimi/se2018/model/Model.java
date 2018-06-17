@@ -285,7 +285,7 @@ public class Model extends Observable {
                     nextTurn();
                 } else {
                     //timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
-                    LOGGER.log(Level.FINE,"Prossimo giocatore pronto, notifico gli ossesrvatori");
+                    LOGGER.log(Level.FINE,"Prossimo giocatore: " + players.get(playerPosition).getNick() +  ". Notifico gli osservatori");
                     notifyObs();
                 }
             }
@@ -299,7 +299,7 @@ public class Model extends Observable {
 
     public void notifyObs() {
         setChanged();
-        notifyObservers();
+        notifyObservers(new ModelView(this));
     }
 
 }

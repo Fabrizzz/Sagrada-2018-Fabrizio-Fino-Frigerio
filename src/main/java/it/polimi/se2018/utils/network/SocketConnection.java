@@ -30,6 +30,7 @@ public class SocketConnection extends Connection implements Runnable {
         this.socket = socket;
         try {
             out = new ObjectOutputStream(this.socket.getOutputStream());
+            out.flush();
             in = new ObjectInputStream(this.socket.getInputStream());
         }catch(IOException e){
             LOGGER.log(Level.SEVERE,"Errore creazione object stream");
@@ -95,9 +96,7 @@ public class SocketConnection extends Connection implements Runnable {
             try{
                 message = (Message) in.readObject();
                 LOGGER.log(Level.FINE,"Messaggio ricevuto");
-                setChanged();
-                notifyObservers(message);
-
+                notifyObs(message);
             }catch (IOException | ClassNotFoundException e){
                 LOGGER.log(Level.INFO,"Errore ricezione oggetto");
                 e.printStackTrace();
@@ -108,6 +107,13 @@ public class SocketConnection extends Connection implements Runnable {
         close();
     }
 
+    private void notifyObs(Message message){
+        setChanged();
+        new Thread() {
+            public void run() {
+                notifyObservers(message);
+            }}.start();
+    }
     @Override
     public void update(Observable o, Object arg) {
         sendMessage((Message) arg);

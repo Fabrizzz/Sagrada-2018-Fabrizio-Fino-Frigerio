@@ -583,7 +583,8 @@ public class CLI extends View{
                 break;
             case MODELVIEWUPDATE:
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
-                modelView = new ModelView(modelView, ((ServerMessage) arg).getModelView());
+
+                modelView = new ModelView(modelView, message.getModelView());
                 for(int k = 0; k < modelView.getPlayers().size(); k ++){
                     if(modelView.getPlayers().get(k).isYourTurn()){
                         LOGGER.log(Level.FINE,"E' il turno del giocatore " + modelView.getPlayers().get(k).getNick());
@@ -591,6 +592,11 @@ public class CLI extends View{
                 }
                 if(modelView.getPlayer(localID).isYourTurn()){
                     chooseMove();
+                }else{
+                    for(int h = 0; h < modelView.getPlayers().size(); h ++){
+                        showBoard(modelView.getBoard(modelView.getPlayers().get(h)));
+                    }
+
                 }
                 break;
         }

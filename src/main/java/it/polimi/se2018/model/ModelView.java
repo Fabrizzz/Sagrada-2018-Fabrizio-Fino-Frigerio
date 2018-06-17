@@ -52,7 +52,7 @@ public class ModelView extends Observable implements Observer, Serializable {
         normalMove = model.hasUsedNormalMove();
 
 
-        model.addObserver(this);
+        //model.addObserver(this);
     }
 
     /**
@@ -99,11 +99,11 @@ public class ModelView extends Observable implements Observer, Serializable {
     //da cambiare!!!
     @Override
     public void update(Observable o, Object arg) {
-        LOGGER.log(Level.INFO,"Ricevuto update model");
-        Model model = (Model) o;
-        ModelView modelView = new ModelView(model);
-        setChanged();
-        notifyObservers(modelView);
+        //LOGGER.log(Level.INFO,"Ricevuto update model");
+        //Model model = (Model) o;
+        //ModelView modelView = new ModelView(model);
+        //setChanged();
+        //notifyObservers(modelView);
     }
 
     /**

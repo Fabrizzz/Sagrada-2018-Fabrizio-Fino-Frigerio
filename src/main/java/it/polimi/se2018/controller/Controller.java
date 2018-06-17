@@ -31,7 +31,7 @@ public class Controller implements Observer {
     private List<RemoteView> views;
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
-    private ModelView modelView;
+    //private ModelView modelView;
 
     public Controller() {}
 
@@ -54,17 +54,17 @@ public class Controller implements Observer {
             throw new IllegalArgumentException();
 
         this.views = new ArrayList<>(views);
-        for(int i = 0; i < this.views.size(); i++){
+   /*     for(int i = 0; i < this.views.size(); i++){
             this.views.get(i).addObserver(this);
         }
 
         for(int i = 0; i < this.views.size(); i++){
             LOGGER.log(Level.FINE,"Invio messaggio board");
             this.views.get(i).sendBack(new ServerMessage(getBoards()));
-        }
+        }*/
 
-        //this.views.stream().forEach(k -> k.addObserver(this));
-        //this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
+        this.views.stream().forEach(k -> k.addObserver(this));
+        this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
         try {
             LOGGER.log(Level.INFO,"Attendo board");
             while (choosenBoards.size() < views.size())
@@ -89,12 +89,12 @@ public class Controller implements Observer {
             }
             temp = temp.setNextHandler(ToolFactory.createToolHandler(Tool.MOSSASTANDARD));
             temp.setNextHandler(ToolFactory.createLastHandler());
-            modelView = new ModelView(model);
-            model.addObserver(modelView);
+            //modelView = new ModelView(model);
+            //model.addObserver(modelView);
             
             for (RemoteView view : views) {
-                modelView.addObserver(view);
-                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, modelView));
+                model.addObserver(view);
+                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model)));
             }
 
             setTimer(0, 0);
