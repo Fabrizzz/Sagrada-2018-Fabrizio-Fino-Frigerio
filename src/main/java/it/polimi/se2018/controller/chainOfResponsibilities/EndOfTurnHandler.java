@@ -5,11 +5,15 @@ import it.polimi.se2018.model.Model;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.messages.PlayerMove;
 
+import java.util.logging.Level;
+
 public class EndOfTurnHandler extends Handler {
 
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) {
+        LOGGER.log(Level.FINE,"EndOfTurnCheck della chain of responsabilities");
         if ((playerMove.getTool() == Tool.SKIPTURN) || (model.hasUsedTool() && model.hasUsedNormalMove())) {
+            LOGGER.log(Level.FINE,"passaggio di turno");
             model.nextTurn();
         }
     }

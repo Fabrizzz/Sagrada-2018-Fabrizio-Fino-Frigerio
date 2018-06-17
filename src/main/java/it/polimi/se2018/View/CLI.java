@@ -8,6 +8,7 @@ import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.server.Server;
 import it.polimi.se2018.utils.InputUtils;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.NoDieException;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -31,6 +34,7 @@ public class CLI extends View{
     private Map<Color,String> colorMap = new HashMap<>();
     private ModelView modelView;
     private Long localID;
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
      * Constructor
@@ -537,9 +541,11 @@ public class CLI extends View{
         switch (message.getMessageType()) {
             case ERROR:
                 System.out.println("Errore: " + message.getErrorType().toString());
-                if(modelView.getPlayer(localID).isYourTurn()){
+                if(message.getErrorType().equals(ErrorType.ILLEGALMOVE)){
                     System.out.println("Mossa inviata non valida, ripeti la scelta");
                     chooseMove();
+                }else{
+                    System.out.println("Non e' il tuo turno");
                 }
                 break;
             case INITIALCONFIGSERVER:
@@ -576,9 +582,14 @@ public class CLI extends View{
                 notifyObservers(new ClientMessage(message.getBoards()[j - 1]));
                 break;
             case MODELVIEWUPDATE:
+                LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
                 modelView = new ModelView(modelView, ((ServerMessage) arg).getModelView());
+                for(int k = 0; k < modelView.getPlayers().size(); k ++){
+                    if(modelView.getPlayers().get(k).isYourTurn()){
+                        LOGGER.log(Level.FINE,"E' il turno del giocatore " + modelView.getPlayers().get(k).getNick());
+                    }
+                }
                 if(modelView.getPlayer(localID).isYourTurn()){
-                    System.out.println("E' il tuo turno");
                     chooseMove();
                 }
                 break;

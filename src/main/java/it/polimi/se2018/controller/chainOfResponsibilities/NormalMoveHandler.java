@@ -49,14 +49,14 @@ public class NormalMoveHandler extends Handler {
                 } else {
 
                     board.setDie(die, row, column);
-                        model.getDraftPool().removeDie(die);
+                    model.getDraftPool().removeDie(die);
 
-                        if (remoteView.getPlayer().isCanDoTwoTurn())
-                            remoteView.getPlayer().setCanDoTwoTurn(false);
-                        else
-                            model.setNormalMove(true);
+                    if (remoteView.getPlayer().isCanDoTwoTurn())
+                        remoteView.getPlayer().setCanDoTwoTurn(false);
+                    else
+                        model.setNormalMove(true);
 
-                        nextHandler.process(playerMove, remoteView, model);
+                    nextHandler.process(playerMove, remoteView, model);
 
                 }
             } catch (NoDieException e) {

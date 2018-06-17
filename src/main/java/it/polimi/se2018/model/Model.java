@@ -6,6 +6,8 @@ import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -17,13 +19,13 @@ public class Model extends Observable {
     private static final int NUMBER_OF_TOOL_CARDS = 3;
     private static final int NUMBER_OF_PUBLIC_OBJECTIVES = 3;
     private static final int NUMBER_OF_DICE_PER_COLOR = 18;     //Nei 90 dadi ho 18 dadi per colore; passo 18 al costruttore del diceBag
-    private static final int MINUTES_PER_TURN = 1;
+    private static final int MINUTES_PER_TURN = 2;
 
     private final Map<Player, PlayerBoard> boardMap;
     private final Map<Player, PrivateObjective> privateObjectiveMap;
     private final Map<Tool, Boolean> tools;
     private final List<PublicObjective> publicObjective;
-
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     private final DiceBag diceBag;    //Il sacchetto contenente i dadi
     private final DraftPool draftPool;  //Dadi pescati del round
@@ -255,6 +257,7 @@ public class Model extends Observable {
      */
     public void nextTurn() { //da spostare nel controller
         //aggiungere che se rimane un solo giocatore, ha vinto
+        LOGGER.log(Level.INFO,"Next turn chiamanto");
         usedTool = false;
         normalMove = false;
         int playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
@@ -271,14 +274,18 @@ public class Model extends Observable {
 
             playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
             if (players.get(playerPosition).isSkipSecondTurn()) {
+                LOGGER.log(Level.FINE,"Is skip second turn");
                 players.get(playerPosition).setSkipSecondTurn(false);
                 nextTurn();
             } else {
+                LOGGER.log(Level.FINE,"Is NOT skip second turn");
                 players.get(playerPosition).setYourTurn(true);
-                if (!players.get(playerPosition).isConnected())
+                if (!players.get(playerPosition).isConnected()){
+                    LOGGER.log(Level.FINE,"Il prossimo giocatore e' disconnesso");
                     nextTurn();
-                else {
+                } else {
                     //timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
+                    LOGGER.log(Level.FINE,"Prossimo giocatore pronto, notifico gli ossesrvatori");
                     notifyObs();
                 }
             }

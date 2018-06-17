@@ -10,7 +10,7 @@ public class Player implements Serializable { //da completare
     private String nick;
     private long id;
     private int favorTokens;
-    private boolean isConnected;
+    private boolean isConnected = true;
 
     private boolean skipSecondTurn; //per la tool card numero 8
     private boolean canDoTwoTurn;

@@ -31,6 +31,7 @@ public class Controller implements Observer {
     private List<RemoteView> views;
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
+    private ModelView modelView;
 
     public Controller() {}
 
@@ -88,7 +89,7 @@ public class Controller implements Observer {
             }
             temp = temp.setNextHandler(ToolFactory.createToolHandler(Tool.MOSSASTANDARD));
             temp.setNextHandler(ToolFactory.createLastHandler());
-            ModelView modelView = new ModelView(model);
+            modelView = new ModelView(model);
             model.addObserver(modelView);
             
             for (RemoteView view : views) {
