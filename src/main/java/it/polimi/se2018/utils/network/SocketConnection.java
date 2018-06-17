@@ -4,6 +4,7 @@ import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.messages.Message;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -102,7 +103,6 @@ public class SocketConnection extends Connection implements Runnable {
                 notifyObs(message);
             }catch (IOException | ClassNotFoundException e){
                 LOGGER.log(Level.INFO,"Errore ricezione oggetto");
-                e.printStackTrace();
                 close();
             }
 

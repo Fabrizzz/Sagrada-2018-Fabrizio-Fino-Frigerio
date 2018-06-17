@@ -15,7 +15,6 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//nested class per osservare sia la connection, sia la modelviewupdate
 public class RemoteView extends Observable implements Observer {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private Player player;

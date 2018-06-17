@@ -14,7 +14,7 @@ public class EndOfTurnHandler extends Handler {
         LOGGER.log(Level.FINE,"EndOfTurnCheck della chain of responsabilities");
         if (((playerMove.getTool() == Tool.SKIPTURN) || model.hasUsedTool() || model.hasUsedNormalMove()) && !remoteView.getPlayer().isCanDoTwoTurn()) {
             LOGGER.log(Level.FINE,"passaggio di turno");
-            model.nextTurn();
+            model.getController().nextTurn();
         }
     }
 }

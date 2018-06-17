@@ -73,6 +73,10 @@ public class CLI extends View{
         showBoard(playerBoard);
     }
 
+    /**
+     * Show the  board containing the restriction
+     * @param playerBoard
+     */
     public void showBoard(PlayerBoard playerBoard){
         System.out.println("Plancia delle restrizioni");
         System.out.println("__________|| Riga");
@@ -539,6 +543,7 @@ public class CLI extends View{
 
         }
     }
+
     @Override
     public void update(Observable o, Object arg) {
         ServerMessage message = (ServerMessage) arg;
@@ -595,7 +600,7 @@ public class CLI extends View{
 
                 System.out.println("La tua plancia: ");
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
-                
+
                 for(int k = 0; k < modelView.getPlayers().size(); k ++){
                     if(modelView.getPlayers().get(k).isYourTurn()){
                         LOGGER.log(Level.FINE,"E' il turno del giocatore " + modelView.getPlayers().get(k).getNick());
@@ -605,7 +610,10 @@ public class CLI extends View{
                     chooseMove();
                 }else{
                     for(int h = 0; h < modelView.getPlayers().size(); h ++){
-                        showBoard(modelView.getBoard(modelView.getPlayers().get(h)));
+                        if(modelView.getPlayers().get(h).getId() != localID){
+                            System.out.println("\nBoard del giocatore: "+modelView.getPlayers().get(h).getNick());
+                            showBoard(modelView.getBoard(modelView.getPlayers().get(h)));
+                        }
                     }
 
                 }

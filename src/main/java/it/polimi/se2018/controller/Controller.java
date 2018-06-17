@@ -80,7 +80,7 @@ public class Controller implements Observer {
             Map<Player, PrivateObjective> privateObjectiveMap = views.stream().collect(Collectors.toMap(k -> k.getPlayer(), t -> new PrivateObjective(iterator.next())));
             List<Tool> tools = Tool.getRandTools(3);
 
-            this.model = new Model(new ArrayList<>(choosenBoards.keySet()), publicObjectives, choosenBoards, privateObjectiveMap, tools);
+            this.model = new Model(new ArrayList<>(choosenBoards.keySet()), publicObjectives, choosenBoards, privateObjectiveMap, tools,this);
             //setta gli handler, setta i vari observer, invia a tutti la modelview
             firstHandler = ToolFactory.createFirstHandler();
             Handler temp = firstHandler;
@@ -89,8 +89,6 @@ public class Controller implements Observer {
             }
             temp = temp.setNextHandler(ToolFactory.createToolHandler(Tool.MOSSASTANDARD));
             temp.setNextHandler(ToolFactory.createLastHandler());
-            //modelView = new ModelView(model);
-            //model.addObserver(modelView);
             
             for (RemoteView view : views) {
                 model.addObserver(view);
@@ -104,7 +102,7 @@ public class Controller implements Observer {
 
     }
 
-    private Model getModel() {
+    public Model getModel() {
         return model;
     }
 
@@ -112,7 +110,7 @@ public class Controller implements Observer {
         LOGGER.log(Level.FINE,"Timer scaduto");
 
         if (model.getTurn() == turn && model.getRound() == round) {
-            model.nextTurn();
+            nextTurn();
             setTimer(model.getTurn(), model.getRound());
         }
 
@@ -146,5 +144,46 @@ public class Controller implements Observer {
             choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
             notify();
         }
+    }
+
+    /**
+     * Change the current player turn
+     */
+    public void nextTurn() { //da spostare nel controller
+        //aggiungere che se rimane un solo giocatore, ha vinto
+        LOGGER.log(Level.INFO,"Next turn chiamanto");
+        model.setUsedTool(false);
+        model.setNormalMove(false);
+        int playerPosition = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 -  model.getTurn() - 1;
+        model.getPlayers().get(playerPosition).setYourTurn(false);
+        model.setTurn(model.getTurn() + 1);
+
+        if (model.getTurn() == model.getPlayers().size() * 2)
+            model.endRound();
+        else if (model.getTurn() == model.getPlayers().size())
+            model.setFirstTurn(false);
+
+
+        if (model.getRound() != 10) {
+
+            playerPosition = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 - model.getTurn() - 1;
+            if (model.getPlayers().get(playerPosition).isSkipSecondTurn()) {
+                LOGGER.log(Level.FINE,"Is skip second turn");
+                model.getPlayers().get(playerPosition).setSkipSecondTurn(false);
+                nextTurn();
+            } else {
+                LOGGER.log(Level.FINE,"Is NOT skip second turn");
+                model.getPlayers().get(playerPosition).setYourTurn(true);
+                if (!model.getPlayers().get(playerPosition).isConnected()){
+                    LOGGER.log(Level.FINE,"Il prossimo giocatore e' disconnesso");
+                    nextTurn();
+                } else {
+                    //timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
+                    LOGGER.log(Level.FINE,"Prossimo giocatore: " + model.getPlayers().get(playerPosition).getNick() +  ". Notifico gli osservatori");
+                    model.notifyObs();
+                }
+            }
+        } else
+            model.endGame();
     }
 }

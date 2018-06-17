@@ -39,7 +39,7 @@ public class TestServerMessage {
         assertEquals(ErrorType.ILLEGALMOVE,serverMessage.getErrorType());
     }
 
-    @Test
+    /*@Test
     public void getModelViewTest(){
         players = new ArrayList<>();
 
@@ -72,6 +72,6 @@ public class TestServerMessage {
         ServerMessage serverMessage = new ServerMessage(MessageType.MODELVIEWUPDATE,modelView);
         assertEquals(modelView,serverMessage.getModelView());
         assertEquals(MessageType.MODELVIEWUPDATE,serverMessage.getMessageType());
-    }
+    }*/
 
 }

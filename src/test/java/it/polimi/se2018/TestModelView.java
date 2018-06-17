@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Alessio
  */
+/*
 public class TestModelView {
     private ModelView modelView;
     private  Model model;
@@ -221,4 +222,4 @@ public class TestModelView {
         assertEquals(model.getPublicObjectives(),modelView.getPublicObjective());
     }
 
-}
+}*/

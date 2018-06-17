@@ -1,5 +1,7 @@
 package it.polimi.se2018;
 
+import it.polimi.se2018.controller.Controller;
+import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.Player;
@@ -11,19 +13,19 @@ import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
+import it.polimi.se2018.utils.network.SocketConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.Socket;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.*;
 
 public class TestModel {
     private  Model model;
-    private List<Player> players;
+    private ArrayList<Player> players = new ArrayList<>();
     private List<PublicObjective> publicObjectives;
     private  PlayerBoard[] playerBoard;
     private Map<Player, PlayerBoard> boardMap;
@@ -33,62 +35,61 @@ public class TestModel {
 
     @Before
     public void initialize(){
-        players = new ArrayList<>();
+        BoardList boardList = new BoardList();
+        boardMap = new HashMap();
+        boardMap.put(new Player("asd",(long)123),new PlayerBoard(boardList.getCouple()[1]));
+        boardMap.put(new Player("asd",(long)1234),new PlayerBoard(boardList.getCouple()[1]));
 
         publicObjectives = new ArrayList<>();
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
-        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
-        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
-        playerBoard = new PlayerBoard[3];
-        for(int j = 0; j < 3; j ++){
-            playerBoard[j] = new PlayerBoard(BoardList.getBoard("Virtus"));
-        }
-        boardMap = new HashMap<>();
-        for (int i = 0; i < 3; i++) {
-            players.add(new Player("Player " + i, (long) i));
-            boardMap.put(players.get(i), playerBoard[i]);
-        }
-        privateObjective = new PrivateObjective[3];
-        privateObjective[0] = new PrivateObjective(Color.BLUE);
-        privateObjective[1] = new PrivateObjective(Color.RED);
-        privateObjective[2] = new PrivateObjective(Color.YELLOW);
-        privateObjectiveMap = new HashMap<>();
-        for (int i = 0; i < players.size(); i++) {
-            privateObjectiveMap.put(players.get(i), privateObjective[i]);
-        }
-        assertEquals(players.size(), boardMap.size());
+        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSICOLONNA));
+        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.DIAGONALICOLORATE));
 
-        model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
+        List colors = Arrays.asList(Color.values());
+        Collections.shuffle(colors);
+        Iterator<Color> iterator = colors.iterator();
+
+        privateObjectiveMap = new HashMap<>();
+        privateObjectiveMap.put(new Player("asd",(long)123),new PrivateObjective(Color.BLUE));
+        privateObjectiveMap.put(new Player("assd",(long)321),new PrivateObjective(Color.RED));
+
+        List<Tool> tools = Tool.getRandTools(3);
+
+        this.model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools,null);
+        Collections.addAll(this.players,boardMap.keySet().toArray(new Player[boardMap.keySet().size()]));
+        this.playerBoard = boardMap.values().toArray(new PlayerBoard[boardMap.values().size()]);
+        this.privateObjective = privateObjectiveMap.values().toArray(new PrivateObjective[privateObjectiveMap.values().size()]);
 
     }
 
     @Test
     public void testCostructor(){
         try{
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
         }catch(IllegalArgumentException e){
             fail();
         }
 
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         try{
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
             fail();
         }catch(IllegalArgumentException e){}
         publicObjectives.remove(3);
 
         players.add(new Player("Player " + 3, (long) 3));
         try{
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
             fail();
         }catch(IllegalArgumentException e){}
 
         PrivateObjective temp = new PrivateObjective(Color.GREEN);
-        privateObjectiveMap.put(players.get(3), temp);
+
         try{
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
+            privateObjectiveMap.put(players.get(2), temp);
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
             fail();
-        }catch(IllegalArgumentException e){}
+        }catch(IllegalArgumentException | IndexOutOfBoundsException e){}
 
     }
 
@@ -127,29 +128,6 @@ public class TestModel {
         assertEquals(players, model.getPlayers());
     }
 
-    @Test
-    public void testGetPrivateObjective(){
-        for (int i = 0; i < players.size(); i++) {
-            try{
-                assertEquals(privateObjective[i], model.getPrivateObjective(players.get(i)));
-            }catch (IllegalArgumentException e){
-                fail();
-            }
-        }
-
-        privateObjective = new PrivateObjective[4];
-        privateObjective[0] = new PrivateObjective(Color.BLUE);
-        privateObjective[1] = new PrivateObjective(Color.RED);
-        privateObjective[2] = new PrivateObjective(Color.YELLOW);
-        privateObjective[3] = new PrivateObjective(Color.GREEN);
-
-        players.add(new Player("Player " + 3, (long) 3));
-        try{
-            assertEquals(privateObjective[3], model.getPrivateObjective(players.get(3)));
-            fail();
-        }catch(IllegalArgumentException e){}
-
-    }
 
     @Test
     public void testGetPublicObjectives(){
@@ -164,14 +142,6 @@ public class TestModel {
         }catch(SizeLimitExceededException e){}
     }
 
-    @Test
-    public void testNextTurn(){
-        model.setUsedTool(true);
-        model.nextTurn();
-        assertFalse(model.hasUsedTool());
-        //da completare
-
-    }
 
     @Test
     public void setNormalMoveTest(){

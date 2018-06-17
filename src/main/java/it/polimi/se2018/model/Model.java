@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.enums.Tool;
@@ -37,6 +38,7 @@ public class Model extends Observable {
     private boolean firstTurn = true; //ogni round è fatto da due turni, è importante tenerne conto anche per l' uso di certe tool
     private boolean usedTool = false;
     private boolean normalMove = false;
+    private Controller controller;
 
 
     /**
@@ -47,7 +49,8 @@ public class Model extends Observable {
      * @param privateObjectiveMap map between the players and their private objectives
      */
     public Model(List<Player> players, List<PublicObjective> publicObjectives, Map<Player, PlayerBoard> boardMap,
-                 Map<Player, PrivateObjective> privateObjectiveMap, List<Tool> tools) {
+                 Map<Player, PrivateObjective> privateObjectiveMap, List<Tool> tools, Controller controller) {
+        this.controller = controller;
         if (players.size() >= 4 || tools.size() != NUMBER_OF_TOOL_CARDS || publicObjectives.size() != NUMBER_OF_PUBLIC_OBJECTIVES ||
                 boardMap.size() != players.size() ||
                 privateObjectiveMap.size() != players.size())
@@ -227,7 +230,7 @@ public class Model extends Observable {
     /**
      * End the round and update the round variables
      */
-    private void endRound() {
+    public void endRound() {
         turn = 0;
         firstTurn = true;
         roundTrack.addDice(round, draftPool.removeAll());
@@ -252,54 +255,21 @@ public class Model extends Observable {
         //chiudere i timer
     }
 
-    /**
-     * Change the current player turn
-     */
-    public void nextTurn() { //da spostare nel controller
-        //aggiungere che se rimane un solo giocatore, ha vinto
-        LOGGER.log(Level.INFO,"Next turn chiamanto");
-        usedTool = false;
-        normalMove = false;
-        int playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
-        players.get(playerPosition).setYourTurn(false);
-        turn++;
-
-        if (turn == players.size() * 2)
-            endRound();
-        else if (turn == players.size())
-            firstTurn = false;
-
-
-        if (round != 10) {
-
-            playerPosition = (turn < players.size()) ? turn : players.size() * 2 - turn - 1;
-            if (players.get(playerPosition).isSkipSecondTurn()) {
-                LOGGER.log(Level.FINE,"Is skip second turn");
-                players.get(playerPosition).setSkipSecondTurn(false);
-                nextTurn();
-            } else {
-                LOGGER.log(Level.FINE,"Is NOT skip second turn");
-                players.get(playerPosition).setYourTurn(true);
-                if (!players.get(playerPosition).isConnected()){
-                    LOGGER.log(Level.FINE,"Il prossimo giocatore e' disconnesso");
-                    nextTurn();
-                } else {
-                    //timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
-                    LOGGER.log(Level.FINE,"Prossimo giocatore: " + players.get(playerPosition).getNick() +  ". Notifico gli osservatori");
-                    notifyObs();
-                }
-            }
-        } else
-            endGame();
-    }
-
     public int getTurn() {
         return turn;
+    }
+
+    public void setTurn(int turn){
+        this.turn = turn;
     }
 
     public void notifyObs() {
         setChanged();
         notifyObservers(new ModelView(this));
+    }
+
+    public Controller getController(){
+        return controller;
     }
 
 }
