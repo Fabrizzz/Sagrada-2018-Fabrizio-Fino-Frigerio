@@ -1,6 +1,8 @@
 package it.polimi.se2018.utils.network;
 
+import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.messages.Message;
+import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -48,6 +50,7 @@ public class SocketConnection extends Connection implements Runnable {
             try{
                 out.writeObject(message);
                 out.flush();
+                out.reset();
                 LOGGER.log(Level.FINE,"Messaggio inviato");
                 return true;
             }catch (IOException e){
