@@ -37,7 +37,7 @@ public class Client {
         }
 
         Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.FINEST);
+        handlerObj.setLevel(Level.WARNING);
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
 

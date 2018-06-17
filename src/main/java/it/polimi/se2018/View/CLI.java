@@ -51,9 +51,9 @@ public class CLI extends View{
      * Show a playerboard to the player
      * @param playerBoard playerboard to show
      */
-    public void showBoard(PlayerBoard playerBoard){
+    public void showPlayerBoard(PlayerBoard playerBoard){
         System.out.println("\nPlancia dei dadi");
-        System.out.println("___________|| Riga");
+        System.out.println("__________|| Riga");
 
         for(int j = 0; j < 4; j ++){
             for(int i = 0; i < 5; i++){
@@ -65,12 +65,17 @@ public class CLI extends View{
             }
             System.out.println("|| "+(j+1));
         }
-        System.out.println("‾‾‾‾‾‾‾‾‾");
-        System.out.println("|1|2|3|4|5|| Colonna");
+        System.out.println("‾‾‾‾‾‾‾‾‾‾");
+        System.out.println("|1|2|3|4|5|| Colonna\n");
 
-        System.out.println("\nPlancia delle restrizioni");
-        System.out.println("___________");
 
+
+        showBoard(playerBoard);
+    }
+
+    public void showBoard(PlayerBoard playerBoard){
+        System.out.println("Plancia delle restrizioni");
+        System.out.println("__________|| Riga");
 
         for(int j = 0; j < 4; j ++){
             for(int i = 0; i < 5; i++){
@@ -84,9 +89,10 @@ public class CLI extends View{
                 }
 
             }
-            System.out.println("|");
+            System.out.println("|| "+(j+1));
         }
         System.out.println("‾‾‾‾‾‾‾‾‾‾");
+        System.out.println("|1|2|3|4|5|| Colonna\n\n");
     }
 
     /**
@@ -109,7 +115,7 @@ public class CLI extends View{
                 System.out.print("| ");
             }
         }
-        System.out.println("|");
+        System.out.println("|\n\n");
     }
 
     /**
@@ -122,7 +128,7 @@ public class CLI extends View{
             System.out.println(modelView.getTools().keySet().toArray()[i].toString());
             System.out.print("Descrizione: ");
             System.out.println(((Tool) modelView.getTools().keySet().toArray()[i]).getDescription());
-            System.out.println("Usato: "+modelView.getTools().get(modelView.getTools().keySet().toArray()[i]) + "\n");
+            System.out.println("Usato: "+modelView.getTools().get(modelView.getTools().keySet().toArray()[i]) + "\n\n");
         }
     }
 
@@ -133,7 +139,7 @@ public class CLI extends View{
         System.out.println("Carte obiettivo pubbliche:");
         for(int i = 0; i < modelView.getPublicObjective().size(); i ++){
             System.out.println("Numero " + (i+1));
-            System.out.println(modelView.getPublicObjective().get(i).getObjectiveName() + "\n");
+            System.out.println(modelView.getPublicObjective().get(i).getObjectiveName() + "\n\n");
         }
     }
 
@@ -141,7 +147,7 @@ public class CLI extends View{
      * Show the player private objective
      */
     private void showPrivateObjective(){
-        System.out.println("Colore obiettivo privato: " /*+ modelView.getPlayer(localID).*/);//TODO
+        System.out.println("Colore obiettivo privato: \n\n" /*+ modelView.getPlayer(localID).*/);//TODO
     }
 
     /**
@@ -156,7 +162,7 @@ public class CLI extends View{
                     System.out.println("|" + modelView.getRoundTrackDie(i,j));
                 }catch (NoDieException e){}
             }
-            System.out.println("|||");
+            System.out.println("|||\n\n");
         }
     }
 
@@ -205,7 +211,7 @@ public class CLI extends View{
         int[] position = new int[2];
         boolean repeat = true;
         do {
-            showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+            showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
             System.out.println("Inserisci l'indice di riga: ");
             position[0] = InputUtils.getInt();
             while (position[0] < 1 || position[0] > 4) {
@@ -455,6 +461,7 @@ public class CLI extends View{
      * Asck the player to chose a action
      */
     public void chooseMove(){
+        System.out.println("------------------------------------------------------");
         System.out.println("E' il tuo turno, scelgi la mossa da effettuare:");
         System.out.println("0) Salta turno");
         System.out.println("1) Piazza un dado dalla riserva");
@@ -500,7 +507,7 @@ public class CLI extends View{
                 for(int j = 0; j < modelView.getPlayers().size(); j ++){
                     if(modelView.getPlayers().get(j).getId() != localID){
                         System.out.println("Board del player " + modelView.getPlayers().get(j).getNick());
-                        showBoard(modelView.getBoard(modelView.getPlayers().get(j)));
+                        showPlayerBoard(modelView.getBoard(modelView.getPlayers().get(j)));
                     }
                 }
                 chooseMove();
@@ -531,9 +538,6 @@ public class CLI extends View{
                 System.out.println("Mossa inviata");
 
         }
-
-        System.out.println("La tua plancia: ");
-        showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
     @Override
     public void update(Observable o, Object arg) {
@@ -543,15 +547,17 @@ public class CLI extends View{
                 System.out.println("Errore: " + message.getErrorType().toString());
                 if(message.getErrorType().equals(ErrorType.ILLEGALMOVE)){
                     System.out.println("Mossa inviata non valida, ripeti la scelta");
+                    System.out.println("------------------------------------------------------");
                     chooseMove();
                 }else{
                     System.out.println("Non e' il tuo turno");
                 }
                 break;
             case INITIALCONFIGSERVER:
+                System.out.println("------------------------------------------------------");
                 this.modelView = message.getModelView();
 
-                System.out.println("La tua board");
+                System.out.println("\n\nLa tua board");
                 showBoard(modelView.getBoard(modelView.getPlayer(localID)));
                 showDraftPool();
                 showToolCards();
@@ -566,6 +572,7 @@ public class CLI extends View{
                 }
                 break;
             case BOARDTOCHOOSE:
+                System.out.println("------------------------------------------------------");
                 System.out.println("Scegli la tua plancia di gioco");
                 for (int i = 0; i < message.getBoards().length; i++) {
                     System.out.println("Plancia " + (i+1));
@@ -582,9 +589,13 @@ public class CLI extends View{
                 notifyObservers(new ClientMessage(message.getBoards()[j - 1]));
                 break;
             case MODELVIEWUPDATE:
+                System.out.println("------------------------------------------------------");
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
-
                 modelView = new ModelView(modelView, message.getModelView());
+
+                System.out.println("La tua plancia: ");
+                showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
+                
                 for(int k = 0; k < modelView.getPlayers().size(); k ++){
                     if(modelView.getPlayers().get(k).isYourTurn()){
                         LOGGER.log(Level.FINE,"E' il turno del giocatore " + modelView.getPlayers().get(k).getNick());
@@ -660,7 +671,6 @@ public class CLI extends View{
 
 
         localID = readID();
-        System.out.println("Player id = " + localID);
 
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(clientNetwork.sendMessage(clientMessage)){
