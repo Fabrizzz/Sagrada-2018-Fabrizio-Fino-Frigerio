@@ -23,6 +23,11 @@ public class Client {
     public Client(){
         LOGGER.setLevel(Level.FINEST);
 
+        Handler handlerObj = new ConsoleHandler();
+        handlerObj.setLevel(Level.WARNING);
+        LOGGER.addHandler(handlerObj);
+        LOGGER.setUseParentHandlers(false);
+
         FileHandler fh;
         try {
             fh = new FileHandler("sagradaClient.log");
@@ -31,15 +36,10 @@ public class Client {
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
         } catch (SecurityException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING,"Security error exception");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING,"Impossibile aprire file di log");
         }
-
-        Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.WARNING);
-        LOGGER.addHandler(handlerObj);
-        LOGGER.setUseParentHandlers(false);
 
         int i;
         Scanner input = new Scanner(System.in);

@@ -107,7 +107,7 @@ public class Controller implements Observer {
         return model;
     }
 
-    private synchronized void timerScaduto(int turn, int round) {
+    public synchronized void timerScaduto(int turn, int round) {
         LOGGER.log(Level.FINE,"Timer scaduto");
 
         if (model.getTurn() == turn && model.getRound() == round) {

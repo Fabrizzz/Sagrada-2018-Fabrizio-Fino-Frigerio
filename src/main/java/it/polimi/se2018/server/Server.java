@@ -19,6 +19,11 @@ public class Server {
     public Server(){
         LOGGER.setLevel(Level.FINEST);
 
+        Handler handlerObj = new ConsoleHandler();
+        handlerObj.setLevel(Level.SEVERE);
+        LOGGER.addHandler(handlerObj);
+        LOGGER.setUseParentHandlers(false);
+
         FileHandler fh;
         try {
             fh = new FileHandler("sagradaServer.log");
@@ -27,15 +32,11 @@ public class Server {
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
         } catch (SecurityException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING,"Security error exception");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING,"Impossibile aprire file di log");
         }
 
-        Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.SEVERE);
-        LOGGER.addHandler(handlerObj);
-        LOGGER.setUseParentHandlers(false);
         int port = 0;
 
         do {

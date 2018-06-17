@@ -40,7 +40,6 @@ public class ServerNetwork implements Observer {
         try {
             LocateRegistry.createRegistry(port + 1);
         } catch (RemoteException e) {
-            e.printStackTrace();
             LOGGER.log(Level.SEVERE,"Errore creazione registry, porta gia' in uso o rmiregistry non avviato");
         }
 
@@ -50,7 +49,6 @@ public class ServerNetwork implements Observer {
         } catch (MalformedURLException e) {
             LOGGER.log(Level.SEVERE,"Impossibile registrare l'oggetto indicato!");
         } catch (RemoteException e) {
-            e.printStackTrace();
             LOGGER.log(Level.SEVERE,"Errore inizializzazione rmi");
         }
     }

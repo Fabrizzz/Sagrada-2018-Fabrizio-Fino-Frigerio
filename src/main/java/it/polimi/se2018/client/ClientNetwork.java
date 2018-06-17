@@ -96,7 +96,7 @@ public class ClientNetwork {
                 }
 
             } catch (MalformedURLException | RemoteException | NotBoundException e) {
-               e.printStackTrace();
+                LOGGER.log(Level.SEVERE,"Errore connessione rmi");
                 return false;
             }
         }else{
