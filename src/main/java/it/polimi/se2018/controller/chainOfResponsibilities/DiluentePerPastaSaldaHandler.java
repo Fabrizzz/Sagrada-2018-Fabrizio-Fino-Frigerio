@@ -38,22 +38,21 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                 throw new InvalidParameterException();
             }
             try {
-
                 draftPool = model.getDraftPool();
-                draftPoolPosition = playerMove.getDraftPosition().get();
-                newValue = playerMove.getNewDiceValue().get();
+                draftPoolPosition = playerMove.getDraftPosition().orElse(0);
+                newValue = playerMove.getNewDiceValue().orElse(NumberEnum.ONE);
                 diceBag = model.getDiceBag();
                 dieToGet = diceBag.getFirst();
                 dieToRemove = draftPool.getDie(draftPoolPosition);
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilzzare DILUENTEPERPASTASALDA");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-                }else {
+                } else {
                     board = model.getBoard(remoteView.getPlayer());
 
                     if (playerMove.getRow().isPresent() && playerMove.getColumn().isPresent()) {
-                        row = playerMove.getRow().get();
-                        column = playerMove.getColumn().get();
+                        row = playerMove.getRow().orElse(0);
+                        column = playerMove.getColumn().orElse(0);
                         NumberEnum num = dieToGet.getNumber();
                         dieToGet.setNumber(newValue);
 
@@ -65,7 +64,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                                 !board.verifyNearCellsRestriction(dieToGet, row, column) ||
                                 !board.verifyPositionRestriction(row, column)) {
                             dieToGet.setNumber(num);
-                            LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
+                            LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                         } else {
                             diceBag.takeDie();
@@ -95,7 +94,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                             nextHandler.process(playerMove, remoteView, model);
                         } else {
-                            LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
+                            LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                         }
                     }
@@ -104,10 +103,8 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
 
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in DILUENTEPERPASTASALDA");
-                e.printStackTrace();
             } catch (AlredySetDie alredySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in DILUENTEPERPASTASALDA");
-                alredySetDie.printStackTrace();
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' DILUENTEPERPASTASALDA, passaggio responsabilita' all'handler successivo");

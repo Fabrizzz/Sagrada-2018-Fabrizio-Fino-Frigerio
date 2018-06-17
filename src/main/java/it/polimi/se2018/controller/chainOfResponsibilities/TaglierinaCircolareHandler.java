@@ -34,9 +34,9 @@ public class TaglierinaCircolareHandler extends ToolHandler {
             }
             roundTrack = model.getRoundTrack();
             draftPool = model.getDraftPool();
-            draftPoolPosition = playerMove.getDraftPosition().get();
-            roundTrackRound = playerMove.getRoundTrackRound().get();
-            roundTrackPosition = playerMove.getRoundTrackPosition().get();
+            draftPoolPosition = playerMove.getDraftPosition().orElse(0);
+            roundTrackRound = playerMove.getRoundTrackRound().orElse(0);
+            roundTrackPosition = playerMove.getRoundTrackPosition().orElse(0);
 
 
             if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || roundTrackPosition >= roundTrack.numberOfDice(roundTrackRound)) {

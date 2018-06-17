@@ -37,8 +37,8 @@ public class ToolFactory {
             case TAGLIERINAMANUALE:
             case LATHEKIN:
                 return new Tool4_12Handler(tool);
-
+            default:
+                throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 }

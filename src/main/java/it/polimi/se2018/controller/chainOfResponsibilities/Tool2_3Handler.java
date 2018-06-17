@@ -42,10 +42,10 @@ public class Tool2_3Handler extends ToolHandler {
                 throw new InvalidParameterException();
             } else {
                 board = model.getBoard(remoteView.getPlayer());
-                row = playerMove.getRow().get();
-                column = playerMove.getColumn().get();
-                finalColumn = playerMove.getFinalColumn().get();
-                finalRow = playerMove.getFinalRow().get();
+                row = playerMove.getRow().orElse(0);
+                column = playerMove.getColumn().orElse(0);
+                finalColumn = playerMove.getFinalColumn().orElse(0);
+                finalRow = playerMove.getFinalRow().orElse(0);
 
 
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||

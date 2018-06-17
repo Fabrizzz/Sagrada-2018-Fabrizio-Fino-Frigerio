@@ -49,10 +49,10 @@ public class Tool4_12Handler extends ToolHandler {
                 throw new InvalidParameterException();
             }
 
-            firstRow = playerMove.getRow().get();
-            firstColumn = playerMove.getColumn().get();
-            firstFinalColumn = playerMove.getFinalColumn().get();
-            firstFinalRow = playerMove.getFinalRow().get();
+            firstRow = playerMove.getRow().orElse(0);
+            firstColumn = playerMove.getColumn().orElse(0);
+            firstFinalColumn = playerMove.getFinalColumn().orElse(0);
+            firstFinalRow = playerMove.getFinalRow().orElse(0);
 
             if (playerMove.getNextMove().isPresent()) {
                 playerMove2 = playerMove.getNextMove().get();
@@ -62,10 +62,10 @@ public class Tool4_12Handler extends ToolHandler {
                     throw new InvalidParameterException();
                 }
 
-                secondRow = playerMove2.getRow().get();
-                secondColumn = playerMove2.getColumn().get();
-                secondFinalColumn = playerMove2.getFinalColumn().get();
-                secondFinalRow = playerMove2.getFinalRow().get();
+                secondRow = playerMove2.getRow().orElse(0);
+                secondColumn = playerMove2.getColumn().orElse(0);
+                secondFinalColumn = playerMove2.getFinalColumn().orElse(0);
+                secondFinalRow = playerMove2.getFinalRow().orElse(0);
 
                 if (secondColumn < 0 || secondColumn > 4 || secondRow < 0 || secondRow > 3 ||
                         secondFinalColumn < 0 || secondFinalColumn > 4 || secondFinalRow < 0 || secondFinalRow > 3){

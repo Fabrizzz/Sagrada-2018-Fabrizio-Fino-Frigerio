@@ -97,7 +97,8 @@ public class Controller implements Observer {
 
             setTimer(0, 0);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE,"Interrupt ricevuto");
+            Thread.currentThread().interrupt();
         }
 
     }
@@ -106,7 +107,7 @@ public class Controller implements Observer {
         return model;
     }
 
-    public synchronized void timerScaduto(int turn, int round) {
+    private synchronized void timerScaduto(int turn, int round) {
         LOGGER.log(Level.FINE,"Timer scaduto");
 
         if (model.getTurn() == turn && model.getRound() == round) {
@@ -116,7 +117,7 @@ public class Controller implements Observer {
 
     }
 
-    public void setTimer(int turn, int round) {
+    private void setTimer(int turn, int round) {
         LOGGER.log(Level.FINE,"Timer impostato");
         timer.schedule(new RoundTimer(turn, round, this), (long) (Model.getMinutesPerTurn() * 60 * 1000));
     }
@@ -137,12 +138,12 @@ public class Controller implements Observer {
                 if (model.getTurn() != turn)
                     setTimer(model.getTurn(), model.getRound());
             } catch (InvalidParameterException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE,"Parametri invalidi");
             }
         } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
             LOGGER.log(Level.INFO, "Board ricevuta");
             choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
-            notify();
+            notifyAll();
         }
     }
 

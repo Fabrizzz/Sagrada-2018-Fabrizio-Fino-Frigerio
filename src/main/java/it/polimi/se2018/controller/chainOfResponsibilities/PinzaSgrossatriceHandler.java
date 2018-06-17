@@ -35,8 +35,8 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
             }
 
             try {
-                draftPosition = playerMove.getDraftPosition().get();
-                aumentaDiUno = playerMove.getAumentaValoreDado().get();
+                draftPosition = playerMove.getDraftPosition().orElse(0);
+                aumentaDiUno = playerMove.getAumentaValoreDado().orElse(false);
                 draftPool = model.getDraftPool();
                 die = draftPool.getDie(draftPosition);  //non dovrebbe lanciare eccezioni perchè ho già fatto il controllo nel first check
 

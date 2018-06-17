@@ -33,9 +33,9 @@ public class RigaInSugheroHandler extends ToolHandler {
             }
             try {
                 board = model.getBoard(remoteView.getPlayer());
-                row = playerMove.getRow().get();
-                column = playerMove.getColumn().get();
-                pos = playerMove.getDraftPosition().get();
+                row = playerMove.getRow().orElse(0);
+                column = playerMove.getColumn().orElse(0);
+                pos = playerMove.getDraftPosition().orElse(0);
                 die = model.getDraftPool().getDie(pos);
                 if (
                         cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||

@@ -701,10 +701,12 @@ public class CLI extends View{
             }
         } catch(Exception e) {}finally {
             try{
-                is.close();
-            }catch (Exception e){}
+                if(is != null)
+                    is.close();
+            }catch (Exception  e){}
             try{
-                dis.close();
+                if(dis != null)
+                    dis.close();
             }catch (Exception e){}
         }
 
@@ -725,9 +727,11 @@ public class CLI extends View{
             System.out.println("Errore scrittura id giocatore, controlla i permessi di scrittura della cartella");
         }finally {
             try{
-                fos.close();
+                if(fos != null)
+                    fos.close();
             }catch (Exception e){}
             try{
+                if(dos != null)
                 dos.close();
             }catch (Exception e){}
         }

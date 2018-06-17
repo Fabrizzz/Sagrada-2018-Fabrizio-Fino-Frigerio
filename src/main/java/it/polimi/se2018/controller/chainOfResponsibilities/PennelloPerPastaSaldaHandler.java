@@ -24,7 +24,8 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
         DraftPool draftPool;
         NumberEnum newValue;
         PlayerBoard board;
-        int row, column;
+        int row;
+        int column;
         int draftPoolPosition;
 
         if (playerMove.getTool() == Tool.PENNELLOPERPASTASALDA) {
@@ -37,8 +38,8 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
             try {
 
                 draftPool = model.getDraftPool();
-                draftPoolPosition = playerMove.getDraftPosition().get();
-                newValue = playerMove.getNewDiceValue().get();
+                draftPoolPosition = playerMove.getDraftPosition().orElse(0);
+                newValue = playerMove.getNewDiceValue().orElse(NumberEnum.ONE);
                 Die die = draftPool.getDie(draftPoolPosition);
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())){
                     LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA");
@@ -51,8 +52,8 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                     board = model.getBoard(remoteView.getPlayer());
 
                     if (playerMove.getRow().isPresent() && playerMove.getColumn().isPresent()) {
-                        row = playerMove.getRow().get();
-                        column = playerMove.getColumn().get();
+                        row = playerMove.getRow().orElse(0);
+                        column = playerMove.getColumn().orElse(0);
                         NumberEnum num = die.getNumber();
                         die.setNumber(newValue);
 

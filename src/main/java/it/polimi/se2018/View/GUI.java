@@ -27,6 +27,7 @@ public class GUI extends Application {
             latch.await();
         } catch (InterruptedException e) {
             System.out.println("Errore");
+            Thread.currentThread().interrupt();
         }
         return classe;
     }

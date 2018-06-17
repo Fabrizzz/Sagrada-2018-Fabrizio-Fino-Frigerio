@@ -266,7 +266,7 @@ public class ControllerGame implements Initializable {
             for (Node node : childrens) {
                 if (gridPane.getRowIndex(node) == i && gridPane.getColumnIndex(node) == j) {
                     nameColor = colorRestriction.getColor().toString();
-                    nameColor.toLowerCase();
+                    nameColor = nameColor.toLowerCase();
                     node.setStyle("-fx-background-color:"+nameColor);
                     node.setOpacity(0.3);
                     break;

@@ -18,7 +18,8 @@ public class TamponeDiamantatoHandler extends ToolHandler {
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
-        int row, column;
+        int row;
+        int column;
         PlayerBoard playerBoard;
         if (playerMove.getTool() == Tool.TAMPONEDIAMANTATO) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa TAMPONEDIAMANTATO");
@@ -27,8 +28,8 @@ public class TamponeDiamantatoHandler extends ToolHandler {
                 throw new InvalidParameterException();
             }
 
-            row = playerMove.getRow().get();
-            column = playerMove.getColumn().get();
+            row = playerMove.getRow().orElse(0);
+            column = playerMove.getColumn().orElse(0);
             playerBoard = model.getBoard(remoteView.getPlayer());
             if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || !playerBoard.containsDie(row, column)){
                 LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAMPONEDIAMANTATO");

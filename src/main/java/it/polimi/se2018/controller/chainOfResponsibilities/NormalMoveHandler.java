@@ -32,9 +32,9 @@ public class NormalMoveHandler extends Handler {
             }
             try {
                 board = model.getBoard(remoteView.getPlayer());
-                row = playerMove.getRow().get();
-                column = playerMove.getColumn().get();
-                pos = playerMove.getDraftPosition().get();
+                row = playerMove.getRow().orElse(0);
+                column = playerMove.getColumn().orElse(0);
+                pos = playerMove.getDraftPosition().orElse(0);
                 die = model.getDraftPool().getDie(pos);
                 if (
                         (board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) &&
@@ -66,10 +66,8 @@ public class NormalMoveHandler extends Handler {
                 }
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in MOSSASTANDARD");
-                e.printStackTrace();
             } catch (AlredySetDie alredySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in MOSSASTANDARD");
-                alredySetDie.printStackTrace();
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' MOSSASTANDARD, passaggio responsabilita' all'handler successivo");
