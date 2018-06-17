@@ -54,11 +54,13 @@ public class NormalMoveHandler extends Handler {
                     board.setDie(die, row, column);
                     model.getDraftPool().removeDie(die);
 
-                    if (remoteView.getPlayer().isCanDoTwoTurn())
+                    if (remoteView.getPlayer().isCanDoTwoTurn()){
+                        LOGGER.log(Level.FINE,"Player puo' fare due turni");
                         remoteView.getPlayer().setCanDoTwoTurn(false);
-                    else
+                    }else {
+                        LOGGER.log(Level.FINE,"Player ha usato normal move");
                         model.setNormalMove(true);
-
+                    }
                     nextHandler.process(playerMove, remoteView, model);
 
                 }

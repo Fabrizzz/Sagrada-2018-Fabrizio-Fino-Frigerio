@@ -13,7 +13,7 @@ public class Player implements Serializable { //da completare
     private boolean isConnected = true;
 
     private boolean skipSecondTurn; //per la tool card numero 8
-    private boolean canDoTwoTurn;
+    private boolean canDoTwoTurn = false;
     private boolean isYourTurn = false;
 
 
