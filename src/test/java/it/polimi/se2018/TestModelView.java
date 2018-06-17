@@ -26,8 +26,9 @@ import static org.junit.Assert.assertTrue;
 
 public class TestModelView {
     private ModelView modelView;
+
     private  Model model;
-    private List<Player> players;
+    private ArrayList<Player> players = new ArrayList<>();
     private List<PublicObjective> publicObjectives;
     private  PlayerBoard[] playerBoard;
     private Map<Player, PlayerBoard> boardMap;
