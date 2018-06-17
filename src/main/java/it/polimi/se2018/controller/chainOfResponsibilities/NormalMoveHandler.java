@@ -37,14 +37,17 @@ public class NormalMoveHandler extends Handler {
                 pos = playerMove.getDraftPosition().get();
                 die = model.getDraftPool().getDie(pos);
                 if (
-                        model.hasUsedNormalMove() ||
-                                (board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
+                        (board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) &&
+                                (model.hasUsedNormalMove() ||
                                 board.containsDie(row, column) ||
                                 !board.verifyColorRestriction(die, row, column) ||
                                 !board.verifyNumberRestriction(die, row, column) ||
                                 !board.verifyNearCellsRestriction(die, row, column) ||
-                                !board.verifyPositionRestriction(row, column)) {
-                    LOGGER.log(Level.INFO,"Il giocatore non puo' eseguire MOSSASTANDARD");
+                                !board.verifyPositionRestriction(row, column))) {
+                    LOGGER.log(Level.INFO,"Il giocatore non puo' eseguire MOSSASTANDARD row: " + row + " column:" + column +
+                    " colorRestriction: " + board.verifyColorRestriction(die, row, column) + " numberRestriction:" +
+                            board.verifyNumberRestriction(die, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(die, row, column) +
+                    "positionRestriction:" + board.verifyPositionRestriction(row, column));
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else {
 
