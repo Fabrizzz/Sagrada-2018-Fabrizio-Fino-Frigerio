@@ -1,10 +1,10 @@
-package it.polimi.se2018.View;
+package it.polimi.se2018.view;
 
 import java.util.Observable;
 import java.util.Observer;
 
 /**
- * View abstract class
+ * view abstract class
  */
 public abstract class View extends Observable implements Observer {
     /**

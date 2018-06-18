@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootRMI" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="it.polimi.se2018.View.ControllerGUIRMI">
+<AnchorPane fx:id="rootRMI" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="it.polimi.se2018.view.ControllerGUIRMI">
   <children>
     <BorderPane id="boarderpaneSocket" fx:id="borderpaneRMI" layoutX="14.0" layoutY="14.0" prefHeight="360.0" prefWidth="550.0">
       <bottom>

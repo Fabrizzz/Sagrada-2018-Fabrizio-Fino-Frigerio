@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="rootSocket" fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="it.polimi.se2018.View.ControllerGUISocket">
+<AnchorPane id="rootSocket" fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="it.polimi.se2018.view.ControllerGUISocket">
   <children>
     <BorderPane id="boarderpaneSocket" fx:id="borderpaneSocket" layoutX="14.0" layoutY="14.0" prefHeight="360.0" prefWidth="550.0">
       <bottom>

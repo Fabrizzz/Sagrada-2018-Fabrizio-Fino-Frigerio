@@ -1,8 +1,8 @@
 package it.polimi.se2018.client;
 
-import it.polimi.se2018.View.CLI;
-import it.polimi.se2018.View.GUIProxy;
-import it.polimi.se2018.View.View;
+import it.polimi.se2018.view.CLI;
+import it.polimi.se2018.view.GUIProxy;
+import it.polimi.se2018.view.View;
 
 import java.io.IOException;
 import java.util.Scanner;

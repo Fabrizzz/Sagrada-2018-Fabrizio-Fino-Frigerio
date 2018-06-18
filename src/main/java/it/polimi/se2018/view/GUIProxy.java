@@ -1,4 +1,4 @@
-package it.polimi.se2018.View;
+package it.polimi.se2018.view;
 
 import it.polimi.se2018.client.ClientNetwork;
 

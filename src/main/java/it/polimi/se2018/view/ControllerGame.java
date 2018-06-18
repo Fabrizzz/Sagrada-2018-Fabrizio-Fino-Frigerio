@@ -1,4 +1,4 @@
-package it.polimi.se2018.View;
+package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.PlayerBoard;
@@ -9,11 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;

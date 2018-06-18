@@ -1,17 +1,12 @@
-package it.polimi.se2018.View;
+package it.polimi.se2018.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.concurrent.CountDownLatch;
-
-import static javafx.fxml.FXMLLoader.*;
 
 /**
  * GUI

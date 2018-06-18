@@ -8,6 +8,7 @@ import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
@@ -139,6 +140,7 @@ public class Controller implements Observer {
                     setTimer(model.getTurn(), model.getRound());
             } catch (InvalidParameterException e) {
                 LOGGER.log(Level.SEVERE,"Parametri invalidi");
+                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
             }
         } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
             LOGGER.log(Level.INFO, "Board ricevuta");

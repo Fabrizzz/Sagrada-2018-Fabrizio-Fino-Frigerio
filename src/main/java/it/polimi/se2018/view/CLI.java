@@ -1,4 +1,4 @@
-package it.polimi.se2018.View;
+package it.polimi.se2018.view;
 
 import it.polimi.se2018.client.ClientNetwork;
 import it.polimi.se2018.model.ModelView;
@@ -17,10 +17,7 @@ import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -30,8 +27,8 @@ import java.util.regex.Pattern;
  * @author Alessio
  */
 public class CLI extends View{
-    private final String ANSI_RESET = "\u001B[0m";
-    private Map<Color,String> colorMap = new HashMap<>();
+    private static final String ANSI_RESET = "\u001B[0m";
+    private Map<Color,String> colorMap = new EnumMap<Color, String>(Color.class);
     private ModelView modelView;
     private Long localID;
     private static final Logger LOGGER = Logger.getLogger("Logger");
@@ -46,27 +43,35 @@ public class CLI extends View{
         colorMap.put(Color.YELLOW,"\u001B[33m");
         colorMap.put(Color.PURPLE, "\u001B[35m");
     }
-
+    
+    private void println(String string){
+        System.out.println(string);
+    }
+    
+    private void print(String string){
+        System.out.print(string);
+    }
+    
     /**
      * Show a playerboard to the player
      * @param playerBoard playerboard to show
      */
-    public void showPlayerBoard(PlayerBoard playerBoard){
-        System.out.println("\nPlancia dei dadi");
-        System.out.println("__________|| Riga");
+    private void showPlayerBoard(PlayerBoard playerBoard){
+        println("\nPlancia dei dadi");
+        println("__________|| Riga");
 
         for(int j = 0; j < 4; j ++){
             for(int i = 0; i < 5; i++){
                 try{
-                    System.out.print("|" + colorMap.get(playerBoard.getDie(j,i).getColor()) + playerBoard.getDie(j,i).getNumber().getInt() + ANSI_RESET);
+                    print("|" + colorMap.get(playerBoard.getDie(j,i).getColor()) + playerBoard.getDie(j,i).getNumber().getInt() + ANSI_RESET);
                 }catch(NoDieException e) {
-                    System.out.print("| ");
+                    print("| ");
                 }
             }
-            System.out.println("|| "+(j+1));
+            println("|| "+(j+1));
         }
-        System.out.println("‾‾‾‾‾‾‾‾‾‾");
-        System.out.println("|1|2|3|4|5|| Colonna\n");
+        println("‾‾‾‾‾‾‾‾‾‾");
+        println("|1|2|3|4|5|| Colonna\n");
 
 
 
@@ -75,75 +80,75 @@ public class CLI extends View{
 
     /**
      * Show the  board containing the restriction
-     * @param playerBoard
+     * @param playerBoard player board to show
      */
-    public void showBoard(PlayerBoard playerBoard){
-        System.out.println("Plancia delle restrizioni");
-        System.out.println("__________|| Riga");
+    private void showBoard(PlayerBoard playerBoard){
+        println("Plancia delle restrizioni");
+        println("__________|| Riga");
 
         for(int j = 0; j < 4; j ++){
             for(int i = 0; i < 5; i++){
 
                 if(playerBoard.getRestriction(j,i).isNumberRestriction()){
-                    System.out.print("|" + (((NumberRestriction) (playerBoard.getRestriction(j,i))).getNumber()).getInt());
+                    print("|" + (((NumberRestriction) (playerBoard.getRestriction(j,i))).getNumber()).getInt());
                 }else if(playerBoard.getRestriction(j,i).isColorRestriction()){
-                    System.out.print("|" + colorMap.get(((ColorRestriction) playerBoard.getRestriction(j,i)).getColor()) + "x" + ANSI_RESET);
+                    print("|" + colorMap.get(((ColorRestriction) playerBoard.getRestriction(j,i)).getColor()) + "x" + ANSI_RESET);
                 }else{
-                    System.out.print("| ");
+                    print("| ");
                 }
 
             }
-            System.out.println("|| "+(j+1));
+            println("|| "+(j+1));
         }
-        System.out.println("‾‾‾‾‾‾‾‾‾‾");
-        System.out.println("|1|2|3|4|5|| Colonna\n\n");
+        println("‾‾‾‾‾‾‾‾‾‾");
+        println("|1|2|3|4|5|| Colonna\n\n");
     }
 
     /**
      * Show the draftpool to the player
      */
-    public void showDraftPool(){
-        System.out.println("Riserva dei dadi");
+    private void showDraftPool(){
+        println("Riserva dei dadi");
 
-        System.out.print("Posizione:");
+        print("Posizione:");
         for(int i = 0; i <  modelView.DraftPoolSize();i++){
-            System.out.print("|"+(i+1));
+            print("|"+(i+1));
         }
-        System.out.println("|");
+        println("|");
 
-        System.out.print("Dadi:     ");
+        print("Dadi:     ");
         for(int i = 0; i < modelView.DraftPoolSize(); i++){
             try{
-                System.out.print("|" + colorMap.get(modelView.getDraftPoolDie(i).getColor()) + modelView.getDraftPoolDie(i).getNumber().getInt() + ANSI_RESET);
+                print("|" + colorMap.get(modelView.getDraftPoolDie(i).getColor()) + modelView.getDraftPoolDie(i).getNumber().getInt() + ANSI_RESET);
             }catch(NoDieException e){
-                System.out.print("| ");
+                print("| ");
             }
         }
-        System.out.println("|\n\n");
+        println("|\n\n");
     }
 
     /**
      * Show the toolcards to the player
      */
-    public void showToolCards(){
-        System.out.println("Carte strumento:");
+    private void showToolCards(){
+        println("Carte strumento:");
         for (int i = 0; i < modelView.getTools().size(); i++) {
-            System.out.print("Nome: ");
-            System.out.println(modelView.getTools().keySet().toArray()[i].toString());
-            System.out.print("Descrizione: ");
-            System.out.println(((Tool) modelView.getTools().keySet().toArray()[i]).getDescription());
-            System.out.println("Usato: "+modelView.getTools().get(modelView.getTools().keySet().toArray()[i]) + "\n\n");
+            print("Nome: ");
+            println(modelView.getTools().keySet().toArray()[i].toString());
+            print("Descrizione: ");
+            println(((Tool) modelView.getTools().keySet().toArray()[i]).getDescription());
+            println("Usato: "+modelView.getTools().get(modelView.getTools().keySet().toArray()[i]) + "\n\n");
         }
     }
 
     /**
      * Show the public objectives cards
      */
-    public void showPublicObjectives(){
-        System.out.println("Carte obiettivo pubbliche:");
+    private void showPublicObjectives(){
+        println("Carte obiettivo pubbliche:");
         for(int i = 0; i < modelView.getPublicObjective().size(); i ++){
-            System.out.println("Numero " + (i+1));
-            System.out.println(modelView.getPublicObjective().get(i).getObjectiveName() + "\n\n");
+            println("Numero " + (i+1));
+            println(modelView.getPublicObjective().get(i).getObjectiveName() + "\n\n");
         }
     }
 
@@ -151,39 +156,37 @@ public class CLI extends View{
      * Show the player private objective
      */
     private void showPrivateObjective(){
-        System.out.println("Colore obiettivo privato: \n\n" /*+ modelView.getPlayer(localID).*/);//TODO
+        println("Colore obiettivo privato: \n\n" /*+ modelView.getPlayer(localID).*/);//TODO
     }
 
     /**
      * Show the round track to the player
      */
-    public void showRoundTrack(){
-        System.out.println("Tracciato dei dadi:");
+    private void showRoundTrack(){
+        println("Tracciato dei dadi:");
         for(int i = 0; i < modelView.getRound(); i ++){
-            System.out.println("Round " + (i+1));
+            println("Round " + (i+1));
             for(int j = 0; j < modelView.getRoundTrack().numberOfDice(i); j ++){
                 try{
-                    System.out.println("|" + modelView.getRoundTrackDie(i,j));
-                }catch (NoDieException e){}
+                    println("|" + modelView.getRoundTrackDie(i,j));
+                }catch (NoDieException e){
+                    LOGGER.log(Level.FINEST,"Dado non presente");
+                }
             }
-            System.out.println("|||\n\n");
+            println("|||\n\n");
         }
     }
 
-    public int[] chooseRoundTrackDie(){
+    private int[] chooseRoundTrackDie(){
         int[] position = new int[2];
         showRoundTrack();
-        System.out.println("Inserisci il numero del round: ");
-        do {
-            position[0] = InputUtils.getInt();
-        }while (position[0] > 0 && position[0] < modelView.getRound());
+        position[0] = modelView.getRound();
 
-        System.out.println("Inserisci la posizione del dado: ");
+        println("Inserisci la posizione del dado: ");
         do {
             position[1] = InputUtils.getInt();
         }while (position[1] > 0 && position[1] < modelView.getRoundTrack().numberOfDice(position[0] - 1));
 
-        position[0] --;
         position[1] --;
 
         return position;
@@ -193,13 +196,13 @@ public class CLI extends View{
      * Let the player choose a die from the draftpool
      * @return the index of the chosen die
      */
-    public int chooseDraftpoolDie(){
-        System.out.println("Scegli il dado dalla riserva");
+    private int chooseDraftpoolDie(){
+        println("Scegli il dado dalla riserva");
         showDraftPool();
-        System.out.println("Inserisci la posizione del dado scelto:");
+        println("Inserisci la posizione del dado scelto:");
         int i = InputUtils.getInt();
         while (i < 1 || i > modelView.DraftPoolSize()) {
-            System.out.println("Errore, inserisci una posizione corretta");
+            println("Errore, inserisci una posizione corretta");
             i = InputUtils.getInt();
         }
         return i - 1;
@@ -208,48 +211,97 @@ public class CLI extends View{
 
     /**
      * Let the player choose a cell in his playerboard
-     * @param withDie Require the player to choose a cell containing a die or not
      * @return  the array containing the row and column coordinates to identify the cell
      */
-    public int[] chooseBoardCell(Boolean withDie){
+    private int[] chooseBoardCellWithDie(){
         int[] position = new int[2];
         boolean repeat = true;
+
+        if(modelView.getBoard(modelView.getPlayer(localID)).isEmpty()){
+            println("La plancia e' vuota, non puoi eseguire questa mossa");
+            position[0] = -1;
+            position[1] = -1;
+            return position;
+        }
+
         do {
             showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
-            System.out.println("Inserisci l'indice di riga: ");
-            position[0] = InputUtils.getInt();
-            while (position[0] < 1 || position[0] > 4) {
-                System.out.println("Errore, inserisci un indice corretto");
-                position[0] = InputUtils.getInt();
-            }
 
-            System.out.println("Inserisci l'indice di colonna: ");
-            position[1] = InputUtils.getInt();
-            while (position[1] < 1 || position[1] > 5) {
-                System.out.println("Errore, inserisci un indice corretto");
-                position[1] = InputUtils.getInt();
-            }
-            if(withDie){
-                if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0] - 1,position[1] - 1)){
-                    repeat = false;
-                }else{
-                    repeat = true;
-                    System.out.println("Errore: nessun dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
-                }
+            position[0] = chooseRow();
+            position[1] = chooseColumn();
+
+            if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0],position[1])){
+                repeat = false;
             }else{
-                if(!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0] - 1,position[1] - 1)){
-                    repeat = false;
-                }else{
-                    repeat = true;
-                    System.out.println("Errore: dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
-                }
-
+                repeat = true;
+                println("Errore: nessun dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
             }
         }while(repeat);
 
-        position[0] --;
-        position[1] --;
         return position;
+    }
+
+    private int chooseRow(){
+        int row = 0;
+        println("Inserisci l'indice di riga: ");
+        row = InputUtils.getInt();
+        while (row < 1 || row > 4) {
+            println("Errore, inserisci un indice corretto");
+            row = InputUtils.getInt();
+        }
+        return row - 1;
+    }
+
+    private int chooseColumn(){
+        int column = 0;
+        println("Inserisci l'indice di colonna: ");
+        column = InputUtils.getInt();
+        while (column < 1 || column > 5) {
+            println("Errore, inserisci un indice corretto");
+            column = InputUtils.getInt();
+        }
+
+        return column - 1;
+    }
+
+    private boolean boardIsFullsFull(PlayerBoard board){
+        for(int k = 0; k < 5; k++){
+            for(int h = 0; h < 4; h++){
+                if(!board.containsDie(h,k)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private int[] chooseBoardCellWithoutDie(){
+        int[] position = new int[2];
+        boolean repeat = true;
+
+        if(boardIsFullsFull(modelView.getBoard(modelView.getPlayer(localID)))){
+            println("Errore, la board e' piena non puoi eseguire questa mossa");
+            position[0] = -1;
+            position[1] = -1;
+            return position;
+        }else {
+            do {
+                showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
+
+                position[0] = chooseRow();
+
+                position[1] = chooseColumn();
+
+
+                if (!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0], position[1])) {
+                    repeat = false;
+                } else {
+                    repeat = true;
+                    println("Errore: dado presente in posizione riga: " + position[0] + ", colonna: " + position[1] + ". Ripetere la scelta");
+                }
+            } while (repeat);
+
+            return position;
+        }
     }
 
     /**
@@ -309,55 +361,50 @@ public class CLI extends View{
     public void normalSugheroMove(Tool tool){
         int i = chooseDraftpoolDie();
 
-        System.out.println("Scelgi la dove piazzare il dado");
-        int[] position = chooseBoardCell(false);
+        println("Scelgi la dove piazzare il dado");
+        int[] position = chooseBoardCellWithoutDie();
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
         setChanged();
         notifyObservers(clientMessage);
-        System.out.println("Mossa inviata");
+        println("Mossa inviata");
     }
 
     /**
      * Execute one of the following actions: skip turn, martelletto tool, tenaglia a rotelle tool
      * @param tool tool to use
      */
-    public void skipMartellettoTenagliaMove(Tool tool){
+    private void skipMartellettoTenagliaMove(Tool tool){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
         setChanged();
-        notifyObservers();
-        System.out.println("Mossa inviata");
+        notifyObservers(clientMessage);
+        println("Mossa inviata");
     }
 
     /**
      * Use the pinza sgrossatrice tool
-     * @return
      */
-    public boolean sgrossatriceMove(){
+    private void sgrossatriceMove(){
        int position = chooseDraftpoolDie();
        try {
-            System.out.println("Valore del dado selezionato: " + modelView.getDraftPoolDie(position).getNumber().getInt());
+            println("Valore del dado selezionato: " + modelView.getDraftPoolDie(position).getNumber().getInt());
             int scelta = 3;
             while(scelta != 0 && scelta != 1){
-                System.out.println("Inserisci 0 per diminuire il valore del dado selezionato, 1 per aumentare il valore del dado");
+                println("Inserisci 0 per diminuire il valore del dado selezionato, 1 per aumentare il valore del dado");
                 scelta = InputUtils.getInt();
             }
 
-            Boolean aumento = false;
-            if(scelta == 0){
-                aumento = false;
-            }else{
-                aumento = true;
-            }
+            Boolean aumento = (scelta != 0);
 
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.PINZASGROSSATRICE,position,aumento));
             setChanged();
             notifyObservers(clientMessage);
-            System.out.println("Mossa inviata");
+            println("Mossa inviata");
 
-            return true;
        }catch(NoDieException e){
-           return false;
+           LOGGER.log(Level.FINEST, "Nessun dado presente");
+           println("Errore, dado non presente nel draftpool, mossa annullata");
+           chooseMove();
        }
 
     }
@@ -366,35 +413,49 @@ public class CLI extends View{
      * Use one of the following tools: pennello per eglomise, alesatore per lamina di rame,lathekin, taglierina manuale
      * @param tool tool to use
      */
-    public void pennelloAlesatoreLeathekinManualeMove(Tool tool){
+    private void pennelloAlesatoreLeathekinManualeMove(Tool tool){
         boolean secondaMossa = false;
-        System.out.println("Scegli il primo dado da muovere");
-        int[] position = chooseBoardCell(true);
-        System.out.println("Scegli dove piazzare primo il dado");
-        int[] newPosition = chooseBoardCell(false);
-        ClientMessage clientMessage;
+        println("Scegli il primo dado da muovere");
+        int[] position = chooseBoardCellWithDie();
+        if(position[0] == -1){
+            chooseMove();
+            return;
+        }
+
+        println("Scegli dove piazzare primo il dado");
+        int[] newPosition = chooseBoardCellWithoutDie();
+        if(newPosition[0] == -1){
+            chooseMove();
+            return;
+        }
 
         if(tool == Tool.LATHEKIN){
             secondaMossa = true;
         }else if(tool == Tool.TAGLIERINAMANUALE){
-            System.out.println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
+            println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
             int scelta = 2;
             do{
                 scelta = InputUtils.getInt();
-            }while(scelta != 0 || scelta != 1);
+            }while(scelta != 0 && scelta != 1);
 
-            if(scelta == 1) {
-                secondaMossa = true;
-            }else {
-                secondaMossa = false;
-            }
+            secondaMossa = (scelta == 1);
         }
 
+        ClientMessage clientMessage;
         if(secondaMossa){
-            System.out.println("Scegli il secondo dado da muovere");
-            int[] position2 = chooseBoardCell(true);
-            System.out.println("Scegli dove piazzare il secondo dado");
-            int[] newPosition2 = chooseBoardCell(false);
+            println("Scegli il secondo dado da muovere");
+            int[] position2 = chooseBoardCellWithDie();
+            if(position2[0] == -1){
+                chooseMove();
+                return;
+            }
+
+            println("Scegli dove piazzare il secondo dado");
+            int[] newPosition2 = chooseBoardCellWithoutDie();
+            if(newPosition2[0] == -1){
+                chooseMove();
+                return;
+            }
             clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
         }else{
             clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
@@ -402,100 +463,104 @@ public class CLI extends View{
 
         setChanged();
         notifyObservers(clientMessage);
-        System.out.println("Mossa inviata");
+        println("Mossa inviata");
     }
 
     /**
      * Use one the taglierina circolare tool
      */
-    public void taglierinaCircolareMove(){
+    private void taglierinaCircolareMove(){
         int i = chooseDraftpoolDie();
         int[] roundPosition = chooseRoundTrackDie();
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(i,roundPosition[0],roundPosition[1],Tool.TAGLIERINACIRCOLARE));
         setChanged();
         notifyObservers(clientMessage);
-        System.out.println("Mossa inviata");
+        println("Mossa inviata");
     }
 
     /**
      * Use the pennello per pasta salda tool
      */
-    public void pennelloPastaSaldaMove(){
+    private void pennelloPastaSaldaMove(){
         int i = chooseDraftpoolDie();
         NumberEnum newNum = NumberEnum.values()[(new Random()).nextInt(NumberEnum.values().length)];
-        System.out.println("Il nuovo valore del dado e': " + newNum.getInt());
-        int[] position = chooseBoardCell(false);
+        println("Il nuovo valore del dado e': " + newNum.getInt());
+        int[] position = chooseBoardCellWithoutDie();
+        if(position[0] == -1){
+            chooseMove();
+            return;
+        }
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(position[0],position[1],i,newNum,Tool.PENNELLOPERPASTASALDA));
         setChanged();
         notifyObservers(clientMessage);
-        System.out.println("Mossa inviata");
+        println("Mossa inviata");
     }
 
     /**
      * Use the diluente per pasta salda tool
      */
-    public void diluentePerPastaSaldaMove(){
+    private void diluentePerPastaSaldaMove(){
         int i = chooseDraftpoolDie();
         try {
             modelView.getDiceBag().addDie(modelView.getDraftPoolDie(i));
         }catch (NoDieException e){
-            System.out.println("Errore: dado non presente");
+            println("Errore: dado non presente");
             return;
         }
 
-        //problema, come passo il valore di colore del nuovo dado??
+        //TODO problema, come passo il valore di colore del nuovo dado??
 
     }
 
     /**
      * Use the tamponeDiamantato tool
      */
-    public void tamponeDiamantato(){
+    private void tamponeDiamantato(){
         int i = chooseDraftpoolDie();
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
         setChanged();
         notifyObservers(clientMessage);
-        System.out.println("Mossa inviata");
+        println("Mossa inviata");
     }
 
     /**
      * Asck the player to chose a action
      */
     public void chooseMove(){
-        System.out.println("------------------------------------------------------");
-        System.out.println("E' il tuo turno, scelgi la mossa da effettuare:");
-        System.out.println("0) Salta turno");
-        System.out.println("1) Piazza un dado dalla riserva");
-        System.out.println("2) Usa una carta strumento");
-        System.out.println("3) Visualizza la tua plancia");
-        System.out.println("4) Visualizza le plancie degli avversari");
-        System.out.println("5) Visualizza la riserva dei dadi");
-        System.out.println("6) Visualizza il tracciato dei dadi");
-        System.out.println("7) Visualizza il le carte strumento");
-        System.out.println("8) Visualizza il le carte obiettivo pubblico");
-        System.out.println("9) Visualizza il tuo obiettivo privato");
-        System.out.print("Scelta: ");
-        int i = 3;
+        println("------------------------------------------------------");
+        println("E' il tuo turno, scelgi la mossa da effettuare:");
+        println("0) Salta turno");
+        println("1) Piazza un dado dalla riserva");
+        println("2) Usa una carta strumento");
+        println("3) Visualizza la tua plancia");
+        println("4) Visualizza le plancie degli avversari");
+        println("5) Visualizza la riserva dei dadi");
+        println("6) Visualizza il tracciato dei dadi");
+        println("7) Visualizza il le carte strumento");
+        println("8) Visualizza il le carte obiettivo pubblico");
+        println("9) Visualizza il tuo obiettivo privato");
+        print("Scelta: ");
+        int i = -1;
         do{
             i = InputUtils.getInt();
         }while(i < 0 || i > 9);
-        System.out.println("");
+        println("");
 
         switch (i){
             case 0:
                 setChanged();
                 notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
-                System.out.println("Mossa inviata");
+                println("Mossa inviata");
                 return;
             case 1:
                 move(Tool.MOSSASTANDARD);
                 break;
             case 2:
                 showToolCards();
-                System.out.println("Carta strumento scelta: ");
+                println("Carta strumento scelta: ");
                 int k = 4;
                 do{
                     k = InputUtils.getInt();
@@ -509,8 +574,8 @@ public class CLI extends View{
                 break;
             case 4:
                 for(int j = 0; j < modelView.getPlayers().size(); j ++){
-                    if(modelView.getPlayers().get(j).getId() != localID){
-                        System.out.println("Board del player " + modelView.getPlayers().get(j).getNick());
+                    if(!modelView.getPlayers().get(j).getId().equals(localID)){
+                        println("Board del player " + modelView.getPlayers().get(j).getNick());
                         showPlayerBoard(modelView.getBoard(modelView.getPlayers().get(j)));
                     }
                 }
@@ -539,7 +604,7 @@ public class CLI extends View{
             default:
                 setChanged();
                 notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
-                System.out.println("Mossa inviata");
+                println("Mossa inviata");
 
         }
     }
@@ -549,20 +614,20 @@ public class CLI extends View{
         ServerMessage message = (ServerMessage) arg;
         switch (message.getMessageType()) {
             case ERROR:
-                System.out.println("Errore: " + message.getErrorType().toString());
+                println("Errore: " + message.getErrorType().toString());
                 if(message.getErrorType().equals(ErrorType.ILLEGALMOVE)){
-                    System.out.println("Mossa inviata non valida, ripeti la scelta");
-                    System.out.println("------------------------------------------------------");
+                    println("Mossa inviata non valida, ripeti la scelta");
+                    println("------------------------------------------------------");
                     chooseMove();
                 }else{
-                    System.out.println("Non e' il tuo turno");
+                    println("Non e' il tuo turno");
                 }
                 break;
             case INITIALCONFIGSERVER:
-                System.out.println("------------------------------------------------------");
+                println("------------------------------------------------------");
                 this.modelView = message.getModelView();
 
-                System.out.println("\n\nLa tua board");
+                println("\n\nLa tua board");
                 showBoard(modelView.getBoard(modelView.getPlayer(localID)));
                 showDraftPool();
                 showToolCards();
@@ -570,21 +635,21 @@ public class CLI extends View{
                 showPublicObjectives();
 
                 if(modelView.getPlayer(localID).isYourTurn()){
-                    System.out.println("Sei il primo giocatore");
+                    println("Sei il primo giocatore");
                     chooseMove();
                 }else{
-                    System.out.println("Attendi il tuo turno");
+                    println("Attendi il tuo turno");
                 }
                 break;
             case BOARDTOCHOOSE:
-                System.out.println("------------------------------------------------------");
-                System.out.println("Scegli la tua plancia di gioco");
+                println("------------------------------------------------------");
+                println("Scegli la tua plancia di gioco");
                 for (int i = 0; i < message.getBoards().length; i++) {
-                    System.out.println("Plancia " + (i+1));
+                    println("Plancia " + (i+1));
                     showBoard(new PlayerBoard(message.getBoards()[i]));
                 }
 
-                System.out.println("Inserisci il numero della plancia scelta: ");
+                println("Inserisci il numero della plancia scelta: ");
                 int j;
                 do{
                     j = InputUtils.getInt();
@@ -594,11 +659,11 @@ public class CLI extends View{
                 notifyObservers(new ClientMessage(message.getBoards()[j - 1]));
                 break;
             case MODELVIEWUPDATE:
-                System.out.println("------------------------------------------------------");
+                println("------------------------------------------------------");
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
                 modelView = new ModelView(modelView, message.getModelView());
 
-                System.out.println("La tua plancia: ");
+                println("La tua plancia: ");
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
 
                 for(int k = 0; k < modelView.getPlayers().size(); k ++){
@@ -611,12 +676,15 @@ public class CLI extends View{
                 }else{
                     for(int h = 0; h < modelView.getPlayers().size(); h ++){
                         if(modelView.getPlayers().get(h).getId() != localID){
-                            System.out.println("\nBoard del giocatore: "+modelView.getPlayers().get(h).getNick());
+                            println("\nBoard del giocatore: "+modelView.getPlayers().get(h).getNick());
                             showBoard(modelView.getBoard(modelView.getPlayers().get(h)));
                         }
                     }
 
                 }
+                break;
+            default:
+                LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");
                 break;
         }
     }
@@ -625,7 +693,7 @@ public class CLI extends View{
      * Called when the connection is closed
      */
     public void connectionClosed(){
-        System.out.println("Connessione al server chiusa");
+        println("Connessione al server chiusa");
     }
 
     /**
@@ -633,9 +701,9 @@ public class CLI extends View{
      * @param clientNetwork the connection manager of the client
      */
     public void createConnection(ClientNetwork clientNetwork){
-        System.out.println("Benvenuto, scegli il metodo di connessione: ");
-        System.out.println("1) Socket");
-        System.out.println("2) RMI");
+        println("Benvenuto, scegli il metodo di connessione: ");
+        println("1) Socket");
+        println("2) RMI");
         int i = 0;
         do{
             i = InputUtils.getInt();
@@ -644,7 +712,7 @@ public class CLI extends View{
         String address = "";
         int port = 0;
             while(!clientNetwork.isConnected()) {
-                System.out.println("Inserisci l'indirizzo del server: ");
+                println("Inserisci l'indirizzo del server: ");
                 boolean prova = true;
                 Pattern pattern = Pattern.compile("((2[0-4]\\d|25[0-5]|[01]?\\d?\\d)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d?\\d)");
                 while (prova) {
@@ -652,27 +720,27 @@ public class CLI extends View{
                     if (pattern.matcher(address).matches())
                         prova = false;
                     else
-                        System.out.println("Ip non corretto\nRiprova: ");
+                        println("Ip non corretto\nRiprova: ");
 
                 }
 
                 if (i == 1) {
                     do {
-                        System.out.println("Inserisci la porta: ");
+                        println("Inserisci la porta: ");
                         port = InputUtils.getInt();
                     }while(Server.available(port));
                     if(!clientNetwork.connectSocket(address, port)){
-                        System.out.println("Connessione fallita");
+                        println("Connessione fallita");
                     }
                 } else
                     if(!clientNetwork.connectRMI(address)){
-                        System.out.println("Connessione fallita");
+                        println("Connessione fallita");
                     }
             }
-            System.out.println("Connessione accettata");
+            println("Connessione accettata");
 
         String nick;
-        System.out.println("Inserisci il tuo nome: ");
+        println("Inserisci il tuo nome: ");
         do{
             nick = InputUtils.getString();
         } while (nick.isEmpty());
@@ -682,13 +750,13 @@ public class CLI extends View{
 
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(clientNetwork.sendMessage(clientMessage)){
-            System.out.println("Nome utente inviato, attendi l'inizio della partita");
+            println("Nome utente inviato, attendi l'inizio della partita");
         }else{
-            System.out.println("Errore connessione");
+            println("Errore connessione");
         }
     }
 
-    public Long readID(){
+    private Long readID(){
         InputStream is = null;
         DataInputStream dis = null;
         try {
@@ -724,7 +792,7 @@ public class CLI extends View{
             dos.writeLong(id);
             dos.flush();
         } catch(Exception e){
-            System.out.println("Errore scrittura id giocatore, controlla i permessi di scrittura della cartella");
+            println("Errore scrittura id giocatore, controlla i permessi di scrittura della cartella");
         }finally {
             try{
                 if(fos != null)
@@ -739,7 +807,7 @@ public class CLI extends View{
         return id;
     }
 
-    public Long generateID(){
+    private Long generateID(){
         return (new Random()).nextLong();
     }
 }

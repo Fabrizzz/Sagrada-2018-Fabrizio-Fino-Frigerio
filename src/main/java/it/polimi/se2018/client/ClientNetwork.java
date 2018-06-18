@@ -1,6 +1,6 @@
 package it.polimi.se2018.client;
 
-import it.polimi.se2018.View.View;
+import it.polimi.se2018.view.View;
 import it.polimi.se2018.server.rmi.ServerRMIControllerInterface;
 import it.polimi.se2018.utils.messages.Message;
 import it.polimi.se2018.utils.network.Connection;

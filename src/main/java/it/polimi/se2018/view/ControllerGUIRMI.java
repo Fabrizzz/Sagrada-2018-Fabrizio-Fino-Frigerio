@@ -1,4 +1,4 @@
-package it.polimi.se2018.View;
+package it.polimi.se2018.view;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

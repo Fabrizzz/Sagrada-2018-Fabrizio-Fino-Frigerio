@@ -1,4 +1,4 @@
-package it.polimi.se2018.View;
+package it.polimi.se2018.view;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,15 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.Observable;
-import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 /**
  * Controller GUI Socket
@@ -136,7 +131,7 @@ public class ControllerGUISocket implements Initializable {
         Scrivere questo metodo (e anche in ControllerGUIRMI che crea la connessione; capire come passare il ClientNetwork che sta in GUIProxy
 
 
-        ClientNetwork clientNetwork = new ClientNetwork( ... ci va la View ...);
+        ClientNetwork clientNetwork = new ClientNetwork( ... ci va la view ...);
 
         Long localID;
         String address = "";
