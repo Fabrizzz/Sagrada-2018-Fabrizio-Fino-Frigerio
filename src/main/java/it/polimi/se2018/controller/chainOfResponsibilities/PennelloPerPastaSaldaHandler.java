@@ -58,12 +58,12 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                         die.setNumber(newValue);
 
 
-                        if (board.containsDie(row, column) ||
-                                !board.verifyInitialPositionRestriction(row, column) ||
-                                !board.verifyNumberRestriction(die, row, column) ||
+                        if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) || ((!board.isEmpty()) && (
+                                board.containsDie(row, column) ||
                                 !board.verifyColorRestriction(die, row, column) ||
+                                !board.verifyNumberRestriction(die, row, column) ||
                                 !board.verifyNearCellsRestriction(die, row, column) ||
-                                !board.verifyPositionRestriction(row, column)) {
+                                !board.verifyPositionRestriction(row, column))))  {
                             LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                             die.setNumber(num);

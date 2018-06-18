@@ -221,6 +221,7 @@ public class CLI extends View{
             println("La plancia e' vuota, non puoi eseguire questa mossa");
             position[0] = -1;
             position[1] = -1;
+            LOGGER.log(Level.FINE,"La plancia e' vuota");
             return position;
         }
 
@@ -264,24 +265,25 @@ public class CLI extends View{
         return column - 1;
     }
 
-    private boolean boardIsFullsFull(PlayerBoard board){
+    private boolean boardIsFull(PlayerBoard board){
         for(int k = 0; k < 5; k++){
             for(int h = 0; h < 4; h++){
                 if(!board.containsDie(h,k)){
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
     private int[] chooseBoardCellWithoutDie(){
         int[] position = new int[2];
         boolean repeat = true;
 
-        if(boardIsFullsFull(modelView.getBoard(modelView.getPlayer(localID)))){
+        if(boardIsFull(modelView.getBoard(modelView.getPlayer(localID)))){
             println("Errore, la board e' piena non puoi eseguire questa mossa");
             position[0] = -1;
             position[1] = -1;
+            LOGGER.log(Level.FINE,"La plancia e' piena");
             return position;
         }else {
             do {
@@ -375,10 +377,24 @@ public class CLI extends View{
      * @param tool tool to use
      */
     private void skipMartellettoTenagliaMove(Tool tool){
-        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
-        setChanged();
-        notifyObservers(clientMessage);
-        println("Mossa inviata");
+        if(modelView.isFirstTurn()) {
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
+            setChanged();
+            notifyObservers(clientMessage);
+            println("Mossa inviata");
+            if (tool.equals(Tool.TENAGLIAAROTELLE)) {
+                println("Esegui il primo piazzamento");
+                normalSugheroMove(Tool.MOSSASTANDARD);
+                clientMessage = new ClientMessage(new PlayerMove(Tool.TENAGLIAAROTELLE));
+                setChanged();
+                notifyObservers(clientMessage);
+                println("Esegui il secondo piazzamento");
+                normalSugheroMove(Tool.MOSSASTANDARD);
+            }
+        }else{
+            println("Errore: Puoi eseguire questa mossa solo al primo turno");
+            chooseMove();
+        }
     }
 
     /**
@@ -519,7 +535,7 @@ public class CLI extends View{
      */
     private void tamponeDiamantato(){
         int i = chooseDraftpoolDie();
-
+        int[] position = chooseBoardCellWithoutDie();
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
         setChanged();
         notifyObservers(clientMessage);
@@ -566,7 +582,7 @@ public class CLI extends View{
                     k = InputUtils.getInt();
                 }while(k < 1 || k > 3);
 
-                move((Tool) modelView.getTools().keySet().toArray()[k]);
+                move((Tool) modelView.getTools().keySet().toArray()[k-1]);
                 break;
             case 3:
                 showBoard(modelView.getBoard(modelView.getPlayer(localID)));

@@ -57,8 +57,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                         dieToGet.setNumber(newValue);
 
 
-                        if (board.containsDie(row, column) ||
-                                !board.verifyInitialPositionRestriction(row, column) ||
+                        if (board.containsDie(row, column)  ||
                                 !board.verifyNumberRestriction(dieToGet, row, column) ||
                                 !board.verifyColorRestriction(dieToGet, row, column) ||
                                 !board.verifyNearCellsRestriction(dieToGet, row, column) ||

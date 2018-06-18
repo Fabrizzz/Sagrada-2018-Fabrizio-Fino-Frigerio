@@ -81,6 +81,10 @@ public class Controller implements Observer {
             Map<Player, PrivateObjective> privateObjectiveMap = views.stream().collect(Collectors.toMap(k -> k.getPlayer(), t -> new PrivateObjective(iterator.next())));
             List<Tool> tools = Tool.getRandTools(3);
 
+            for(int j = 0; j < tools.size(); j ++){
+                LOGGER.log(Level.FINE,"Tool 1 = " + tools.get(j).toString());
+            }
+
             this.model = new Model(new ArrayList<>(choosenBoards.keySet()), publicObjectives, choosenBoards, privateObjectiveMap, tools,this);
             //setta gli handler, setta i vari observer, invia a tutti la modelview
             firstHandler = ToolFactory.createFirstHandler();

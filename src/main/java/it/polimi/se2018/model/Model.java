@@ -59,7 +59,7 @@ public class Model extends Observable {
         this.players = new ArrayList<>(players); //Creazione di un arraylist che conterrà i player
         diceBag = new DiceBag(NUMBER_OF_DICE_PER_COLOR);    //Creazione del sacchetto; viene passato 18 così verranno generati i 90 dadi, 18 per colore
         draftPool = new DraftPool(players.size(), diceBag); //Creazione della variabile draftPool per i dadi pescati; viene passato il numero di dadi da pescare (numplayer  2 +1) e il sacchetto da cui pescare
-        this.tools = new EnumMap<Tool, Boolean>(Tool.getRandTools(3).stream().collect(Collectors.toMap(k -> k, t -> false)));
+        this.tools = new EnumMap<Tool, Boolean>(tools.stream().collect(Collectors.toMap(k -> k, t -> false)));
         publicObjective = new ArrayList<>(publicObjectives);
         roundTrack = new RoundTrack();
         this.boardMap = new HashMap<>(boardMap);
