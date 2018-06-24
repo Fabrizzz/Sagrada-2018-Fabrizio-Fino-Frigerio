@@ -152,6 +152,7 @@ public class PlayerBoard implements Serializable {
             for (int j = -1; j <= 1; j++) {
                 if ((i != 0 || j != 0))
                     try {
+                    if(column + j >= 0 && column + j < 5)
                         if (get(row + i, column + j).isUsed())
                             ris = true;
                     } catch (IndexOutOfBoundsException e) {
