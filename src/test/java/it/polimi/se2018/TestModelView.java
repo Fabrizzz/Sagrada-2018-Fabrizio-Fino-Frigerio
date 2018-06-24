@@ -6,6 +6,7 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
+import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
@@ -38,30 +39,8 @@ public class TestModelView {
 
     @Before
     public void initialize(){
-        BoardList boardList = new BoardList();
-        boardMap = new HashMap();
-        boardMap.put(new Player("asd",(long)123),new PlayerBoard(boardList.getCouple()[1]));
-        boardMap.put(new Player("asd",(long)1234),new PlayerBoard(boardList.getCouple()[1]));
-
-        publicObjectives = new ArrayList<>();
-        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
-        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSICOLONNA));
-        publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.DIAGONALICOLORATE));
-
-        List colors = Arrays.asList(Color.values());
-        Collections.shuffle(colors);
-        Iterator<Color> iterator = colors.iterator();
-
-        privateObjectiveMap = new HashMap<>();
-        privateObjectiveMap.put(new Player("asd",(long)123),new PrivateObjective(Color.BLUE));
-        privateObjectiveMap.put(new Player("assd",(long)321),new PrivateObjective(Color.RED));
-
-        List<Tool> tools = Tool.getRandTools(3);
-
-        this.model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools,null);
-        Collections.addAll(this.players,boardMap.keySet().toArray(new Player[boardMap.keySet().size()]));
-        this.playerBoard = boardMap.values().toArray(new PlayerBoard[boardMap.values().size()]);
-        this.privateObjective = privateObjectiveMap.values().toArray(new PrivateObjective[privateObjectiveMap.values().size()]);
+        model = ModelControllerInitializerTest.initialize();
+        players = (ArrayList) model.getPlayers();
         model.setRound(3);
         modelView = new ModelView(model);
     }
