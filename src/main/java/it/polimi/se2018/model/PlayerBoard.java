@@ -11,6 +11,8 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Board of the player
@@ -20,6 +22,7 @@ public class PlayerBoard implements Serializable {
     private Board board;
     private Cell[] cells = new Cell[20];
     boolean isEmpty = true;
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
      * Costructor
@@ -120,9 +123,12 @@ public class PlayerBoard implements Serializable {
      * @return true if the die respect the restriction, false otherwise
      */
     public boolean verifyColorRestriction(Die die, int row, int column) {
-        if (get(row, column).getRestriction().isColorRestriction())
+        if (get(row, column).getRestriction().isColorRestriction()){
+            LOGGER.log(Level.FINE,"Restrizione colore cella row:"+row+" Column:"+column+" non rispettata");
             return get(row, column).verifyRestriction(die);
+        }
 
+        LOGGER.log(Level.FINE,"Restrizione colore cella row:"+row+" Column:"+column+" rispettata");
         return true;
     }
 
@@ -134,9 +140,12 @@ public class PlayerBoard implements Serializable {
      * @return true if the die respect the restriction, false otherwise
      */
     public boolean verifyNumberRestriction(Die die, int row, int column) {
-        if (get(row, column).getRestriction().isNumberRestriction())
+        if (get(row, column).getRestriction().isNumberRestriction()){
+            LOGGER.log(Level.FINE,"Restrizione di numero cella row:"+row+" Column:"+column+" non rispettata");
             return get(row, column).verifyRestriction(die);
+        }
 
+        LOGGER.log(Level.FINE,"Restrizione di numero cella row:"+row+" Column:"+column+" rispettata");
         return true;
     }
 
@@ -153,8 +162,10 @@ public class PlayerBoard implements Serializable {
                 if ((i != 0 || j != 0))
                     try {
                     if(column + j >= 0 && column + j < 5)
-                        if (get(row + i, column + j).isUsed())
+                        if (get(row + i, column + j).isUsed()){
                             ris = true;
+                            LOGGER.log(Level.FINE,"Restrizione di posizione rispettata");
+                        }
                     } catch (IndexOutOfBoundsException e) {
 
                     }
@@ -176,23 +187,43 @@ public class PlayerBoard implements Serializable {
 
         try {
             if (row > 0 && (get(row - 1, column).isUsed())) {
-                if (get(row - 1, column).getDie().getColor().equals(die.getColor()) || get(row - 1, column).getDie().getNumber().equals(die.getNumber()))
+                if (get(row - 1, column).getDie().getColor().equals(die.getColor()) || get(row - 1, column).getDie().getNumber().equals(die.getNumber())){
+                    LOGGER.log(Level.FINE,"Il dado sopra e' simile al dado da inserire in posizione row:"+row+" column:"+column+". Colore = " +
+                            get(row - 1, column).getDie().getColor().equals(die.getColor()) + " numero: " +
+                            get(row - 1, column).getDie().getNumber().equals(die.getNumber()));
                     ris = false;
+                }
+
             }
 
             if (row < 3 && (get(row + 1, column).isUsed())) {
-                if (get(row + 1, column).getDie().getColor().equals(die.getColor()) || get(row + 1, column).getDie().getNumber().equals(die.getNumber()))
+                if (get(row + 1, column).getDie().getColor().equals(die.getColor()) || get(row + 1, column).getDie().getNumber().equals(die.getNumber())){
+                    LOGGER.log(Level.FINE,"Il dado sotto e' simile al dado da inserire in posizione row:"+row+" column:"+column+". Colore = " +
+                            get(row + 1, column).getDie().getColor().equals(die.getColor()) + " numero: " +
+                            get(row + 1, column).getDie().getNumber().equals(die.getNumber()));
                     ris = false;
+                }
+
             }
 
             if (column > 0 && (get(row, column - 1).isUsed())) {
-                if (get(row, column - 1).getDie().getColor().equals(die.getColor()) || get(row, column - 1).getDie().getNumber().equals(die.getNumber()))
+                if (get(row, column - 1).getDie().getColor().equals(die.getColor()) || get(row, column - 1).getDie().getNumber().equals(die.getNumber())){
+                    LOGGER.log(Level.FINE,"Il dado a sinistra e' simile al dado da inserire in posizione row:"+row+" column:"+column+". Colore = " +
+                            get(row , column - 1).getDie().getColor().equals(die.getColor()) + " numero: " +
+                            get(row , column - 1).getDie().getNumber().equals(die.getNumber()));
                     ris = false;
+                }
+
             }
 
             if (column < 4 && (get(row, column + 1).isUsed())) {
-                if (get(row, column + 1).getDie().getColor().equals(die.getColor()) || get(row, column + 1).getDie().getNumber().equals(die.getNumber()))
+                if (get(row, column + 1).getDie().getColor().equals(die.getColor()) || get(row, column + 1).getDie().getNumber().equals(die.getNumber())){
+                    LOGGER.log(Level.FINE,"Il dado a destra e' simile al dado da inserire in posizione row:"+row+" column:"+column+". Colore = " +
+                            get(row , column + 1).getDie().getColor().equals(die.getColor()) + " numero: " +
+                            get(row , column + 1).getDie().getNumber().equals(die.getNumber()));
                     ris = false;
+                }
+
             }
         } catch (NoDieException e) {
             System.err.println(e);
@@ -203,13 +234,17 @@ public class PlayerBoard implements Serializable {
     }
 
     public boolean verifyInitialPositionRestriction(int row, int column) {
-
+        LOGGER.log(Level.FINE,"Initial positio restriction = " + (row == 0 || row == 3 || column == 0 || column == 4));
         return (row == 0 || row == 3 || column == 0 || column == 4);
 
     }
 
     public Restriction getRestriction(int row, int column) {
         return get(row, column).getRestriction();
+    }
+
+    public int getBoardDifficutly(){
+        return board.getTokens();
     }
 
 }

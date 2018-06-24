@@ -32,7 +32,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
         Die dieToGet;
 
         if (playerMove.getTool() == Tool.DILUENTEPERPASTASALDA) {
-            LOGGER.log(Level.FINE,"Elaborazione validita' mossa DILUENTEPERPASTASALDA");
+            LOGGER.log(Level.FINE,"Elaborazione validita' mossa DILUENTEPERPASTASALDA 1");
             if (!playerMove.getNewDiceValue().isPresent() || !playerMove.getDraftPosition().isPresent()) {
                 LOGGER.log(Level.INFO, "Parametri DILUENTEPERPASTASALDA mossa non validi");
                 throw new InvalidParameterException();
@@ -45,7 +45,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                 dieToGet = diceBag.getFirst();
                 dieToRemove = draftPool.getDie(draftPoolPosition);
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
-                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilzzare DILUENTEPERPASTASALDA");
+                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilzzare DILUENTEPERPASTASALDA 2");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else {
                     board = model.getBoard(remoteView.getPlayer());
@@ -56,14 +56,14 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                         NumberEnum num = dieToGet.getNumber();
                         dieToGet.setNumber(newValue);
 
-
-                        if (board.containsDie(row, column)  ||
-                                !board.verifyNumberRestriction(dieToGet, row, column) ||
+                        if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
+                                ((!board.isEmpty()) && (!board.verifyNearCellsRestriction(dieToGet, row, column) || !board.verifyPositionRestriction(row, column))) ||
+                                board.containsDie(row, column) ||
                                 !board.verifyColorRestriction(dieToGet, row, column) ||
-                                !board.verifyNearCellsRestriction(dieToGet, row, column) ||
-                                !board.verifyPositionRestriction(row, column)) {
+                                !board.verifyNumberRestriction(dieToGet, row, column)
+                                ) {
                             dieToGet.setNumber(num);
-                            LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
+                            LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA 3");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                         } else {
                             diceBag.takeDie();
@@ -93,7 +93,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                             nextHandler.process(playerMove, remoteView, model);
                         } else {
-                            LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA");
+                            LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA 4");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                         }
                     }

@@ -36,12 +36,13 @@ public class NormalMoveHandler extends Handler {
                 column = playerMove.getColumn().orElse(0);
                 pos = playerMove.getDraftPosition().orElse(0);
                 die = model.getDraftPool().getDie(pos);
-                if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) || ((!board.isEmpty()) && (model.hasUsedNormalMove() ||
+                if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
+                        ((!board.isEmpty()) && (!board.verifyNearCellsRestriction(die, row, column) || !board.verifyPositionRestriction(row, column))) ||
+                        model.hasUsedNormalMove() ||
                         board.containsDie(row, column) ||
                         !board.verifyColorRestriction(die, row, column) ||
-                        !board.verifyNumberRestriction(die, row, column) ||
-                        !board.verifyNearCellsRestriction(die, row, column) ||
-                        !board.verifyPositionRestriction(row, column)))) {
+                        !board.verifyNumberRestriction(die, row, column)
+                        ) {
                     LOGGER.log(Level.INFO,"Il giocatore non puo' eseguire MOSSASTANDARD row: " + row + " column:" + column +
                     " colorRestriction: " + board.verifyColorRestriction(die, row, column) + " numberRestriction:" +
                             board.verifyNumberRestriction(die, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(die, row, column) +

@@ -4,10 +4,16 @@ import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.enums.Tool;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public abstract class ToolHandler extends Handler {
 
     protected boolean cantUseTool(Player player, Model model, Tool tool) {
         boolean alreadyUsed = model.getTools().get(tool);
+        LOGGER.log(Level.FINEST,"Already used = " + alreadyUsed);
+        LOGGER.log(Level.FINEST,"Has used tool = model.hasUsedTool()");
+        LOGGER.log(Level.FINEST,"getFavorTockens < 2 = " + player.getFavorTokens());
         return (model.hasUsedTool() || (alreadyUsed && player.getFavorTokens() < 2) || (!alreadyUsed && player.getFavorTokens() < 1));
     }
 

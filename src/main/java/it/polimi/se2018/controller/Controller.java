@@ -55,14 +55,6 @@ public class Controller implements Observer {
             throw new IllegalArgumentException();
 
         this.views = new ArrayList<>(views);
-   /*     for(int i = 0; i < this.views.size(); i++){
-            this.views.get(i).addObserver(this);
-        }
-
-        for(int i = 0; i < this.views.size(); i++){
-            LOGGER.log(Level.FINE,"Invio messaggio board");
-            this.views.get(i).sendBack(new ServerMessage(getBoards()));
-        }*/
 
         this.views.stream().forEach(k -> k.addObserver(this));
         this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
@@ -83,6 +75,10 @@ public class Controller implements Observer {
 
             for(int j = 0; j < tools.size(); j ++){
                 LOGGER.log(Level.FINE,"Tool 1 = " + tools.get(j).toString());
+            }
+
+            for(Player player : choosenBoards.keySet()){
+                player.setFavorTokens(choosenBoards.get(player).getBoardDifficutly());
             }
 
             this.model = new Model(new ArrayList<>(choosenBoards.keySet()), publicObjectives, choosenBoards, privateObjectiveMap, tools,this);

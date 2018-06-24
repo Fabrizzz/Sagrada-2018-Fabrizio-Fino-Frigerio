@@ -9,9 +9,9 @@ import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TenagliaARotelleHandler extends ToolHandler {
-
     @Override
     public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
