@@ -57,13 +57,16 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                         dieToGet.setNumber(newValue);
 
                         if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
-                                ((!board.isEmpty()) && (!board.verifyNearCellsRestriction(dieToGet, row, column) || !board.verifyPositionRestriction(row, column))) ||
+                                (!board.isEmpty() && (!board.verifyNearCellsRestriction(dieToGet, row, column) || !board.verifyPositionRestriction(row, column))) ||
                                 board.containsDie(row, column) ||
                                 !board.verifyColorRestriction(dieToGet, row, column) ||
                                 !board.verifyNumberRestriction(dieToGet, row, column)
                                 ) {
                             dieToGet.setNumber(num);
-                            LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA 3");
+                            LOGGER.log(Level.INFO,"Il giocatore non puo' eseguire DILUENTEPERPASTASALDA 3 row: " + row + " column:" + column +
+                                    " colorRestriction: " + board.verifyColorRestriction(dieToGet, row, column) + " numberRestriction:" +
+                                    board.verifyNumberRestriction(dieToGet, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(dieToGet, row, column) +
+                                    " positionRestriction:" + board.verifyPositionRestriction(row, column));
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                         } else {
                             diceBag.takeDie();

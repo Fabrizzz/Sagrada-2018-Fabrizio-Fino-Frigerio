@@ -37,7 +37,7 @@ public class NormalMoveHandler extends Handler {
                 pos = playerMove.getDraftPosition().orElse(0);
                 die = model.getDraftPool().getDie(pos);
                 if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
-                        ((!board.isEmpty()) && (!board.verifyNearCellsRestriction(die, row, column) || !board.verifyPositionRestriction(row, column))) ||
+                        (!board.isEmpty() && (!board.verifyNearCellsRestriction(die, row, column) || !board.verifyPositionRestriction(row, column))) ||
                         model.hasUsedNormalMove() ||
                         board.containsDie(row, column) ||
                         !board.verifyColorRestriction(die, row, column) ||
