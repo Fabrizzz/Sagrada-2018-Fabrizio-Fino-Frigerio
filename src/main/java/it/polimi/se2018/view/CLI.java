@@ -179,6 +179,11 @@ public class CLI extends View{
 
     private int[] chooseRoundTrackDie(){
         int[] position = new int[2];
+        if(modelView.getRoundTrack().numberOfDice(modelView.getRound()) == 0){
+            println("Errore, il tracciato dei dadi e' vuoto");
+            position[0] = -1;
+            position[1] = -1;
+        }
         showRoundTrack();
         position[0] = modelView.getRound();
 
@@ -488,11 +493,14 @@ public class CLI extends View{
     private void taglierinaCircolareMove(){
         int i = chooseDraftpoolDie();
         int[] roundPosition = chooseRoundTrackDie();
-
-        ClientMessage clientMessage = new ClientMessage(new PlayerMove(i,roundPosition[0],roundPosition[1],Tool.TAGLIERINACIRCOLARE));
-        setChanged();
-        notifyObservers(clientMessage);
-        println("Mossa inviata");
+        if(roundPosition[0] == -1){
+            chooseMove();
+        }else {
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(i, roundPosition[0], roundPosition[1], Tool.TAGLIERINACIRCOLARE));
+            setChanged();
+            notifyObservers(clientMessage);
+            println("Mossa inviata");
+        }
     }
 
     /**
@@ -585,7 +593,7 @@ public class CLI extends View{
                 move((Tool) modelView.getTools().keySet().toArray()[k-1]);
                 break;
             case 3:
-                showBoard(modelView.getBoard(modelView.getPlayer(localID)));
+                showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
                 chooseMove();
                 break;
             case 4:
@@ -691,9 +699,9 @@ public class CLI extends View{
                     chooseMove();
                 }else{
                     for(int h = 0; h < modelView.getPlayers().size(); h ++){
-                        if(modelView.getPlayers().get(h).getId() != localID){
-                            println("\nBoard del giocatore: "+modelView.getPlayers().get(h).getNick());
-                            showBoard(modelView.getBoard(modelView.getPlayers().get(h)));
+                        if(!modelView.getPlayers().get(h).getId().equals(localID)){
+                            println("\nPlancia del giocatore: "+modelView.getPlayers().get(h).getNick());
+                            showPlayerBoard(modelView.getBoard(modelView.getPlayers().get(h)));
                         }
                     }
 

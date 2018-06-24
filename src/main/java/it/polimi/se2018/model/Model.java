@@ -198,9 +198,9 @@ public class Model extends Observable {
      * Return the private objective of a player
      * @param player player
      * @return  private objective of player
-     * @throws IllegalArgumentException if plauyer is not contained in the player list
+     * @throws IllegalArgumentException if player is not contained in the player list
      */
-    public PrivateObjective getPrivateObjective(Player player) throws IllegalArgumentException{
+    public PrivateObjective getPrivateObjective(Player player){
         if(players.contains(player)) {
             return privateObjectiveMap.get(player);
         }else{
