@@ -38,7 +38,7 @@ public class ServerNetwork implements Observer {
         executor.submit(new SocketConnectionGatherer(this, port));
 
         try {
-            LocateRegistry.createRegistry(port + 1);
+            LocateRegistry.createRegistry(1099);
         } catch (RemoteException e) {
             LOGGER.log(Level.SEVERE,"Errore creazione registry, porta gia' in uso o rmiregistry non avviato");
         }
