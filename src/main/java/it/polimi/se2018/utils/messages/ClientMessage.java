@@ -9,6 +9,7 @@ public class ClientMessage extends Message {
     private Long id;
     private Board board;
 
+
     public ClientMessage(PlayerMove playerMove) {
         super(MessageType.PLAYERMOVE);
         this.playerMove = playerMove;
@@ -23,6 +24,11 @@ public class ClientMessage extends Message {
     public ClientMessage(Board board) {
         super(MessageType.CHOSENBOARD);
         this.board = board;
+    }
+
+    public ClientMessage(String player) {
+        super(MessageType.HASDISCONNECTED);
+        nick = player;
     }
 
 

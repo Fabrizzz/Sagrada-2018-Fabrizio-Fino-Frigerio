@@ -8,7 +8,13 @@ import it.polimi.se2018.utils.enums.MessageType;
 public class ServerMessage extends Message {
     private ErrorType errorType;
     private ModelView modelView;
+    private String disconnectedPlayer;
     private Board[] boards;
+
+    public ServerMessage(String player) {
+        super(MessageType.HASDISCONNECTED);
+        this.disconnectedPlayer = player;
+    }
 
 
     public ServerMessage(ErrorType errorType) {
@@ -37,5 +43,9 @@ public class ServerMessage extends Message {
 
     public Board[] getBoards() {
         return boards;
+    }
+
+    public String getDisconnectedPlayer() {
+        return disconnectedPlayer;
     }
 }
