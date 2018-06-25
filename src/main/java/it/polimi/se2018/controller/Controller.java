@@ -112,6 +112,7 @@ public class Controller implements Observer {
         if (model.getTurn() == turn && model.getRound() == round) {
             nextTurn();
             setTimer(model.getTurn(), model.getRound());
+            model.notifyObs();
         }
 
     }
