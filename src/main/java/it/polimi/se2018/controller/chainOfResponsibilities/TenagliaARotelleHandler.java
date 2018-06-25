@@ -9,11 +9,10 @@ import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TenagliaARotelleHandler extends ToolHandler {
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
         if (playerMove.getTool() == Tool.TENAGLIAAROTELLE) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa TENAGLIAAROTELLE");
@@ -29,11 +28,12 @@ public class TenagliaARotelleHandler extends ToolHandler {
                     remoteView.getPlayer().setCanDoTwoTurn(true);
                 remoteView.getPlayer().setSkipSecondTurn(true);
                 completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                nextHandler.process(playerMove, remoteView, model);
+                return true;
             }
         } else{
             LOGGER.log(Level.FINEST, "La mossa non e' TENAGLIAAROTELLE, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
+        return false;
     }
 }

@@ -14,7 +14,7 @@ import java.util.logging.Level;
 public class MartellettoHandler extends ToolHandler {
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
         DraftPool draftPool;
 
@@ -27,11 +27,12 @@ public class MartellettoHandler extends ToolHandler {
                 draftPool = model.getDraftPool();
                 draftPool.reRollDice();
                 completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                nextHandler.process(playerMove, remoteView, model);
+                return true;
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' MARTELLETTO, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
+        return false;
     }
 }

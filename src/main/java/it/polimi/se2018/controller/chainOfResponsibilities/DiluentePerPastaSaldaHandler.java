@@ -20,7 +20,7 @@ import java.util.logging.Level;
 public class DiluentePerPastaSaldaHandler extends ToolHandler {
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
         DraftPool draftPool;
         NumberEnum newValue;
@@ -74,7 +74,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                             draftPool.removeDie(dieToRemove);
                             diceBag.addDie(dieToRemove);
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                            nextHandler.process(playerMove, remoteView, model);
+                            return true;
                         }
                     } else {
                         boolean check = true;
@@ -94,7 +94,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                             draftPool.removeDie(dieToRemove);
                             draftPool.addDie(dieToGet);
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                            nextHandler.process(playerMove, remoteView, model);
+                            return true;
                         } else {
                             LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA 4");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
@@ -110,9 +110,9 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' DILUENTEPERPASTASALDA, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
-
+        return false;
 
     }
 }

@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class NormalMoveHandler extends Handler {
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         PlayerBoard board;
         int row;
         int column;
@@ -60,8 +60,7 @@ public class NormalMoveHandler extends Handler {
                         LOGGER.log(Level.FINE,"Player ha usato normal move");
                         model.setNormalMove(true);
                     }
-                    nextHandler.process(playerMove, remoteView, model);
-
+                    return true;
                 }
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in MOSSASTANDARD");
@@ -70,7 +69,8 @@ public class NormalMoveHandler extends Handler {
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' MOSSASTANDARD, passaggio responsabilita' all'handler successivo");
-            this.nextHandler.process(playerMove, remoteView, model);
+            return this.nextHandler.process(playerMove, remoteView, model);
         }
+        return false;
     }
 }

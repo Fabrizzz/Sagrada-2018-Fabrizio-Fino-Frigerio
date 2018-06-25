@@ -27,7 +27,7 @@ public class Tool4_12Handler extends ToolHandler {
     }
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
         PlayerBoard board;
         int firstRow;
@@ -117,8 +117,7 @@ public class Tool4_12Handler extends ToolHandler {
                         board.removeDie(secondRow, secondColumn);
                         board.setDie(die2, secondFinalRow, secondFinalColumn);
                     }
-                    nextHandler.process(playerMove, remoteView, model);
-
+                    return true;
                 } else{
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare LATHEKIN TAGLIERINAMANUALE");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
@@ -130,8 +129,9 @@ public class Tool4_12Handler extends ToolHandler {
             }
         } else{
             LOGGER.log(Level.FINEST, "La mossa non e' LATHEKIN TAGLIERINAMANUALE, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
+        return false;
     }
 }
 

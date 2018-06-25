@@ -20,7 +20,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
 
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         DraftPool draftPool;
         NumberEnum newValue;
         PlayerBoard board;
@@ -71,7 +71,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                             board.setDie(die, row, column);
                             draftPool.removeDie(die);
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                            nextHandler.process(playerMove, remoteView, model);
+                            return true;
                         }
                     } else {
                         NumberEnum num = die.getNumber();
@@ -90,7 +90,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                         if (check) {
                             die.setNumber(newValue);
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                            nextHandler.process(playerMove, remoteView, model);
+                            return true;
                         } else {
                             die.setNumber(num);
                             LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA");
@@ -107,9 +107,9 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' PENNELLOPERPASTASALDA, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
-
+        return false;
 
     }
 }

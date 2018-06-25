@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class TaglierinaCircolareHandler extends ToolHandler {
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
         RoundTrack roundTrack;
         DraftPool draftPool;
@@ -51,14 +51,14 @@ public class TaglierinaCircolareHandler extends ToolHandler {
                 roundTrack.addDie(roundTrackRound, draftPoolDie);
                 draftPool.addDie(roundTrackDie);
                 completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                nextHandler.process(playerMove, remoteView, model);
+                return true;
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in TAGLIERINACIRCOLARE");
             }
         } else {
             LOGGER.log(Level.FINEST, "La mossa non e' TAGLIERINACIRCOLARE, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
-
+        return false;
     }
 }

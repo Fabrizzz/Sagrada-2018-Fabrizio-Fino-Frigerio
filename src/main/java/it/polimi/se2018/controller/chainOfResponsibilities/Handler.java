@@ -22,5 +22,5 @@ public abstract class Handler {
         return nextHandler;
     }
 
-    public abstract void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException;
+    public abstract boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException;
 }

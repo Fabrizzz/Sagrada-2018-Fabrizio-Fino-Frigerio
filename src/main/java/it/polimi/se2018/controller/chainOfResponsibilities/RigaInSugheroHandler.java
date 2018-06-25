@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class RigaInSugheroHandler extends ToolHandler {
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
         PlayerBoard board;
         int row;
@@ -50,8 +50,8 @@ public class RigaInSugheroHandler extends ToolHandler {
                     board.setDie(die, row, column);
                     model.getDraftPool().removeDie(die);
                     completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                    nextHandler.process(playerMove, remoteView, model);
 
+                    return true;
                 }
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in RIGAINSUGHERO");
@@ -60,7 +60,8 @@ public class RigaInSugheroHandler extends ToolHandler {
             }
         } else {
             LOGGER.log(Level.FINEST, "La mossa non e' RIGAINSUGHERO, passaggio responsabilita' all'handler successivo");
-            this.nextHandler.process(playerMove, remoteView, model);
+            return this.nextHandler.process(playerMove, remoteView, model);
         }
+        return false;
     }
 }

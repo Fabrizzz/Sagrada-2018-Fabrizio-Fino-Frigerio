@@ -9,12 +9,11 @@ import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class FirstCheck extends Handler {
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         int temp;
         LOGGER.log(Level.FINE,"FirstCheck della chain of responsabilities");
         if (remoteView.getPlayer().isYourTurn()) {
@@ -30,7 +29,7 @@ public class FirstCheck extends Handler {
 
                 throw new InvalidParameterException();
             else{
-                nextHandler.process(playerMove, remoteView, model);
+                return nextHandler.process(playerMove, remoteView, model);
             }
 
 
@@ -38,6 +37,6 @@ public class FirstCheck extends Handler {
             LOGGER.log(Level.FINE,"Non e' il turno del giocatore " + remoteView.getPlayer().getNick() +" id: " + remoteView.getPlayer().getId() +", invio messaggio NOTYOURTURN");
             remoteView.sendBack(new ServerMessage(ErrorType.NOTYOURTURN));
         }
-
+        return false;
     }
 }

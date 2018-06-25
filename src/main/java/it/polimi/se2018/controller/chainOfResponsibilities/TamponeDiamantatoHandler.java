@@ -16,7 +16,7 @@ public class TamponeDiamantatoHandler extends ToolHandler {
 
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
         int row;
         int column;
@@ -38,14 +38,15 @@ public class TamponeDiamantatoHandler extends ToolHandler {
                 try {
                     playerBoard.getDie(row, column).flip();
                     completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                    nextHandler.process(playerMove, remoteView, model);
+                    return true;
                 } catch (NoDieException e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in TAMPONEDIAMANTATO");
                 }
             }
         } else {
             LOGGER.log(Level.FINEST, "La mossa non e' TAMPONEDIAMANTATO, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
+        return false;
     }
 }

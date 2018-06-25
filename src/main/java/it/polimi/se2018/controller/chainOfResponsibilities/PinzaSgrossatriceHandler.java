@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class PinzaSgrossatriceHandler extends ToolHandler {
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException
 
     {
         DraftPool draftPool;
@@ -50,7 +50,7 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
                             die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() - 1));
 
                     completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                        nextHandler.process(playerMove, remoteView, model);
+                    return true;
                 }
 
             } catch (NoDieException e) {
@@ -59,9 +59,9 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
 
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' PINZASGROSSATRICE, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
-
+        return false;
 
     }
 }

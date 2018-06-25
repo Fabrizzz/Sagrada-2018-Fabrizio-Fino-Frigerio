@@ -8,7 +8,7 @@ public class ToolFactory {
     }
 
     public static Handler createLastHandler() {
-        return new EndOfTurnHandler();
+        return new EndOfTheChainHandler();
     }
 
     public static Handler createToolHandler(Tool tool) {

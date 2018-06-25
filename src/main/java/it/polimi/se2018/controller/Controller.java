@@ -21,18 +21,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static java.lang.Thread.sleep;
-
 public class Controller implements Observer {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private Model model;
     private Handler firstHandler;
-    BoardList boardList = new BoardList();
+    private BoardList boardList = new BoardList();
     private List<RemoteView> views;
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
-    //private ModelView modelView;
 
     public Controller() {}
 
@@ -72,6 +69,7 @@ public class Controller implements Observer {
             Iterator<Color> iterator = colors.iterator();
             Map<Player, PrivateObjective> privateObjectiveMap = views.stream().collect(Collectors.toMap(k -> k.getPlayer(), t -> new PrivateObjective(iterator.next())));
             List<Tool> tools = Tool.getRandTools(3);
+            ArrayList<Player> players = new ArrayList<>(views.stream().map(k -> k.getPlayer()).collect(Collectors.toList()));
 
             for(int j = 0; j < tools.size(); j ++){
                 LOGGER.log(Level.FINE,"Tool 1 = " + tools.get(j).toString());
@@ -81,7 +79,7 @@ public class Controller implements Observer {
                 player.setFavorTokens(choosenBoards.get(player).getBoardDifficutly());
             }
 
-            this.model = new Model(new ArrayList<>(choosenBoards.keySet()), publicObjectives, choosenBoards, privateObjectiveMap, tools,this);
+            this.model = new Model(players, publicObjectives, choosenBoards, privateObjectiveMap, tools);
             //setta gli handler, setta i vari observer, invia a tutti la modelview
             firstHandler = ToolFactory.createFirstHandler();
             Handler temp = firstHandler;
@@ -90,7 +88,7 @@ public class Controller implements Observer {
             }
             temp = temp.setNextHandler(ToolFactory.createToolHandler(Tool.MOSSASTANDARD));
             temp.setNextHandler(ToolFactory.createLastHandler());
-            
+
             for (RemoteView view : views) {
                 model.addObserver(view);
                 view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model)));
@@ -123,6 +121,32 @@ public class Controller implements Observer {
         timer.schedule(new RoundTimer(turn, round, this), (long) (Model.getMinutesPerTurn() * 60 * 1000));
     }
 
+    /**
+     * End the game
+     */
+    public void endGame() {
+        //chiudere i timer
+    }
+
+    /**
+     * End the round and update the round variables
+     */
+    private void endRound() {
+        getModel().setTurn(0);
+        getModel().setFirstTurn(true);
+        getModel().getRoundTrack().addDice(getModel().getRound(), getModel().getDraftPool().removeAll());
+        getModel().setRound(getModel().getRound() + 1);
+        Collections.rotate(getModel().getPlayers(), 1);
+        if (getModel().getRound() == 10)
+            endGame();
+        else {
+            getModel().getDraftPool().rollDice(getModel().getDiceBag());
+        }
+
+    }
+
+
+
     @Override
     public synchronized void update(Observable o, Object arg) {
         ClientMessage message = (ClientMessage) arg;
@@ -135,17 +159,29 @@ public class Controller implements Observer {
 
             try {
                 int turn = model.getTurn();
-                firstHandler.process(playerMove, remoteView, getModel());
-                if (model.getTurn() != turn)
-                    setTimer(model.getTurn(), model.getRound());
+                if (firstHandler.process(playerMove, remoteView, getModel())) {
+
+                    if ((playerMove.getTool().equals(Tool.SKIPTURN)) || model.hasUsedTool() && model.hasUsedNormalMove()) {
+                        nextTurn();
+                        setTimer(model.getTurn(), model.getRound());
+                        LOGGER.log(Level.FINE, "passaggio di turno");
+                    }
+                    model.notifyObs();
+                }
+
             } catch (InvalidParameterException e) {
                 LOGGER.log(Level.SEVERE,"Parametri invalidi");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
             }
+
         } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
             LOGGER.log(Level.INFO, "Board ricevuta");
             choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
             notifyAll();
+        } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
+            for (RemoteView view : views) {
+                view.sendBack(new ServerMessage(message.getNick()));
+            }
         }
     }
 
@@ -162,7 +198,7 @@ public class Controller implements Observer {
         model.setTurn(model.getTurn() + 1);
 
         if (model.getTurn() == model.getPlayers().size() * 2)
-            model.endRound();
+            endRound();
         else if (model.getTurn() == model.getPlayers().size())
             model.setFirstTurn(false);
 
@@ -177,16 +213,15 @@ public class Controller implements Observer {
             } else {
                 LOGGER.log(Level.FINE,"Is NOT skip second turn");
                 model.getPlayers().get(playerPosition).setYourTurn(true);
-                if (!model.getPlayers().get(playerPosition).isConnected()){
+                if (!views.get(playerPosition).isConnected()) {
                     LOGGER.log(Level.FINE,"Il prossimo giocatore e' disconnesso");
                     nextTurn();
                 } else {
                     //timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
                     LOGGER.log(Level.FINE,"Prossimo giocatore: " + model.getPlayers().get(playerPosition).getNick() +  ". Notifico gli osservatori");
-                    model.notifyObs();
+
                 }
             }
-        } else
-            model.endGame();
+        }
     }
 }

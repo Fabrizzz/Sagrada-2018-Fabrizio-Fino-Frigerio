@@ -26,7 +26,7 @@ public class Tool2_3Handler extends ToolHandler {
     }
 
     @Override
-    public void process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
+    public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         int row;
         int column;
         int finalRow;
@@ -64,7 +64,7 @@ public class Tool2_3Handler extends ToolHandler {
                             board.removeDie(row, column);
                             board.setDie(die, finalRow, finalColumn);
                         completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                            nextHandler.process(playerMove, remoteView, model);
+                        return true;
                     }
 
                 } catch (NoDieException | AlredySetDie e) {
@@ -75,7 +75,8 @@ public class Tool2_3Handler extends ToolHandler {
 
         } else{
             LOGGER.log(Level.FINEST, "La mossa non e' PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME, passaggio responsabilita' all'handler successivo");
-            nextHandler.process(playerMove, remoteView, model);
+            return nextHandler.process(playerMove, remoteView, model);
         }
+        return false;
     }
 }
