@@ -8,7 +8,6 @@ import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -23,6 +22,7 @@ public class TestPlayerBoard {
         Die die = new Die(Color.BLUE);
 
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
 

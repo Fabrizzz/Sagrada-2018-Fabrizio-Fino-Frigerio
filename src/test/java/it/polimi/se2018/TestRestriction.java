@@ -22,7 +22,6 @@ public class TestRestriction {
 
         die = new Die(Color.BLUE);
         restriction = factory.createNoRestriction();
-        assertTrue(restriction.noRestriction());
         assertTrue(restriction.verifyRestriction(die));
 
         for (Color color : Color.values()) {
@@ -53,7 +52,6 @@ public class TestRestriction {
         for (Color color : Color.values()) {
             restriction = factory.createColorRestriction(color);
             assertFalse(restriction.isNumberRestriction());
-            assertFalse(restriction.noRestriction());
             for (Color colors : Color.values()) {
                 die = new Die(colors);
                 if (!color.equals(colors))
@@ -63,7 +61,6 @@ public class TestRestriction {
 
         for (NumberEnum number : NumberEnum.values()) {
             restriction = factory.createNumberRestriction(number);
-            assertFalse(restriction.noRestriction());
             assertFalse(restriction.isColorRestriction());
 
         }

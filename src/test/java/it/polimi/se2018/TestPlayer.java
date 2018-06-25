@@ -54,9 +54,5 @@ public class TestPlayer {
         assertTrue(player.isYourTurn());
     }
 
-    @Test
-    public void isConnectedTest(){
-        player.setConnected(true);
-        assertTrue(player.isConnected());
-    }
+
 }

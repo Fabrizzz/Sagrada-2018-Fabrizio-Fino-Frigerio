@@ -58,7 +58,7 @@ public class TestServerMessage {
 
         List<Tool> tools = Tool.getRandTools(3);
 
-        this.model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools,null);
+        this.model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools);
         Collections.addAll(this.players,boardMap.keySet().toArray(new Player[boardMap.keySet().size()]));
         this.playerBoard = boardMap.values().toArray(new PlayerBoard[boardMap.values().size()]);
         this.privateObjective = privateObjectiveMap.values().toArray(new PrivateObjective[privateObjectiveMap.values().size()]);

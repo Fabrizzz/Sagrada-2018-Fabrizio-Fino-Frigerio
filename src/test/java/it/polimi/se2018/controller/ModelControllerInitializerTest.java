@@ -1,4 +1,4 @@
-package it.polimi.se2018.utils;
+package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.Model;
@@ -50,7 +50,7 @@ public class ModelControllerInitializerTest {
             tmpPlayer.setFavorTokens(boardMap.get(player).getBoardDifficutly());
         }
 
-        model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools, null);
+        model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools);
 
         return model;
     }

@@ -1,7 +1,5 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.controller.Controller;
-import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.Player;
@@ -13,13 +11,10 @@ import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
-import it.polimi.se2018.utils.network.SocketConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.net.Socket;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.*;
 
@@ -55,7 +50,7 @@ public class TestModel {
 
         List<Tool> tools = Tool.getRandTools(3);
 
-        this.model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools,null);
+        this.model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools);
         Collections.addAll(this.players,boardMap.keySet().toArray(new Player[boardMap.keySet().size()]));
         this.playerBoard = boardMap.values().toArray(new PlayerBoard[boardMap.values().size()]);
         this.privateObjective = privateObjectiveMap.values().toArray(new PrivateObjective[privateObjectiveMap.values().size()]);
@@ -65,21 +60,21 @@ public class TestModel {
     @Test
     public void testCostructor(){
         try{
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
         }catch(IllegalArgumentException e){
             fail();
         }
 
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         try{
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
             fail();
         }catch(IllegalArgumentException e){}
         publicObjectives.remove(3);
 
         players.add(new Player("Player " + 3, (long) 3));
         try{
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
             fail();
         }catch(IllegalArgumentException e){}
 
@@ -87,7 +82,7 @@ public class TestModel {
 
         try{
             privateObjectiveMap.put(players.get(2), temp);
-            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3),null);
+            model = new Model(players, publicObjectives, boardMap, privateObjectiveMap, Tool.getRandTools(3));
             fail();
         }catch(IllegalArgumentException | IndexOutOfBoundsException e){}
 

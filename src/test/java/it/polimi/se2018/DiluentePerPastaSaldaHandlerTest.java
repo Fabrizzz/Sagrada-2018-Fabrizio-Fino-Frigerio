@@ -1,11 +1,11 @@
 package it.polimi.se2018;
 
+import it.polimi.se2018.controller.ModelControllerInitializerTest;
 import it.polimi.se2018.controller.RemoteView;
+import it.polimi.se2018.controller.TestHandler;
 import it.polimi.se2018.controller.chainOfResponsibilities.DiluentePerPastaSaldaHandler;
-import it.polimi.se2018.controller.chainOfResponsibilities.TestHandler;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
@@ -15,7 +15,6 @@ import it.polimi.se2018.utils.network.TestConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;

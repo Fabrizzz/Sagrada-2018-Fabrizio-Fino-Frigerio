@@ -1,24 +1,21 @@
 package it.polimi.se2018;
 
+import it.polimi.se2018.controller.ModelControllerInitializerTest;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
-import it.polimi.se2018.objective_cards.PublicObjectiveName;
-import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
-import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.fail;
+import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -111,7 +108,7 @@ public class TestModelView {
            fail();
         }
 
-        modelView.update(model,model);
+        //modelView.update(model,model);
         assertTrue(modelView.boardContainsDie(modelView.getPlayers().get(1),1,1));
     }
 
@@ -130,7 +127,7 @@ public class TestModelView {
             fail();
         }
 
-        modelView.update(model,model);
+        //modelView.update(model,model);
 
         try{
            assertEquals(die,modelView.getBoardDie(modelView.getPlayers().get(1),1,1));
@@ -148,7 +145,7 @@ public class TestModelView {
 
         Die die = new Die(Color.BLUE);
         model.getRoundTrack().addDie(1,die);
-        modelView.update(model,model);
+        //modelView.update(model,model);
 
         try{
             assertEquals(die, modelView.getRoundTrackDie(1,0));
@@ -163,7 +160,7 @@ public class TestModelView {
 
         Die die = new Die(Color.BLUE);
         model.getRoundTrack().addDie(1,die);
-        modelView.update(model,model);
+        //modelView.update(model,model);
 
         assertTrue(modelView.roundTrackContainsColor(Color.BLUE));
     }
