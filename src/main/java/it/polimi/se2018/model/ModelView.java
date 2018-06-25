@@ -10,15 +10,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * ModelView
  * @author Giampietro
  */
-public class ModelView extends Observable implements Observer, Serializable {
+public class ModelView extends Observable implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private final Map<Tool, Boolean> tools;
     private final List<PublicObjective> publicObjective;
@@ -95,16 +93,6 @@ public class ModelView extends Observable implements Observer, Serializable {
         }
     }
 
-
-    //da cambiare!!!
-    @Override
-    public void update(Observable o, Object arg) {
-        //LOGGER.log(Level.INFO,"Ricevuto update model");
-        //Model model = (Model) o;
-        //ModelView modelView = new ModelView(model);
-        //setChanged();
-        //notifyObservers(modelView);
-    }
 
     /**
      * Return the current round number
