@@ -1,13 +1,11 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.controller.Controller;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -38,7 +36,6 @@ public class Model extends Observable {
     private boolean firstTurn = true; //ogni round è fatto da due turni, è importante tenerne conto anche per l' uso di certe tool
     private boolean usedTool = false;
     private boolean normalMove = false;
-    private Controller controller;
 
 
     /**
@@ -49,8 +46,7 @@ public class Model extends Observable {
      * @param privateObjectiveMap map between the players and their private objectives
      */
     public Model(List<Player> players, List<PublicObjective> publicObjectives, Map<Player, PlayerBoard> boardMap,
-                 Map<Player, PrivateObjective> privateObjectiveMap, List<Tool> tools, Controller controller) {
-        this.controller = controller;
+                 Map<Player, PrivateObjective> privateObjectiveMap, List<Tool> tools) {
         if (players.size() >= 4 || tools.size() != NUMBER_OF_TOOL_CARDS || publicObjectives.size() != NUMBER_OF_PUBLIC_OBJECTIVES ||
                 boardMap.size() != players.size() ||
                 privateObjectiveMap.size() != players.size())
@@ -227,40 +223,15 @@ public class Model extends Observable {
         this.publicObjective.add(publicObjective);
     }
 
-    /**
-     * End the round and update the round variables
-     */
-    public void endRound() {
-        turn = 0;
-        firstTurn = true;
-        roundTrack.addDice(round, draftPool.removeAll());
-        round++;
-        Collections.rotate(players, 1);
-        if (round == 10)
-            endGame();
-        else {
-            draftPool.rollDice(diceBag);
-        }
-
-    }
 
     public static int getMinutesPerTurn() {
         return MINUTES_PER_TURN;
     }
 
-    /**
-     * End the game
-     */
-    public void endGame() {
-        //chiudere i timer
-    }
+
 
     public int getTurn() {
         return turn;
-    }
-
-    public void setTurn(int turn){
-        this.turn = turn;
     }
 
     public void notifyObs() {
@@ -268,8 +239,7 @@ public class Model extends Observable {
         notifyObservers(new ModelView(this));
     }
 
-    public Controller getController(){
-        return controller;
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
-
 }
