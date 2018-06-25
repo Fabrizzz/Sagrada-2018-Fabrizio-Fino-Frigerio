@@ -17,7 +17,10 @@ import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
 import java.io.*;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -368,7 +371,7 @@ public class CLI extends View{
     public void normalSugheroMove(Tool tool){
         int i = chooseDraftpoolDie();
 
-        println("Scelgi la dove piazzare il dado");
+        println("Scegli dove piazzare il dado");
         int[] position = chooseBoardCellWithoutDie();
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
@@ -382,7 +385,10 @@ public class CLI extends View{
      * @param tool tool to use
      */
     private void skipMartellettoTenagliaMove(Tool tool){
-        if(modelView.isFirstTurn()) {
+        if ((tool == Tool.TENAGLIAAROTELLE && !modelView.isFirstTurn()) || (tool == Tool.MARTELLETTO && (modelView.isFirstTurn() || modelView.isNormalMove()))) {
+            println("Errore: Non puoi eseguire questa mossa");
+            chooseMove();
+        } else {
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
             setChanged();
             notifyObservers(clientMessage);
@@ -396,9 +402,6 @@ public class CLI extends View{
                 println("Esegui il secondo piazzamento");
                 normalSugheroMove(Tool.MOSSASTANDARD);
             }
-        }else{
-            println("Errore: Puoi eseguire questa mossa solo al primo turno");
-            chooseMove();
         }
     }
 
@@ -569,12 +572,14 @@ public class CLI extends View{
         print("Scelta: ");
         int i = -1;
         do{
+            System.out.println("lmao");
             i = InputUtils.getInt();
         }while(i < 0 || i > 9);
-        println("");
+        println("Input ricevuto");
 
         switch (i){
             case 0:
+                println("In attesa di mandarlo");
                 setChanged();
                 notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
                 println("Mossa inviata");
