@@ -1,5 +1,6 @@
 package it.polimi.se2018.utils.network;
 
+import it.polimi.se2018.utils.exceptions.DisconnectedException;
 import it.polimi.se2018.utils.messages.Message;
 
 import java.rmi.RemoteException;
@@ -38,7 +39,7 @@ public class RMIConnection extends Connection implements RMIInterface {
      * @return if the message has been correctly sent
      */
     @Override
-    public boolean sendMessage(Message message) {
+    public boolean sendMessage(Message message) throws DisconnectedException {
         if (isConnected())
             try {
                 LOGGER.log(Level.FINE,"Invio messaggio");
@@ -48,6 +49,7 @@ public class RMIConnection extends Connection implements RMIInterface {
             }catch (RemoteException e){
                 LOGGER.log(Level.INFO,"Remote exception invio messaggio rmi");
                 close();
+                throw new DisconnectedException();
             }
         return false;
     }
@@ -84,6 +86,10 @@ public class RMIConnection extends Connection implements RMIInterface {
 
     public void update(Observable o, Object arg) {
         LOGGER.log(Level.FINE,"update messaggio dalla view");
-        sendMessage((Message) arg);
+        try {
+            sendMessage((Message) arg);
+        } catch (DisconnectedException e) {
+            //
+        }
     }
 }

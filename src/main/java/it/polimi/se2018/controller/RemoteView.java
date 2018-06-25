@@ -2,9 +2,8 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.model.Player;
-import it.polimi.se2018.server.Server;
 import it.polimi.se2018.utils.enums.MessageType;
-import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.exceptions.DisconnectedException;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.Message;
 import it.polimi.se2018.utils.messages.ServerMessage;
@@ -40,8 +39,14 @@ public class RemoteView extends Observable implements Observer {
     }
 
     public void sendBack(Message message) {
-        LOGGER.log(Level.FINE,"Invio messaggio dalla remoteview");
-        connection.sendMessage(message);
+        LOGGER.log(Level.FINE, "Invio messaggio");
+        try {
+            connection.sendMessage(message);
+        } catch (DisconnectedException e) {
+            setChanged();
+            notifyObservers(new ClientMessage(player.getNick()));
+            LOGGER.log(Level.WARNING, player.getNick() + " si è disconnesso");
+        }
 
     }
 

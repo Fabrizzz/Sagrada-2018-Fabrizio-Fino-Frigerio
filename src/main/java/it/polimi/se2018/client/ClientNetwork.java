@@ -1,12 +1,13 @@
 package it.polimi.se2018.client;
 
-import it.polimi.se2018.view.View;
 import it.polimi.se2018.server.rmi.ServerRMIControllerInterface;
+import it.polimi.se2018.utils.exceptions.DisconnectedException;
 import it.polimi.se2018.utils.messages.Message;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.RMIConnection;
 import it.polimi.se2018.utils.network.RMIInterface;
 import it.polimi.se2018.utils.network.SocketConnection;
+import it.polimi.se2018.view.View;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -114,11 +115,16 @@ public class ClientNetwork {
     public Boolean sendMessage(Message message){
         LOGGER.log(Level.FINE,"Invio messaggio");
         if(isConnected()){
-            return connection.sendMessage(message);
+            try {
+                return connection.sendMessage(message);
+            } catch (DisconnectedException e) {
+                LOGGER.log(Level.SEVERE, "Messaggio non inviato, client disconnesso");
+            }
         }else{
             LOGGER.log(Level.FINE,"Client non connesso, invio annullato");
             return false;
         }
+        return false;
     }
 
     /**

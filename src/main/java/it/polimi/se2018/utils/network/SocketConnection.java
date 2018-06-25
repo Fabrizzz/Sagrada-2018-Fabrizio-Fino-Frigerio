@@ -1,10 +1,8 @@
 package it.polimi.se2018.utils.network;
 
-import it.polimi.se2018.utils.enums.MessageType;
+import it.polimi.se2018.utils.exceptions.DisconnectedException;
 import it.polimi.se2018.utils.messages.Message;
-import it.polimi.se2018.utils.messages.ServerMessage;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -45,7 +43,7 @@ public class SocketConnection extends Connection implements Runnable {
      * Send message
      * @param message message to send
      */
-    public boolean sendMessage(Message message){
+    public boolean sendMessage(Message message) throws DisconnectedException {
         LOGGER.log(Level.FINE,"Invio messaggio");
         if (isConnected())
             try{
@@ -56,7 +54,7 @@ public class SocketConnection extends Connection implements Runnable {
                 return true;
             }catch (IOException e){
                 close();
-                return false;
+                throw new DisconnectedException();
             }
         return false;
     }
@@ -119,6 +117,10 @@ public class SocketConnection extends Connection implements Runnable {
     }
     @Override
     public void update(Observable o, Object arg) {
-        sendMessage((Message) arg);
+        try {
+            sendMessage((Message) arg);
+        } catch (DisconnectedException e) {
+            //
+        }
     }
 }
