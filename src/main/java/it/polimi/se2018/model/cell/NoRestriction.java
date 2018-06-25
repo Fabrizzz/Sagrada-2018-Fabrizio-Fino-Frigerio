@@ -15,10 +15,6 @@ public class NoRestriction implements Restriction {
         return false;
     }
 
-    @Override
-    public boolean noRestriction() {
-        return true;
-    }
 
     @Override
     public boolean verifyRestriction(Die die) {

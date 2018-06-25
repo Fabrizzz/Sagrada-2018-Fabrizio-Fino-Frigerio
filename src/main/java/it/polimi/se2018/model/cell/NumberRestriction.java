@@ -26,10 +26,6 @@ public class NumberRestriction implements Restriction {
         return false;
     }
 
-    @Override
-    public boolean noRestriction() {
-        return false;
-    }
 
     @Override
     public boolean verifyRestriction(Die die) {

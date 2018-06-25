@@ -8,8 +8,6 @@ public interface Restriction extends Serializable {
 
     boolean isColorRestriction();
 
-    boolean noRestriction();
-
     boolean verifyRestriction(Die die);
 
 }

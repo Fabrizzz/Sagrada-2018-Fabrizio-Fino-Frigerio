@@ -25,10 +25,6 @@ public class ColorRestriction implements Restriction, Serializable {
         return true;
     }
 
-    @Override
-    public boolean noRestriction() {
-        return false;
-    }
 
     @Override
     public boolean verifyRestriction(Die die) {
