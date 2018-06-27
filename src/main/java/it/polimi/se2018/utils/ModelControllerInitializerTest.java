@@ -44,7 +44,7 @@ public class ModelControllerInitializerTest {
         List<Tool> tools = new ArrayList<>();
         tools.add(Tool.DILUENTEPERPASTASALDA);
         tools.add(Tool.MOSSASTANDARD);
-        tools.add(Tool.TAGLIERINAMANUALE);
+        tools.add(Tool.MARTELLETTO);
 
         for (Player tmpPlayer : boardMap.keySet()) {
             tmpPlayer.setFavorTokens(boardMap.get(player).getBoardDifficutly());
