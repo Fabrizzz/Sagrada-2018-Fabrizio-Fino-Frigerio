@@ -18,7 +18,7 @@ public class FirstCheck extends Handler {
         LOGGER.log(Level.FINE,"FirstCheck della chain of responsabilities");
         if (remoteView.getPlayer().isYourTurn()) {
             if (playerMove.getColumn().filter(k -> k < 0 || k > 4).isPresent() ||
-                    playerMove.getDraftPosition().filter(k -> (k >= model.getDraftPool().size())).isPresent() ||
+                    playerMove.getDraftPosition().filter(k -> (k >= model.getDraftPool().size() || k < 0) ).isPresent() ||
                     playerMove.getFinalColumn().filter(k -> k < 0 || k > 4).isPresent() ||
                     playerMove.getFinalRow().filter(k -> k < 0 || k > 3).isPresent() ||
                     playerMove.getRoundTrackRound().filter(k -> k >= model.getRound()).isPresent() ||

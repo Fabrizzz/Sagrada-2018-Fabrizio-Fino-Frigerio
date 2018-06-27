@@ -22,22 +22,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class EndOfTheChainHandlerTest {
-
-    private static final Logger LOGGER = Logger.getLogger("Logger");
     private RemoteView remoteView;
     private Model model;
     private Connection connection;
 
     @Before
     public void initialize(){
-
-        LOGGER.setLevel(Level.FINEST);
-
-        Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.WARNING);
-        LOGGER.addHandler(handlerObj);
-        LOGGER.setUseParentHandlers(false);
-
         model = ModelControllerInitializerTest.initialize();
         connection = new TestConnection();
         remoteView = new RemoteView(model.getPlayers().get(0),connection);
