@@ -96,10 +96,75 @@ public class DiluentePerPastaSaldaHandlerTest {
         }catch (Exception e){
             fail();
         }
-
-
     }
 
+    @Test
+    public void testPiazzamentoSenzaRow(){
+        Die bagDie;
+        try{
+            bagDie = model.getDiceBag().getFirst();
 
+            Die die;
+            if(bagDie.getColor().equals(Color.BLUE)){
+                die = new Die(Color.RED);
+            }else{
+                die = new Die(Color.BLUE);
+            }
 
+            die.setNumber(NumberEnum.TWO);
+
+            try{
+                model.getBoard(model.getPlayers().get(0)).setDie(die,2,0);
+            }catch (Exception e){
+                fail();
+            }
+
+            DiluentePerPastaSaldaHandler diluentePerPastaSaldaHandler = new DiluentePerPastaSaldaHandler();
+            diluentePerPastaSaldaHandler.setNextHandler(new EndOfTheChainHandler());
+            playerMove = new PlayerMove(0,NumberEnum.ONE,Tool.DILUENTEPERPASTASALDA);
+            try{
+                assertFalse(diluentePerPastaSaldaHandler.process(playerMove,remoteView,model));
+            }catch (Exception e){
+                e.printStackTrace();
+                fail();
+            }
+
+        }catch (Exception e){
+            fail();
+        }
+    }
+
+    @Test
+    public void testPiazzamentoSenzaRowCheckFalse(){
+        Die bagDie;
+        try{
+            Die die = new Die(Color.RED);
+
+            die.setNumber(NumberEnum.FOUR);
+
+            try{
+                model.getBoard(model.getPlayers().get(0)).setDie(die,3,4);
+            }catch (Exception e){
+                fail();
+            }
+
+            for(int i = 0; i < model.getDiceBag().size(); i++){
+                model.getDiceBag().takeDie();
+            }
+            model.getDiceBag().addDie(new Die(Color.PURPLE));
+
+            DiluentePerPastaSaldaHandler diluentePerPastaSaldaHandler = new DiluentePerPastaSaldaHandler();
+            diluentePerPastaSaldaHandler.setNextHandler(new EndOfTheChainHandler());
+            playerMove = new PlayerMove(0,NumberEnum.ONE,Tool.DILUENTEPERPASTASALDA);
+            try{
+                assertTrue(diluentePerPastaSaldaHandler.process(playerMove,remoteView,model));
+            }catch (Exception e){
+                e.printStackTrace();
+                fail();
+            }
+
+        }catch (Exception e){
+            fail();
+        }
+    }
 }
