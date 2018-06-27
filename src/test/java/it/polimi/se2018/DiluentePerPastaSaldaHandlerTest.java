@@ -1,9 +1,9 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.controller.ModelControllerInitializerTest;
+import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.controller.RemoteView;
-import it.polimi.se2018.controller.TestHandler;
 import it.polimi.se2018.controller.chainOfResponsibilities.DiluentePerPastaSaldaHandler;
+import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.Color;
@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class DiluentePerPastaSaldaHandlerTest {
@@ -37,7 +38,7 @@ public class DiluentePerPastaSaldaHandlerTest {
         LOGGER.setLevel(Level.FINEST);
 
         Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.FINEST);
+        handlerObj.setLevel(Level.WARNING);
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
 
@@ -51,16 +52,14 @@ public class DiluentePerPastaSaldaHandlerTest {
     @Test
     public void testPiazzamentoAVuoto(){
         DiluentePerPastaSaldaHandler diluentePerPastaSaldaHandler = new DiluentePerPastaSaldaHandler();
-        diluentePerPastaSaldaHandler.setNextHandler(new TestHandler());
 
         try{
-            diluentePerPastaSaldaHandler.process(playerMove,remoteView,model);
+            assertTrue(diluentePerPastaSaldaHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
             e.printStackTrace();
             fail();
         }
 
-        assertFalse(((TestConnection) connection).isSent());
     }
 
     @Test
@@ -85,16 +84,14 @@ public class DiluentePerPastaSaldaHandlerTest {
             }
 
             DiluentePerPastaSaldaHandler diluentePerPastaSaldaHandler = new DiluentePerPastaSaldaHandler();
-            diluentePerPastaSaldaHandler.setNextHandler(new TestHandler());
+            diluentePerPastaSaldaHandler.setNextHandler(new EndOfTheChainHandler());
 
             try{
-                diluentePerPastaSaldaHandler.process(playerMove,remoteView,model);
+               assertTrue(diluentePerPastaSaldaHandler.process(playerMove,remoteView,model));
             }catch (Exception e){
                 e.printStackTrace();
                 fail();
             }
-
-            assertFalse(((TestConnection) connection).isSent());
 
         }catch (Exception e){
             fail();

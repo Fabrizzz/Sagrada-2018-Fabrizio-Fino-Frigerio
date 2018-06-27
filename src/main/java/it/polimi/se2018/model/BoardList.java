@@ -70,10 +70,12 @@ public final class BoardList {
         for(int i = 0; i < boardList.size(); i ++){
             for(int j = 0; j < 2; j++) {
                 if (boardList.get(i)[j].getName().equals(name)){
+                    LOGGER.log(Level.FINE,"Nome board " + boardList.get(i)[j].getName());
                     return boardList.get(i)[j];
                 }
             }
         }
+        LOGGER.log(Level.FINE,"Board non trovata");
         return null;
     }
 

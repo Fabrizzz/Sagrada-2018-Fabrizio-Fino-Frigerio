@@ -1,9 +1,6 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.model.cell.AbstractRestrictionFactory;
-import it.polimi.se2018.model.cell.Cell;
-import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.model.cell.Restriction;
+import it.polimi.se2018.model.cell.*;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
@@ -124,7 +121,7 @@ public class PlayerBoard implements Serializable {
      */
     public boolean verifyColorRestriction(Die die, int row, int column) {
         if (get(row, column).getRestriction().isColorRestriction()){
-            LOGGER.log(Level.FINE,"Restrizione colore cella row:"+row+" Column:"+column+" non rispettata");
+            LOGGER.log(Level.FINE,"Restrizione colore cella row:"+row+" Column:"+column+" colore cella: " +((ColorRestriction) get(row, column).getRestriction()).getColor() + " colore dado: "+ die.getColor()+" esito: " + get(row, column).verifyRestriction(die));
             return get(row, column).verifyRestriction(die);
         }
 
@@ -141,7 +138,7 @@ public class PlayerBoard implements Serializable {
      */
     public boolean verifyNumberRestriction(Die die, int row, int column) {
         if (get(row, column).getRestriction().isNumberRestriction()){
-            LOGGER.log(Level.FINE,"Restrizione di numero cella row:"+row+" Column:"+column+" non rispettata");
+            LOGGER.log(Level.FINE,"Restrizione numero cella row:"+row+" Column:"+column+" numero cella: " +((NumberRestriction) get(row, column).getRestriction()).getNumber() + " numero dado: "+ die.getNumber()+" esito: " + get(row, column).verifyRestriction(die));
             return get(row, column).verifyRestriction(die);
         }
 

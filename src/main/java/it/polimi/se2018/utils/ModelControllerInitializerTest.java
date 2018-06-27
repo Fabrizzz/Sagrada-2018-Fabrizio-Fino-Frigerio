@@ -1,4 +1,4 @@
-package it.polimi.se2018.controller;
+package it.polimi.se2018.utils;
 
 import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.Model;
@@ -10,6 +10,7 @@ import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.view.CLI;
 
 import java.util.*;
 
@@ -25,9 +26,8 @@ public class ModelControllerInitializerTest {
 
         boardMap = new HashMap();
         Player player = new Player("asd", (long) 123);
-        boardMap.put(player, new PlayerBoard(boardList.getBoard("Bellesguard")));
-        boardMap.put(new Player("asd", (long) 1234), new PlayerBoard(boardList.getCouple()[1]));
-
+        boardMap.put(player, new PlayerBoard(boardList.getBoard("Firelight")));
+        boardMap.put(new Player("asd", (long) 1234), new PlayerBoard(boardList.getBoard("Firelight")));
         publicObjectives = new ArrayList<>();
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSICOLONNA));

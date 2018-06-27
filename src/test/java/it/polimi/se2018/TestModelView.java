@@ -1,6 +1,6 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.controller.ModelControllerInitializerTest;
+import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.PrivateObjective;
