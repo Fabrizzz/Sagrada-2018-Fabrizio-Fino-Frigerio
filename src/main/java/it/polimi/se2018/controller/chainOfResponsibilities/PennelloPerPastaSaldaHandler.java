@@ -57,7 +57,6 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                         NumberEnum num = die.getNumber();
                         die.setNumber(newValue);
 
-
                         if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) || ((!board.isEmpty()) && (
                                 board.containsDie(row, column) ||
                                 !board.verifyColorRestriction(die, row, column) ||
@@ -77,14 +76,18 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                         NumberEnum num = die.getNumber();
                         die.setNumber(newValue);
                         boolean check = true;
-                        for (int r = 0; r < 4 && check; r++) {
-                            for (int c = 0; c < 5 && check; c++) {
-                                if (board.verifyInitialPositionRestriction(r, c) &&
-                                        board.verifyNumberRestriction(die, r, c) &&
-                                        board.verifyColorRestriction(die, r, c) &&
-                                        board.verifyNearCellsRestriction(die, r, c) &&
-                                        board.verifyPositionRestriction(r, c))
-                                    check = false;
+                        if(board.isEmpty()){
+                            check = false;
+                        }else{
+                            for (int r = 0; r < 4 && check; r++) {
+                                for (int c = 0; c < 5 && check; c++) {
+                                    if (board.verifyInitialPositionRestriction(r, c) &&
+                                            board.verifyNumberRestriction(die, r, c) &&
+                                            board.verifyColorRestriction(die, r, c) &&
+                                            board.verifyNearCellsRestriction(die, r, c) &&
+                                            board.verifyPositionRestriction(r, c))
+                                        check = false;
+                                }
                             }
                         }
                         if (check) {

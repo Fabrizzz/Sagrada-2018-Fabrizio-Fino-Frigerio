@@ -17,7 +17,7 @@ import java.util.*;
 
 public class ModelControllerInitializerTest {
 
-    public static Model initialize() {
+    public static Model initialize(Tool tool) {
         Model model;
         List<PublicObjective> publicObjectives;
         Map<Player, PlayerBoard> boardMap;
@@ -42,9 +42,9 @@ public class ModelControllerInitializerTest {
         privateObjectiveMap.put(new Player("assd", (long) 321), new PrivateObjective(Color.RED));
 
         List<Tool> tools = new ArrayList<>();
-        tools.add(Tool.DILUENTEPERPASTASALDA);
+        tools.add(Tool.SKIPTURN);
         tools.add(Tool.MOSSASTANDARD);
-        tools.add(Tool.MARTELLETTO);
+        tools.add(tool);
 
         for (Player tmpPlayer : boardMap.keySet()) {
             tmpPlayer.setFavorTokens(boardMap.get(player).getBoardDifficutly());
@@ -53,5 +53,9 @@ public class ModelControllerInitializerTest {
         model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools);
 
         return model;
+    }
+
+    public static Model initialize(){
+        return initialize(Tool.MARTELLETTO);
     }
 }

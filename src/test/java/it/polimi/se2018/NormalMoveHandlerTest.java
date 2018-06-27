@@ -25,7 +25,6 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
 public class NormalMoveHandlerTest {
-    private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;
     private Model model;
@@ -34,13 +33,6 @@ public class NormalMoveHandlerTest {
 
     @Before
     public void initialize(){
-
-        LOGGER.setLevel(Level.FINEST);
-
-        Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.WARNING);
-        LOGGER.addHandler(handlerObj);
-        LOGGER.setUseParentHandlers(false);
 
         model = ModelControllerInitializerTest.initialize();
 
@@ -76,6 +68,9 @@ public class NormalMoveHandlerTest {
             fail();
         }
 
+        for(int i = 0; i < model.getDiceBag().size(); i++){
+            model.getDiceBag().getFirst();
+        }
         die = new Die(Color.RED);
         die.setNumber(NumberEnum.TWO);
         model.getDiceBag().addDie(die);

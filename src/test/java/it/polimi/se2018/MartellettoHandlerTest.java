@@ -33,7 +33,7 @@ public class MartellettoHandlerTest {
     @Before
     public void initialize(){
 
-        model = ModelControllerInitializerTest.initialize();
+        model = ModelControllerInitializerTest.initialize(Tool.MARTELLETTO);
 
         playerMove = new PlayerMove(Tool.MARTELLETTO);
         connection = new TestConnection();

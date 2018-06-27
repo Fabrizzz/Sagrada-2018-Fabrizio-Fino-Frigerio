@@ -42,7 +42,7 @@ public class DiluentePerPastaSaldaHandlerTest {
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
 
-        model = ModelControllerInitializerTest.initialize();
+        model = ModelControllerInitializerTest.initialize(Tool.DILUENTEPERPASTASALDA);
 
         playerMove = new PlayerMove(1,0,0,NumberEnum.ONE,Tool.DILUENTEPERPASTASALDA);
         connection = new TestConnection();
