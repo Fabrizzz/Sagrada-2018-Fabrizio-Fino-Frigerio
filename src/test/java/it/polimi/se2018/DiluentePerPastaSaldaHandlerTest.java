@@ -76,7 +76,6 @@ public class DiluentePerPastaSaldaHandlerTest {
             }
 
             die.setNumber(NumberEnum.TWO);
-
             try{
                 model.getBoard(model.getPlayers().get(0)).setDie(die,2,0);
             }catch (Exception e){
@@ -86,6 +85,7 @@ public class DiluentePerPastaSaldaHandlerTest {
             DiluentePerPastaSaldaHandler diluentePerPastaSaldaHandler = new DiluentePerPastaSaldaHandler();
             diluentePerPastaSaldaHandler.setNextHandler(new EndOfTheChainHandler());
 
+            model.setUsedTool(false);
             try{
                assertTrue(diluentePerPastaSaldaHandler.process(playerMove,remoteView,model));
             }catch (Exception e){
@@ -122,6 +122,7 @@ public class DiluentePerPastaSaldaHandlerTest {
             DiluentePerPastaSaldaHandler diluentePerPastaSaldaHandler = new DiluentePerPastaSaldaHandler();
             diluentePerPastaSaldaHandler.setNextHandler(new EndOfTheChainHandler());
             playerMove = new PlayerMove(0,NumberEnum.ONE,Tool.DILUENTEPERPASTASALDA);
+            model.setUsedTool(false);
             try{
                 assertFalse(diluentePerPastaSaldaHandler.process(playerMove,remoteView,model));
             }catch (Exception e){

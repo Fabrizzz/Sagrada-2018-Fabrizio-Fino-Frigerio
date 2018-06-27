@@ -69,8 +69,10 @@ public class PennelloPerPastaSaldaTest {
             fail();
         }catch (Exception e){}
 
+
         model = ModelControllerInitializerTest.initialize(Tool.PENNELLOPERPASTASALDA);
         remoteView = new RemoteView(model.getPlayers().get(0),connection);
+        model.setUsedTool(false);
         playerMove = new PlayerMove(1,2,0,NumberEnum.ONE,Tool.PENNELLOPERPASTASALDA);
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
@@ -78,6 +80,7 @@ public class PennelloPerPastaSaldaTest {
             fail();
         }
 
+        model.setUsedTool(false);
         playerMove = new PlayerMove(1,0,0,NumberEnum.ONE,Tool.PENNELLOPERPASTASALDA);
         try{
             assertTrue(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
@@ -95,12 +98,14 @@ public class PennelloPerPastaSaldaTest {
             fail();
         }
 
+        model.setUsedTool(false);
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
             fail();
         }
 
+        model.setUsedTool(false);
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
@@ -116,6 +121,7 @@ public class PennelloPerPastaSaldaTest {
             fail();
         }
 
+        model.setUsedTool(false);
         playerMove = new PlayerMove(3,4,0,NumberEnum.SIX,Tool.PENNELLOPERPASTASALDA);
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
@@ -125,7 +131,7 @@ public class PennelloPerPastaSaldaTest {
     }
 
     @Test
-    public void noInsertTest(){
+    public void noInsertTest1(){
         playerMove = new PlayerMove(0,NumberEnum.SIX,Tool.PENNELLOPERPASTASALDA);
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
@@ -133,6 +139,7 @@ public class PennelloPerPastaSaldaTest {
             fail();
         }
 
+        model.setUsedTool(false);
         playerMove = new PlayerMove(1,0,0,NumberEnum.ONE,Tool.PENNELLOPERPASTASALDA);
         try{
             assertTrue(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
@@ -140,14 +147,12 @@ public class PennelloPerPastaSaldaTest {
             fail();
         }
 
+        model.setUsedTool(false);
         playerMove = new PlayerMove(0,NumberEnum.SIX,Tool.PENNELLOPERPASTASALDA);
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
             fail();
         }
-
-
     }
-
 }
