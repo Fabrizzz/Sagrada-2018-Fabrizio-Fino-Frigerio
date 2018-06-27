@@ -24,8 +24,6 @@ import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
 
 public class MartellettoHandlerTest {
-
-    private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;
     private Model model;
@@ -34,13 +32,6 @@ public class MartellettoHandlerTest {
 
     @Before
     public void initialize(){
-
-        LOGGER.setLevel(Level.FINEST);
-
-        Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.WARNING);
-        LOGGER.addHandler(handlerObj);
-        LOGGER.setUseParentHandlers(false);
 
         model = ModelControllerInitializerTest.initialize();
 
@@ -86,10 +77,10 @@ public class MartellettoHandlerTest {
 
     @Test
     public void notMartellettoTest(){
-        playerMove = new PlayerMove(Tool.SKIPTURN);
+        playerMove = new PlayerMove(Tool.MOSSASTANDARD,1,1,1);
 
         try{
-            assertTrue(martellettoHandler.process(playerMove,remoteView,model));
+            assertFalse(martellettoHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
             fail();
         }

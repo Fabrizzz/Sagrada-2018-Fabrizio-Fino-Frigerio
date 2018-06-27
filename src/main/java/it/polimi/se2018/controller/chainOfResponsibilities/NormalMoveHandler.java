@@ -45,8 +45,9 @@ public class NormalMoveHandler extends Handler {
                         ) {
                     LOGGER.log(Level.INFO,"Il giocatore non puo' eseguire MOSSASTANDARD row: " + row + " column:" + column +
                     " colorRestriction: " + board.verifyColorRestriction(die, row, column) + " numberRestriction:" +
-                            board.verifyNumberRestriction(die, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(die, row, column) +
-                    " positionRestriction:" + board.verifyPositionRestriction(row, column));
+                    board.verifyNumberRestriction(die, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(die, row, column) +
+                    " positionRestriction:" + board.verifyPositionRestriction(row, column) + " isEmpty: " + board.isEmpty() + " containsDie:" +  board.containsDie(row, column) +
+                    " usedNormalMove:" + model.hasUsedNormalMove());
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else {
 

@@ -185,7 +185,7 @@ public class PlayerBoard implements Serializable {
         try {
             if (row > 0 && (get(row - 1, column).isUsed())) {
                 if (get(row - 1, column).getDie().getColor().equals(die.getColor()) || get(row - 1, column).getDie().getNumber().equals(die.getNumber())){
-                    LOGGER.log(Level.FINE,"Il dado sopra e' simile al dado da inserire in posizione row:"+row+" column:"+column+". Colore = " +
+                    LOGGER.log(Level.FINE,"Il dado sopra e' simile al dado da inserire in posizione row:"+row+" column:"+column+". Colore = " + get(row - 1, column).getDie().getColor() + " " +
                             get(row - 1, column).getDie().getColor().equals(die.getColor()) + " numero: " +
                             get(row - 1, column).getDie().getNumber().equals(die.getNumber()));
                     ris = false;
