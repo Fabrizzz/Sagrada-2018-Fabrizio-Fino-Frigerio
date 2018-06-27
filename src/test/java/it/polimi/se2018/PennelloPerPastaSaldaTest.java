@@ -132,13 +132,22 @@ public class PennelloPerPastaSaldaTest {
         }catch (Exception e){
             fail();
         }
-    }
-    /*
-    for(int i = 0; i < model.getDiceBag().size(); i++){
-            model.getDiceBag().takeDie();
+
+        playerMove = new PlayerMove(1,0,0,NumberEnum.ONE,Tool.PENNELLOPERPASTASALDA);
+        try{
+            assertTrue(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            fail();
         }
-        Die die = new Die(Color.BLUE);
-        model.getDiceBag().addDie(die);
-     */
+
+        playerMove = new PlayerMove(0,NumberEnum.SIX,Tool.PENNELLOPERPASTASALDA);
+        try{
+            assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            fail();
+        }
+
+
+    }
 
 }
