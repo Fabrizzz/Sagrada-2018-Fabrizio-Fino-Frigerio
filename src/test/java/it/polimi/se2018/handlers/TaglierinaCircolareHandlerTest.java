@@ -2,7 +2,6 @@ package it.polimi.se2018.handlers;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
-import it.polimi.se2018.controller.chainOfResponsibilities.RigaInSugheroHandler;
 import it.polimi.se2018.controller.chainOfResponsibilities.TaglierinaCircolareHandler;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.cell.Die;
@@ -16,8 +15,6 @@ import it.polimi.se2018.utils.network.TestConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
