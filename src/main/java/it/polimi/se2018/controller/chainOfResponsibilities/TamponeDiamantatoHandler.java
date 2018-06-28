@@ -18,25 +18,21 @@ public class TamponeDiamantatoHandler extends ToolHandler {
     @Override
     public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
 
-        int row;
-        int column;
-        PlayerBoard playerBoard;
+        int draftPosition;
         if (playerMove.getTool() == Tool.TAMPONEDIAMANTATO) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa TAMPONEDIAMANTATO");
-            if (!playerMove.getColumn().isPresent() || !playerMove.getRow().isPresent()){
+            if (!playerMove.getDraftPosition().isPresent() || playerMove.getDraftPosition().orElse(0) < 0 || playerMove.getDraftPosition().orElse(0) >= model.getDraftPool().size()){
                 LOGGER.log(Level.SEVERE,"Errore parametri TAMPONEDIAMANTATO");
                 throw new InvalidParameterException();
             }
 
-            row = playerMove.getRow().orElse(0);
-            column = playerMove.getColumn().orElse(0);
-            playerBoard = model.getBoard(remoteView.getPlayer());
-            if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || !playerBoard.containsDie(row, column)){
+            draftPosition = playerMove.getDraftPosition().orElse(0);
+            if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())){
                 LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAMPONEDIAMANTATO");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
             } else {
                 try {
-                    playerBoard.getDie(row, column).flip();
+                    model.getDraftPool().getDie(draftPosition).flip();
                     completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                     return true;
                 } catch (NoDieException e) {

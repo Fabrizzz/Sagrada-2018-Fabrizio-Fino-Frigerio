@@ -35,7 +35,7 @@ public class PennelloPerPastaSaldaHandlerTest {
     @Before
     public void initialize(){
 
-        LOGGER.setLevel(Level.FINEST);
+        LOGGER.setLevel(Level.OFF);
 
         Handler handlerObj = new ConsoleHandler();
         handlerObj.setLevel(Level.WARNING);

@@ -15,8 +15,6 @@ import it.polimi.se2018.utils.network.TestConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +23,7 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
 public class NormalMoveHandlerTest {
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;
     private Model model;
@@ -33,6 +32,8 @@ public class NormalMoveHandlerTest {
 
     @Before
     public void initialize(){
+
+        LOGGER.setLevel(Level.OFF);
 
         model = ModelControllerInitializerTest.initialize();
 

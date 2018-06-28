@@ -24,6 +24,7 @@ import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
 
 public class MartellettoHandlerTest {
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;
     private Model model;
@@ -32,6 +33,7 @@ public class MartellettoHandlerTest {
 
     @Before
     public void initialize(){
+        LOGGER.setLevel(Level.OFF);
 
         model = ModelControllerInitializerTest.initialize(Tool.MARTELLETTO);
 
