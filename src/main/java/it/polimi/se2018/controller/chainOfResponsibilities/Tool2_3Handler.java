@@ -54,15 +54,16 @@ public class Tool2_3Handler extends ToolHandler {
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else try {
                     die = board.getDie(row, column);
+                    board.removeDie(row, column);
                     if (!board.verifyNearCellsRestriction(die, finalRow, finalColumn) || !board.verifyPositionRestriction(finalRow, finalColumn) ||
                             (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)) || // il problma puo' manifestarsi anche qui ma non ho ancora testato
                             (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn))){ // Il problema e' qui, durante il controllo del numero se lo spostamento effettuato e' di una sola casella ortogonalmente alla vecchia posizione il controllo ritorna esito negativo perche' il dado nella nuova posizione viene confrontato con sestesso nella vecchia posizione dando errore
                         LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 2");
+                        board.setDie(die, row, column);
                         remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                     } else {
 
-                            board.removeDie(row, column);
-                            board.setDie(die, finalRow, finalColumn);
+                        board.setDie(die, finalRow, finalColumn);
                         completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                         return true;
                     }
