@@ -2,6 +2,10 @@ package it.polimi.se2018.controller;
 
 import java.util.TimerTask;
 
+/**
+ * It notify to the controller when the Timer expires every turn
+ * @author Giampietro
+ */
 public class RoundTimer extends TimerTask {
 
     private int round;

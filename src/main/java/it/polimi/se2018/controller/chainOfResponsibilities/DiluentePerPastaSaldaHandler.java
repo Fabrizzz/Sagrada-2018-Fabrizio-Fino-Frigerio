@@ -10,6 +10,7 @@ import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
@@ -107,6 +108,9 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                 LOGGER.log(Level.SEVERE, "Dado non presente in DILUENTEPERPASTASALDA");
             } catch (AlredySetDie alredySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in DILUENTEPERPASTASALDA");
+            }
+            catch (EmptyBagException e){
+                LOGGER.log(Level.SEVERE, "Tentativo di estrarre da DiceBag vuota");
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' DILUENTEPERPASTASALDA, passaggio responsabilita' all'handler successivo");

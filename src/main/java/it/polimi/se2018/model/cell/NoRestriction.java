@@ -1,5 +1,10 @@
 package it.polimi.se2018.model.cell;
 
+/**
+ * An empty Restriction
+ * @author Giampietro
+ */
+
 public class NoRestriction implements Restriction {
 
     protected NoRestriction() {

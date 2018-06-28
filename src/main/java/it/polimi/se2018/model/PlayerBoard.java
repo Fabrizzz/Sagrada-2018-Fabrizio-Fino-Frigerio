@@ -121,11 +121,11 @@ public class PlayerBoard implements Serializable {
      */
     public boolean verifyColorRestriction(Die die, int row, int column) {
         if (get(row, column).getRestriction().isColorRestriction()){
-            LOGGER.log(Level.FINE,"Restrizione colore cella row:"+row+" Column:"+column+" colore cella: " +((ColorRestriction) get(row, column).getRestriction()).getColor() + " colore dado: "+ die.getColor()+" esito: " + get(row, column).verifyRestriction(die));
+            LOGGER.log(Level.FINER,"Restrizione colore cella row:"+row+" Column:"+column+" colore cella: " +((ColorRestriction) get(row, column).getRestriction()).getColor() + " colore dado: "+ die.getColor()+" esito: " + get(row, column).verifyRestriction(die));
             return get(row, column).verifyRestriction(die);
         }
 
-        LOGGER.log(Level.FINE,"Restrizione colore cella row:"+row+" Column:"+column+" rispettata");
+        LOGGER.log(Level.FINER,"Restrizione colore cella row:"+row+" Column:"+column+" rispettata");
         return true;
     }
 
@@ -138,11 +138,11 @@ public class PlayerBoard implements Serializable {
      */
     public boolean verifyNumberRestriction(Die die, int row, int column) {
         if (get(row, column).getRestriction().isNumberRestriction()){
-            LOGGER.log(Level.FINE,"Restrizione numero cella row:"+row+" Column:"+column+" numero cella: " +((NumberRestriction) get(row, column).getRestriction()).getNumber() + " numero dado: "+ die.getNumber()+" esito: " + get(row, column).verifyRestriction(die));
+            LOGGER.log(Level.FINER,"Restrizione numero cella row:"+row+" Column:"+column+" numero cella: " +((NumberRestriction) get(row, column).getRestriction()).getNumber() + " numero dado: "+ die.getNumber()+" esito: " + get(row, column).verifyRestriction(die));
             return get(row, column).verifyRestriction(die);
         }
 
-        LOGGER.log(Level.FINE,"Restrizione di numero cella row:"+row+" Column:"+column+" rispettata");
+        LOGGER.log(Level.FINER,"Restrizione di numero cella row:"+row+" Column:"+column+" rispettata");
         return true;
     }
 
@@ -223,7 +223,7 @@ public class PlayerBoard implements Serializable {
 
             }
         } catch (NoDieException e) {
-            System.err.println(e);
+            LOGGER.log(Level.SEVERE, e.toString(),e);
         }
 
 
@@ -231,7 +231,7 @@ public class PlayerBoard implements Serializable {
     }
 
     public boolean verifyInitialPositionRestriction(int row, int column) {
-        LOGGER.log(Level.FINE,"Initial positio restriction = " + (row == 0 || row == 3 || column == 0 || column == 4));
+        LOGGER.log(Level.FINE,"Initial position restriction = " + (row == 0 || row == 3 || column == 0 || column == 4));
         return (row == 0 || row == 3 || column == 0 || column == 4);
 
     }
@@ -240,7 +240,7 @@ public class PlayerBoard implements Serializable {
         return get(row, column).getRestriction();
     }
 
-    public int getBoardDifficutly(){
+    public int getBoardDifficulty(){
         return board.getTokens();
     }
 

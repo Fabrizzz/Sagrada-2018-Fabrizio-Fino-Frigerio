@@ -30,7 +30,11 @@ public class TestDraftPool {
     public void rollDice() {
         assertEquals(player * 2 + 1, draftpool.size());
         while(draftpool.size() != 0){
-            draftpool.removeDie(0);
+            try {
+                draftpool.removeDie(0);
+            } catch (NoDieException e) {
+                fail();
+            }
         }
         draftpool.rollDice(dicebag);
         assertEquals(player*2 +1, draftpool.size());
@@ -137,7 +141,11 @@ public class TestDraftPool {
     public void size() {
         int k = 0, i = draftpool.size();
         while(draftpool.size() != 0){
-            draftpool.removeDie(0);
+            try {
+                draftpool.removeDie(0);
+            } catch (NoDieException e) {
+                fail();
+            }
             k++;
         }
         assertEquals(i,k);

@@ -9,6 +9,7 @@ import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.network.Connection;
 import it.polimi.se2018.utils.network.TestConnection;
@@ -43,7 +44,11 @@ public class NormalMoveHandlerTest {
         normalMoveHandler.setNextHandler(new EndOfTheChainHandler());
 
         for(int i = 0; i < model.getDiceBag().size(); i++){
-            model.getDiceBag().takeDie();
+            try {
+                model.getDiceBag().takeDie();
+            } catch (EmptyBagException e) {
+                fail();
+            }
         }
     }
 
@@ -69,7 +74,11 @@ public class NormalMoveHandlerTest {
         }
 
         for(int i = 0; i < model.getDiceBag().size(); i++){
-            model.getDiceBag().getFirst();
+            try {
+                model.getDiceBag().getFirst();
+            } catch (EmptyBagException e) {
+                fail();
+            }
         }
         die = new Die(Color.RED);
         die.setNumber(NumberEnum.TWO);

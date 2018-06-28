@@ -7,6 +7,7 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
 import org.junit.Test;
@@ -187,7 +188,11 @@ public class TestModelView {
 
     @Test
     public void getDiceBagDie(){
-        assertEquals(model.getDiceBag().getFirst(),modelView.getDiceBagDie());
+        try {
+            assertEquals(model.getDiceBag().getFirst(),modelView.getDiceBagDie());
+        } catch (EmptyBagException e) {
+            fail();
+        }
     }
 
     @Test

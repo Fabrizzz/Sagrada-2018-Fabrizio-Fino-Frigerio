@@ -1,11 +1,14 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Draft pool
@@ -15,6 +18,8 @@ public class DraftPool implements Serializable {
 
     private List<Die> dice = new ArrayList<>(9);    //Lista contenente tutti i dadi pescati
     private int numberOfDice;  //Numero di dadi da pescare a ogni round
+    private static final Logger LOGGER = Logger.getLogger("Logger");
+
     /**
      * Constructor
      * @param lenght Number of turns
@@ -22,8 +27,13 @@ public class DraftPool implements Serializable {
      */
     public DraftPool(int lenght, DiceBag diceBag) {
         numberOfDice = lenght * 2 + 1; //Inizializzazione del numero di dadi da pescare ogni round
-        for (int i = 0; i < numberOfDice; i++)
-            addDie(diceBag.takeDie());  //Si pescano i dadi dal sacchetto
+        try {
+            for (int i = 0; i < numberOfDice; i++)
+                addDie(diceBag.takeDie());  //Si pescano i dadi dal sacchetto
+        }
+        catch (EmptyBagException e){
+            LOGGER.log(Level.SEVERE, "Tentativo di estrarre dado da sacchetto vuoto");
+        }
     }
 
     /**
@@ -31,8 +41,13 @@ public class DraftPool implements Serializable {
      * @param diceBag dice bag
      */
     public void rollDice(DiceBag diceBag) {
-        for (int i = 0; i < numberOfDice; i++) {
-            dice.add(diceBag.takeDie());
+        try {
+            for (int i = 0; i < numberOfDice; i++) {
+                dice.add(diceBag.takeDie());
+            }
+        }
+        catch (EmptyBagException e){
+            LOGGER.log(Level.SEVERE, "Tentativo di estrarre un dado da DiceBag vuota", e);
         }
     }
 
@@ -69,8 +84,13 @@ public class DraftPool implements Serializable {
      * Remove the die in position i from the draftpool
      * @param i position of the die to be removed
      */
-    public void removeDie(int i) {
-        dice.remove(i);
+    public void removeDie(int i) throws NoDieException {
+        try {
+            dice.remove(i);
+        }
+        catch (IndexOutOfBoundsException e){
+            throw new NoDieException();
+        }
     }
 
     /**

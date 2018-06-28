@@ -9,11 +9,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author Alessio
+ */
 public final class BoardList {
+    private static final Logger LOGGER = Logger.getLogger("Logger");
+    private ArrayList<Board[]> boardList = new ArrayList<>();
 
     public BoardList(){
         JSONParser parser = new JSONParser();
@@ -53,13 +59,9 @@ public final class BoardList {
         }
     }
 
-    private ArrayList<Board[]> boardList = new ArrayList<Board[]>();
-    private static final Logger LOGGER = Logger.getLogger("Logger");
-
-
     public Board[] getCouple(){
         if(boardList.isEmpty()){
-            LOGGER.log(Level.INFO,"Nessuna coppia di mappe disponibile");
+            LOGGER.log(Level.SEVERE,"Nessuna coppia di mappe disponibile");
             return null;
         }else{
             return boardList.remove((new Random()).nextInt(boardList.size()));
@@ -75,22 +77,20 @@ public final class BoardList {
                 }
             }
         }
-        LOGGER.log(Level.FINE,"Board non trovata");
+        LOGGER.log(Level.WARNING,"Board non trovata");
         return null;
     }
 
     public Board[] values(){
         ArrayList<Board> boardValues = new ArrayList<>();
         for(int i = 0; i < boardList.size(); i ++){
-            for(int j = 0; j < 2; j++){
-                boardValues.add(boardList.get(i)[j]);
-            }
+            boardValues.addAll(Arrays.asList(boardList.get(i)));
+
         }
 
         Board[] boardArray = new Board[boardValues.size()];
-        boardArray = boardValues.toArray(boardArray);
 
-        return boardArray;
+        return boardValues.toArray(boardArray);
     }
 
 }

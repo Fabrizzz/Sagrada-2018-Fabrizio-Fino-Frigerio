@@ -11,8 +11,8 @@ public class ServerMessage extends Message {
     private String disconnectedPlayer;
     private Board[] boards;
 
-    public ServerMessage(String player) {
-        super(MessageType.HASDISCONNECTED);
+    public ServerMessage(MessageType messageType, String player) {
+        super(messageType);
         this.disconnectedPlayer = player;
     }
 

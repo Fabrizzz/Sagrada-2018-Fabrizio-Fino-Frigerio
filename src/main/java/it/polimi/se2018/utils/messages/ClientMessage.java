@@ -26,9 +26,9 @@ public class ClientMessage extends Message {
         this.board = board;
     }
 
-    public ClientMessage(String player) {
-        super(MessageType.HASDISCONNECTED);
-        nick = player;
+    public ClientMessage(MessageType messageType) {
+        super(messageType);
+
     }
 
 

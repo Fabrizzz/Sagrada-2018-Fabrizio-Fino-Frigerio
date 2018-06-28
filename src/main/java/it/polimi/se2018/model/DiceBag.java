@@ -36,19 +36,21 @@ public class DiceBag implements Serializable {
      * Draw a die form the bag
      * @return die draw
      */
-    public Die takeDie() {
+    public Die takeDie() throws EmptyBagException{
         if (bag.isEmpty()) {
-            LOGGER.log(Level.INFO, "Sacchetto dei dadi vuoto");
             throw new EmptyBagException();
         }
         return bag.poll();
     }
 
     /**
-     * Return the next die to be drawnn
-     * @return next die to be drawnn 
+     * Return the next die to be drawn
+     * @return next die to be drawn
      */
-    public Die getFirst() {
+    public Die getFirst() throws EmptyBagException{
+        if (bag.isEmpty()) {
+            throw new EmptyBagException();
+        }
         return bag.getFirst();
     }
 

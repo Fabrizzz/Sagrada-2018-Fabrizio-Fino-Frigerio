@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Player
  * @author Giampietro
  */
-public class Player implements Serializable { //da completare
+public class Player implements Serializable {
     private String nick;
     private long id;
     private int favorTokens;
@@ -70,5 +70,7 @@ public class Player implements Serializable { //da completare
     }
 
 
-    public Long getId(){return id;}
+    public Long getId(){ //da rimuovere sia dal player che dalla modelview
+        return id;
+    }
 }

@@ -3,12 +3,14 @@ package it.polimi.se2018;
 import it.polimi.se2018.model.DiceBag;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class TestDiceBag {
 
@@ -24,8 +26,12 @@ public class TestDiceBag {
         int i = 0;
         Color rand = Color.values()[new Random().nextInt(Color.values().length)];
         while(dicebag.size() != 0){
-            if (dicebag.takeDie().getColor() == rand) {
-                i++;
+            try {
+                if (dicebag.takeDie().getColor() == rand) {
+                    i++;
+                }
+            } catch (EmptyBagException e) {
+                fail();
             }
         }
         assertEquals(18,i);
@@ -40,8 +46,12 @@ public class TestDiceBag {
         dicebag.addDie(die);
         assertEquals(k + 1, dicebag.size());
         while(dicebag.size() != 0){
-            if(dicebag.takeDie().getColor() == Color.BLUE){
-                i++;
+            try {
+                if(dicebag.takeDie().getColor() == Color.BLUE){
+                    i++;
+                }
+            } catch (EmptyBagException e) {
+                fail();
             }
         }
         assertEquals(19,i);
@@ -55,8 +65,12 @@ public class TestDiceBag {
         int k;
         k = dicebag.size();
         while(dicebag.size() != 0){
+            try {
                 dicebag.takeDie();
-                i++;
+            } catch (EmptyBagException e) {
+                fail();
+            }
+            i++;
             }
         assertEquals(i, k);
     }

@@ -10,7 +10,6 @@ import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.view.CLI;
 
 import java.util.*;
 
@@ -47,7 +46,7 @@ public class ModelControllerInitializerTest {
         tools.add(tool);
 
         for (Player tmpPlayer : boardMap.keySet()) {
-            tmpPlayer.setFavorTokens(boardMap.get(player).getBoardDifficutly());
+            tmpPlayer.setFavorTokens(boardMap.get(player).getBoardDifficulty());
         }
 
         model = new Model(new ArrayList<>(boardMap.keySet()), publicObjectives, boardMap, privateObjectiveMap, tools);

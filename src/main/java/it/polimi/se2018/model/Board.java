@@ -3,6 +3,10 @@ package it.polimi.se2018.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ *
+ * @author Alessio
+ */
 public class Board implements Serializable {
     private String name;
     private int tokens;

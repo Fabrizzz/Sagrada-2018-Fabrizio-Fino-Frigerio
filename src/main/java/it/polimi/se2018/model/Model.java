@@ -44,6 +44,7 @@ public class Model extends Observable {
      * @param publicObjectives list of the public objective
      * @param boardMap map between the players and the boards
      * @param privateObjectiveMap map between the players and their private objectives
+     * @param tools list of tools choosen by the controller
      */
     public Model(List<Player> players, List<PublicObjective> publicObjectives, Map<Player, PlayerBoard> boardMap,
                  Map<Player, PrivateObjective> privateObjectiveMap, List<Tool> tools) {
@@ -184,11 +185,6 @@ public class Model extends Observable {
         return tools;
     }
 
-    /*public abstract int calculatePrivatePoints(Player player);
-
-    public abstract int calculatePublicPoints(Player player);
-
-    public abstract int calculateUnusedCellPoints(Player player);*/
 
     /**
      * Return the private objective of a player
@@ -224,21 +220,33 @@ public class Model extends Observable {
     }
 
 
+    /**
+     * Return the duration of a single Turn
+     * @return
+     */
     public static int getMinutesPerTurn() {
         return MINUTES_PER_TURN;
     }
 
-
-
+    /**
+     * return the current turn
+     */
     public int getTurn() {
         return turn;
     }
 
+    /**
+     * it notify the Observers about Model Changes
+     */
     public void notifyObs() {
         setChanged();
         notifyObservers(new ModelView(this));
     }
 
+    /**
+     * it sets the turn
+     * @param turn
+     */
     public void setTurn(int turn) {
         this.turn = turn;
     }
