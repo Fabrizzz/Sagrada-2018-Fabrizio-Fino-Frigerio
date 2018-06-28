@@ -21,6 +21,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * This class control the game logic
+ *
+ * @author Giampietro
+ */
+
 public class Controller implements Observer {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
@@ -31,21 +37,29 @@ public class Controller implements Observer {
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
 
-    public Controller() {}
 
+    /**
+     * It return two playerboard couples to choose
+     * @return array of lenght = 4
+     */
     public Board[] getBoards() {
         LinkedList<Board> boards = new LinkedList<>();
-        Board[] coppia;
-        coppia = boardList.getCouple();
-        boards.add(coppia[0]);
-        boards.add(coppia[1]);
-        coppia = boardList.getCouple();
-        boards.add(coppia[0]);
-        boards.add(coppia[1]);
+        try {
+            for (int i = 0; i < 2; i++)
+                boards.addAll(Arrays.asList(boardList.getCouple()));
+        } catch (NullPointerException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
         Board[] board = new Board[4];
 
         return boards.toArray(board);
     }
+
+    /**
+     * it starts a new game by asking players to choose a board and initializing the Model and the tool handlers
+     * @param views remoteviews
+     */
 
     public synchronized void startGame(Collection<RemoteView> views) {
         if (views.size() < 2 || views.size() > 4)
@@ -56,7 +70,7 @@ public class Controller implements Observer {
         this.views.stream().forEach(k -> k.addObserver(this));
         this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
         try {
-            LOGGER.log(Level.INFO,"Attendo board");
+            LOGGER.log(Level.INFO, "In attesa di ricevere Board dai client");
             while (choosenBoards.size() < views.size())
                 wait();
             LOGGER.log(Level.INFO,"Avvio gioco");
@@ -71,12 +85,12 @@ public class Controller implements Observer {
             List<Tool> tools = Tool.getRandTools(3);
             ArrayList<Player> players = new ArrayList<>(views.stream().map(k -> k.getPlayer()).collect(Collectors.toList()));
 
-            for(int j = 0; j < tools.size(); j ++){
+            for (int j = 0; j < tools.size(); j++){
                 LOGGER.log(Level.FINE,"Tool 1 = " + tools.get(j).toString());
             }
 
-            for(Player player : choosenBoards.keySet()){
-                player.setFavorTokens(choosenBoards.get(player).getBoardDifficutly());
+            for(Player player : choosenBoards.keySet()) {
+                player.setFavorTokens(choosenBoards.get(player).getBoardDifficulty());
             }
 
             this.model = new Model(players, publicObjectives, choosenBoards, privateObjectiveMap, tools);
@@ -96,7 +110,7 @@ public class Controller implements Observer {
 
             setTimer(0, 0);
         } catch (InterruptedException e) {
-            LOGGER.log(Level.SEVERE,"Interrupt ricevuto");
+            LOGGER.log(Level.SEVERE, "Interrupt ricevuto durante l' attesa delle boards");
             Thread.currentThread().interrupt();
         }
 
@@ -106,10 +120,15 @@ public class Controller implements Observer {
         return model;
     }
 
+    /**
+     * it calls nextTurn() when the timer expires, if the turn hasn't ended yet
+     * @param turn turn when the timer was called
+     * @param round round when the timer was called
+     */
     public synchronized void timerScaduto(int turn, int round) {
-        LOGGER.log(Level.FINE,"Timer scaduto");
 
         if (model.getTurn() == turn && model.getRound() == round) {
+            LOGGER.log(Level.INFO, "Timer scaduto, turno interrotto e nextTurn chiamata");
             nextTurn();
             setTimer(model.getTurn(), model.getRound());
             model.notifyObs();
@@ -117,84 +136,50 @@ public class Controller implements Observer {
 
     }
 
+    /**
+     * It sets the Timer
+     * @param turn turn when the timer was called
+     * @param round round when the timer was called
+     */
     private void setTimer(int turn, int round) {
-        LOGGER.log(Level.FINE,"Timer impostato");
+        LOGGER.log(Level.FINER, "Timer impostato");
         timer.schedule(new RoundTimer(turn, round, this), (long) (Model.getMinutesPerTurn() * 60 * 1000));
     }
 
     /**
-     * End the game
+     * End the game and send final scores to every player
      */
     public void endGame() {
         //chiudere i timer
+        //cancellare observers, chiudere connection, deregistrare connections dal server
     }
 
     /**
      * End the round and update the round variables
      */
     private void endRound() {
-        getModel().setTurn(0);
-        getModel().setFirstTurn(true);
-        getModel().getRoundTrack().addDice(getModel().getRound(), getModel().getDraftPool().removeAll());
         getModel().setRound(getModel().getRound() + 1);
-        Collections.rotate(getModel().getPlayers(), 1);
         if (getModel().getRound() == 10)
             endGame();
         else {
+            getModel().setTurn(0);
+            getModel().setFirstTurn(true);
+            getModel().getRoundTrack().addDice(getModel().getRound(), getModel().getDraftPool().removeAll());
+            Collections.rotate(getModel().getPlayers(), 1);
             getModel().getDraftPool().rollDice(getModel().getDiceBag());
         }
 
     }
 
-
-
-    @Override
-    public synchronized void update(Observable o, Object arg) {
-        ClientMessage message = (ClientMessage) arg;
-        RemoteView remoteView = (RemoteView) o;
-
-        if (message.getMessageType() == MessageType.PLAYERMOVE) {
-
-            PlayerMove playerMove = message.getPlayerMove();
-            LOGGER.log(Level.INFO, "PlayerMove ricevuta");
-
-            try {
-                int turn = model.getTurn();
-                if (firstHandler.process(playerMove, remoteView, getModel())) {
-
-                    if ((playerMove.getTool().equals(Tool.SKIPTURN)) || model.hasUsedTool() && model.hasUsedNormalMove()) {
-                        nextTurn();
-                        setTimer(model.getTurn(), model.getRound());
-                        LOGGER.log(Level.FINE, "passaggio di turno");
-                    }
-                    model.notifyObs();
-                }
-
-            } catch (InvalidParameterException e) {
-                LOGGER.log(Level.SEVERE,"Parametri invalidi");
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-            }
-
-        } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
-            LOGGER.log(Level.INFO, "Board ricevuta");
-            choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
-            notifyAll();
-        } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
-            for (RemoteView view : views) {
-                view.sendBack(new ServerMessage(message.getNick()));
-            }
-        }
-    }
-
     /**
      * Change the current player turn
      */
-    public void nextTurn() { //da spostare nel controller
+    public void nextTurn() {
         //aggiungere che se rimane un solo giocatore, ha vinto
-        LOGGER.log(Level.INFO,"Next turn chiamanto");
+        LOGGER.log(Level.FINE, "Next turn chiamato");
         model.setUsedTool(false);
         model.setNormalMove(false);
-        int playerPosition = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 -  model.getTurn() - 1;
+        int playerPosition = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 - model.getTurn() - 1;
         model.getPlayers().get(playerPosition).setYourTurn(false);
         model.setTurn(model.getTurn() + 1);
 
@@ -207,22 +192,73 @@ public class Controller implements Observer {
         if (model.getRound() != 10) {
 
             playerPosition = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 - model.getTurn() - 1;
+            model.getPlayers().get(playerPosition).setYourTurn(true);
             if (model.getPlayers().get(playerPosition).isSkipSecondTurn()) {
-                LOGGER.log(Level.FINE,"Is skip second turn");
+                LOGGER.log(Level.FINE, "Il giocatore corrente salta il secondo turno a causa di una tool");
                 model.getPlayers().get(playerPosition).setSkipSecondTurn(false);
                 nextTurn();
+            } else if (!views.get(playerPosition).isConnected()) {
+                LOGGER.log(Level.FINE, "Il giocatore corrente passa il turno poichè disconnesso");
+                nextTurn();
             } else {
-                LOGGER.log(Level.FINE,"Is NOT skip second turn");
-                model.getPlayers().get(playerPosition).setYourTurn(true);
-                if (!views.get(playerPosition).isConnected()) {
-                    LOGGER.log(Level.FINE,"Il prossimo giocatore e' disconnesso");
-                    nextTurn();
-                } else {
-                    //timer.schedule(new RoundTimer(getTurn(), getRound(), this), MINUTES_PER_TURN * 60 * 1000);
-                    LOGGER.log(Level.FINE,"Prossimo giocatore: " + model.getPlayers().get(playerPosition).getNick() +  ". Notifico gli osservatori");
-
-                }
+                LOGGER.log(Level.FINE, "Prossimo giocatore: " + model.getPlayers().get(playerPosition).getNick() + ". Notifico gli osservatori");
             }
         }
     }
+
+
+    /**
+     * Gestisce i messaggi ricevuti dalla remoteview
+     * @param o RemoteView
+     * @param arg ClientMessage
+     */
+
+    @Override
+    public synchronized void update(Observable o, Object arg) {
+        try {
+            ClientMessage message = (ClientMessage) arg;
+            RemoteView remoteView = (RemoteView) o;
+
+
+            if (message.getMessageType() == MessageType.PLAYERMOVE) {
+
+                PlayerMove playerMove = message.getPlayerMove();
+                LOGGER.log(Level.INFO, "PlayerMove ricevuta");
+
+                try {
+                    if (firstHandler.process(playerMove, remoteView, getModel())) {
+
+                        if ((playerMove.getTool().equals(Tool.SKIPTURN)) || model.hasUsedTool() && model.hasUsedNormalMove()) {
+                            nextTurn();
+                            setTimer(model.getTurn(), model.getRound());
+                            LOGGER.log(Level.FINE, "passaggio di turno");
+                        }
+                        model.notifyObs();
+                    }
+
+                } catch (InvalidParameterException e) {
+                    LOGGER.log(Level.SEVERE, "Ricevuta PlayerMove con parametri invalidi");
+                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                }
+
+            } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
+                LOGGER.log(Level.INFO, "Board ricevuta");
+                choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
+                notifyAll();
+            } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
+                LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è disconnesso");
+                for (RemoteView view : views) {
+                    view.sendBack(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
+                }
+            } else if (message.getMessageType() == MessageType.HASRICONNECTED) {
+                LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è riconnesso");
+                for (RemoteView view : views) {
+                    view.sendBack(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
+                }
+            }
+        } catch (ClassCastException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
 }
