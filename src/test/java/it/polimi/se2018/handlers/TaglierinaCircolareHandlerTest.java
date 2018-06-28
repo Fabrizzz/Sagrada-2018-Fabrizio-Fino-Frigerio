@@ -15,6 +15,8 @@ import it.polimi.se2018.utils.network.TestConnection;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +34,10 @@ public class TaglierinaCircolareHandlerTest {
     public void initialize(){
 
         LOGGER.setLevel(Level.OFF);
+        Handler handlerObj = new ConsoleHandler();
+        handlerObj.setLevel(Level.WARNING);
+        LOGGER.addHandler(handlerObj);
+        LOGGER.setUseParentHandlers(false);
 
         model = ModelControllerInitializerTest.initialize(Tool.TAGLIERINACIRCOLARE);
 
