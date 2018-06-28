@@ -1,4 +1,4 @@
-package it.polimi.se2018;
+package it.polimi.se2018.handlers;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
@@ -22,12 +22,15 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class EndOfTheChainHandlerTest {
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private RemoteView remoteView;
     private Model model;
     private Connection connection;
 
     @Before
     public void initialize(){
+        LOGGER.setLevel(Level.OFF);
+
         model = ModelControllerInitializerTest.initialize();
         connection = new TestConnection();
         remoteView = new RemoteView(model.getPlayers().get(0),connection);

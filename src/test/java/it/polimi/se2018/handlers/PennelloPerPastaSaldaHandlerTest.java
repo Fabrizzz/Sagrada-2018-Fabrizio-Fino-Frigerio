@@ -1,4 +1,4 @@
-package it.polimi.se2018;
+package it.polimi.se2018.handlers;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
@@ -24,7 +24,7 @@ import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class PennelloPerPastaSaldaTest {
+public class PennelloPerPastaSaldaHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;
@@ -35,7 +35,7 @@ public class PennelloPerPastaSaldaTest {
     @Before
     public void initialize(){
 
-        LOGGER.setLevel(Level.FINEST);
+        LOGGER.setLevel(Level.OFF);
 
         Handler handlerObj = new ConsoleHandler();
         handlerObj.setLevel(Level.WARNING);
@@ -131,7 +131,7 @@ public class PennelloPerPastaSaldaTest {
     }
 
     @Test
-    public void noInsertTest1(){
+    public void noInsertTest(){
         playerMove = new PlayerMove(0,NumberEnum.SIX,Tool.PENNELLOPERPASTASALDA);
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
@@ -143,14 +143,6 @@ public class PennelloPerPastaSaldaTest {
         playerMove = new PlayerMove(1,0,0,NumberEnum.ONE,Tool.PENNELLOPERPASTASALDA);
         try{
             assertTrue(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
-        }catch (Exception e){
-            fail();
-        }
-
-        model.setUsedTool(false);
-        playerMove = new PlayerMove(0,NumberEnum.SIX,Tool.PENNELLOPERPASTASALDA);
-        try{
-            assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
             fail();
         }

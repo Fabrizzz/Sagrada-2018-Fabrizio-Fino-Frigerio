@@ -1,4 +1,4 @@
-package it.polimi.se2018;
+package it.polimi.se2018.handlers;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
@@ -16,8 +16,6 @@ import it.polimi.se2018.utils.network.TestConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +24,7 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
 public class NormalMoveHandlerTest {
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;
     private Model model;
@@ -34,6 +33,8 @@ public class NormalMoveHandlerTest {
 
     @Before
     public void initialize(){
+
+        LOGGER.setLevel(Level.OFF);
 
         model = ModelControllerInitializerTest.initialize();
 
@@ -89,12 +90,12 @@ public class NormalMoveHandlerTest {
         }catch (Exception e){
             fail();
         }
-        model.setNormalMove(false);
+        /*model.setNormalMove(false);
         playerMove = new PlayerMove(Tool.MOSSASTANDARD,2,0,0);
         try{
             assertTrue(normalMoveHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
             fail();
-        }
+        }*/
     }
 }

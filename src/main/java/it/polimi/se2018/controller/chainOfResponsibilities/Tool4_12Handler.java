@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class Tool4_12Handler extends ToolHandler {
@@ -54,8 +55,9 @@ public class Tool4_12Handler extends ToolHandler {
             firstFinalColumn = playerMove.getFinalColumn().orElse(0);
             firstFinalRow = playerMove.getFinalRow().orElse(0);
 
-            if (playerMove.getNextMove().isPresent()) {
-                playerMove2 = playerMove.getNextMove().get();
+            Optional<PlayerMove> tmpPlayerMove = playerMove.getNextMove();
+            if (tmpPlayerMove.isPresent()) {
+                playerMove2 = tmpPlayerMove.get();
                 if (!playerMove2.getRow().isPresent() || !playerMove2.getColumn().isPresent() ||
                         !playerMove2.getFinalRow().isPresent() || !playerMove2.getFinalColumn().isPresent()){
                     LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");

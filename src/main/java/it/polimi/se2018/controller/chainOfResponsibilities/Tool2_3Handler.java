@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class Tool2_3Handler extends ToolHandler {
     Tool toolname;
 
-    protected Tool2_3Handler(Tool toolname) {
+    public Tool2_3Handler(Tool toolname) {
         this.toolname = toolname;
         if (toolname != Tool.PENNELLOPEREGLOMISE && toolname != Tool.ALESATOREPERLAMINADIRAME){
             LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
@@ -50,14 +50,14 @@ public class Tool2_3Handler extends ToolHandler {
 
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                         !board.containsDie(row, column) || board.containsDie(finalRow, finalColumn)){
-                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
+                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 1");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else try {
                     die = board.getDie(row, column);
                     if (!board.verifyNearCellsRestriction(die, finalRow, finalColumn) || !board.verifyPositionRestriction(finalRow, finalColumn) ||
-                            (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)) ||
-                            (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn))){
-                        LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
+                            (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)) || // il problma puo' manifestarsi anche qui ma non ho ancora testato
+                            (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn))){ // Il problema e' qui, durante il controllo del numero se lo spostamento effettuato e' di una sola casella ortogonalmente alla vecchia posizione il controllo ritorna esito negativo perche' il dado nella nuova posizione viene confrontato con sestesso nella vecchia posizione dando errore
+                        LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 2");
                         remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                     } else {
 

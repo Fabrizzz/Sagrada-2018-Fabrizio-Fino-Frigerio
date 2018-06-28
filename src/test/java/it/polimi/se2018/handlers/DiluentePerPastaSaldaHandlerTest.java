@@ -1,4 +1,4 @@
-package it.polimi.se2018;
+package it.polimi.se2018.handlers;
 
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.controller.RemoteView;
@@ -35,7 +35,7 @@ public class DiluentePerPastaSaldaHandlerTest {
     @Before
     public void initialize(){
 
-        LOGGER.setLevel(Level.FINEST);
+        LOGGER.setLevel(Level.OFF);
 
         Handler handlerObj = new ConsoleHandler();
         handlerObj.setLevel(Level.WARNING);
