@@ -44,10 +44,10 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
                     LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PINZASGROSSATRICE");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 }else {
-                        if (aumentaDiUno)
-                            die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() + 1));
-                        else
-                            die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() - 1));
+                    if (aumentaDiUno)
+                        die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() + 1));
+                    else
+                        die.setNumber(NumberEnum.getNumber(die.getNumber().getInt() - 1));
 
                     completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                     return true;

@@ -1,4 +1,4 @@
-package it.polimi.se2018;
+package it.polimi.se2018.handlers;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
