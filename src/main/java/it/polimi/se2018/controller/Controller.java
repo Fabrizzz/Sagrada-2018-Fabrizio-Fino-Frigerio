@@ -250,6 +250,11 @@ public class Controller implements Observer {
                 for (RemoteView view : views) {
                     view.sendBack(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
                 }
+                if (remoteView.getPlayer().isYourTurn()) {
+                    nextTurn();
+                    setTimer(model.getTurn(), model.getRound());
+                    getModel().notifyObs();
+                }
             } else if (message.getMessageType() == MessageType.HASRICONNECTED) {
                 LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è riconnesso");
                 for (RemoteView view : views) {

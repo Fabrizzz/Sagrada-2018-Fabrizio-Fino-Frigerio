@@ -3,7 +3,6 @@ package it.polimi.se2018.handlers;
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
 import it.polimi.se2018.controller.chainOfResponsibilities.NormalMoveHandler;
-import it.polimi.se2018.controller.chainOfResponsibilities.TaglierinaCircolareHandler;
 import it.polimi.se2018.controller.chainOfResponsibilities.Tool2_3Handler;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.cell.Die;
@@ -22,9 +21,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class Tool2HandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
@@ -82,21 +79,23 @@ public class Tool2HandlerTest {
         }
     }
 
-    /*@Test
+    @Test
     public void oneDieMove(){
         try{
             assertTrue(tool2_3Handler.process(new PlayerMove(Tool.MOSSASTANDARD,1,0,0),remoteView,model));
         }catch (Exception e){
+            e.printStackTrace();
             fail();
         }
 
         try{
             assertTrue(tool2_3Handler.process(playerMove,remoteView,model));
         }catch (Exception e){
+            e.printStackTrace();
             fail();
         }
 
-    }*/
+    }
 
 
 }

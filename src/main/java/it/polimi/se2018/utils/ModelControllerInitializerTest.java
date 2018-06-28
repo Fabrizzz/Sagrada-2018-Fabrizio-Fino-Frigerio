@@ -34,7 +34,6 @@ public class ModelControllerInitializerTest {
 
         List colors = Arrays.asList(Color.values());
         Collections.shuffle(colors);
-        Iterator<Color> iterator = colors.iterator();
 
         privateObjectiveMap = new HashMap<>();
         privateObjectiveMap.put(new Player("asd", (long) 123), new PrivateObjective(Color.BLUE));
