@@ -70,6 +70,46 @@ public class RigaInSugheroHandlerTest {
     }
 
     @Test
+    public void negativeParameterTest(){
+        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,-1,0,0);
+        try{
+            rigaInSugheroHandler.process(playerMove,remoteView,model);
+            fail();
+        }catch (Exception e){}
+
+        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,-1,0);
+        try{
+            rigaInSugheroHandler.process(playerMove,remoteView,model);
+            fail();
+        }catch (Exception e){}
+
+        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,0,0,-1);
+        try{
+            rigaInSugheroHandler.process(playerMove,remoteView,model);
+            fail();
+        }catch (Exception e){}
+
+
+        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,4,0,0);
+        try{
+            rigaInSugheroHandler.process(playerMove,remoteView,model);
+            fail();
+        }catch (Exception e){}
+
+        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,5,0);
+        try{
+            rigaInSugheroHandler.process(playerMove,remoteView,model);
+            fail();
+        }catch (Exception e){}
+
+        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,0,0,model.getDraftPool().size());
+        try{
+            rigaInSugheroHandler.process(playerMove,remoteView,model);
+            fail();
+        }catch (Exception e){}
+    }
+
+    @Test
     public void initialInsertTest(){
         try{
             assertTrue(rigaInSugheroHandler.process(playerMove,remoteView,model));

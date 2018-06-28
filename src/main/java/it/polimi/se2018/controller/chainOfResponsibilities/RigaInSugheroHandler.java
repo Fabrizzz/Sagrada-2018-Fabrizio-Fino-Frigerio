@@ -27,8 +27,10 @@ public class RigaInSugheroHandler extends ToolHandler {
 
         if (playerMove.getTool() == Tool.RIGAINSUGHERO) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa RIGAINSUGHERO");
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent()) {
-                LOGGER.log(Level.SEVERE,"Errore parametri RIGAINSUGHERO");
+            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent() ||
+                    playerMove.getRow().orElse(0) < 0 || playerMove.getRow().orElse(0) > 3 || playerMove.getColumn().orElse(0) < 0 ||
+                    playerMove.getColumn().orElse(0) > 4 || playerMove.getDraftPosition().orElse(0) < -1 || playerMove.getDraftPosition().orElse(0) >= model.getDraftPool().size()) {
+                LOGGER.log(Level.WARNING,"Errore parametri RIGAINSUGHERO");
                 throw new InvalidParameterException();
             }
             try {

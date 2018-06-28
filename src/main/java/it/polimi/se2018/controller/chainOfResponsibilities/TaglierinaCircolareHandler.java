@@ -38,22 +38,27 @@ public class TaglierinaCircolareHandler extends ToolHandler {
             roundTrackRound = playerMove.getRoundTrackRound().orElse(0);
             roundTrackPosition = playerMove.getRoundTrackPosition().orElse(0);
 
-
-            if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || roundTrackPosition >= roundTrack.numberOfDice(roundTrackRound)) {
-                LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAGLIERINACIRCOLARE");
+            if(draftPoolPosition < 0 || roundTrackRound < 0 || roundTrackPosition < 0  || draftPoolPosition >= model.getDraftPool().size() || roundTrackRound > model.getRound() ||
+                    roundTrackPosition >= model.getRoundTrack().numberOfDice(roundTrackRound)){
+                LOGGER.log(Level.INFO, "Errore parametri");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
-            } else try {
-                Die roundTrackDie = roundTrack.getDie(roundTrackRound, roundTrackPosition);
-                Die draftPoolDie = draftPool.getDie(draftPoolPosition);
+            }else {
+                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || roundTrackPosition >= roundTrack.numberOfDice(roundTrackRound)) {
+                    LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAGLIERINACIRCOLARE");
+                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                } else try {
+                    Die roundTrackDie = roundTrack.getDie(roundTrackRound, roundTrackPosition);
+                    Die draftPoolDie = draftPool.getDie(draftPoolPosition);
 
-                roundTrack.removeDie(roundTrackRound, roundTrackPosition);
-                draftPool.removeDie(draftPoolDie);
-                roundTrack.addDie(roundTrackRound, draftPoolDie);
-                draftPool.addDie(roundTrackDie);
-                completeTool(remoteView.getPlayer(), model, playerMove.getTool());
-                return true;
-            } catch (NoDieException e) {
-                LOGGER.log(Level.SEVERE, "Dado non presente in TAGLIERINACIRCOLARE");
+                    roundTrack.removeDie(roundTrackRound, roundTrackPosition);
+                    draftPool.removeDie(draftPoolDie);
+                    roundTrack.addDie(roundTrackRound, draftPoolDie);
+                    draftPool.addDie(roundTrackDie);
+                    completeTool(remoteView.getPlayer(), model, playerMove.getTool());
+                    return true;
+                } catch (NoDieException e) {
+                    LOGGER.log(Level.SEVERE, "Dado non presente in TAGLIERINACIRCOLARE");
+                }
             }
         } else {
             LOGGER.log(Level.FINEST, "La mossa non e' TAGLIERINACIRCOLARE, passaggio responsabilita' all'handler successivo");
