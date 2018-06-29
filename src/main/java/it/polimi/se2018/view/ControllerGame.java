@@ -33,6 +33,9 @@ public class ControllerGame implements Initializable {
     VBox vboxCard;
 
     @FXML
+    HBox hboxLabel;
+
+    @FXML
     GridPane gridPane;
 
     @FXML
@@ -102,6 +105,7 @@ public class ControllerGame implements Initializable {
         vboxBoard.prefWidthProperty().bind(root.widthProperty());
         vboxCard.prefHeightProperty().bind(root.heightProperty());
         vboxCard.prefWidthProperty().bind(root.widthProperty());
+        hboxLabel.prefWidthProperty().bind(root.widthProperty());
 
         paneTool1.prefHeightProperty().bind(vboxCard.heightProperty());
         paneTool1.prefWidthProperty().bind(vboxCard.widthProperty());
