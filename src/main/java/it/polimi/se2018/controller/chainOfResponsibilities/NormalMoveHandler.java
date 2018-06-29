@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class NormalMoveHandler extends Handler {
@@ -26,15 +27,20 @@ public class NormalMoveHandler extends Handler {
 
         if (playerMove.getTool() == Tool.MOSSASTANDARD) {
             LOGGER.log(Level.FINE,"Elaborazione validita' MOSSASTANDARD");
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent()){
-                LOGGER.log(Level.SEVERE,"Errore parametri MOSSASTANDARD");
-                throw new InvalidParameterException();
-            }
             try {
                 board = model.getBoard(remoteView.getPlayer());
-                row = playerMove.getRow().orElse(0);
-                column = playerMove.getColumn().orElse(0);
-                pos = playerMove.getDraftPosition().orElse(0);
+                Optional<Integer> rowO = playerMove.getRow();
+                Optional<Integer> colO = playerMove.getColumn();
+                Optional<Integer> posO = playerMove.getDraftPosition();
+                if (rowO.isPresent() && colO.isPresent() && posO.isPresent()) {
+                    row = rowO.get();
+                    column = colO.get();
+                    pos = posO.get();
+                }else{
+                    LOGGER.log(Level.SEVERE,"Errore parametri MOSSASTANDARD");
+                    throw new InvalidParameterException();
+                }
+
                 die = model.getDraftPool().getDie(pos);
                 if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
                         (!board.isEmpty() && (!board.verifyNearCellsRestriction(die, row, column) || !board.verifyPositionRestriction(row, column))) ||
@@ -44,10 +50,10 @@ public class NormalMoveHandler extends Handler {
                         !board.verifyNumberRestriction(die, row, column)
                         ) {
                     LOGGER.log(Level.INFO,"Il giocatore non puo' eseguire MOSSASTANDARD row: " + row + " column:" + column +
-                    " colorRestriction: " + board.verifyColorRestriction(die, row, column) + " numberRestriction:" +
-                    board.verifyNumberRestriction(die, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(die, row, column) +
-                    " positionRestriction:" + board.verifyPositionRestriction(row, column) + " isEmpty: " + board.isEmpty() + " containsDie:" +  board.containsDie(row, column) +
-                    " usedNormalMove:" + model.hasUsedNormalMove());
+                            " colorRestriction: " + board.verifyColorRestriction(die, row, column) + " numberRestriction:" +
+                            board.verifyNumberRestriction(die, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(die, row, column) +
+                            " positionRestriction:" + board.verifyPositionRestriction(row, column) + " isEmpty: " + board.isEmpty() + " containsDie:" +  board.containsDie(row, column) +
+                            " usedNormalMove:" + model.hasUsedNormalMove());
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else {
 
@@ -63,6 +69,7 @@ public class NormalMoveHandler extends Handler {
                     }
                     return true;
                 }
+
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in MOSSASTANDARD");
             } catch (AlredySetDie alredySetDie) {

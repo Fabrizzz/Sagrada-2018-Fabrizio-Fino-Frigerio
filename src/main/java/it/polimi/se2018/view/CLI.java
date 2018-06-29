@@ -572,7 +572,6 @@ public class CLI extends View{
         print("Scelta: ");
         int i = -1;
         do{
-            System.out.println("lmao");
             i = InputUtils.getInt();
         }while(i < 0 || i > 9);
         println("Input ricevuto");
@@ -711,6 +710,12 @@ public class CLI extends View{
                     }
 
                 }
+                break;
+            case HASDISCONNECTED:
+                println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' disconnesso");
+                break;
+            case HASRICONNECTED:
+                println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
                 break;
             default:
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");

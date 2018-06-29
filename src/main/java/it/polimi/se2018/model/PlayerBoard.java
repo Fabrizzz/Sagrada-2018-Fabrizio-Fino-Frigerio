@@ -98,6 +98,14 @@ public class PlayerBoard implements Serializable {
      */
     public void removeDie(int row, int column) throws NoDieException {
         get(row, column).removeDie();
+        isEmpty = true;
+        for(int i = 0; i < 4; i ++){
+            for(int j = 0; j < 5; j ++){
+                if(get(i,j).isUsed()){
+                    isEmpty = false;
+                }
+            }
+        }
     }
 
     /**
