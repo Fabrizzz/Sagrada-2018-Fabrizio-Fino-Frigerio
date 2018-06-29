@@ -16,6 +16,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class DiluentePerPastaSaldaHandler extends ToolHandler {
@@ -27,21 +28,26 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
         NumberEnum newValue;
         PlayerBoard board;
         DiceBag diceBag;
-        int row, column;
+        int row;
+        int column;
         int draftPoolPosition;
         Die dieToRemove;
         Die dieToGet;
 
         if (playerMove.getTool() == Tool.DILUENTEPERPASTASALDA) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa DILUENTEPERPASTASALDA 1");
-            if (!playerMove.getNewDiceValue().isPresent() || !playerMove.getDraftPosition().isPresent()) {
-                LOGGER.log(Level.INFO, "Parametri DILUENTEPERPASTASALDA mossa non validi");
-                throw new InvalidParameterException();
-            }
             try {
                 draftPool = model.getDraftPool();
-                draftPoolPosition = playerMove.getDraftPosition().orElse(0);
-                newValue = playerMove.getNewDiceValue().orElse(NumberEnum.ONE);
+                Optional<Integer> draftPoolPositionO = playerMove.getDraftPosition();
+                Optional<NumberEnum> newValueO = playerMove.getNewDiceValue();
+                if(draftPoolPositionO.isPresent() && newValueO.isPresent()) {
+                    draftPoolPosition = draftPoolPositionO.get();
+                    newValue = newValueO.get();
+                }else{
+                    LOGGER.log(Level.WARNING, "Parametri DILUENTEPERPASTASALDA mossa non presenti");
+                    throw new InvalidParameterException();
+                }
+
                 diceBag = model.getDiceBag();
                 dieToGet = diceBag.getFirst();
                 dieToRemove = draftPool.getDie(draftPoolPosition);
@@ -51,9 +57,11 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                 } else {
                     board = model.getBoard(remoteView.getPlayer());
 
-                    if (playerMove.getRow().isPresent() && playerMove.getColumn().isPresent()) {
-                        row = playerMove.getRow().orElse(0);
-                        column = playerMove.getColumn().orElse(0);
+                    Optional<Integer> rowO = playerMove.getRow();
+                    Optional<Integer> colO = playerMove.getColumn();
+                    if (rowO.isPresent() && colO.isPresent()) {
+                        row = rowO.get();
+                        column = colO.get();
                         NumberEnum num = dieToGet.getNumber();
                         dieToGet.setNumber(newValue);
 

@@ -79,7 +79,7 @@ public class Tool2HandlerTest {
         }
     }
 
-    @Test
+    /*@Test
     public void oneDieMove(){
         try{
             assertTrue(tool2_3Handler.process(new PlayerMove(Tool.MOSSASTANDARD,1,0,0),remoteView,model));
@@ -95,7 +95,7 @@ public class Tool2HandlerTest {
             fail();
         }
 
-    }
+    }*/
 
 
 }

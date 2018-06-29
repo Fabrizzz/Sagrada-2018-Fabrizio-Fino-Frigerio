@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class RigaInSugheroHandler extends ToolHandler {
@@ -27,17 +28,24 @@ public class RigaInSugheroHandler extends ToolHandler {
 
         if (playerMove.getTool() == Tool.RIGAINSUGHERO) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa RIGAINSUGHERO");
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() || !playerMove.getDraftPosition().isPresent() ||
-                    playerMove.getRow().orElse(0) < 0 || playerMove.getRow().orElse(0) > 3 || playerMove.getColumn().orElse(0) < 0 ||
-                    playerMove.getColumn().orElse(0) > 4 || playerMove.getDraftPosition().orElse(0) < -1 || playerMove.getDraftPosition().orElse(0) >= model.getDraftPool().size()) {
+            Optional<Integer> rowO = playerMove.getRow();
+            Optional<Integer> colO = playerMove.getColumn();
+            Optional<Integer> posO = playerMove.getDraftPosition();
+            if (rowO.isPresent() && colO.isPresent() && posO.isPresent()) {
+                row = rowO.get();
+                column = colO.get();
+                pos = posO.get();
+            }else{
+                LOGGER.log(Level.SEVERE,"Errore parametri assenti MOSSASTANDARD");
+                throw new InvalidParameterException();
+            }
+
+            if (row < 0 || row > 3 || column < 0 || column > 4 || pos < -1 || pos >= model.getDraftPool().size()) {
                 LOGGER.log(Level.WARNING,"Errore parametri RIGAINSUGHERO");
                 throw new InvalidParameterException();
             }
             try {
                 board = model.getBoard(remoteView.getPlayer());
-                row = playerMove.getRow().orElse(0);
-                column = playerMove.getColumn().orElse(0);
-                pos = playerMove.getDraftPosition().orElse(0);
                 die = model.getDraftPool().getDie(pos);
                 if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) || (!board.isEmpty() && (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                         board.containsDie(row, column) ||

@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class Tool2_3Handler extends ToolHandler {
@@ -36,17 +37,18 @@ public class Tool2_3Handler extends ToolHandler {
 
         if (playerMove.getTool() == toolname) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() ||
-                    !playerMove.getFinalColumn().isPresent() || !playerMove.getFinalRow().isPresent()){
-                LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
-                throw new InvalidParameterException();
-            } else {
-                board = model.getBoard(remoteView.getPlayer());
-                row = playerMove.getRow().orElse(0);
-                column = playerMove.getColumn().orElse(0);
-                finalColumn = playerMove.getFinalColumn().orElse(0);
-                finalRow = playerMove.getFinalRow().orElse(0);
 
+            Optional<Integer> rowO = playerMove.getRow();
+            Optional<Integer> columnO =  playerMove.getColumn();
+            Optional<Integer> finalRowO = playerMove.getFinalRow();
+            Optional<Integer> finalColumnO =  playerMove.getFinalColumn();
+
+            if (rowO.isPresent() && columnO.isPresent() && finalRowO.isPresent() && finalColumnO.isPresent()){
+                board = model.getBoard(remoteView.getPlayer());
+                row = rowO.get();
+                column = columnO.get();
+                finalColumn = finalColumnO.get();
+                finalRow = finalRowO.get();
 
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                         !board.containsDie(row, column) || board.containsDie(finalRow, finalColumn)){
@@ -72,6 +74,9 @@ public class Tool2_3Handler extends ToolHandler {
                     LOGGER.log(Level.SEVERE, "Dado non presente in PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
                 }
 
+            } else {
+                LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
+                throw new InvalidParameterException();
             }
 
         } else{

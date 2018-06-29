@@ -10,6 +10,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class TamponeDiamantatoHandler extends ToolHandler {
@@ -21,12 +22,19 @@ public class TamponeDiamantatoHandler extends ToolHandler {
         int draftPosition;
         if (playerMove.getTool() == Tool.TAMPONEDIAMANTATO) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa TAMPONEDIAMANTATO");
-            if (!playerMove.getDraftPosition().isPresent() || playerMove.getDraftPosition().orElse(0) < 0 || playerMove.getDraftPosition().orElse(0) >= model.getDraftPool().size()){
+            Optional<Integer> draftPositionO = playerMove.getDraftPosition();
+            if(draftPositionO.isPresent()){
+                draftPosition = draftPositionO.get();
+            }else{
+                LOGGER.log(Level.SEVERE,"Errore parametri assenti TAMPONEDIAMANTATO");
+                throw new InvalidParameterException();
+            }
+
+            if (draftPosition < 0 || draftPosition >= model.getDraftPool().size()){
                 LOGGER.log(Level.SEVERE,"Errore parametri TAMPONEDIAMANTATO");
                 throw new InvalidParameterException();
             }
 
-            draftPosition = playerMove.getDraftPosition().orElse(0);
             if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())){
                 LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAMPONEDIAMANTATO");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));

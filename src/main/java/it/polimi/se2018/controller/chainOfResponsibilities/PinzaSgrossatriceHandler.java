@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class PinzaSgrossatriceHandler extends ToolHandler {
@@ -29,14 +30,18 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
 
         if (playerMove.getTool() == Tool.PINZASGROSSATRICE) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa PINZASGROSSATRICE");
-            if (!playerMove.getDraftPosition().isPresent() || !playerMove.getAumentaValoreDado().isPresent()){
-                LOGGER.log(Level.SEVERE,"Errore parametri PINZASGROSSATRICE");
-                throw new InvalidParameterException();
-            }
 
             try {
-                draftPosition = playerMove.getDraftPosition().orElse(0);
-                aumentaDiUno = playerMove.getAumentaValoreDado().orElse(false);
+                Optional<Integer> draftPositionO = playerMove.getDraftPosition();
+                Optional<Boolean> aumentaDiUnoO = playerMove.getAumentaValoreDado();
+                if(draftPositionO.isPresent() && aumentaDiUnoO.isPresent()){
+                    draftPosition = draftPositionO.get();
+                    aumentaDiUno = aumentaDiUnoO.get();
+                }else{
+                    LOGGER.log(Level.SEVERE,"Errore parametri PINZASGROSSATRICE");
+                    throw new InvalidParameterException();
+                }
+
                 draftPool = model.getDraftPool();
                 die = draftPool.getDie(draftPosition);  //non dovrebbe lanciare eccezioni perchè ho già fatto il controllo nel first check
 

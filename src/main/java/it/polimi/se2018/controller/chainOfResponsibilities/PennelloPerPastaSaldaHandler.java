@@ -14,6 +14,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class PennelloPerPastaSaldaHandler extends ToolHandler {
@@ -30,16 +31,19 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
 
         if (playerMove.getTool() == Tool.PENNELLOPERPASTASALDA) {
             LOGGER.log(Level.FINE,"Elaborazione validita' PENNELLOPERPASTASALDA");
-            if (!playerMove.getNewDiceValue().isPresent() || !playerMove.getDraftPosition().isPresent()){
-                LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPERPASTASALDA");
-                throw new InvalidParameterException();
-            }
 
             try {
-
                 draftPool = model.getDraftPool();
-                draftPoolPosition = playerMove.getDraftPosition().orElse(0);
-                newValue = playerMove.getNewDiceValue().orElse(NumberEnum.ONE);
+                Optional<Integer> draftPoolPositionO = playerMove.getDraftPosition();
+                Optional<NumberEnum> newValueO =  playerMove.getNewDiceValue();
+                if (newValueO.isPresent() && draftPoolPositionO.isPresent()) {
+                    draftPoolPosition = draftPoolPositionO.get();
+                    newValue = newValueO.get();
+                }else {
+                    LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPERPASTASALDA");
+                    throw new InvalidParameterException();
+                }
+
                 Die die = draftPool.getDie(draftPoolPosition);
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())){
                     LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA");
@@ -50,10 +54,11 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                     //die.setNumber(newValue);
                     //completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                     board = model.getBoard(remoteView.getPlayer());
-
-                    if (playerMove.getRow().isPresent() && playerMove.getColumn().isPresent()) {
-                        row = playerMove.getRow().orElse(0);
-                        column = playerMove.getColumn().orElse(0);
+                    Optional<Integer> rowO = playerMove.getRow();
+                    Optional<Integer> colO = playerMove.getColumn();
+                    if (rowO.isPresent() && colO.isPresent()) {
+                        row = rowO.get();
+                        column = colO.get();
                         NumberEnum num = die.getNumber();
                         die.setNumber(newValue);
 
