@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -31,6 +32,12 @@ public class ControllerGame implements Initializable {
 
     @FXML
     VBox vboxCard;
+
+    @FXML
+    HBox hboxLabel;
+
+    @FXML
+    HBox hboxBottoni;
 
     @FXML
     GridPane gridPane;
@@ -80,6 +87,13 @@ public class ControllerGame implements Initializable {
     @FXML
     Label privateObjective;
 
+    @FXML
+    Separator separatorGrid1;
+
+    @FXML
+    Separator separatorGrid2;
+
+
     PlayerBoard playerBoard; // Messa globale per provare i metodi; in seguito da togliere perchè viene richiesta al server
 
     @Override
@@ -102,6 +116,11 @@ public class ControllerGame implements Initializable {
         vboxBoard.prefWidthProperty().bind(root.widthProperty());
         vboxCard.prefHeightProperty().bind(root.heightProperty());
         vboxCard.prefWidthProperty().bind(root.widthProperty());
+        hboxLabel.prefWidthProperty().bind(root.widthProperty());
+        hboxBottoni.prefWidthProperty().bind(root.widthProperty());
+
+        separatorGrid1.prefHeightProperty().bind(vboxBoard.heightProperty());
+        separatorGrid2.prefHeightProperty().bind(vboxBoard.heightProperty());
 
         paneTool1.prefHeightProperty().bind(vboxCard.heightProperty());
         paneTool1.prefWidthProperty().bind(vboxCard.widthProperty());
