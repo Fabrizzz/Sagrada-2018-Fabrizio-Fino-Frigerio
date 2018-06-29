@@ -6,15 +6,20 @@ import it.polimi.se2018.model.cell.*;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -324,4 +329,20 @@ public class ControllerGame implements Initializable {
         privateObjective.setStyle("-fx-text-fill:red");
     }
 
+    public void handlezoomTool1(ActionEvent event) {
+
+        Stage popupwindow=new Stage();
+        popupwindow.initModality(Modality.APPLICATION_MODAL);
+        popupwindow.setTitle("This is a pop up window");
+        Label label1= new Label("Pop up window now displayed");
+        Button button1= new Button("Close this pop up window");
+        button1.setOnAction(e -> popupwindow.close());
+        VBox layout= new VBox(10);
+        layout.getChildren().addAll(label1, button1);
+        //layout.setAlignment(Pos.CENTER);
+        Scene scene1= new Scene(layout, 300, 250);
+        popupwindow.setScene(scene1);
+        popupwindow.showAndWait();
+
+    }
 }
