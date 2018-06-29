@@ -97,6 +97,7 @@ public class Tool2HandlerTest {
         }
     }
 
+
     @Test
     public void twoDieMove(){
         try{
@@ -118,6 +119,33 @@ public class Tool2HandlerTest {
         playerMove = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,0,2,1);
         try{
             assertTrue(tool2_3Handler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void twoDieInvalidMove(){
+        try{
+            assertTrue(tool2_3Handler.process(new PlayerMove(Tool.MOSSASTANDARD,1,0,0),remoteView,model));
+        }catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+
+        model.setNormalMove(false);
+        model.setUsedTool(false);
+        try{
+            assertTrue(tool2_3Handler.process(new PlayerMove(Tool.MOSSASTANDARD,2,0,0),remoteView,model));
+        }catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+
+        playerMove = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,0,0,4);
+        try{
+            assertFalse(tool2_3Handler.process(playerMove,remoteView,model));
         }catch (Exception e){
             e.printStackTrace();
             fail();
