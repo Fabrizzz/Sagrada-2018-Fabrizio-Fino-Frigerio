@@ -57,10 +57,13 @@ public class Tool2_3Handler extends ToolHandler {
                 } else try {
                     die = board.getDie(row, column);
                     board.removeDie(row, column);
-                    if (!board.verifyNearCellsRestriction(die, finalRow, finalColumn) || !board.verifyPositionRestriction(finalRow, finalColumn) ||
+                    if ((!board.isEmpty() && !board.verifyPositionRestriction(finalRow, finalColumn)) || !board.verifyNearCellsRestriction(die, finalRow, finalColumn) ||
                             (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)) || // il problma puo' manifestarsi anche qui ma non ho ancora testato
                             (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn))){ // Il problema e' qui, durante il controllo del numero se lo spostamento effettuato e' di una sola casella ortogonalmente alla vecchia posizione il controllo ritorna esito negativo perche' il dado nella nuova posizione viene confrontato con sestesso nella vecchia posizione dando errore
-                        LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 2");
+                        LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 2 isempty: " + board.isEmpty() +
+                        " positionRestriction: " + board.verifyPositionRestriction(finalRow, finalColumn) + " nearCellRestriction: " + board.verifyNearCellsRestriction(die, finalRow, finalColumn) +
+                        " number restriction:" + (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn)) +
+                        " color restriction: " + (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)));
                         board.setDie(die, row, column);
                         remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                     } else {

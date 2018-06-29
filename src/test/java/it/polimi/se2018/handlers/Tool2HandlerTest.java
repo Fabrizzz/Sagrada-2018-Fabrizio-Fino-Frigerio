@@ -50,11 +50,12 @@ public class Tool2HandlerTest {
         tool2_3Handler.setNextHandler(normalMoveHandler);
         normalMoveHandler.setNextHandler(new EndOfTheChainHandler());
 
+        model.getDraftPool().removeAll();
         Die die = new Die(Color.BLUE);
         die.setNumber(NumberEnum.SIX);
-        model.getRoundTrack().addDie(0,die);
+        model.getDraftPool().addDie(die);
 
-        model.getDraftPool().removeAll();
+
         die = new Die(Color.RED);
         die.setNumber(NumberEnum.ONE);
         model.getDraftPool().addDie(die);
@@ -79,7 +80,7 @@ public class Tool2HandlerTest {
         }
     }
 
-    /*@Test
+    @Test
     public void oneDieMove(){
         try{
             assertTrue(tool2_3Handler.process(new PlayerMove(Tool.MOSSASTANDARD,1,0,0),remoteView,model));
@@ -94,8 +95,34 @@ public class Tool2HandlerTest {
             e.printStackTrace();
             fail();
         }
+    }
 
-    }*/
+    @Test
+    public void twoDieMove(){
+        try{
+            assertTrue(tool2_3Handler.process(new PlayerMove(Tool.MOSSASTANDARD,1,0,0),remoteView,model));
+        }catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+
+        model.setNormalMove(false);
+        model.setUsedTool(false);
+        try{
+            assertTrue(tool2_3Handler.process(new PlayerMove(Tool.MOSSASTANDARD,2,0,0),remoteView,model));
+        }catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+
+        playerMove = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,0,2,1);
+        try{
+            assertTrue(tool2_3Handler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+    }
 
 
 }
