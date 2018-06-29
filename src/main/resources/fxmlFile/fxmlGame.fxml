@@ -13,7 +13,7 @@
   <children>
     <HBox fx:id="hbox" alignment="CENTER" layoutX="0.0" layoutY="0.0" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0">
       <children>
-        <VBox fx:id="vboxBoard" alignment="TOP_CENTER" minWidth="500.0" prefHeight="-1.0" prefWidth="-1.0" spacing="20.0">
+        <VBox fx:id="vboxBoard" alignment="TOP_CENTER" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" spacing="0.0">
           <children>
             <HBox fx:id="hboxLabel" alignment="TOP_CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
               <children>
@@ -35,6 +35,7 @@
                 <Label fx:id="labelRound" font="$x2" text="Round" />
               </children>
             </HBox>
+            <Separator id="separator" fx:id="separatorGrid1" maxHeight="100.0" orientation="VERTICAL" prefHeight="-1.0" visible="false" />
             <GridPane id="gridPaneGame" fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" maxHeight="-1.0" maxWidth="-1.0" minWidth="500.0" prefHeight="-1.0" prefWidth="-1.0" snapToPixel="true">
               <children>
                 <!-- PANE 00 -->
@@ -153,9 +154,17 @@
                 <RowConstraints maxHeight="170.0" minHeight="-Infinity" percentHeight="-1.0" vgrow="NEVER" />
               </rowConstraints>
             </GridPane>
+            <Separator id="SeparatorGrid2" fx:id="separatorGrid2" maxHeight="100.0" orientation="VERTICAL" prefHeight="-1.0" visible="false" />
+            <HBox id="hboxR" fx:id="hboxBottoni" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="50.0">
+              <children>
+                <Button font="$x2" minHeight="50.0" minWidth="100.0" mnemonicParsing="false" text="Riserva" />
+                <Button font="$x2" minHeight="50.0" minWidth="100.0" mnemonicParsing="false" text="Tracciato" />
+                <Button font="$x2" minHeight="50.0" minWidth="100.0" mnemonicParsing="false" text="Skip turno" />
+              </children>
+            </HBox>
           </children>
           <padding>
-            <Insets left="10.0" top="20.0" />
+            <Insets bottom="20.0" left="10.0" top="20.0" />
           </padding>
         </VBox>
         <VBox id="vbox" fx:id="vboxCard" alignment="CENTER" maxHeight="-1.0" maxWidth="-1.0" minWidth="400.0" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
