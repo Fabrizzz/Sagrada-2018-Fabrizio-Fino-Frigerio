@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class Tool2_3Handler extends ToolHandler {
@@ -36,17 +37,18 @@ public class Tool2_3Handler extends ToolHandler {
 
         if (playerMove.getTool() == toolname) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
-            if (!playerMove.getRow().isPresent() || !playerMove.getColumn().isPresent() ||
-                    !playerMove.getFinalColumn().isPresent() || !playerMove.getFinalRow().isPresent()){
-                LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
-                throw new InvalidParameterException();
-            } else {
-                board = model.getBoard(remoteView.getPlayer());
-                row = playerMove.getRow().orElse(0);
-                column = playerMove.getColumn().orElse(0);
-                finalColumn = playerMove.getFinalColumn().orElse(0);
-                finalRow = playerMove.getFinalRow().orElse(0);
 
+            Optional<Integer> rowO = playerMove.getRow();
+            Optional<Integer> columnO =  playerMove.getColumn();
+            Optional<Integer> finalRowO = playerMove.getFinalRow();
+            Optional<Integer> finalColumnO =  playerMove.getFinalColumn();
+
+            if (rowO.isPresent() && columnO.isPresent() && finalRowO.isPresent() && finalColumnO.isPresent()){
+                board = model.getBoard(remoteView.getPlayer());
+                row = rowO.get();
+                column = columnO.get();
+                finalColumn = finalColumnO.get();
+                finalRow = finalRowO.get();
 
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                         !board.containsDie(row, column) || board.containsDie(finalRow, finalColumn)){
@@ -55,14 +57,16 @@ public class Tool2_3Handler extends ToolHandler {
                 } else try {
                     die = board.getDie(row, column);
                     board.removeDie(row, column);
-                    if (!board.verifyNearCellsRestriction(die, finalRow, finalColumn) || !board.verifyPositionRestriction(finalRow, finalColumn) ||
-                            (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)) || // il problma puo' manifestarsi anche qui ma non ho ancora testato
-                            (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn))){ // Il problema e' qui, durante il controllo del numero se lo spostamento effettuato e' di una sola casella ortogonalmente alla vecchia posizione il controllo ritorna esito negativo perche' il dado nella nuova posizione viene confrontato con sestesso nella vecchia posizione dando errore
-                        LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 2");
+                    if ((!board.isEmpty() && !board.verifyPositionRestriction(finalRow, finalColumn)) || !board.verifyNearCellsRestriction(die, finalRow, finalColumn) ||
+                            (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)) ||
+                            (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn))){
+                        LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 2 isempty: " + board.isEmpty() +
+                        " positionRestriction: " + board.verifyPositionRestriction(finalRow, finalColumn) + " nearCellRestriction: " + board.verifyNearCellsRestriction(die, finalRow, finalColumn) +
+                        " number restriction:" + (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn)) +
+                        " color restriction: " + (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)));
                         board.setDie(die, row, column);
                         remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                     } else {
-
                         board.setDie(die, finalRow, finalColumn);
                         completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                         return true;
@@ -72,6 +76,9 @@ public class Tool2_3Handler extends ToolHandler {
                     LOGGER.log(Level.SEVERE, "Dado non presente in PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
                 }
 
+            } else {
+                LOGGER.log(Level.SEVERE,"Errore parametri PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
+                throw new InvalidParameterException();
             }
 
         } else{

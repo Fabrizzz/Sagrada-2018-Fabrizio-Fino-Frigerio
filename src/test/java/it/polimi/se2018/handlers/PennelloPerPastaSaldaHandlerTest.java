@@ -2,6 +2,7 @@ package it.polimi.se2018.handlers;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.controller.chainOfResponsibilities.EndOfTheChainHandler;
+import it.polimi.se2018.controller.chainOfResponsibilities.NormalMoveHandler;
 import it.polimi.se2018.controller.chainOfResponsibilities.PennelloPerPastaSaldaHandler;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.cell.Die;
@@ -38,7 +39,7 @@ public class PennelloPerPastaSaldaHandlerTest {
         LOGGER.setLevel(Level.OFF);
 
         Handler handlerObj = new ConsoleHandler();
-        handlerObj.setLevel(Level.WARNING);
+        handlerObj.setLevel(Level.FINEST);
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
 
@@ -48,7 +49,24 @@ public class PennelloPerPastaSaldaHandlerTest {
         connection = new TestConnection();
         remoteView = new RemoteView(model.getPlayers().get(0),connection);
         pennelloPerPastaSaldaHandler = new PennelloPerPastaSaldaHandler();
-        pennelloPerPastaSaldaHandler.setNextHandler(new EndOfTheChainHandler());
+        NormalMoveHandler normalMoveHandler = new NormalMoveHandler();
+        pennelloPerPastaSaldaHandler.setNextHandler(normalMoveHandler);
+        normalMoveHandler.setNextHandler(new EndOfTheChainHandler());
+
+        model.getDraftPool().removeAll();
+        Die die = new Die(Color.BLUE);
+        die.setNumber(NumberEnum.SIX);
+        model.getDraftPool().addDie(die);
+
+
+        die = new Die(Color.RED);
+        die.setNumber(NumberEnum.FOUR);
+        model.getDraftPool().addDie(die);
+
+        die = new Die(Color.YELLOW);
+        die.setNumber(NumberEnum.FIVE);
+        model.getDraftPool().addDie(die);
+
     }
 
     @Test
@@ -146,5 +164,16 @@ public class PennelloPerPastaSaldaHandlerTest {
         }catch (Exception e){
             fail();
         }
+
+        model.setUsedTool(false);
+        assertFalse(model.getBoard(remoteView.getPlayer()).isEmpty());
+        playerMove = new PlayerMove(0,NumberEnum.TWO,Tool.PENNELLOPERPASTASALDA);
+        try{
+            assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            fail();
+        }
+
+
     }
 }

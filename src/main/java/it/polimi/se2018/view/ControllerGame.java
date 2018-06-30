@@ -6,14 +6,20 @@ import it.polimi.se2018.model.cell.*;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,6 +37,12 @@ public class ControllerGame implements Initializable {
 
     @FXML
     VBox vboxCard;
+
+    @FXML
+    HBox hboxLabel;
+
+    @FXML
+    HBox hboxBottoni;
 
     @FXML
     GridPane gridPane;
@@ -80,6 +92,13 @@ public class ControllerGame implements Initializable {
     @FXML
     Label privateObjective;
 
+    @FXML
+    Separator separatorGrid1;
+
+    @FXML
+    Separator separatorGrid2;
+
+
     PlayerBoard playerBoard; // Messa globale per provare i metodi; in seguito da togliere perchè viene richiesta al server
 
     @Override
@@ -102,6 +121,11 @@ public class ControllerGame implements Initializable {
         vboxBoard.prefWidthProperty().bind(root.widthProperty());
         vboxCard.prefHeightProperty().bind(root.heightProperty());
         vboxCard.prefWidthProperty().bind(root.widthProperty());
+        hboxLabel.prefWidthProperty().bind(root.widthProperty());
+        hboxBottoni.prefWidthProperty().bind(root.widthProperty());
+
+        separatorGrid1.prefHeightProperty().bind(vboxBoard.heightProperty());
+        separatorGrid2.prefHeightProperty().bind(vboxBoard.heightProperty());
 
         paneTool1.prefHeightProperty().bind(vboxCard.heightProperty());
         paneTool1.prefWidthProperty().bind(vboxCard.widthProperty());
@@ -305,4 +329,20 @@ public class ControllerGame implements Initializable {
         privateObjective.setStyle("-fx-text-fill:red");
     }
 
+    public void handlezoomTool1(ActionEvent event) {
+
+        Stage popupwindow=new Stage();
+        popupwindow.initModality(Modality.APPLICATION_MODAL);
+        popupwindow.setTitle("This is a pop up window");
+        Label label1= new Label("Pop up window now displayed");
+        Button button1= new Button("Close this pop up window");
+        button1.setOnAction(e -> popupwindow.close());
+        VBox layout= new VBox(10);
+        layout.getChildren().addAll(label1, button1);
+        //layout.setAlignment(Pos.CENTER);
+        Scene scene1= new Scene(layout, 300, 250);
+        popupwindow.setScene(scene1);
+        popupwindow.showAndWait();
+
+    }
 }

@@ -98,6 +98,14 @@ public class PlayerBoard implements Serializable {
      */
     public void removeDie(int row, int column) throws NoDieException {
         get(row, column).removeDie();
+        isEmpty = true;
+        for(int i = 0; i < 4; i ++){
+            for(int j = 0; j < 5; j ++){
+                if(get(i,j).isUsed()){
+                    isEmpty = false;
+                }
+            }
+        }
     }
 
     /**
@@ -161,12 +169,16 @@ public class PlayerBoard implements Serializable {
                     if(column + j >= 0 && column + j < 5)
                         if (get(row + i, column + j).isUsed()){
                             ris = true;
-                            LOGGER.log(Level.FINE,"Restrizione di posizione rispettata");
                         }
                     } catch (IndexOutOfBoundsException e) {
 
                     }
             }
+        }
+        if(!ris){
+            LOGGER.log(Level.FINE,"Restrizione di posizione cella " + row + " " + column + " non rispettata");
+        }else {
+            LOGGER.log(Level.FINE,"Restrizione di posizione cella " + row + " " + column + "rispettata");
         }
         return ris;
 

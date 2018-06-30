@@ -12,6 +12,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class TaglierinaCircolareHandler extends ToolHandler {
@@ -27,16 +28,21 @@ public class TaglierinaCircolareHandler extends ToolHandler {
 
         if (playerMove.getTool() == Tool.TAGLIERINACIRCOLARE) {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa TAGLIERINACIRCOLARE");
-            if (!playerMove.getRoundTrackPosition().isPresent() || !playerMove.getRoundTrackRound().isPresent() ||
-                    !playerMove.getDraftPosition().isPresent()) {
-                LOGGER.log(Level.SEVERE,"Errore parametri TAGLIERINACIRCOLARE");
-                throw new InvalidParameterException();
-            }
+
             roundTrack = model.getRoundTrack();
             draftPool = model.getDraftPool();
-            draftPoolPosition = playerMove.getDraftPosition().orElse(0);
-            roundTrackRound = playerMove.getRoundTrackRound().orElse(0);
-            roundTrackPosition = playerMove.getRoundTrackPosition().orElse(0);
+
+            Optional<Integer> draftPoolPositionO = playerMove.getDraftPosition();
+            Optional<Integer> roundTrackRoundO = playerMove.getRoundTrackRound();
+            Optional<Integer> roundTrackPositionO = playerMove.getRoundTrackPosition();
+            if (draftPoolPositionO.isPresent() && roundTrackRoundO.isPresent() && roundTrackPositionO.isPresent()) {
+                draftPoolPosition = draftPoolPositionO.get();
+                roundTrackRound = roundTrackRoundO.get();
+                roundTrackPosition = roundTrackPositionO.get();
+            }else{
+                LOGGER.log(Level.SEVERE,"Errore parametri MOSSASTANDARD");
+                throw new InvalidParameterException();
+            }
 
             if(draftPoolPosition < 0 || roundTrackRound < 0 || roundTrackPosition < 0  || draftPoolPosition >= model.getDraftPool().size() || roundTrackRound > model.getRound() ||
                     roundTrackPosition >= model.getRoundTrack().numberOfDice(roundTrackRound)){
