@@ -76,10 +76,7 @@ public class RMIConnection extends Connection implements RMIInterface {
     public void remoteSend(Message message) throws RemoteException {
         LOGGER.log(Level.FINE,"Remote message ricevuto");
         setChanged();
-        new Thread() {
-            public void run() {
-                notifyObservers(message);
-            }}.start();
+        new Thread(() -> notifyObservers(message)).start();
 
     }
 

@@ -73,6 +73,7 @@ public class Controller implements Observer {
             LOGGER.log(Level.INFO, "In attesa di ricevere Board dai client");
             while (choosenBoards.size() < views.size())
                 wait();
+
             LOGGER.log(Level.INFO,"Avvio gioco");
             List publicObjectiveNames = Arrays.asList(PublicObjectiveName.values());
             Collections.shuffle(publicObjectiveNames);
@@ -191,17 +192,17 @@ public class Controller implements Observer {
 
         if (model.getRound() != 10) {
 
-            playerPosition = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 - model.getTurn() - 1;
-            model.getPlayers().get(playerPosition).setYourTurn(true);
-            if (model.getPlayers().get(playerPosition).isSkipSecondTurn()) {
-                LOGGER.log(Level.FINE, "Il giocatore corrente salta il secondo turno a causa di una tool");
-                model.getPlayers().get(playerPosition).setSkipSecondTurn(false);
+            int playerPosition2 = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 - model.getTurn() - 1;
+            model.getPlayers().get(playerPosition2).setYourTurn(true);
+            if (model.getPlayers().get(playerPosition2).isSkipSecondTurn()) {
+                LOGGER.log(Level.FINE, "Il giocatore " + model.getPlayers().get(playerPosition2).getNick() + " salta il secondo turno a causa di una tool");
+                model.getPlayers().get(playerPosition2).setSkipSecondTurn(false);
                 nextTurn();
-            } else if (!views.get(playerPosition).isConnected()) {
-                LOGGER.log(Level.FINE, "Il giocatore corrente passa il turno poichè disconnesso");
+            } else if (!views.stream().filter(k -> k.getPlayer() == model.getPlayers().get(playerPosition2)).findAny().get().isConnected()) {
+                LOGGER.log(Level.FINE, "Il giocatore " + model.getPlayers().get(playerPosition2).getNick() + " passa il turno poichè disconnesso");
                 nextTurn();
             } else {
-                LOGGER.log(Level.FINE, "Prossimo giocatore: " + model.getPlayers().get(playerPosition).getNick() + ". Notifico gli osservatori");
+                LOGGER.log(Level.FINE, "Prossimo giocatore: " + model.getPlayers().get(playerPosition2).getNick() + ". Notifico gli osservatori");
             }
         }
     }
@@ -215,6 +216,7 @@ public class Controller implements Observer {
 
     @Override
     public synchronized void update(Observable o, Object arg) {
+
         try {
             ClientMessage message = (ClientMessage) arg;
             RemoteView remoteView = (RemoteView) o;
@@ -231,7 +233,7 @@ public class Controller implements Observer {
                         if ((playerMove.getTool().equals(Tool.SKIPTURN)) || model.hasUsedTool() && model.hasUsedNormalMove()) {
                             nextTurn();
                             setTimer(model.getTurn(), model.getRound());
-                            LOGGER.log(Level.FINE, "passaggio di turno");
+                            LOGGER.log(Level.FINE, "Mossa ricevuta e turno finito");
                         }
                         model.notifyObs();
                     }
@@ -246,7 +248,7 @@ public class Controller implements Observer {
                 choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
                 notifyAll();
             } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
-                LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è disconnesso");
+                LOGGER.log(Level.INFO, "Notifico la disconnessione di " + remoteView.getPlayer().getNick());
                 for (RemoteView view : views) {
                     view.sendBack(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
                 }
