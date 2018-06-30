@@ -40,12 +40,13 @@ public class CLI extends View{
     /**
      * Constructor
      */
-    public CLI(){
+    public CLI(Long localID){
         colorMap.put(Color.BLUE,"\u001B[34m");
         colorMap.put(Color.RED,"\u001B[31m");
         colorMap.put(Color.GREEN, "\u001B[32m");
         colorMap.put(Color.YELLOW,"\u001B[33m");
         colorMap.put(Color.PURPLE, "\u001B[35m");
+        this.localID = localID;
     }
 
     /**
@@ -710,7 +711,6 @@ public class CLI extends View{
                 println("------------------------------------------------------");
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
                 modelView = new ModelView(modelView, message.getModelView());
-
                 println("La tua plancia: ");
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
 
@@ -728,11 +728,13 @@ public class CLI extends View{
                             showPlayerBoard(modelView.getBoard(modelView.getPlayers().get(h)));
                         }
                     }
-
                 }
                 break;
             case HASDISCONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' disconnesso");
+                if(modelView.getPlayer(localID).isYourTurn()){
+                    chooseMove();
+                }
                 break;
             case HASRICONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
@@ -799,82 +801,11 @@ public class CLI extends View{
             nick = InputUtils.getString();
         } while (nick.isEmpty());
 
-
-        localID = readID();
-
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(clientNetwork.sendMessage(clientMessage)){
             println("Nome utente inviato, attendi l'inizio della partita");
         }else{
             println("Errore connessione");
         }
-    }
-
-    /**
-     * Read the playerid from the file, if there is no file the id is generated and written to file
-     * @return the id of the local player
-     */
-    private Long readID(){
-        InputStream is = null;
-        DataInputStream dis = null;
-        try {
-            is = new FileInputStream("playerID");
-
-            dis = new DataInputStream(is);
-
-            if(dis.available()>0) {
-                return dis.readLong();
-            }
-        } catch(Exception e) {}finally {
-            try{
-                if(is != null)
-                    is.close();
-            }catch (Exception  e){}
-            try{
-                if(dis != null)
-                    dis.close();
-            }catch (Exception e){}
-        }
-
-        return generateID();//writeID(generateID());
-    }
-
-    /**
-     * Write the id to file
-     * @param id id to write
-     * @return the id written
-     */
-    public Long writeID(Long id){
-        FileOutputStream fos = null;
-        DataOutputStream dos = null;
-
-        try {
-            fos = new FileOutputStream("playerID");
-            dos = new DataOutputStream(fos);
-
-            dos.writeLong(id);
-            dos.flush();
-        } catch(Exception e){
-            println("Errore scrittura id giocatore, controlla i permessi di scrittura della cartella");
-        }finally {
-            try{
-                if(fos != null)
-                    fos.close();
-            }catch (Exception e){}
-            try{
-                if(dos != null)
-                dos.close();
-            }catch (Exception e){}
-        }
-
-        return id;
-    }
-
-    /**
-     * Generate the id
-     * @return the id
-     */
-    private Long generateID(){
-        return (new Random()).nextLong();
     }
 }

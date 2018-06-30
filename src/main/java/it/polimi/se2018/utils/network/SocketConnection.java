@@ -50,6 +50,7 @@ public class SocketConnection extends Connection implements Runnable {
             try {
                 out.writeObject(message);
                 out.flush();
+                out.reset();
                 LOGGER.log(Level.FINE, "Messaggio inviato");
                 return true;
             } catch (IOException e) {

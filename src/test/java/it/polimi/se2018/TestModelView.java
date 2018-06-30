@@ -6,6 +6,7 @@ import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
@@ -15,6 +16,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static junit.framework.TestCase.*;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TestModelView {
     private ModelView modelView;
-
+    private static final Logger LOGGER = Logger.getLogger("Logger");
     private  Model model;
     private ArrayList<Player> players = new ArrayList<>();
     private List<PublicObjective> publicObjectives;
@@ -37,6 +42,13 @@ public class TestModelView {
 
     @Before
     public void initialize(){
+        LOGGER.setLevel(Level.OFF);
+
+        Handler handlerObj = new ConsoleHandler();
+        handlerObj.setLevel(Level.FINEST);
+        LOGGER.addHandler(handlerObj);
+        LOGGER.setUseParentHandlers(false);
+
         model = ModelControllerInitializerTest.initialize();
         players = (ArrayList) model.getPlayers();
         model.setRound(3);

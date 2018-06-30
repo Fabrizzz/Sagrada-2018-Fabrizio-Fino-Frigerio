@@ -40,6 +40,7 @@ public class ServerNetwork implements Observer {
         try {
             LocateRegistry.createRegistry(1099);
         } catch (RemoteException e) {
+            e.printStackTrace();
             LOGGER.log(Level.SEVERE,"Errore creazione registry, porta gia' in uso o rmiregistry non avviato");
         }
 

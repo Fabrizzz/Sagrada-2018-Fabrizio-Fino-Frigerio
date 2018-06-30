@@ -253,6 +253,7 @@ public class Controller implements Observer {
                     view.sendBack(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
                 }
                 if (remoteView.getPlayer().isYourTurn()) {
+                    LOGGER.log(Level.FINE,"Era il turno del giocatore disconnesso, passo al nuovo turno");
                     nextTurn();
                     setTimer(model.getTurn(), model.getRound());
                     getModel().notifyObs();
@@ -262,6 +263,7 @@ public class Controller implements Observer {
                 for (RemoteView view : views) {
                     view.sendBack(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
                 }
+                remoteView.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER,new ModelView(model)));
             }
         } catch (ClassCastException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);

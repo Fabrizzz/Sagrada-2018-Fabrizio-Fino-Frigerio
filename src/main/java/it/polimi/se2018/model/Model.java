@@ -18,7 +18,7 @@ public class Model extends Observable {
     private static final int NUMBER_OF_TOOL_CARDS = 3;
     private static final int NUMBER_OF_PUBLIC_OBJECTIVES = 3;
     private static final int NUMBER_OF_DICE_PER_COLOR = 18;     //Nei 90 dadi ho 18 dadi per colore; passo 18 al costruttore del diceBag
-    private static final int MINUTES_PER_TURN = 2;
+    private static final int MINUTES_PER_TURN = 1;
 
     private final Map<Player, PlayerBoard> boardMap;
     private final Map<Player, PrivateObjective> privateObjectiveMap;
@@ -36,7 +36,6 @@ public class Model extends Observable {
     private boolean firstTurn = true; //ogni round è fatto da due turni, è importante tenerne conto anche per l' uso di certe tool
     private boolean usedTool = false;
     private boolean normalMove = false;
-
 
     /**
      * Constructor

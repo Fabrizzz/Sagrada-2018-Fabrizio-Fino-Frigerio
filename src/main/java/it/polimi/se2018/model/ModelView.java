@@ -8,9 +8,9 @@ import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -32,6 +32,8 @@ public class ModelView extends Observable implements Serializable {
     private boolean usedTool;
     private boolean normalMove;
 
+
+
     /**
      * Constructor
      * @param model model of the game
@@ -49,9 +51,6 @@ public class ModelView extends Observable implements Serializable {
         firstTurn = model.isFirstTurn();
         usedTool = model.hasUsedTool();
         normalMove = model.hasUsedNormalMove();
-
-
-        //model.addObserver(this);
     }
 
     /**
@@ -65,35 +64,38 @@ public class ModelView extends Observable implements Serializable {
 
         if(updateView.getPlayers() != null){
             players = updateView.getPlayers();
+            LOGGER.log(Level.FINE,"Players not null");
         }else{
             players = oldView.getPlayers();
         }
 
         if(updateView.getDiceBag() != null){
             diceBag = updateView.getDiceBag();
+            LOGGER.log(Level.FINE,"diceBag not null");
         }else{
             diceBag = oldView.getDiceBag();
         }
 
         if(updateView.getDraftPool() != null){
             draftPool = updateView.getDraftPool();
+            LOGGER.log(Level.FINE,"draftPool not null");
         }else{
             draftPool = oldView.getDraftPool();
         }
 
         if(updateView.getRoundTrack() != null){
             roundTrack = updateView.getRoundTrack();
+            LOGGER.log(Level.FINE,"roundTrack not null");
         }else{
             roundTrack = oldView.getRoundTrack();
         }
 
         if(updateView.getBoardMap() != null){
-            boardMap = updateView.getBoardMap();
+            boardMap = updateView.getBoardMap();LOGGER.log(Level.FINE,"boardMap not null");
         }else{
             boardMap = oldView.getBoardMap();
         }
     }
-
 
     /**
      * Return the current round number
