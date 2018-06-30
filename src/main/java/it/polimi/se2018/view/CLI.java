@@ -391,6 +391,12 @@ public class CLI extends View{
      * @param tool tool to use
      */
     public void normalSugheroMove(Tool tool){
+        if(tool.equals(Tool.MOSSASTANDARD) && modelView.isNormalMove()){
+            println("Errore, hai gia eseguito una mossa normale, passa il turno o usa una carta strumento");
+            chooseMove();
+            return;
+        }
+
         int i = chooseDraftpoolDie();
 
         println("Scegli dove piazzare il dado");
@@ -580,9 +586,14 @@ public class CLI extends View{
     public void chooseMove(){
         println("------------------------------------------------------");
         println("E' il tuo turno, scelgi la mossa da effettuare:");
-        println("0) Salta turno");
-        println("1) Piazza un dado dalla riserva");
-        println("2) Usa una carta strumento");
+        if(modelView.isNormalMove() || modelView.isUsedTool())
+            println("0) Finisci turno");
+        else
+            println("0) Salta turno");
+        if(!modelView.isNormalMove())
+            println("1) Piazza un dado dalla riserva");
+        if(!modelView.isUsedTool())
+            println("2) Usa una carta strumento");
         println("3) Visualizza la tua plancia");
         println("4) Visualizza le plancie degli avversari");
         println("5) Visualizza la riserva dei dadi");
@@ -605,17 +616,24 @@ public class CLI extends View{
                 println("Mossa inviata");
                 return;
             case 1:
-                move(Tool.MOSSASTANDARD);
+                if(!modelView.isNormalMove())
+                    move(Tool.MOSSASTANDARD);
+                else
+                    chooseMove();
                 break;
             case 2:
-                showToolCards();
-                println("Carta strumento scelta: ");
-                int k = 4;
-                do{
-                    k = InputUtils.getInt();
-                }while(k < 1 || k > 3);
+                if(!modelView.isUsedTool()){
+                    showToolCards();
+                    println("Carta strumento scelta: ");
+                    int k = 4;
+                    do{
+                        k = InputUtils.getInt();
+                    }while(k < 1 || k > 3);
 
-                move((Tool) modelView.getTools().keySet().toArray()[k-1]);
+                    move((Tool) modelView.getTools().keySet().toArray()[k-1]);
+                }
+                else
+                    chooseMove();
                 break;
             case 3:
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
@@ -732,9 +750,11 @@ public class CLI extends View{
                 break;
             case HASDISCONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' disconnesso");
-                if(modelView.getPlayer(localID).isYourTurn()){
-                    chooseMove();
-                }
+                try {
+                    if (modelView.getPlayer(localID).isYourTurn()) {
+                        chooseMove();
+                    }
+                }catch (NullPointerException e){}
                 break;
             case HASRICONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");

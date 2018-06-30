@@ -61,6 +61,9 @@ public class ModelView extends Observable implements Serializable {
     public ModelView(ModelView oldView, ModelView updateView){
         tools = oldView.getTools();
         publicObjective = oldView.getPublicObjective();
+        firstTurn = updateView.isFirstTurn();
+        usedTool = updateView.isUsedTool();
+        normalMove = updateView.isNormalMove();
 
         if(updateView.getPlayers() != null){
             players = updateView.getPlayers();
