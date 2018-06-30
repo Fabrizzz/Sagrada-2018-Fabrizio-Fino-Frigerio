@@ -21,6 +21,7 @@ public class SocketConnection extends Connection implements Runnable {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean connected = true;
+    private boolean justDisconnected = true;
 
     /**
      * Costructor
@@ -45,17 +46,20 @@ public class SocketConnection extends Connection implements Runnable {
      */
     public boolean sendMessage(Message message) throws DisconnectedException {
         LOGGER.log(Level.FINE,"Invio messaggio");
-        if (isConnected())
-            try{
+        if (isConnected()) {
+            try {
                 out.writeObject(message);
                 out.flush();
-                out.reset();
-                LOGGER.log(Level.FINE,"Messaggio inviato");
+                LOGGER.log(Level.FINE, "Messaggio inviato");
                 return true;
-            }catch (IOException e){
+            } catch (IOException e) {
                 close();
                 throw new DisconnectedException();
             }
+        } else if (justDisconnected) {
+            justDisconnected = false;
+            throw new DisconnectedException();
+        }
         return false;
     }
 

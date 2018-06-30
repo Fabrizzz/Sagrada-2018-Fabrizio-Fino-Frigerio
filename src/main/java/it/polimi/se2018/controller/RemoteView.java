@@ -8,7 +8,6 @@ import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.Message;
 import it.polimi.se2018.utils.messages.ServerMessage;
 import it.polimi.se2018.utils.network.Connection;
-import it.polimi.se2018.view.CLI;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -64,9 +63,10 @@ public class RemoteView extends Observable implements Observer {
         try {
             connection.sendMessage(message);
         } catch (DisconnectedException e) {
-            setChanged();
-            notifyObservers(new ClientMessage(MessageType.HASDISCONNECTED));
             LOGGER.log(Level.WARNING, player.getNick() + " si è disconnesso");
+            setChanged();
+            new Thread(() -> notifyObservers(new ClientMessage(MessageType.HASDISCONNECTED))).start();
+
         }
 
     }
