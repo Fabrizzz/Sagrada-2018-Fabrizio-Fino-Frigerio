@@ -15,7 +15,6 @@ public class Player implements Serializable {
     private boolean canDoTwoTurn;
     private boolean isYourTurn = false;
 
-
     /**
      * Constructor
      * @param nick nickname of the player
@@ -26,31 +25,59 @@ public class Player implements Serializable {
         this.id = id;
     }
 
+    /**
+     * Return if the player must skip the second turn this round
+     * @return
+     */
     public boolean isSkipSecondTurn() {
         return skipSecondTurn;
     }
 
+    /**
+     * Set if the player must skip the second turn this round
+     * @param skipSecondTurn
+     */
     public void setSkipSecondTurn(boolean skipSecondTurn) {
         this.skipSecondTurn = skipSecondTurn;
     }
 
+    /**
+     * Return the number of tokens of the player
+     * @return the number of tokens
+     */
     public int getFavorTokens() {
         return favorTokens;
     }
 
+    /**
+     * Set the number of tokens of the player
+     * @param favorTokens the number of tokens
+     */
     public void setFavorTokens(int favorTokens) {
         this.favorTokens = favorTokens;
     }
 
+    /**
+     * Return if the player can do a second turn
+     * @return true if can do a second turn, false otherwise
+     */
     public boolean isCanDoTwoTurn() {
         return canDoTwoTurn;
 
     }
 
+    /**
+     * Set if the player can do two turns
+     * @param canDoTwoTurn
+     */
     public void setCanDoTwoTurn(boolean canDoTwoTurn) {
         this.canDoTwoTurn = canDoTwoTurn;
     }
 
+    /**
+     * Get the player nickname
+     * @return
+     */
     public String getNick(){return nick;}
 
     /**

@@ -32,8 +32,6 @@ public class ModelView extends Observable implements Serializable {
     private boolean usedTool;
     private boolean normalMove;
 
-
-
     /**
      * Constructor
      * @param model model of the game

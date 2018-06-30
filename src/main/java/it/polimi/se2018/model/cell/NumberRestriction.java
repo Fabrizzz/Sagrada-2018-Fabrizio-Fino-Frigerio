@@ -10,7 +10,6 @@ import it.polimi.se2018.utils.enums.NumberEnum;
 public class NumberRestriction implements Restriction {
     private final NumberEnum number;
 
-
     protected NumberRestriction(NumberEnum number) {
         this.number = number;
     }
@@ -19,7 +18,6 @@ public class NumberRestriction implements Restriction {
     public NumberEnum getNumber() {
         return number;
     }
-
 
     @Override
     public boolean isNumberRestriction() {
@@ -30,7 +28,6 @@ public class NumberRestriction implements Restriction {
     public boolean isColorRestriction() {
         return false;
     }
-
 
     @Override
     public boolean verifyRestriction(Die die) {

@@ -242,16 +242,32 @@ public class PlayerBoard implements Serializable {
         return ris;
     }
 
+    /**
+     * Verify if the position respect the initial die placement's rules
+      * @param row row of the die
+     * @param column column of the die
+     * @return true if the cell is near the border of the board, false otherwise
+     */
     public boolean verifyInitialPositionRestriction(int row, int column) {
         LOGGER.log(Level.FINE,"Initial position restriction = " + (row == 0 || row == 3 || column == 0 || column == 4));
         return (row == 0 || row == 3 || column == 0 || column == 4);
 
     }
 
+    /**
+     * Return the restriction of the cell row,column
+     * @param row row of the cell
+     * @param column column of the cell
+     * @return the restriction of the cell
+     */
     public Restriction getRestriction(int row, int column) {
         return get(row, column).getRestriction();
     }
 
+    /**
+     * Get the board difficutly
+     * @return the board difficulty
+     */
     public int getBoardDifficulty(){
         return board.getTokens();
     }

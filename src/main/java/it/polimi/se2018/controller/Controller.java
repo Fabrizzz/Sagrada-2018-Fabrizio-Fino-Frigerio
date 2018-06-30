@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 /**
  * This class control the game logic
- *
  * @author Giampietro
  */
 
@@ -60,7 +59,6 @@ public class Controller implements Observer {
      * it starts a new game by asking players to choose a board and initializing the Model and the tool handlers
      * @param views remoteviews
      */
-
     public synchronized void startGame(Collection<RemoteView> views) {
         if (views.size() < 2 || views.size() > 4)
             throw new IllegalArgumentException();
@@ -117,6 +115,10 @@ public class Controller implements Observer {
 
     }
 
+    /**
+     * Return the game model
+     * @return the game model
+     */
     public Model getModel() {
         return model;
     }
@@ -213,7 +215,6 @@ public class Controller implements Observer {
      * @param o RemoteView
      * @param arg ClientMessage
      */
-
     @Override
     public synchronized void update(Observable o, Object arg) {
 

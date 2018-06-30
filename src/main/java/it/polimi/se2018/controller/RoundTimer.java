@@ -12,6 +12,12 @@ public class RoundTimer extends TimerTask {
     private int turn;
     private Controller controller;
 
+    /**
+     * Constructor
+     * @param turn game turn
+     * @param round game round
+     * @param controller game controller
+     */
     public RoundTimer(int turn, int round, Controller controller) {
         this.round = round;
         this.turn = turn;

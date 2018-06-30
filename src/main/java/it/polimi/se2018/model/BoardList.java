@@ -21,6 +21,9 @@ public final class BoardList {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private ArrayList<Board[]> boardList = new ArrayList<>();
 
+    /**
+     * Constructor, load all the maps from the json file
+     */
     public BoardList(){
         JSONParser parser = new JSONParser();
         try {
@@ -59,6 +62,10 @@ public final class BoardList {
         }
     }
 
+    /**
+     * Remove a couple of boards from the list of board
+     * @return a couple of boards
+     */
     public Board[] getCouple(){
         if(boardList.isEmpty()){
             LOGGER.log(Level.SEVERE,"Nessuna coppia di mappe disponibile");
@@ -68,6 +75,11 @@ public final class BoardList {
         }
     }
 
+    /**
+     * Return the board with the specified name without removing it from the list of boards
+     * @param name the name of the board
+     * @return the board
+     */
     public Board getBoard(String name){
         for(int i = 0; i < boardList.size(); i ++){
             for(int j = 0; j < 2; j++) {
@@ -81,15 +93,17 @@ public final class BoardList {
         return null;
     }
 
+    /**
+     * Return the array of boards
+     * @return the array of boards
+     */
     public Board[] values(){
         ArrayList<Board> boardValues = new ArrayList<>();
         for(int i = 0; i < boardList.size(); i ++){
             boardValues.addAll(Arrays.asList(boardList.get(i)));
 
         }
-
         Board[] boardArray = new Board[boardValues.size()];
-
         return boardValues.toArray(boardArray);
     }
 
