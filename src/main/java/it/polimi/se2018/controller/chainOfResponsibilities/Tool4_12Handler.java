@@ -135,6 +135,8 @@ public class Tool4_12Handler extends ToolHandler {
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                             return false;
                         }
+                    }else {
+                        return true;
                     }
                 } catch (AlredySetDie alredySetDie) {
                     LOGGER.log(Level.SEVERE, "Dado gia' presente in LATHEKIN TAGLIERINAMANUALE 5");

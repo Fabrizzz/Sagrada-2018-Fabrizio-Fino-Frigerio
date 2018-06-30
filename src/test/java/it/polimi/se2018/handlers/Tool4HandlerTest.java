@@ -177,5 +177,55 @@ public class Tool4HandlerTest {
         }
     }
 
+    @Test
+    public void noDieTest1(){
+        PlayerMove playerMove2 = new PlayerMove(Tool.LATHEKIN,2,0,3,0);
+        playerMove = new PlayerMove(Tool.LATHEKIN,0,0,2,1,playerMove2);
+
+        try {
+            assertFalse(tool4_12Handler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            fail();
+        }
+
+        assertTrue(model.getBoard(model.getPlayers().get(0)).containsDie(1,0));
+        assertTrue(model.getBoard(model.getPlayers().get(0)).containsDie(2,0));
+
+        try{
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(1,0).getNumber(),NumberEnum.SIX);
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(1,0).getColor(),Color.BLUE);
+
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(2,0).getNumber(),NumberEnum.ONE);
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(2,0).getColor(),Color.RED);
+        }catch (Exception e){
+            fail();
+        }
+    }
+
+    @Test
+    public void noDieTest2(){
+        PlayerMove playerMove2 = new PlayerMove(Tool.LATHEKIN,3,0,3,0);
+        playerMove = new PlayerMove(Tool.LATHEKIN,1,0,2,1,playerMove2);
+
+        try {
+            assertFalse(tool4_12Handler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            fail();
+        }
+
+        assertTrue(model.getBoard(model.getPlayers().get(0)).containsDie(1,0));
+        assertTrue(model.getBoard(model.getPlayers().get(0)).containsDie(2,0));
+
+        try{
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(1,0).getNumber(),NumberEnum.SIX);
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(1,0).getColor(),Color.BLUE);
+
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(2,0).getNumber(),NumberEnum.ONE);
+            assertEquals(model.getBoard(model.getPlayers().get(0)).getDie(2,0).getColor(),Color.RED);
+        }catch (Exception e){
+            fail();
+        }
+    }
+
 
 }
