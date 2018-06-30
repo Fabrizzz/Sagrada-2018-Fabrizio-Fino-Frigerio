@@ -45,6 +45,7 @@ public class RemoteView extends Observable implements Observer {
     public void changeConnection(Connection connection) {
         LOGGER.log(Level.FINE,"Connessione cambia");
         this.connection = connection;
+        connection.addObserver(new MessageReceiver());
         setChanged();
         notifyObservers(new ClientMessage(MessageType.HASRICONNECTED));
     }
