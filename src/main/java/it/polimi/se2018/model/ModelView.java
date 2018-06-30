@@ -21,10 +21,10 @@ public class ModelView extends Observable implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private final Map<Tool, Boolean> tools;
     private final List<PublicObjective> publicObjective;
-    private final DiceBag diceBag;    //Il sacchetto contenente i dadi
-    private final DraftPool draftPool;  //Dadi pescati del round
-    private final RoundTrack roundTrack; //Il tracciato
-    private final List<Player> players;   //I player in gioco
+    private final DiceBag diceBag;
+    private final DraftPool draftPool;
+    private final RoundTrack roundTrack;
+    private final List<Player> players;
     private final Map<Player, PlayerBoard> boardMap;
 
     private int round;

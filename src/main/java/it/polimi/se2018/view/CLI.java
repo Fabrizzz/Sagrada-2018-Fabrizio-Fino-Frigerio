@@ -11,6 +11,7 @@ import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.exceptions.AlredySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
@@ -46,17 +47,25 @@ public class CLI extends View{
         colorMap.put(Color.YELLOW,"\u001B[33m");
         colorMap.put(Color.PURPLE, "\u001B[35m");
     }
-    
+
+    /**
+     * Print the string and append a newline on the end
+     * @param string string to print
+     */
     private void println(String string){
         System.out.println(string);
     }
-    
+
+    /**
+     * Print the string and append
+     * @param string string to print
+     */
     private void print(String string){
         System.out.print(string);
     }
     
     /**
-     * Show a playerboard to the player
+     * Show a playerboard
      * @param playerBoard playerboard to show
      */
     private void showPlayerBoard(PlayerBoard playerBoard){
@@ -76,13 +85,11 @@ public class CLI extends View{
         println("‾‾‾‾‾‾‾‾‾‾");
         println("|1|2|3|4|5|| Colonna\n");
 
-
-
         showBoard(playerBoard);
     }
 
     /**
-     * Show the  board containing the restriction
+     * Show the board containing the restriction
      * @param playerBoard player board to show
      */
     private void showBoard(PlayerBoard playerBoard){
@@ -91,7 +98,6 @@ public class CLI extends View{
 
         for(int j = 0; j < 4; j ++){
             for(int i = 0; i < 5; i++){
-
                 if(playerBoard.getRestriction(j,i).isNumberRestriction()){
                     print("|" + (((NumberRestriction) (playerBoard.getRestriction(j,i))).getNumber()).getInt());
                 }else if(playerBoard.getRestriction(j,i).isColorRestriction()){
@@ -99,7 +105,6 @@ public class CLI extends View{
                 }else{
                     print("| ");
                 }
-
             }
             println("|| "+(j+1));
         }
@@ -112,7 +117,6 @@ public class CLI extends View{
      */
     private void showDraftPool(){
         println("Riserva dei dadi");
-
         print("Posizione:");
         for(int i = 0; i <  modelView.DraftPoolSize();i++){
             print("|"+(i+1));
@@ -180,12 +184,16 @@ public class CLI extends View{
         }
     }
 
-    private int[] chooseRoundTrackDie(){
+    /**
+     * Let the player choose a die from the roundTrack
+     * @return the array containing the round and the position of the die in the round
+     * @throws NoDieException if the roundtrack is empty
+     */
+    private int[] chooseRoundTrackDie() throws NoDieException{
         int[] position = new int[2];
         if(modelView.getRoundTrack().numberOfDice(modelView.getRound()) == 0){
             println("Errore, il tracciato dei dadi e' vuoto");
-            position[0] = -1;
-            position[1] = -1;
+            throw new NoDieException();
         }
         showRoundTrack();
         position[0] = modelView.getRound();
@@ -214,23 +222,22 @@ public class CLI extends View{
             i = InputUtils.getInt();
         }
         return i - 1;
-
     }
 
     /**
+     *
      * Let the player choose a cell in his playerboard
      * @return  the array containing the row and column coordinates to identify the cell
+     * @throws NoDieException if the board is empty
      */
-    private int[] chooseBoardCellWithDie(){
+    private int[] chooseBoardCellWithDie() throws NoDieException{
         int[] position = new int[2];
         boolean repeat = true;
 
         if(modelView.getBoard(modelView.getPlayer(localID)).isEmpty()){
             println("La plancia e' vuota, non puoi eseguire questa mossa");
-            position[0] = -1;
-            position[1] = -1;
             LOGGER.log(Level.FINE,"La plancia e' vuota");
-            return position;
+            throw new NoDieException();
         }
 
         do {
@@ -250,6 +257,10 @@ public class CLI extends View{
         return position;
     }
 
+    /**
+     * Let the player choose a row
+     * @return the chosen row
+     */
     private int chooseRow(){
         int row = 0;
         println("Inserisci l'indice di riga: ");
@@ -261,6 +272,10 @@ public class CLI extends View{
         return row - 1;
     }
 
+    /**
+     * Let the player choose a column
+     * @return the chosen column
+     */
     private int chooseColumn(){
         int column = 0;
         println("Inserisci l'indice di colonna: ");
@@ -273,6 +288,11 @@ public class CLI extends View{
         return column - 1;
     }
 
+    /**
+     * Return if the board is full
+     * @param board board to search
+     * @return true if is full, false otherwise
+     */
     private boolean boardIsFull(PlayerBoard board){
         for(int k = 0; k < 5; k++){
             for(int h = 0; h < 4; h++){
@@ -283,24 +303,25 @@ public class CLI extends View{
         }
         return true;
     }
-    private int[] chooseBoardCellWithoutDie(){
+
+    /**
+     * Let the player choose an empty cell in the board
+     * @return the position of the cell
+     * @throws AlredySetDie if the board is full
+     */
+    private int[] chooseBoardCellWithoutDie() throws AlredySetDie {
         int[] position = new int[2];
         boolean repeat = true;
 
         if(boardIsFull(modelView.getBoard(modelView.getPlayer(localID)))){
             println("Errore, la board e' piena non puoi eseguire questa mossa");
-            position[0] = -1;
-            position[1] = -1;
             LOGGER.log(Level.FINE,"La plancia e' piena");
-            return position;
+            throw new AlredySetDie();
         }else {
             do {
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
-
                 position[0] = chooseRow();
-
                 position[1] = chooseColumn();
-
 
                 if (!modelView.getBoard(modelView.getPlayer(localID)).containsDie(position[0], position[1])) {
                     repeat = false;
@@ -315,8 +336,8 @@ public class CLI extends View{
     }
 
     /**
-     * Execute an action
-     * @param tool type of action to be executed
+     * Use a tool
+     * @param tool type of action to be used
      */
     public void move(Tool tool){
         switch (tool) {
@@ -372,12 +393,16 @@ public class CLI extends View{
         int i = chooseDraftpoolDie();
 
         println("Scegli dove piazzare il dado");
-        int[] position = chooseBoardCellWithoutDie();
-
-        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
-        setChanged();
-        notifyObservers(clientMessage);
-        println("Mossa inviata");
+        try{
+            int[] position = chooseBoardCellWithoutDie();
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
+            setChanged();
+            notifyObservers(clientMessage);
+            println("Mossa inviata");
+        }catch (AlredySetDie e){
+            println("Errore, la plancia e' piena, non puoi usare questo tool");
+            chooseMove();
+        }
     }
 
     /**
@@ -406,7 +431,7 @@ public class CLI extends View{
     }
 
     /**
-     * Use the pinza sgrossatrice tool
+     * Use the pinzasgrossatrice tool
      */
     private void sgrossatriceMove(){
        int position = chooseDraftpoolDie();
@@ -438,91 +463,87 @@ public class CLI extends View{
      * @param tool tool to use
      */
     private void pennelloAlesatoreLeathekinManualeMove(Tool tool){
-        boolean secondaMossa = false;
-        println("Scegli il primo dado da muovere");
-        int[] position = chooseBoardCellWithDie();
-        if(position[0] == -1){
-            chooseMove();
-            return;
-        }
+        try{
+            boolean secondaMossa = false;
+            println("Scegli il primo dado da muovere");
+            int[] position = chooseBoardCellWithDie();
 
-        println("Scegli dove piazzare primo il dado");
-        int[] newPosition = chooseBoardCellWithoutDie();
-        if(newPosition[0] == -1){
-            chooseMove();
-            return;
-        }
+            println("Scegli dove piazzare primo il dado");
+            int[] newPosition = chooseBoardCellWithoutDie();
 
-        if(tool == Tool.LATHEKIN){
-            secondaMossa = true;
-        }else if(tool == Tool.TAGLIERINAMANUALE){
-            println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
-            int scelta = 2;
-            do{
-                scelta = InputUtils.getInt();
-            }while(scelta != 0 && scelta != 1);
+            if(tool == Tool.LATHEKIN){
+                secondaMossa = true;
+            }else if(tool == Tool.TAGLIERINAMANUALE){
+                println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
+                int scelta = 2;
+                do{
+                    scelta = InputUtils.getInt();
+                }while(scelta != 0 && scelta != 1);
 
-            secondaMossa = (scelta == 1);
-        }
-
-        ClientMessage clientMessage;
-        if(secondaMossa){
-            println("Scegli il secondo dado da muovere");
-            int[] position2 = chooseBoardCellWithDie();
-            if(position2[0] == -1){
-                chooseMove();
-                return;
+                secondaMossa = (scelta == 1);
             }
 
-            println("Scegli dove piazzare il secondo dado");
-            int[] newPosition2 = chooseBoardCellWithoutDie();
-            if(newPosition2[0] == -1){
-                chooseMove();
-                return;
+            ClientMessage clientMessage;
+            if(secondaMossa){
+                println("Scegli il secondo dado da muovere");
+                int[] position2 = chooseBoardCellWithDie();
+                println("Scegli dove piazzare il secondo dado");
+                int[] newPosition2 = chooseBoardCellWithoutDie();
+                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
+            }else{
+                clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
             }
-            clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
-        }else{
-            clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
+
+            setChanged();
+            notifyObservers(clientMessage);
+            println("Mossa inviata");
+        }catch (AlredySetDie e){
+            println("Errore: la plancia e' piena, non puoi usare questo tool");
+            chooseMove();
+        }catch (NoDieException e){
+            println("Errore: la plancia e' vuota, non puoi usare questo tool");
+            chooseMove();
         }
 
-        setChanged();
-        notifyObservers(clientMessage);
-        println("Mossa inviata");
     }
 
     /**
      * Use one the taglierina circolare tool
      */
     private void taglierinaCircolareMove(){
-        int i = chooseDraftpoolDie();
-        int[] roundPosition = chooseRoundTrackDie();
-        if(roundPosition[0] == -1){
-            chooseMove();
-        }else {
+        try{
+            int i = chooseDraftpoolDie();
+            int[] roundPosition = chooseRoundTrackDie();
+
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(i, roundPosition[0], roundPosition[1], Tool.TAGLIERINACIRCOLARE));
             setChanged();
             notifyObservers(clientMessage);
             println("Mossa inviata");
+        }catch (NoDieException e){
+            println("Errore: la plancia e' vuota, non puoi usare questo tool");
+            chooseMove();
         }
+
     }
 
     /**
      * Use the pennello per pasta salda tool
      */
     private void pennelloPastaSaldaMove(){
-        int i = chooseDraftpoolDie();
-        NumberEnum newNum = NumberEnum.values()[(new Random()).nextInt(NumberEnum.values().length)];
-        println("Il nuovo valore del dado e': " + newNum.getInt());
-        int[] position = chooseBoardCellWithoutDie();
-        if(position[0] == -1){
-            chooseMove();
-            return;
-        }
+        try{
+            int i = chooseDraftpoolDie();
+            NumberEnum newNum = NumberEnum.values()[(new Random()).nextInt(NumberEnum.values().length)];
+            println("Il nuovo valore del dado e': " + newNum.getInt());
+            int[] position = chooseBoardCellWithoutDie();
 
-        ClientMessage clientMessage = new ClientMessage(new PlayerMove(position[0],position[1],i,newNum,Tool.PENNELLOPERPASTASALDA));
-        setChanged();
-        notifyObservers(clientMessage);
-        println("Mossa inviata");
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(position[0],position[1],i,newNum,Tool.PENNELLOPERPASTASALDA));
+            setChanged();
+            notifyObservers(clientMessage);
+            println("Mossa inviata");
+        }catch (AlredySetDie e){
+            println("Errore: la plancia e' piena, non puoi usare questo tool");
+            chooseMove();
+        }
     }
 
     /**
@@ -546,7 +567,6 @@ public class CLI extends View{
      */
     private void tamponeDiamantato(){
         int i = chooseDraftpoolDie();
-        int[] position = chooseBoardCellWithoutDie();
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
         setChanged();
         notifyObservers(clientMessage);
@@ -790,6 +810,10 @@ public class CLI extends View{
         }
     }
 
+    /**
+     * Read the playerid from the file, if there is no file the id is generated and written to file
+     * @return the id of the local player
+     */
     private Long readID(){
         InputStream is = null;
         DataInputStream dis = null;
@@ -815,6 +839,11 @@ public class CLI extends View{
         return generateID();//writeID(generateID());
     }
 
+    /**
+     * Write the id to file
+     * @param id id to write
+     * @return the id written
+     */
     public Long writeID(Long id){
         FileOutputStream fos = null;
         DataOutputStream dos = null;
@@ -841,6 +870,10 @@ public class CLI extends View{
         return id;
     }
 
+    /**
+     * Generate the id
+     * @return the id
+     */
     private Long generateID(){
         return (new Random()).nextLong();
     }
