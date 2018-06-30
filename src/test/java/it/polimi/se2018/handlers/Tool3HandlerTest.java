@@ -25,6 +25,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+/**
+ * @author Alessio
+ */
 public class Tool3HandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -33,6 +36,9 @@ public class Tool3HandlerTest {
     private Connection connection;
     private Tool2_3Handler tool2_3Handler;
 
+    /**
+     * Initialize the model, the handler and the draftpool for the tests
+     */
     @Before
     public void initialize(){
 
@@ -63,6 +69,9 @@ public class Tool3HandlerTest {
         model.getDraftPool().addDie(die);
     }
 
+    /**
+     * Try to use the tool with no die on the board
+     */
     @Test
     public void noDieMoveTest(){
         try{
@@ -72,6 +81,9 @@ public class Tool3HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on a single die
+     */
     @Test
     public void oneDieMove(){
         try{
@@ -89,6 +101,9 @@ public class Tool3HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on two dice
+     */
     @Test
     public void twoDieMove(){
         try{
@@ -126,6 +141,9 @@ public class Tool3HandlerTest {
 
     }
 
+    /**
+     * Try to use the tool on two dice with invalid parameters
+     */
     @Test
     public void twoDieInvalidMove(){
         try{

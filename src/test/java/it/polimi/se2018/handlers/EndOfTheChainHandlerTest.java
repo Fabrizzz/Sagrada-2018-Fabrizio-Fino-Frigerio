@@ -21,12 +21,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+/**
+ * @author Alessio
+ */
 public class EndOfTheChainHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private RemoteView remoteView;
     private Model model;
     private Connection connection;
 
+    /**
+     * Initialize the model for the tests
+     */
     @Before
     public void initialize(){
         LOGGER.setLevel(Level.OFF);
@@ -36,6 +42,9 @@ public class EndOfTheChainHandlerTest {
         remoteView = new RemoteView(model.getPlayers().get(0),connection);
     }
 
+    /**
+     * Try to skip the turn
+     */
     @Test
     public void testSkipTurn(){
         PlayerMove playerMove = new PlayerMove(Tool.SKIPTURN);
@@ -47,9 +56,12 @@ public class EndOfTheChainHandlerTest {
         }
     }
 
+    /**
+     * Try to use an illegal tool
+     */
     @Test
     public void testNotSkipTurn(){
-        PlayerMove playerMove = new PlayerMove(Tool.MOSSASTANDARD,1,1,1);
+        PlayerMove playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,1,1);
         EndOfTheChainHandler endOfTheChainHandler = new EndOfTheChainHandler();
         try{
             assertFalse(endOfTheChainHandler.process(playerMove,remoteView,model));

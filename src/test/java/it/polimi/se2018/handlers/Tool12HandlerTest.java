@@ -25,6 +25,9 @@ import static junit.framework.TestCase.*;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
 
+/**
+ * @author Alessio
+ */
 public class Tool12HandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -33,6 +36,9 @@ public class Tool12HandlerTest {
     private Connection connection;
     private Tool4_12Handler tool4_12Handler;
 
+    /**
+     * Initialize the model, the handler, the draftpool and the playerboard for the tests
+     */
     @Before
     public void initialize(){
 
@@ -74,22 +80,9 @@ public class Tool12HandlerTest {
         }
     }
 
-    @Test
-    public void wrongInitialization(){
-        try{
-            tool4_12Handler = new Tool4_12Handler(Tool.RIGAINSUGHERO);
-            fail();
-        }catch (Exception e){}
-    }
-
-    @Test
-    public void notTAGLIERINAMANUALETest(){
-        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,0,0);
-        try{
-            assertFalse(tool4_12Handler.process(playerMove,remoteView,model));
-        }catch (Exception e){}
-    }
-
+    /**
+     * Try to use the tool on a single die
+     */
     @Test
     public void singleMoveTest(){
         playerMove = new PlayerMove(Tool.TAGLIERINAMANUALE,2,0,2,1);
@@ -110,6 +103,9 @@ public class Tool12HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on two dice
+     */
     @Test
     public void doubleMoveTest(){
         try {

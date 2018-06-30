@@ -26,6 +26,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * @author Alessio
+ */
 public class TamponeDiamantatoHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -34,6 +37,9 @@ public class TamponeDiamantatoHandlerTest {
     private Connection connection;
     private TamponeDiamantatoHandler tamponeDiamantatoHandler;
 
+    /**
+     * Initialize the model, the handler and the draftpool for the test
+     */
     @Before
     public void initialize(){
 
@@ -58,6 +64,9 @@ public class TamponeDiamantatoHandlerTest {
         model.getDraftPool().addDie(die);
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void notTamponeDiamantato(){
         playerMove = new PlayerMove(Tool.MOSSASTANDARD,0,0,0);
@@ -68,6 +77,9 @@ public class TamponeDiamantatoHandlerTest {
         }
     }
 
+    /**
+     * Try to use invalid parameters for the tool
+     */
     @Test
     public void invalidParameterTest(){
         playerMove = new PlayerMove(Tool.TAMPONEDIAMANTATO,-1);
@@ -85,6 +97,9 @@ public class TamponeDiamantatoHandlerTest {
 
     }
 
+    /**
+     * Try to use the tool with valid parameters
+     */
     @Test
     public void normalTest(){
         try{

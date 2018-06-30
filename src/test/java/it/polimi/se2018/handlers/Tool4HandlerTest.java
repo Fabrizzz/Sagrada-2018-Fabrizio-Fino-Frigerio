@@ -24,6 +24,9 @@ import java.util.logging.Logger;
 
 import static junit.framework.TestCase.*;
 
+/**
+ * @author Alessio
+ */
 public class Tool4HandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -32,6 +35,9 @@ public class Tool4HandlerTest {
     private Connection connection;
     private Tool4_12Handler tool4_12Handler;
 
+    /**
+     * Initialize the model, the handler, the draftpool and the board for the tests
+     */
     @Before
     public void initialize(){
 
@@ -73,6 +79,9 @@ public class Tool4HandlerTest {
         }
     }
 
+    /**
+     * Try to initialize the handler with the wrong tool type
+     */
     @Test
     public void wrongInitialization(){
         try{
@@ -81,14 +90,20 @@ public class Tool4HandlerTest {
         }catch (Exception e){}
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
-    public void notLATHEKINTest(){
+    public void notLathekinTest(){
         playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,0,0);
         try{
             assertFalse(tool4_12Handler.process(playerMove,remoteView,model));
         }catch (Exception e){}
     }
 
+    /**
+     * Try to use the tool on a single die
+     */
     @Test
     public void singleMoveTest(){
         playerMove = new PlayerMove(Tool.LATHEKIN,1,0,2,1);
@@ -98,6 +113,9 @@ public class Tool4HandlerTest {
         }catch (Exception e){}
     }
 
+    /**
+     * Try to use the tool on two dice
+     */
     @Test
     public void doubleMoveTest(){
         try {
@@ -127,6 +145,9 @@ public class Tool4HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on two dice with an invalid first move parameters
+     */
     @Test
     public void doubleIllegalMoveTest1(){
         PlayerMove playerMove2 = new PlayerMove(Tool.LATHEKIN,2,0,2,1);
@@ -152,6 +173,9 @@ public class Tool4HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on two dice with an invalid second move parameters
+     */
     @Test
     public void doubleIllegalMoveTest2(){
         PlayerMove playerMove2 = new PlayerMove(Tool.LATHEKIN,2,0,3,0);
@@ -177,6 +201,9 @@ public class Tool4HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool with no die int the first cell
+     */
     @Test
     public void noDieTest1(){
         PlayerMove playerMove2 = new PlayerMove(Tool.LATHEKIN,2,0,3,0);
@@ -202,6 +229,9 @@ public class Tool4HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool with no die int the second cell
+     */
     @Test
     public void noDieTest2(){
         PlayerMove playerMove2 = new PlayerMove(Tool.LATHEKIN,3,0,3,0);
@@ -226,6 +256,4 @@ public class Tool4HandlerTest {
             fail();
         }
     }
-
-
 }

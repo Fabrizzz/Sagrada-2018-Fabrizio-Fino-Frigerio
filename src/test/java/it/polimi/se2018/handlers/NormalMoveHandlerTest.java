@@ -23,6 +23,9 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
+/**
+ * @author Alessio
+ */
 public class NormalMoveHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -31,6 +34,9 @@ public class NormalMoveHandlerTest {
     private Connection connection;
     private NormalMoveHandler normalMoveHandler;
 
+    /**
+     * Initialize the model, the handler and the dicebag for the test
+     */
     @Before
     public void initialize(){
 
@@ -53,6 +59,9 @@ public class NormalMoveHandlerTest {
         }
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void notMossaStandardTest(){
         playerMove = new PlayerMove(Tool.MARTELLETTO);
@@ -63,6 +72,9 @@ public class NormalMoveHandlerTest {
         }
     }
 
+    /**
+     * Insert a die in the board
+     */
     @Test
     public void dieTest(){
         Die die = new Die(Color.BLUE);

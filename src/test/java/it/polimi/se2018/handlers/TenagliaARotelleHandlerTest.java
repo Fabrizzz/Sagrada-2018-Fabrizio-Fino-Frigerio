@@ -22,6 +22,9 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Alessio
+ */
 public class TenagliaARotelleHandlerTest {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
@@ -31,6 +34,9 @@ public class TenagliaARotelleHandlerTest {
     private Connection connection;
     private TenagliaARotelleHandler tenagliaARotelleHandler;
 
+    /**
+     * Initialize the model, the handler and the draftpool for the test
+     */
     @Before
     public void initialize(){
 
@@ -58,6 +64,9 @@ public class TenagliaARotelleHandlerTest {
         model.getDraftPool().addDie(die);
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void notTenagliaARotelle(){
         playerMove = new PlayerMove(Tool.RIGAINSUGHERO,0,0,0);
@@ -68,6 +77,9 @@ public class TenagliaARotelleHandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool after a normalMove
+     */
     @Test
     public void afterNormalMoveTest(){
         assertFalse(model.getPlayers().get(0).isCanDoTwoTurn());
@@ -103,6 +115,9 @@ public class TenagliaARotelleHandlerTest {
 
     }
 
+    /**
+     * Try to use the tool before a normal move
+     */
     @Test
     public void preNormalMoveTest(){
         assertFalse(model.getPlayers().get(0).isCanDoTwoTurn());
@@ -135,6 +150,9 @@ public class TenagliaARotelleHandlerTest {
 
     }
 
+    /**
+     * Try to use the tool during the second turn
+     */
     @Test
     public void notFirstTurnTest(){
         model.setFirstTurn(false);
@@ -144,6 +162,4 @@ public class TenagliaARotelleHandlerTest {
             fail();
         }
     }
-
-
 }

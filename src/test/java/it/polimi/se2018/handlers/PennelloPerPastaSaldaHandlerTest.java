@@ -25,6 +25,9 @@ import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * @author Alessio
+ */
 public class PennelloPerPastaSaldaHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -33,6 +36,9 @@ public class PennelloPerPastaSaldaHandlerTest {
     private Connection connection;
     private PennelloPerPastaSaldaHandler pennelloPerPastaSaldaHandler;
 
+    /**
+     * Initialize the model, the handler and the draftpool for the tests
+     */
     @Before
     public void initialize(){
 
@@ -69,6 +75,9 @@ public class PennelloPerPastaSaldaHandlerTest {
 
     }
 
+    /**
+     *
+     */
     @Test
     public void notPennelloPerPastaSaldaTest(){
         playerMove = new PlayerMove(Tool.MARTELLETTO);
@@ -79,6 +88,9 @@ public class PennelloPerPastaSaldaHandlerTest {
         }
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void initialPositionTest(){
         model =  ModelControllerInitializerTest.initialize();
@@ -107,7 +119,9 @@ public class PennelloPerPastaSaldaHandlerTest {
         }
     }
 
-
+    /**
+     * Try to insert two dice
+     */
     @Test
     public void doubleInsertTest(){
         try{
@@ -131,6 +145,9 @@ public class PennelloPerPastaSaldaHandlerTest {
         }
     }
 
+    /**
+     * Try to insert a die away form another die
+     */
     @Test
     public void notNearTest(){
         try{
@@ -148,6 +165,9 @@ public class PennelloPerPastaSaldaHandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool without placing the die in the board
+     */
     @Test
     public void noInsertTest(){
         playerMove = new PlayerMove(0,NumberEnum.SIX,Tool.PENNELLOPERPASTASALDA);
@@ -173,7 +193,5 @@ public class PennelloPerPastaSaldaHandlerTest {
         }catch (Exception e){
             fail();
         }
-
-
     }
 }

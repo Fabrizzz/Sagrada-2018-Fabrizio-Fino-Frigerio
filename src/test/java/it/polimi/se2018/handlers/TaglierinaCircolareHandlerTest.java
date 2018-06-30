@@ -22,6 +22,9 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Alessio
+ */
 public class TaglierinaCircolareHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -30,6 +33,9 @@ public class TaglierinaCircolareHandlerTest {
     private Connection connection;
     private TaglierinaCircolareHandler taglierinaCircolareHandler;
 
+    /**
+     * Initialize the model, the handler and the draftpool
+     */
     @Before
     public void initialize(){
 
@@ -57,6 +63,9 @@ public class TaglierinaCircolareHandlerTest {
         model.getDraftPool().addDie(die);
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void notTaglierinaCircolareTest(){
         playerMove = new PlayerMove(Tool.MOSSASTANDARD,1,0,0);
@@ -67,6 +76,9 @@ public class TaglierinaCircolareHandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool with illegal arguments
+     */
     @Test
     public void wrongPositionTest(){
         playerMove = new PlayerMove(-1,0,0,Tool.TAGLIERINACIRCOLARE);
@@ -112,6 +124,9 @@ public class TaglierinaCircolareHandlerTest {
         }
     }
 
+    /**
+     * Normal use of the tool
+     */
     @Test
     public void normalTest(){
         try{

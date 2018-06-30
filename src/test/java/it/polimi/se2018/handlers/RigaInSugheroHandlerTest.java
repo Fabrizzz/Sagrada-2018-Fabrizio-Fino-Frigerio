@@ -24,6 +24,9 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
+/**
+ * @author Alessio
+ */
 public class RigaInSugheroHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -31,6 +34,10 @@ public class RigaInSugheroHandlerTest {
     private Model model;
     private Connection connection;
     private RigaInSugheroHandler rigaInSugheroHandler;
+
+    /**
+     * Initialize the model, the handler and the draftpool
+     */
     @Before
     public void initialize(){
 
@@ -59,6 +66,9 @@ public class RigaInSugheroHandlerTest {
         model.getDraftPool().addDie(die);
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void notRigaInSugheroTest(){
         playerMove = new PlayerMove(Tool.MOSSASTANDARD,1,0,0);
@@ -69,6 +79,9 @@ public class RigaInSugheroHandlerTest {
         }
     }
 
+    /**
+     * Test the handler with illegal arguments
+     */
     @Test
     public void negativeParameterTest(){
         playerMove = new PlayerMove(Tool.RIGAINSUGHERO,-1,0,0);
@@ -109,6 +122,9 @@ public class RigaInSugheroHandlerTest {
         }catch (Exception e){}
     }
 
+    /**
+     * Try to insert a die with an empty playerboard
+     */
     @Test
     public void initialInsertTest(){
         try{
@@ -118,6 +134,9 @@ public class RigaInSugheroHandlerTest {
         }
     }
 
+    /**
+     * Try to insert a die in a used cell
+     */
     @Test
     public void usedCellTest(){
         try{
@@ -134,6 +153,9 @@ public class RigaInSugheroHandlerTest {
         }
     }
 
+    /**
+     * Try to insert a die near another die
+     */
     @Test
     public void secondNearInsertTest(){
         try{
@@ -151,6 +173,9 @@ public class RigaInSugheroHandlerTest {
         }
     }
 
+    /**
+     * Try to insert a die far from other dice
+     */
     @Test
     public void secondFarInsertTest(){
         try{

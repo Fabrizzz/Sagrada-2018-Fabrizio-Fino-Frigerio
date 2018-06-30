@@ -17,12 +17,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+/**
+ * @author Alessio
+ */
 public class FirstCheckTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private RemoteView remoteView;
     private Model model;
 
+    /**
+     * Initialize the model for the tests
+     */
     @Before
     public void initialize(){
         LOGGER.setLevel(Level.OFF);
@@ -32,6 +39,9 @@ public class FirstCheckTest {
         remoteView = new RemoteView(model.getPlayers().get(0),connection);
     }
 
+    /**
+     * Try to skip the turn when is not your turn
+     */
     @Test
     public void notYourTurnTest(){
         PlayerMove playerMove = new PlayerMove(Tool.SKIPTURN);
@@ -44,18 +54,24 @@ public class FirstCheckTest {
         }
     }
 
+    /**
+     * Try to skip the turn when is your turn
+     */
     @Test
     public void validParameterTest(){
         PlayerMove playerMove = new PlayerMove(Tool.SKIPTURN);
         FirstCheck firstCheck = new FirstCheck();
         firstCheck.setNextHandler(new EndOfTheChainHandler());
         try{
-            firstCheck.process(playerMove,remoteView,model);
+            assertTrue(firstCheck.process(playerMove,remoteView,model));
         }catch (Exception e){
             fail();
         }
     }
 
+    /**
+     * Try to use a normal move with illegal parameters
+     */
     @Test
     public void invalidParameterTest(){
         PlayerMove playerMove;

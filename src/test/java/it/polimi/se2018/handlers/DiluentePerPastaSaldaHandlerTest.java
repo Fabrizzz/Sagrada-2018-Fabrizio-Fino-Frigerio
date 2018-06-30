@@ -24,6 +24,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+/**
+ * @author Alessio
+ */
 public class DiluentePerPastaSaldaHandlerTest {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
@@ -32,6 +35,9 @@ public class DiluentePerPastaSaldaHandlerTest {
     private Model model;
     private Connection connection;
 
+    /**
+     * Initialize the model for the tests
+     */
     @Before
     public void initialize(){
 
@@ -49,6 +55,9 @@ public class DiluentePerPastaSaldaHandlerTest {
         remoteView = new RemoteView(model.getPlayers().get(0),connection);
     }
 
+    /**
+     * Try to place a die in an empty board
+     */
     @Test
     public void testPiazzamentoAVuoto(){
         DiluentePerPastaSaldaHandler diluentePerPastaSaldaHandler = new DiluentePerPastaSaldaHandler();
@@ -62,6 +71,9 @@ public class DiluentePerPastaSaldaHandlerTest {
 
     }
 
+    /**
+     * Place one die on the board with a nomralmove and then try to place a die with the toolcard
+     */
     @Test
     public void testPiazzamentoConDado(){
         Die bagDie;
@@ -98,6 +110,9 @@ public class DiluentePerPastaSaldaHandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool without placing the die even if there is space on the board
+     */
     @Test
     public void testPiazzamentoSenzaRow(){
         Die bagDie;
@@ -135,6 +150,9 @@ public class DiluentePerPastaSaldaHandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool without placing the die when there is no space on the board
+     */
     @Test
     public void testPiazzamentoSenzaRowCheckFalse(){
         Die bagDie;

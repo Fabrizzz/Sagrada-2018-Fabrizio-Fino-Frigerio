@@ -21,10 +21,11 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.fail;
+import static junit.framework.TestCase.*;
 
+/**
+ * @author Alessio
+ */
 public class PinzaSgrossatriceHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -33,6 +34,9 @@ public class PinzaSgrossatriceHandlerTest {
     private Connection connection;
     private PinzaSgrossatriceHandler pinzaSgrossatriceHandler;
 
+    /**
+     * Initialize the model, the handler and the draftpool for the tests
+     */
     @Before
     public void initialize() {
 
@@ -57,6 +61,9 @@ public class PinzaSgrossatriceHandlerTest {
         pinzaSgrossatriceHandler.setNextHandler(new EndOfTheChainHandler());
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void notPinzaSgrossatrice(){
         playerMove = new PlayerMove(Tool.MOSSASTANDARD,1,0,0);
@@ -68,6 +75,9 @@ public class PinzaSgrossatriceHandlerTest {
 
     }
 
+    /**
+     * Try to use the tool
+     */
     @Test
     public void normalUse(){
         try{
@@ -77,7 +87,7 @@ public class PinzaSgrossatriceHandlerTest {
         }
 
         try{
-            assertTrue(model.getDraftPool().getDie(0).getNumber().equals(NumberEnum.TWO));
+            assertEquals(model.getDraftPool().getDie(0).getNumber(),NumberEnum.TWO);
         }catch (Exception e){
             fail();
         }
@@ -96,14 +106,17 @@ public class PinzaSgrossatriceHandlerTest {
             fail();
         }
         try{
-            assertTrue(model.getDraftPool().getDie(0).getNumber().equals(NumberEnum.ONE));
+            assertEquals(model.getDraftPool().getDie(0).getNumber(),NumberEnum.ONE);
         }catch (Exception e){
             fail();
         }
     }
 
+    /**
+     * Try to decrease the number of a die having value ONE
+     */
     @Test
-    public void deceaseOneTest(){
+    public void decreaseOneTest(){
         playerMove = new PlayerMove(Tool.PINZASGROSSATRICE,0,false);
         try{
             assertFalse(pinzaSgrossatriceHandler.process(playerMove,remoteView,model));
@@ -112,12 +125,15 @@ public class PinzaSgrossatriceHandlerTest {
         }
 
         try{
-            assertTrue(model.getDraftPool().getDie(0).getNumber().equals(NumberEnum.ONE));
+            assertEquals(model.getDraftPool().getDie(0).getNumber(),NumberEnum.ONE);
         }catch (Exception e){
             fail();
         }
     }
 
+    /**
+     * Try to  increase the number of a die having value SIX
+     */
     @Test
     public void increaseSixTest(){
         model.getDraftPool().removeAll();
@@ -133,7 +149,7 @@ public class PinzaSgrossatriceHandlerTest {
         }
 
         try{
-            assertTrue(model.getDraftPool().getDie(0).getNumber().equals(NumberEnum.SIX));
+            assertEquals(model.getDraftPool().getDie(0).getNumber(),NumberEnum.SIX);
         }catch (Exception e){
             fail();
         }

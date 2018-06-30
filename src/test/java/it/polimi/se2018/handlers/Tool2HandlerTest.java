@@ -23,6 +23,9 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Alessio
+ */
 public class Tool2HandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -31,6 +34,9 @@ public class Tool2HandlerTest {
     private Connection connection;
     private Tool2_3Handler tool2_3Handler;
 
+    /**
+     * Initialize the model, the handler and the draftpool for the tests
+     */
     @Before
     public void initialize(){
 
@@ -61,6 +67,9 @@ public class Tool2HandlerTest {
         model.getDraftPool().addDie(die);
     }
 
+    /**
+     * Try to initialize the handler with the wrong tool type
+     */
     @Test
     public void wrongInitialization(){
         try{
@@ -69,6 +78,9 @@ public class Tool2HandlerTest {
         }catch (Exception e){}
     }
 
+    /**
+     * Try to use an tool not present in the chain of responsibilities
+     */
     @Test
     public void notTool2_3Test(){
         playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,0,0);
@@ -79,6 +91,9 @@ public class Tool2HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool with no die present in the board
+     */
     @Test
     public void noDieMoveTest(){
         try{
@@ -88,6 +103,9 @@ public class Tool2HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on a single die
+     */
     @Test
     public void oneDieMove(){
         try{
@@ -105,6 +123,9 @@ public class Tool2HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on two dice
+     */
     @Test
     public void twoDieMove(){
         try{
@@ -132,6 +153,9 @@ public class Tool2HandlerTest {
         }
     }
 
+    /**
+     * Try to use the tool on two dice with invalid parameters
+     */
     @Test
     public void twoDieInvalidMove(){
         try{
@@ -158,6 +182,4 @@ public class Tool2HandlerTest {
             fail();
         }
     }
-
-
 }

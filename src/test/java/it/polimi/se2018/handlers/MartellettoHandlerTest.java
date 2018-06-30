@@ -23,6 +23,9 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
 
+/**
+ * @author Alessio
+ */
 public class MartellettoHandlerTest {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
@@ -31,6 +34,9 @@ public class MartellettoHandlerTest {
     private Connection connection;
     private MartellettoHandler martellettoHandler;
 
+    /**
+     * Intialize the model and the handler for the tests
+     */
     @Before
     public void initialize(){
         LOGGER.setLevel(Level.OFF);
@@ -45,6 +51,9 @@ public class MartellettoHandlerTest {
 
     }
 
+    /**
+     * Test the tool in the first and second turn
+     */
     @Test
     public void turnCheckTest(){
         model.setFirstTurn(true);
@@ -77,9 +86,12 @@ public class MartellettoHandlerTest {
         }
     }
 
+    /**
+     * Try to use a tool not present in the tool list for the match
+     */
     @Test
     public void notMartellettoTest(){
-        playerMove = new PlayerMove(Tool.MOSSASTANDARD,1,1,1);
+        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,1,1);
 
         try{
             assertFalse(martellettoHandler.process(playerMove,remoteView,model));
