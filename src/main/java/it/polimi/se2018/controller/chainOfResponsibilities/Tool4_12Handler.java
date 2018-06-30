@@ -19,7 +19,7 @@ public class Tool4_12Handler extends ToolHandler {
 
     Tool tool;
 
-    protected Tool4_12Handler(Tool tool) {
+    public Tool4_12Handler(Tool tool) {
         this.tool = tool;
         if (tool != Tool.LATHEKIN && tool != Tool.TAGLIERINAMANUALE){
             LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");
@@ -54,10 +54,9 @@ public class Tool4_12Handler extends ToolHandler {
                 firstFinalColumn = finalColumnO.get();
                 firstFinalRow = finalRowO.get();
 
-
-                Optional<PlayerMove> tmpPlayerMove = playerMove.getNextMove();
-                if (tmpPlayerMove.isPresent()) {
-                    playerMove2 = tmpPlayerMove.get();
+                Optional<PlayerMove> secondeMoveO = playerMove.getNextMove();
+                if (secondeMoveO.isPresent()) {
+                    playerMove2 = secondeMoveO.get();
 
                     Optional<Integer> secondRowO = playerMove2.getRow();
                     Optional<Integer> secondColumnO = playerMove2.getColumn();
@@ -70,73 +69,80 @@ public class Tool4_12Handler extends ToolHandler {
                         secondFinalColumn = secondFinalColumnO.get();
                         secondFinalRow = secondFinalRowO.get();
 
-
                         if (secondColumn < 0 || secondColumn > 4 || secondRow < 0 || secondRow > 3 ||
                                 secondFinalColumn < 0 || secondFinalColumn > 4 || secondFinalRow < 0 || secondFinalRow > 3) {
-                            LOGGER.log(Level.SEVERE, "Errore parametri LATHEKIN TAGLIERINAMANUALE");
+                            LOGGER.log(Level.SEVERE, "Errore parametri LATHEKIN TAGLIERINAMANUALE 1");
                             throw new InvalidParameterException();
                         }
                     }else{
-                        LOGGER.log(Level.SEVERE, "Errore parametri LATHEKIN TAGLIERINAMANUALE");
+                        LOGGER.log(Level.SEVERE, "Errore parametri LATHEKIN TAGLIERINAMANUALE 2");
                         throw new InvalidParameterException();
                     }
+                }else if(playerMove.getTool() == Tool.LATHEKIN){
+                    LOGGER.log(Level.SEVERE, "Errore parametri LATHEKIN, seconda mossa assente 3");
+                    throw new InvalidParameterException();
                 }
+
                 board = model.getBoard(remoteView.getPlayer());
 
                 try {
                     Die die1;
                     Die die2;
-                    boolean check = true;
-
+                    die1 = board.getDie(firstRow, firstColumn);
                     if (board.containsDie(firstRow, firstColumn)) {
-                        die1 = board.getDie(firstRow, firstColumn);
+                        board.removeDie(firstRow,firstColumn);
                         if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                                 board.containsDie(firstFinalRow, firstFinalColumn) ||
                                 !board.verifyPositionRestriction(firstFinalRow, firstFinalColumn) ||
                                 !board.verifyNearCellsRestriction(die1, firstFinalRow, firstFinalColumn) ||
                                 !board.verifyColorRestriction(die1, firstFinalRow, firstFinalColumn) ||
-                                !board.verifyNumberRestriction(die1, firstFinalRow, firstFinalColumn))
-                            check = false;
-                    } else
-                        check = false;
+                                !board.verifyNumberRestriction(die1, firstFinalRow, firstFinalColumn)){
+                            board.setDie(die1,firstRow,firstColumn);
+                            LOGGER.log(Level.FINE,"Restrizioni dado 1 non rispettate");
+                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            return false;
+                        }
+                    } else{
+                        LOGGER.log(Level.FINE,"Dado 1 non presente");
+                        remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                        return false;
+                    }
+
+                    board.setDie(die1, firstFinalRow, firstFinalColumn);
 
                     if (playerMove.getNextMove().isPresent()) {
-                        die2 = board.getDie(secondRow, secondColumn);
                         if (board.containsDie(secondRow, secondColumn)) {
-
+                            die2 = board.getDie(secondRow, secondColumn);
+                            board.removeDie(secondRow,secondColumn);
                             if (board.containsDie(secondFinalRow, secondFinalColumn) ||
                                     !board.verifyPositionRestriction(secondFinalRow, secondFinalColumn) ||
                                     !board.verifyNearCellsRestriction(die2, secondFinalRow, secondFinalColumn) ||
                                     !board.verifyColorRestriction(die2, secondFinalRow, secondFinalColumn) ||
-                                    !board.verifyNumberRestriction(die2, secondFinalRow, secondFinalColumn))
-                                check = false;
-
-                        } else
-                            check = false;
-
-                    }
-
-                    if (check) {
-                        die1 = board.getDie(firstRow, firstColumn);
-                        board.removeDie(firstRow, firstColumn);
-                        board.setDie(die1, firstRow, firstColumn);
-                        if (playerMove.getNextMove().isPresent()) {
-                            die2 = board.getDie(secondRow, secondColumn);
-                            board.removeDie(secondRow, secondColumn);
-                            board.setDie(die2, secondFinalRow, secondFinalColumn);
+                                    !board.verifyNumberRestriction(die2, secondFinalRow, secondFinalColumn)){
+                                board.setDie(die2,secondRow,secondColumn);
+                                board.removeDie(firstFinalRow,firstFinalColumn);
+                                board.setDie(die1,firstRow,firstColumn);
+                                LOGGER.log(Level.FINE,"Restrizioni dado 2 non rispettate: containsDie:" + board.containsDie(secondFinalRow, secondFinalColumn) +
+                                " position restriction: " + secondFinalRow + " " +secondFinalColumn + " " + board.verifyPositionRestriction(secondFinalRow, secondFinalColumn));
+                            }else{
+                                board.setDie(die2, secondFinalRow, secondFinalColumn);
+                                return true;
+                            }
+                        } else{
+                            board.removeDie(firstFinalRow,firstFinalColumn);
+                            board.setDie(die1,firstRow,firstColumn);
+                            LOGGER.log(Level.FINE,"Dado 2 non presente in posizione " + secondRow + " " + secondColumn);
+                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            return false;
                         }
-                        return true;
-                    } else {
-                        LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare LATHEKIN TAGLIERINAMANUALE");
-                        remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                     }
                 } catch (AlredySetDie alredySetDie) {
-                    LOGGER.log(Level.SEVERE, "Dado gia' presente in LATHEKIN TAGLIERINAMANUALE");
+                    LOGGER.log(Level.SEVERE, "Dado gia' presente in LATHEKIN TAGLIERINAMANUALE 5");
                 } catch (NoDieException e) {
-                    LOGGER.log(Level.SEVERE, "Dado non presente in LATHEKIN TAGLIERINAMANUALE");
+                    LOGGER.log(Level.SEVERE, "Dado non presente in LATHEKIN TAGLIERINAMANUALE 6");
                 }
             }else{
-                LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE");
+                LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE 7");
                 throw new InvalidParameterException();
             }
         } else{

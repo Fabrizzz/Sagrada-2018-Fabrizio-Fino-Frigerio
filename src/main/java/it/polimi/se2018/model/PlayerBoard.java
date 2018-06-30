@@ -169,12 +169,16 @@ public class PlayerBoard implements Serializable {
                     if(column + j >= 0 && column + j < 5)
                         if (get(row + i, column + j).isUsed()){
                             ris = true;
-                            LOGGER.log(Level.FINE,"Restrizione di posizione rispettata");
                         }
                     } catch (IndexOutOfBoundsException e) {
 
                     }
             }
+        }
+        if(!ris){
+            LOGGER.log(Level.FINE,"Restrizione di posizione cella " + row + " " + column + " non rispettata");
+        }else {
+            LOGGER.log(Level.FINE,"Restrizione di posizione cella " + row + " " + column + "rispettata");
         }
         return ris;
 
