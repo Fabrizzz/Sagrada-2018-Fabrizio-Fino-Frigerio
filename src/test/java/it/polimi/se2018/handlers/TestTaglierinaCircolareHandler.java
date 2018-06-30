@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 /**
  * @author Alessio
  */
-public class TaglierinaCircolareHandlerTest {
+public class TestTaglierinaCircolareHandler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;

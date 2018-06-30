@@ -27,7 +27,7 @@ import static junit.framework.TestCase.*;
 /**
  * @author Alessio
  */
-public class Tool4HandlerTest {
+public class TestTool4Handler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;

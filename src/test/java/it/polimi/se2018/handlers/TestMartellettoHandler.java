@@ -26,7 +26,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author Alessio
  */
-public class MartellettoHandlerTest {
+public class TestMartellettoHandler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;

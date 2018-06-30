@@ -29,7 +29,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Alessio
  */
-public class TamponeDiamantatoHandlerTest {
+public class TestTamponeDiamantatoHandler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;

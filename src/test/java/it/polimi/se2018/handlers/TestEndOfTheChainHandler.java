@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 /**
  * @author Alessio
  */
-public class EndOfTheChainHandlerTest {
+public class TestEndOfTheChainHandler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private RemoteView remoteView;
     private Model model;

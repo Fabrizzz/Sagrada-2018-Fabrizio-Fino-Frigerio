@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Alessio
  */
-public class PennelloPerPastaSaldaHandlerTest {
+public class TestPennelloPerPastaSaldaHandler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;

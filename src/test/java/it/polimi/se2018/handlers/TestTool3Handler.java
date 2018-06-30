@@ -21,12 +21,14 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author Alessio
  */
-public class Tool2HandlerTest {
+public class TestTool3Handler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;
@@ -46,12 +48,12 @@ public class Tool2HandlerTest {
         LOGGER.addHandler(handlerObj);
         LOGGER.setUseParentHandlers(false);
 
-        model = ModelControllerInitializerTest.initialize(Tool.PENNELLOPEREGLOMISE);
+        model = ModelControllerInitializerTest.initialize(Tool.ALESATOREPERLAMINADIRAME);
 
-        playerMove = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,0,2,0);
+        playerMove = new PlayerMove(Tool.ALESATOREPERLAMINADIRAME,1,0,2,0);
         connection = new TestConnection();
         remoteView = new RemoteView(model.getPlayers().get(0),connection);
-        tool2_3Handler = new Tool2_3Handler(Tool.PENNELLOPEREGLOMISE);
+        tool2_3Handler = new Tool2_3Handler(Tool.ALESATOREPERLAMINADIRAME);
         NormalMoveHandler normalMoveHandler = new NormalMoveHandler();
         tool2_3Handler.setNextHandler(normalMoveHandler);
         normalMoveHandler.setNextHandler(new EndOfTheChainHandler());
@@ -68,31 +70,7 @@ public class Tool2HandlerTest {
     }
 
     /**
-     * Try to initialize the handler with the wrong tool type
-     */
-    @Test
-    public void wrongInitialization(){
-        try{
-            tool2_3Handler = new Tool2_3Handler(Tool.RIGAINSUGHERO);
-            fail();
-        }catch (Exception e){}
-    }
-
-    /**
-     * Try to use an tool not present in the chain of responsibilities
-     */
-    @Test
-    public void notTool2_3Test(){
-        playerMove = new PlayerMove(Tool.RIGAINSUGHERO,1,0,0);
-        try{
-            assertFalse(tool2_3Handler.process(playerMove,remoteView,model));
-        }catch (Exception e){
-            fail();
-        }
-    }
-
-    /**
-     * Try to use the tool with no die present in the board
+     * Try to use the tool with no die on the board
      */
     @Test
     public void noDieMoveTest(){
@@ -144,13 +122,23 @@ public class Tool2HandlerTest {
             fail();
         }
 
-        playerMove = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,0,2,1);
+        playerMove = new PlayerMove(Tool.ALESATOREPERLAMINADIRAME,1,0,3,0);
         try{
             assertTrue(tool2_3Handler.process(playerMove,remoteView,model));
         }catch (Exception e){
             e.printStackTrace();
             fail();
         }
+
+        model.setUsedTool(false);
+        playerMove = new PlayerMove(Tool.ALESATOREPERLAMINADIRAME,3,0,2,1);
+        try{
+            assertTrue(tool2_3Handler.process(playerMove,remoteView,model));
+        }catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
+
     }
 
     /**
@@ -174,7 +162,7 @@ public class Tool2HandlerTest {
             fail();
         }
 
-        playerMove = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,0,0,4);
+        playerMove = new PlayerMove(Tool.ALESATOREPERLAMINADIRAME,1,0,0,4);
         try{
             assertFalse(tool2_3Handler.process(playerMove,remoteView,model));
         }catch (Exception e){

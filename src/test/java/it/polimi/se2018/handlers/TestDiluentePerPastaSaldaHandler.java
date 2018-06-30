@@ -27,7 +27,7 @@ import static org.junit.Assert.fail;
 /**
  * @author Alessio
  */
-public class DiluentePerPastaSaldaHandlerTest {
+public class TestDiluentePerPastaSaldaHandler {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;

@@ -26,7 +26,7 @@ import static junit.framework.TestCase.fail;
 /**
  * @author Alessio
  */
-public class NormalMoveHandlerTest {
+public class TestNormalMoveHandler {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private PlayerMove playerMove;
     private RemoteView remoteView;

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Alessio
  */
-public class FirstCheckTest {
+public class TestFirstCheck {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private RemoteView remoteView;
     private Model model;
