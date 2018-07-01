@@ -350,6 +350,8 @@ public class ControllerGame implements Initializable {
         layout.getChildren().addAll( zoomTool1);
         layout.setAlignment(Pos.CENTER);
         popupStage.setScene(scene1);
+        popupStage.setMinWidth(200);
+        popupStage.setMinHeight(300);
         popupStage.showAndWait();
 
         /*
@@ -377,11 +379,42 @@ public class ControllerGame implements Initializable {
         layout.getChildren().addAll( zoomTool1);
         layout.setAlignment(Pos.CENTER);
         popupStage.setScene(scene1);
+        popupStage.setMinWidth(200);
+        popupStage.setMinHeight(300);
         popupStage.showAndWait();
 
         /*
         Button close = new Button("Close this pop up window");
         close.setOnAction(e -> popupStage.close());
         */
+    }
+
+    public void handleRiserva(ActionEvent event) {
+
+        Stage popupStage= new Stage();
+        ImageView[] imageRiserva = new ImageView[9];
+        HBox layout = new HBox(10);
+        Scene scene1= new Scene(layout, 1000, 250);
+        int i;
+
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Riserva");
+
+        //Richiesta server per ogni dado della riserva; sistemare ciclo for in base alla lunghezza della riserva (DraftPool.size());
+
+        for (i = 0; i < 9; i++){
+            imageRiserva[i] = new ImageView();
+            imageRiserva[i].setImage(new Image("utilsGUI/B1.png"));
+            imageRiserva[i].setFitHeight(100);
+            imageRiserva[i].setFitWidth(100);
+            imageRiserva[i].setPreserveRatio(true);
+            layout.getChildren().add( imageRiserva[i]);
+        }
+
+        layout.setAlignment(Pos.CENTER);
+        popupStage.setScene(scene1);
+        popupStage.setMinWidth(1000);
+        popupStage.setMinHeight(200);
+        popupStage.showAndWait();
     }
 }

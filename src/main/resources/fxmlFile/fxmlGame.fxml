@@ -157,7 +157,7 @@
             <Separator id="SeparatorGrid2" fx:id="separatorGrid2" maxHeight="100.0" orientation="VERTICAL" prefHeight="-1.0" visible="false" />
             <HBox id="hboxR" fx:id="hboxBottoni" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" spacing="50.0">
               <children>
-                <Button font="$x2" minHeight="50.0" minWidth="100.0" mnemonicParsing="false" text="Riserva" />
+                <Button fx:id="buttonRiserva" font="$x2" minHeight="50.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleRiserva" text="Riserva" />
                 <Button font="$x2" minHeight="50.0" minWidth="100.0" mnemonicParsing="false" text="Tracciato" />
                 <Button font="$x2" minHeight="50.0" minWidth="100.0" mnemonicParsing="false" text="Skip turno" />
               </children>
