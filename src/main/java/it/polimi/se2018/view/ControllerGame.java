@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -331,18 +332,56 @@ public class ControllerGame implements Initializable {
 
     public void handlezoomTool1(ActionEvent event) {
 
-        Stage popupwindow=new Stage();
-        popupwindow.initModality(Modality.APPLICATION_MODAL);
-        popupwindow.setTitle("This is a pop up window");
-        Label label1= new Label("Pop up window now displayed");
-        Button button1= new Button("Close this pop up window");
-        button1.setOnAction(e -> popupwindow.close());
-        VBox layout= new VBox(10);
-        layout.getChildren().addAll(label1, button1);
-        //layout.setAlignment(Pos.CENTER);
-        Scene scene1= new Scene(layout, 300, 250);
-        popupwindow.setScene(scene1);
-        popupwindow.showAndWait();
+        Stage popupStage= new Stage();
+        ImageView zoomTool1;
+        VBox layout = new VBox(10);
+        Scene scene1= new Scene(layout, 350, 500);
 
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Tool1");
+
+        //Richiesta server tool1
+        zoomTool1 = new ImageView();
+        zoomTool1.setImage(new Image("toolCard/toolCard01.jpeg"));
+        zoomTool1.fitHeightProperty().bind(scene1.heightProperty());
+        zoomTool1.fitWidthProperty().bind(scene1.widthProperty());
+        zoomTool1.setPreserveRatio(true);
+
+        layout.getChildren().addAll( zoomTool1);
+        layout.setAlignment(Pos.CENTER);
+        popupStage.setScene(scene1);
+        popupStage.showAndWait();
+
+        /*
+        Button close = new Button("Close this pop up window");
+        close.setOnAction(e -> popupStage.close());
+        */
+    }
+    public void handlezoomTool2(ActionEvent event) {
+
+        Stage popupStage= new Stage();
+        ImageView zoomTool1;
+        VBox layout = new VBox(10);
+        Scene scene1= new Scene(layout, 350, 500);
+
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Tool1");
+
+        //Richiesta server tool1
+        zoomTool1 = new ImageView();
+        zoomTool1.setImage(new Image("toolCard/toolCard02.jpeg"));
+        zoomTool1.fitHeightProperty().bind(scene1.heightProperty());
+        zoomTool1.fitWidthProperty().bind(scene1.widthProperty());
+        zoomTool1.setPreserveRatio(true);
+
+        layout.getChildren().addAll( zoomTool1);
+        layout.setAlignment(Pos.CENTER);
+        popupStage.setScene(scene1);
+        popupStage.showAndWait();
+
+        /*
+        Button close = new Button("Close this pop up window");
+        close.setOnAction(e -> popupStage.close());
+        */
     }
 }

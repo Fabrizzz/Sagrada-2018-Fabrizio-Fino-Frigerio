@@ -205,7 +205,7 @@
                     <HBox alignment="TOP_LEFT" prefHeight="-1.0" prefWidth="-1.0" spacing="10.0">
                       <children>
                         <Button id="buttonTool1" fx:id="buttonTool2" maxWidth="-1.0" minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Utilizza" />
-                        <Button fx:id="buttonZoomTool2" minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Ingrandisci" />
+                        <Button fx:id="buttonZoomTool2" minHeight="30.0" minWidth="70.0" mnemonicParsing="false" onAction="#handlezoomTool2" text="Ingrandisci" />
                       </children>
                     </HBox>
                   </children>
