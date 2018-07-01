@@ -431,4 +431,57 @@ public class ControllerGame implements Initializable {
         popupStage.setY((primScreenBounds.getHeight() - 300));
         popupStage.showAndWait();
     }
+
+    public void handleTracciato(ActionEvent event) {
+
+        //Richiesta server per ogni dado del tracciato
+
+        Stage popupStage= new Stage();
+        ImageView[] imageRound = new ImageView[9];
+        VBox layoutVbox = new VBox(20);
+        HBox tracciatoHbox= new HBox(10);
+        VBox columnRoundVbox[] = new VBox[10];
+        Label label;
+        Scene scene1 = new Scene(layoutVbox, 900, 800);
+        int i, j;
+
+        popupStage.initModality(Modality.NONE);
+        popupStage.setTitle("Tracciato");
+
+        label = new Label("Tracciato:");
+        label.setFont(Font.font("System", 16));
+        label.setStyle("-fx-font-weight: bold");
+
+        for (i = 0; i < 10; i++){
+            columnRoundVbox[i] = new VBox(10);
+        }
+
+        //Sistemare ciclo in base ai dati che arrivano dal server.. imageRound viene inizializzato con una lista del round i-esimo
+
+        for (i = 0; i < 10; i++){   //Round
+
+            //imageRound viene inizializzato con una lista del round i-esimo  ... da fare
+
+            for (j = 0; j < 9; j++) {   //Dadi nel round
+                imageRound[j] = new ImageView();
+                imageRound[j].setImage(new Image("utilsGUI/B1.png"));
+                imageRound[j].setFitHeight(70);
+                imageRound[j].setFitWidth(70);
+                imageRound[j].setPreserveRatio(true);
+                columnRoundVbox[i].getChildren().add(imageRound[j]);
+            }
+
+            tracciatoHbox.getChildren().add(columnRoundVbox[i]);
+        }
+
+        tracciatoHbox.setAlignment(Pos.CENTER);
+        layoutVbox.getChildren().addAll(label, tracciatoHbox);
+        popupStage.setScene(scene1);
+        popupStage.setMinWidth(900);
+        popupStage.setMinHeight(800);
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        popupStage.setX((primScreenBounds.getWidth())/2);
+        //popupStage.setY((primScreenBounds.getHeight() - 300));
+        popupStage.showAndWait();
+    }
 }
