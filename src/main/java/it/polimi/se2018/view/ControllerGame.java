@@ -18,6 +18,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -335,7 +336,7 @@ public class ControllerGame implements Initializable {
         Stage popupStage= new Stage();
         ImageView zoomTool1;
         VBox layout = new VBox(10);
-        Scene scene1= new Scene(layout, 350, 500);
+        Scene scene1 = new Scene(layout, 350, 500);
 
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setTitle("Tool1");
@@ -364,7 +365,7 @@ public class ControllerGame implements Initializable {
         Stage popupStage= new Stage();
         ImageView zoomTool1;
         VBox layout = new VBox(10);
-        Scene scene1= new Scene(layout, 350, 500);
+        Scene scene1 = new Scene(layout, 350, 500);
 
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setTitle("Tool1");
@@ -393,12 +394,18 @@ public class ControllerGame implements Initializable {
 
         Stage popupStage= new Stage();
         ImageView[] imageRiserva = new ImageView[9];
-        HBox layout = new HBox(10);
-        Scene scene1= new Scene(layout, 1000, 250);
+        VBox layoutVbox = new VBox(20);
+        HBox layoutHbox = new HBox(10);
+        Label label;
+        Scene scene1 = new Scene(layoutVbox, 1000, 200);
         int i;
 
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setTitle("Riserva");
+
+        label = new Label("Riserva:");
+        label.setFont(Font.font("System", 16));
+        label.setStyle("-fx-font-weight: bold");
 
         //Richiesta server per ogni dado della riserva; sistemare ciclo for in base alla lunghezza della riserva (DraftPool.size());
 
@@ -408,10 +415,11 @@ public class ControllerGame implements Initializable {
             imageRiserva[i].setFitHeight(100);
             imageRiserva[i].setFitWidth(100);
             imageRiserva[i].setPreserveRatio(true);
-            layout.getChildren().add( imageRiserva[i]);
+            layoutHbox.getChildren().add(imageRiserva[i]);
         }
 
-        layout.setAlignment(Pos.CENTER);
+        layoutHbox.setAlignment(Pos.CENTER);
+        layoutVbox.getChildren().addAll(label, layoutHbox);
         popupStage.setScene(scene1);
         popupStage.setMinWidth(1000);
         popupStage.setMinHeight(200);
