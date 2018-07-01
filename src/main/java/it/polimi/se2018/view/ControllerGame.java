@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,6 +22,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -400,7 +402,8 @@ public class ControllerGame implements Initializable {
         Scene scene1 = new Scene(layoutVbox, 1000, 200);
         int i;
 
-        popupStage.initModality(Modality.APPLICATION_MODAL);
+        //popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initModality(Modality.NONE);
         popupStage.setTitle("Riserva");
 
         label = new Label("Riserva:");
@@ -423,6 +426,9 @@ public class ControllerGame implements Initializable {
         popupStage.setScene(scene1);
         popupStage.setMinWidth(1000);
         popupStage.setMinHeight(200);
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        popupStage.setX((primScreenBounds.getWidth() - popupStage.getWidth()));
+        popupStage.setY((primScreenBounds.getHeight() - 300));
         popupStage.showAndWait();
     }
 }
