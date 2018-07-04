@@ -64,10 +64,16 @@ public class ControllerGame implements Initializable {
     Pane paneTool2;
 
     @FXML
+    Pane paneTool3;
+
+    @FXML
     Pane paneObjective1;
 
     @FXML
     Pane paneObjective2;
+
+    @FXML
+    Pane paneObjective3;
 
     @FXML
     ImageView tool1;
@@ -76,10 +82,16 @@ public class ControllerGame implements Initializable {
     ImageView tool2;
 
     @FXML
+    ImageView tool3;
+
+    @FXML
     ImageView objective1;
 
     @FXML
     ImageView objective2;
+
+    @FXML
+    ImageView objective3;
 
     @FXML
     Button buttonTool1;
@@ -88,10 +100,16 @@ public class ControllerGame implements Initializable {
     Button buttonTool2;
 
     @FXML
+    Button buttonTool3;
+
+    @FXML
     Button buttonZoomTool1;
 
     @FXML
     Button buttonZoomTool2;
+
+    @FXML
+    Button buttonZoomTool3;
 
     @FXML
     Label privateObjective;
@@ -135,21 +153,29 @@ public class ControllerGame implements Initializable {
         paneTool1.prefWidthProperty().bind(vboxCard.widthProperty());
         paneTool2.prefHeightProperty().bind(vboxCard.heightProperty());
         paneTool2.prefWidthProperty().bind(vboxCard.widthProperty());
+        paneTool3.prefHeightProperty().bind(vboxCard.heightProperty());
+        paneTool3.prefWidthProperty().bind(vboxCard.widthProperty());
 
         paneObjective1.prefHeightProperty().bind(vboxCard.heightProperty());
         paneObjective1.prefWidthProperty().bind(vboxCard.widthProperty());
         paneObjective2.prefHeightProperty().bind(vboxCard.heightProperty());
         paneObjective2.prefWidthProperty().bind(vboxCard.widthProperty());
+        paneObjective3.prefHeightProperty().bind(vboxCard.heightProperty());
+        paneObjective3.prefWidthProperty().bind(vboxCard.widthProperty());
 
         tool1.fitWidthProperty().bind(paneTool1.widthProperty());
         tool1.fitHeightProperty().bind(paneTool1.heightProperty());
         tool2.fitWidthProperty().bind(paneTool2.widthProperty());
         tool2.fitHeightProperty().bind(paneTool2.heightProperty());
+        tool3.fitWidthProperty().bind(paneTool3.widthProperty());
+        tool3.fitHeightProperty().bind(paneTool3.heightProperty());
 
         objective1.fitWidthProperty().bind(paneObjective1.widthProperty());
         objective1.fitHeightProperty().bind(paneObjective1.heightProperty());
         objective2.fitWidthProperty().bind(paneObjective2.widthProperty());
         objective2.fitHeightProperty().bind(paneObjective2.heightProperty());
+        objective3.fitWidthProperty().bind(paneObjective3.widthProperty());
+        objective3.fitHeightProperty().bind(paneObjective3.heightProperty());
     }
 
     private void initializeRestrictionPlayerBoard() {
@@ -336,23 +362,23 @@ public class ControllerGame implements Initializable {
     public void handlezoomTool1(ActionEvent event) {
 
         Stage popupStage= new Stage();
-        ImageView zoomTool1;
+        ImageView zoomTool;
         VBox layout = new VBox(10);
-        Scene scene1 = new Scene(layout, 350, 500);
+        Scene scene = new Scene(layout, 350, 500);
 
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setTitle("Tool1");
 
         //Richiesta server tool1
-        zoomTool1 = new ImageView();
-        zoomTool1.setImage(new Image("toolCard/toolCard01.jpeg"));
-        zoomTool1.fitHeightProperty().bind(scene1.heightProperty());
-        zoomTool1.fitWidthProperty().bind(scene1.widthProperty());
-        zoomTool1.setPreserveRatio(true);
+        zoomTool = new ImageView();
+        zoomTool.setImage(new Image("toolCard/toolCard01.jpeg"));
+        zoomTool.fitHeightProperty().bind(scene.heightProperty());
+        zoomTool.fitWidthProperty().bind(scene.widthProperty());
+        zoomTool.setPreserveRatio(true);
 
-        layout.getChildren().addAll( zoomTool1);
+        layout.getChildren().addAll( zoomTool);
         layout.setAlignment(Pos.CENTER);
-        popupStage.setScene(scene1);
+        popupStage.setScene(scene);
         popupStage.setMinWidth(200);
         popupStage.setMinHeight(300);
         popupStage.showAndWait();
@@ -362,34 +388,57 @@ public class ControllerGame implements Initializable {
         close.setOnAction(e -> popupStage.close());
         */
     }
+
     public void handlezoomTool2(ActionEvent event) {
 
         Stage popupStage= new Stage();
-        ImageView zoomTool1;
+        ImageView zoomTool;
         VBox layout = new VBox(10);
-        Scene scene1 = new Scene(layout, 350, 500);
+        Scene scene = new Scene(layout, 350, 500);
 
         popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setTitle("Tool1");
+        popupStage.setTitle("Tool2");
 
         //Richiesta server tool1
-        zoomTool1 = new ImageView();
-        zoomTool1.setImage(new Image("toolCard/toolCard02.jpeg"));
-        zoomTool1.fitHeightProperty().bind(scene1.heightProperty());
-        zoomTool1.fitWidthProperty().bind(scene1.widthProperty());
-        zoomTool1.setPreserveRatio(true);
+        zoomTool = new ImageView();
+        zoomTool.setImage(new Image("toolCard/toolCard02.jpeg"));
+        zoomTool.fitHeightProperty().bind(scene.heightProperty());
+        zoomTool.fitWidthProperty().bind(scene.widthProperty());
+        zoomTool.setPreserveRatio(true);
 
-        layout.getChildren().addAll( zoomTool1);
+        layout.getChildren().addAll( zoomTool);
         layout.setAlignment(Pos.CENTER);
-        popupStage.setScene(scene1);
+        popupStage.setScene(scene);
         popupStage.setMinWidth(200);
         popupStage.setMinHeight(300);
         popupStage.showAndWait();
 
-        /*
-        Button close = new Button("Close this pop up window");
-        close.setOnAction(e -> popupStage.close());
-        */
+    }
+
+    public void handlezoomTool3(ActionEvent event) {
+
+        Stage popupStage= new Stage();
+        ImageView zoomTool;
+        VBox layout = new VBox(10);
+        Scene scene = new Scene(layout, 350, 500);
+
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Tool3");
+
+        //Richiesta server tool1
+        zoomTool = new ImageView();
+        zoomTool.setImage(new Image("toolCard/toolCard03.jpeg"));
+        zoomTool.fitHeightProperty().bind(scene.heightProperty());
+        zoomTool.fitWidthProperty().bind(scene.widthProperty());
+        zoomTool.setPreserveRatio(true);
+
+        layout.getChildren().addAll( zoomTool);
+        layout.setAlignment(Pos.CENTER);
+        popupStage.setScene(scene);
+        popupStage.setMinWidth(200);
+        popupStage.setMinHeight(300);
+        popupStage.showAndWait();
+
     }
 
     public void handleRiserva(ActionEvent event) {
@@ -484,4 +533,5 @@ public class ControllerGame implements Initializable {
         //popupStage.setY((primScreenBounds.getHeight() - 300));
         popupStage.showAndWait();
     }
+
 }
