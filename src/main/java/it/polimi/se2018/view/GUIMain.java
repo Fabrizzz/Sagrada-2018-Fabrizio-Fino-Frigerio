@@ -30,6 +30,7 @@ public class GUIMain {
     private JLabel labelSegnalini;
     private JLabel labelRound;
     private JButton terminaTurnoButton;
+    private JButton mostraLeCarteObiettivoButton;
     private Map<Color,String> colorMap = new HashMap<>();
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
@@ -71,7 +72,12 @@ public class GUIMain {
             }
         });
 
-
+        mostraLeCarteObiettivoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostraObiettivi();
+            }
+        });
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
@@ -133,6 +139,13 @@ public class GUIMain {
         }
         labelSegnalini.setText("Segnalini: "+ modelView.getPlayer(localID).getFavorTokens());
         labelRound.setText("Round: "+ modelView.getRound());
+    }
+
+    private void mostraObiettivi(){
+        GUISwingObiettivi dialog = new GUISwingObiettivi(modelView.getPublicObjective());
+        dialog.pack();
+        dialog.setVisible(true);
+
     }
 
     private void whiteRefreshBoard(){
@@ -348,4 +361,5 @@ public class GUIMain {
         frame.setVisible(true);
 
     }
+
 }
