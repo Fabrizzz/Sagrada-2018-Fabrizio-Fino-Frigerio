@@ -14,8 +14,8 @@ import java.util.concurrent.CountDownLatch;
  */
 public class GUI extends Application {
 
-    public static final CountDownLatch latch = new CountDownLatch(1);
-    public static GUI classe = null;
+    private static final CountDownLatch latch = new CountDownLatch(1);
+    private static GUI classe = null;
 
     public static GUI waitStartUpGUI() {
         try {

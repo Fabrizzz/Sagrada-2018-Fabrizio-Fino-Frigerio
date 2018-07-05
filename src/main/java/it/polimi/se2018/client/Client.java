@@ -3,6 +3,7 @@ package it.polimi.se2018.client;
 import it.polimi.se2018.view.CLI;
 import it.polimi.se2018.view.GUIProxy;
 import it.polimi.se2018.view.View;
+import org.apache.commons.cli.*;
 
 import java.io.*;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class Client {
     /**
      * Constructor
      */
-    public Client(){
+    public Client(String[] args){
 
         LOGGER.setLevel(Level.FINEST);
 
@@ -42,22 +43,26 @@ public class Client {
             LOGGER.log(Level.WARNING,"Impossibile aprire file di log");
         }
 
-        int i;
-        Scanner input = new Scanner(System.in);
-        System.out.println("Scegli l'interfaccia grafica:");
-        System.out.println("1) CLI");
-        System.out.println("2) GUI");
-        do{
-            i = input.nextInt();
-        }while(i < 1 || i > 2);
+        if(args[0].equals("--gui")){
+            clientGUI();
+        }else {
+            int i;
+            Scanner input = new Scanner(System.in);
+            System.out.println("Scegli l'interfaccia grafica:");
+            System.out.println("1) CLI");
+            System.out.println("2) GUI");
+            do {
+                i = input.nextInt();
+            } while (i < 1 || i > 2);
 
-        switch (i){
-            case 1:
-                clientCLI();
-                break;
-            case 2:
-                clientGUI();
-                break;
+            switch (i) {
+                case 1:
+                    clientCLI();
+                    break;
+                case 2:
+                    clientGUI();
+                    break;
+            }
         }
     }
 
