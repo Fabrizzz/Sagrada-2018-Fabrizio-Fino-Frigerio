@@ -133,7 +133,6 @@ public class ControllerGUISocket implements Initializable {
     public boolean createConnection(){
 
         String ip;
-        String portString;
         int port;
         String nick;
         boolean bool = true;
