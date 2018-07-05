@@ -26,6 +26,7 @@ public class GUISwing {
     private JLabel tool1Label;
     private JLabel tool2Label;
     private JLabel tool3Label;
+    private JButton piazzaUnDadoButton;
     private Map<Color,String> colorMap = new HashMap<>();
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
@@ -79,12 +80,18 @@ public class GUISwing {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         whiteRefreshBoard();
+        piazzaUnDadoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mossaStandard();
+            }
+        });
     }
 
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
-                ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
+                ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
             }
         }
     }
@@ -147,9 +154,9 @@ public class GUISwing {
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.getRestriction(i,j).isColorRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png",false));
                 }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png",false));
                 }
             }
         }
@@ -158,12 +165,13 @@ public class GUISwing {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.containsDie(i,j)){
                     try{
-                        ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png",false));
+                        ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png",false));
                     }catch (Exception e){}
                 }
             }
         }
     }
+
     private void refreshBoard(){
         showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
@@ -172,6 +180,11 @@ public class GUISwing {
         return colorMap.get(color);
     }
 
+    private void chooseDie(){
+        ChooseDie dialog = new ChooseDie(modelView.getBoard(modelView.getPlayer(localID)));
+        dialog.pack();
+        dialog.setVisible(true);
+    }
 
     public void mostraRiserva(){
 
@@ -192,6 +205,11 @@ public class GUISwing {
     public JPanel getContentPane(){
         return contentPane;
     }
+
+    public void mossaStandard(){
+        chooseDie();
+    }
+
     public static void main(String[] args) {
         Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);
         model.getRoundTrack().addDie(0,new Die(Color.RED));
