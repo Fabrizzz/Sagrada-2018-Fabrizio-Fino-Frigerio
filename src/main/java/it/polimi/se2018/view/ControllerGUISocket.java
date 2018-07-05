@@ -139,8 +139,10 @@ public class ControllerGUISocket implements Initializable {
         boolean bool = true;
 
         ip = textIPSocket.getText();
-        portString = textPortaSocket.getText();
         nick = textNickSocket.getText();
+
+
+        localID = JSONUtils.readID(nick);
 
         try{
             port = Integer.parseInt(textPortaSocket.getText());
@@ -150,23 +152,23 @@ public class ControllerGUISocket implements Initializable {
             bool = false;
         }
 
-        if(!Server.available(port)){
+        if(Server.available(port)){
             bool = false;
+            System.out.println("Porta non disponibile");
         }
 
         if(!clientNetwork.connectSocket(ip, port)){
+            System.out.println("Connessione non riuscita; Ip o porta errati");
             bool = false;
         }
 
-        localID = JSONUtils.readID(nick);
-        
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(!clientNetwork.sendMessage(clientMessage)){
             bool = false;
+            System.out.println("Errore nell'invio del nome");
         }
 
         return bool;
-
     }
 
     public void sendInfo(ClientNetwork temp) {
@@ -178,25 +180,19 @@ public class ControllerGUISocket implements Initializable {
             Stage popupStage= new Stage();
             Label label;
             VBox layout = new VBox(10);
-            Scene scene = new Scene(layout, 250, 250);
+            Scene scene = new Scene(layout, 250, 100);
 
             popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.setTitle("Tool1");
+            popupStage.setTitle("Errore");
 
             label = new Label("Errore nell'inserimento. Riprova!");
             label.setFont(Font.font("System", 16));
             //label.setStyle("-fx-font-weight: bold");
             layout.getChildren().add(label);
-
-            Button close = new Button("Chiudi");
-            close.setOnAction(e -> popupStage.close());
-            layout.getChildren().add(close);
-
-            layout.getChildren().addAll(layout);
             layout.setAlignment(Pos.CENTER);
             popupStage.setScene(scene);
-            popupStage.setMinWidth(200);
-            popupStage.setMinHeight(200);
+            popupStage.setMinWidth(250);
+            popupStage.setMinHeight(100);
             popupStage.showAndWait();
     }
 
