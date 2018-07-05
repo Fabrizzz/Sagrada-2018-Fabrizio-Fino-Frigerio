@@ -6,16 +6,18 @@ public class InputUtils {
     private InputUtils(){}
 
     public static synchronized int getInt(){
-        int i = 0;
+        int i = -1;
         Scanner scanner = new Scanner(System.in);
-
-        try{
-            i = scanner.nextInt();
-        }catch (Exception e){
-            scanner.reset();
-            System.out.println("Input non corretto, inserire un numero");
+        while (i < 0) {
+            try {
+                i = scanner.nextInt();
+            } catch (Exception e) {
+                scanner.reset();
+                System.out.println("Input non corretto, inserire un numero");
+            }
+            if (i < 0)
+                System.out.println("Inserire un numero maggiore di 0");
         }
-
         return i;
     }
 
