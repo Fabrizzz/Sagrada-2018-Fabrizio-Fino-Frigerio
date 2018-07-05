@@ -310,7 +310,21 @@ public class GUIMain {
         guiSwingProxy.sendMessage(clientMessage);
     }
 
+    public void taglierinaManualeMove(){
+        int[] posi = chooseCell();
+        int[] posf = chooseCell();
 
+        GenericRadio dialog = new GenericRadio("Vuoi spostare un altro dado?");
+        if(dialog.getValue()){
+            int[] pos2i = chooseCell();
+            int[] pos2f = chooseCell();
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1],new PlayerMove(Tool.LATHEKIN,pos2i[0],pos2i[1],pos2f[0],pos2f[1])));
+            guiSwingProxy.sendMessage(clientMessage);
+        }else{
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1]));
+            guiSwingProxy.sendMessage(clientMessage);
+        }
+    }
 
     public static void main(String[] args) {
         Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);

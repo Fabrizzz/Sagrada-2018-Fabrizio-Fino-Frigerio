@@ -9,7 +9,7 @@ public class GUIAumentaValoreDialog extends JDialog {
     private JButton buttonOK;
     private JRadioButton aumentaDiUnoRadioButton;
     private JRadioButton diminuisciDiUnoRadioButton;
-    public final CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch latch = new CountDownLatch(1);
 
     public GUIAumentaValoreDialog() {
         setContentPane(contentPane);
