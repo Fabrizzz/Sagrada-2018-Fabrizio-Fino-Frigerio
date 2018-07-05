@@ -18,3 +18,4 @@ target/
 playerID
 sagradaClient.log*
 sagradaServer.log*
+settings.json

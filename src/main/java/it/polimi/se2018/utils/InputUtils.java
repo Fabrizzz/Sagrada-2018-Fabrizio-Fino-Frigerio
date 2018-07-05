@@ -3,8 +3,9 @@ package it.polimi.se2018.utils;
 import java.util.Scanner;
 
 public class InputUtils {
+    private InputUtils(){}
 
-    public static int getInt(){
+    public static synchronized int getInt(){
         int i = 0;
         Scanner scanner = new Scanner(System.in);
 
@@ -18,7 +19,7 @@ public class InputUtils {
         return i;
     }
 
-    public static String getString(){
+    public static synchronized String getString(){
         Scanner scanner = new Scanner(System.in);
         return scanner.next();
     }

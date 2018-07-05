@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
+import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 
@@ -17,8 +18,7 @@ public class Model extends Observable {
 
     private static final int NUMBER_OF_TOOL_CARDS = 3;
     private static final int NUMBER_OF_PUBLIC_OBJECTIVES = 3;
-    private static final int NUMBER_OF_DICE_PER_COLOR = 18;     //Nei 90 dadi ho 18 dadi per colore; passo 18 al costruttore del diceBag
-    private static final int MINUTES_PER_TURN = 1;
+    private static final int NUMBER_OF_DICE_PER_COLOR = 18;
 
     private final Map<Player, PlayerBoard> boardMap;
     private final Map<Player, PrivateObjective> privateObjectiveMap;
@@ -216,15 +216,6 @@ public class Model extends Observable {
         if (this.publicObjective.size() >= NUMBER_OF_PUBLIC_OBJECTIVES)
             throw new SizeLimitExceededException();
         this.publicObjective.add(publicObjective);
-    }
-
-
-    /**
-     * Return the duration of a single Turn
-     * @return
-     */
-    public static int getMinutesPerTurn() {
-        return MINUTES_PER_TURN;
     }
 
     /**

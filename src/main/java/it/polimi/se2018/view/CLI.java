@@ -7,6 +7,7 @@ import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.server.Server;
 import it.polimi.se2018.utils.InputUtils;
+import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
@@ -35,18 +36,25 @@ public class CLI extends View{
     private Map<Color,String> colorMap = new EnumMap<Color, String>(Color.class);
     private ModelView modelView;
     private Long localID;
+    private String nick;
     private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
      * Constructor
      */
-    public CLI(Long localID){
+    public CLI(){
         colorMap.put(Color.BLUE,"\u001B[34m");
         colorMap.put(Color.RED,"\u001B[31m");
         colorMap.put(Color.GREEN, "\u001B[32m");
         colorMap.put(Color.YELLOW,"\u001B[33m");
         colorMap.put(Color.PURPLE, "\u001B[35m");
-        this.localID = localID;
+
+        println("Inserisci il tuo nome: ");
+        do{
+            nick = InputUtils.getString();
+        } while (nick.isEmpty());
+
+        this.localID = JSONUtils.readID(nick);
     }
 
     /**
@@ -754,7 +762,9 @@ public class CLI extends View{
                     if (modelView.getPlayer(localID).isYourTurn()) {
                         chooseMove();
                     }
-                }catch (NullPointerException e){}
+                }catch (NullPointerException e){
+                    LOGGER.log(Level.WARNING,"Null pointer has disconnected");
+                }
                 break;
             case HASRICONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
@@ -837,11 +847,7 @@ public class CLI extends View{
             }
             println("Connessione accettata");
 
-        String nick;
-        println("Inserisci il tuo nome: ");
-        do{
-            nick = InputUtils.getString();
-        } while (nick.isEmpty());
+
 
         ClientMessage clientMessage = new ClientMessage(nick,localID);
         if(clientNetwork.sendMessage(clientMessage)){

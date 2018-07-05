@@ -7,6 +7,7 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
+import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
@@ -35,6 +36,7 @@ public class Controller implements Observer {
     private List<RemoteView> views;
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
+    private int roundTimer = 1;
 
 
     /**
@@ -60,6 +62,8 @@ public class Controller implements Observer {
      * @param views remoteviews
      */
     public synchronized void startGame(Collection<RemoteView> views) {
+        roundTimer = JSONUtils.readRoundTimer();
+
         if (views.size() < 2 || views.size() > 4)
             throw new IllegalArgumentException();
 
@@ -146,7 +150,7 @@ public class Controller implements Observer {
      */
     private void setTimer(int turn, int round) {
         LOGGER.log(Level.FINER, "Timer impostato");
-        timer.schedule(new RoundTimer(turn, round, this), (long) (Model.getMinutesPerTurn() * 60 * 1000));
+        timer.schedule(new RoundTimer(turn, round, this), (long) (roundTimer * 60 * 1000));
     }
 
     /**
