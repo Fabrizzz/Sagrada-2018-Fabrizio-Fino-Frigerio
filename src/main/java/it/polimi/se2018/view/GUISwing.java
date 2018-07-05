@@ -22,6 +22,7 @@ public class GUISwing {
     private JLabel tool2Label;
     private JLabel tool3Label;
     private JButton piazzaUnDadoButton;
+    private JComboBox comboBoxPlayerBoard;
     private Map<Color,String> colorMap = new HashMap<>();
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
@@ -64,6 +65,7 @@ public class GUISwing {
         });
 
 
+
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -80,6 +82,29 @@ public class GUISwing {
         });
     }
 
+    private void setCombobox() {
+
+        comboBoxPlayerBoard.addItem(modelView.getPlayer(localID).getNick());
+        for(int j = 0; j < modelView.getPlayers().size(); j ++){
+            if(!modelView.getPlayers().get(j).getId().equals(localID)){
+                comboBoxPlayerBoard.addItem(modelView.getPlayers().get(j).getNick());
+            }
+        }
+
+        comboBoxPlayerBoard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nickPlayer = comboBoxPlayerBoard.getSelectedItem().toString();
+                for(int j = 0; j < modelView.getPlayers().size(); j ++){
+                    if(modelView.getPlayers().get(j).getNick().equals(nickPlayer)){
+                        showBoard(modelView.getBoard(modelView.getPlayers().get(j)));
+                    }
+                }
+            }
+        });
+
+    }
+
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
@@ -90,6 +115,8 @@ public class GUISwing {
 
     public void setModelView(ModelView modelView){
         this.modelView = modelView;
+
+        setCombobox();
         refreshBoard();
     }
 
@@ -222,6 +249,7 @@ public class GUISwing {
         frame.setContentPane(game.getContentPane());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setLocationRelativeTo( null );
         frame.setVisible(true);
 
     }
