@@ -4,6 +4,7 @@ import it.polimi.se2018.client.ClientNetwork;
 import it.polimi.se2018.server.Server;
 import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.messages.ClientMessage;
+import it.polimi.se2018.utils.messages.ServerMessage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -33,6 +34,7 @@ public class ControllerGUIRMI implements Initializable {
     private static final int limitIPRMI= 15;
     private ClientNetwork clientNetwork;
     private Long localID;
+    private ServerMessage message;
 
     @FXML
     private TextField textIPRMI;
@@ -95,10 +97,6 @@ public class ControllerGUIRMI implements Initializable {
 
     }
 
-    public void sendInfo(ClientNetwork temp) {
-        clientNetwork = temp;
-    }
-
     public boolean createConnection(){
 
         String ip;
@@ -144,6 +142,11 @@ public class ControllerGUIRMI implements Initializable {
         popupStage.setMinWidth(250);
         popupStage.setMinHeight(100);
         popupStage.showAndWait();
+    }
+
+    public void sendInfo(ClientNetwork clientNetwork, ServerMessage message) {
+        this.clientNetwork = clientNetwork;
+        this.message = message;
     }
 
 }

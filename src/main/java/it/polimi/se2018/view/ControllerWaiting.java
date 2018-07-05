@@ -1,5 +1,7 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.client.ClientNetwork;
+import it.polimi.se2018.utils.messages.ServerMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +19,8 @@ import java.util.ResourceBundle;
  * @author Matteo
  */
 public class ControllerWaiting implements Initializable {
+
+    private ServerMessage message;
 
     @FXML
     private Button buttonWaiting;
@@ -46,5 +50,16 @@ public class ControllerWaiting implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        if (message == null){
+            System.out.println("NULL");
+        }
+        else{
+            System.out.println("NOT NULL");
+        }
+
+    }
+
+    public void sendInfo(ServerMessage message) {
+        this.message = message;
     }
 }

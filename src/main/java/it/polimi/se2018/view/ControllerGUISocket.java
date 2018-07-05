@@ -5,6 +5,7 @@ import it.polimi.se2018.server.Server;
 import it.polimi.se2018.utils.InputUtils;
 import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.messages.ClientMessage;
+import it.polimi.se2018.utils.messages.ServerMessage;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -36,6 +37,9 @@ public class ControllerGUISocket implements Initializable {
 
     private ClientNetwork clientNetwork;
     private Long localID;
+    private ServerMessage message;
+    private ControllerWaiting nextController;
+
 
     @FXML
     private TextField textIPSocket;
@@ -54,6 +58,7 @@ public class ControllerGUISocket implements Initializable {
         Stage stage;
         Parent newScene;
         Scene scene = null;
+        FXMLLoader loader = null;
         boolean connect;
 
         connect = createConnection();
@@ -64,11 +69,14 @@ public class ControllerGUISocket implements Initializable {
         else {
             stage = (Stage) buttonAvantiSocket.getScene().getWindow();
             try {
-                newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlWaiting.fxml"));
+                loader = new FXMLLoader(getClass().getResource("/fxmlFile/fxmlWaiting.fxml"));
+                newScene = (Parent) loader.load();
                 scene = new Scene(newScene);
             } catch (Exception e) {
                 System.out.println("File FXML not found");
             }
+            nextController = loader.getController();
+            nextController.sendInfo(message);
             stage.setTitle("Preparazione gioco");
             stage.setScene(scene);
             stage.setResizable(false);
@@ -149,10 +157,6 @@ public class ControllerGUISocket implements Initializable {
         return bool;
     }
 
-    public void sendInfo(ClientNetwork temp) {
-        clientNetwork = temp;
-    }
-
     public void popupError(){
 
             Stage popupStage= new Stage();
@@ -172,6 +176,11 @@ public class ControllerGUISocket implements Initializable {
             popupStage.setMinWidth(250);
             popupStage.setMinHeight(100);
             popupStage.showAndWait();
+    }
+
+    public void sendInfo(ClientNetwork clientNetwork, ServerMessage message) {
+        this.clientNetwork = clientNetwork;
+        this.message = message;
     }
 
     /*
