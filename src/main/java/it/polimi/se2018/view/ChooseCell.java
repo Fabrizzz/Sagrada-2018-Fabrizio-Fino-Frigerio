@@ -10,16 +10,19 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
-public class ChooseDie extends JDialog implements MouseListener {
+public class ChooseCell extends JDialog implements MouseListener {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JPanel board;
     private PlayerBoard playerBoard;
     private Map<Color,String> colorMap = new HashMap<>();
+    private int r,c;
+    public final CountDownLatch latch = new CountDownLatch(1);
 
-    public ChooseDie(PlayerBoard playerBoard) {
+    public ChooseCell(PlayerBoard playerBoard) {
         colorMap.put(Color.BLUE,"B");
         colorMap.put(Color.RED,"R");
         colorMap.put(Color.GREEN, "G");
@@ -66,13 +69,30 @@ public class ChooseDie extends JDialog implements MouseListener {
         }
     }
 
+    public int[] getPosition(){
+        this.pack();
+        this.setVisible(true);
+
+        try{
+            latch.await();
+        }catch (InterruptedException e){}
+        int[] pos = new int[2];
+        pos[0] = r;
+        pos[1] = c;
+        return pos;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         JLabel source = (JLabel) e.getSource();
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
                 if(((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).equals(source)){
-                    System.out.println("" + i + " " + j);
+                    r = i;
+                    c = j;
+                    latch.countDown();
+                    onCancel();
+                    return;
                 }
             }
         }

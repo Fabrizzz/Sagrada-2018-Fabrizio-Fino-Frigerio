@@ -1,12 +1,9 @@
 package it.polimi.se2018.view;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
@@ -14,8 +11,6 @@ import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.ErrorType;
-import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
 
 public class GUISwing {
@@ -180,21 +175,15 @@ public class GUISwing {
         return colorMap.get(color);
     }
 
-    private void chooseDie(){
-        ChooseDie dialog = new ChooseDie(modelView.getBoard(modelView.getPlayer(localID)));
-        dialog.pack();
-        dialog.setVisible(true);
+    private void chooseCell(){
+        ChooseCell dialog = new ChooseCell(modelView.getBoard(modelView.getPlayer(localID)));
+        int[] pos = dialog.getPosition();
     }
 
     public void mostraRiserva(){
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
-                dialog.pack();
-                dialog.setVisible(true);
-            }
-        });
+        GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
+        dialog.pack();
+        dialog.setVisible(true);
     }
 
     private void onCancel() {
@@ -207,7 +196,7 @@ public class GUISwing {
     }
 
     public void mossaStandard(){
-        chooseDie();
+        chooseCell();
     }
 
     public static void main(String[] args) {
