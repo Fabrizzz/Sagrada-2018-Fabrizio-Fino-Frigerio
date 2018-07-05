@@ -1,7 +1,9 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.client.ClientNetwork;
+import it.polimi.se2018.utils.messages.ServerMessage;
 import javafx.application.Application;
+import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,6 +20,9 @@ public class GUI extends Application {
     private static final CountDownLatch latch = new CountDownLatch(1);
     private static GUI classe = null;
     private ClientNetwork clientNetwork;
+    private ServerMessage message;
+    private ControllerGUI nextController;
+    private IntegerProperty num;
 
     public static GUI waitStartUpGUI() {
         try {
@@ -34,8 +39,10 @@ public class GUI extends Application {
         latch.countDown();
     }
 
-    public void sendInfo(ClientNetwork temp) {
-        clientNetwork = temp;
+    public void sendInfo(ClientNetwork clientNetwork, ServerMessage message, IntegerProperty num) {
+        this.clientNetwork = clientNetwork;
+        this.message = message;
+        this.num = num;
     }
 
     public GUI() {
@@ -65,8 +72,8 @@ public class GUI extends Application {
             System.out.println("File FXML not found");
         }
 
-        ControllerGUI nextController = loader.getController();
-        nextController.sendInfo(clientNetwork);
+        nextController = loader.getController();
+        nextController.sendInfo(clientNetwork, message, num);
 
         primaryStage.setTitle("Sagrada");
         primaryStage.setScene(scene);

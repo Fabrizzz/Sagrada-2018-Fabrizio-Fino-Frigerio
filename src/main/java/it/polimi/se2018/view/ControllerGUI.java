@@ -1,6 +1,8 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.client.ClientNetwork;
+import it.polimi.se2018.utils.messages.ServerMessage;
+import javafx.beans.property.IntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +24,10 @@ import java.util.ResourceBundle;
 public class ControllerGUI implements Initializable {
 
     private ClientNetwork clientNetwork;
-    ControllerGUISocket nextControllerSocket;
-    ControllerGUIRMI nextControllerRMI;
+    private ControllerGUISocket nextControllerSocket;
+    private ControllerGUIRMI nextControllerRMI;
+    private ServerMessage message;
+    private IntegerProperty num;
 
     @FXML
     private AnchorPane root;
@@ -64,7 +68,7 @@ public class ControllerGUI implements Initializable {
                 System.out.println("File FXML not found");
             }
             nextControllerSocket = loader.getController();
-            nextControllerSocket.sendInfo(clientNetwork);
+            nextControllerSocket.sendInfo(clientNetwork, message, num);
             stage.setTitle("Socket");
             stage.setScene(scene);
         }
@@ -81,7 +85,7 @@ public class ControllerGUI implements Initializable {
                 System.out.println("File FXML not found");
             }
             nextControllerRMI = loader.getController();
-            nextControllerRMI.sendInfo(clientNetwork);
+            nextControllerRMI.sendInfo(clientNetwork,message, num);
             stage.setTitle("RMI");
             stage.setScene(scene);
         }
@@ -100,8 +104,10 @@ public class ControllerGUI implements Initializable {
 
     }
 
-    public void sendInfo(ClientNetwork temp) {
-        clientNetwork = temp;
+    public void sendInfo(ClientNetwork clientNetwork, ServerMessage message, IntegerProperty num) {
+        this.clientNetwork = clientNetwork;
+        this.message = message;
+        this.num = num;
     }
 
 }

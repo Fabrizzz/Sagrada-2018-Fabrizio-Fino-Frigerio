@@ -1,5 +1,10 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.client.ClientNetwork;
+import it.polimi.se2018.utils.messages.ServerMessage;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +22,10 @@ import java.util.ResourceBundle;
  * @author Matteo
  */
 public class ControllerWaiting implements Initializable {
+
+    private ServerMessage message;
+    private IntegerProperty num;
+    private ChangeListener changeListener;
 
     @FXML
     private Button buttonWaiting;
@@ -46,5 +55,20 @@ public class ControllerWaiting implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public void sendInfo(ServerMessage message, IntegerProperty num) {
+        this.message = message;
+        this.num = num;
+
+        changeListener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
+                System.out.println("Nuovo valore di message");
+                System.out.println(message);
+            }
+        };
+
+        num.addListener(changeListener);
     }
 }

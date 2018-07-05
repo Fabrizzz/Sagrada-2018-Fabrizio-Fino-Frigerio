@@ -1,6 +1,9 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.client.ClientNetwork;
+import it.polimi.se2018.utils.messages.ServerMessage;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.Observable;
 
@@ -12,9 +15,13 @@ public class GUIProxy extends View {
 
     private ClientNetwork clientNetwork;
     private GUI startUpTest;
+    private ServerMessage message;
+    private IntegerProperty num;
+    private int i;
 
 
     public GUIProxy(){
+        num = new SimpleIntegerProperty(1);
         launchGUI();
 
     }
@@ -33,7 +40,7 @@ public class GUIProxy extends View {
 
     public void setClientNetwork(ClientNetwork temp) {
         clientNetwork = temp;
-        startUpTest.sendInfo(clientNetwork);
+        startUpTest.sendInfo(clientNetwork, message, num);
     }
 
     /**
@@ -43,11 +50,15 @@ public class GUIProxy extends View {
      */
     @Override
     public void update(Observable o, Object arg) {
-
+        message = (ServerMessage) arg;
+        i = num.getValue();
+        i++;
+        num.setValue(i);
     }
 
     @Override
     public void connectionClosed() {
+        System.out.println("Connessione al server chiusa");
 
     }
 
