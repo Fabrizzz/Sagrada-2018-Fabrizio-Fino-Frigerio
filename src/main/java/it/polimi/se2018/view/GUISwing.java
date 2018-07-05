@@ -23,6 +23,9 @@ public class GUISwing {
     private JLabel tool3Label;
     private JButton piazzaUnDadoButton;
     private JComboBox comboBoxPlayerBoard;
+    private JLabel labelTurn;
+    private JLabel labelSegnalini;
+    private JLabel labelRound;
     private Map<Color,String> colorMap = new HashMap<>();
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
@@ -105,6 +108,21 @@ public class GUISwing {
 
     }
 
+    private void setIndicator(){
+
+        boolean yourTurn;
+
+        yourTurn = modelView.getPlayer(localID).isYourTurn();
+        if(yourTurn){
+            labelTurn.setText("E' il tuo turno");
+        }
+        else {
+            labelTurn.setText("Non e' il tuo turno");
+        }
+        labelSegnalini.setText("Segnalini: "+ modelView.getPlayer(localID).getFavorTokens());
+        labelRound.setText("Round: "+ modelView.getRound());
+    }
+
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
@@ -117,6 +135,7 @@ public class GUISwing {
         this.modelView = modelView;
 
         setCombobox();
+        setIndicator();
         refreshBoard();
     }
 
@@ -255,4 +274,7 @@ public class GUISwing {
     }
 
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }
