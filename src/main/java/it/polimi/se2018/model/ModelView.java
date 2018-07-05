@@ -8,8 +8,8 @@ import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * ModelView
  * @author Giampietro
  */
-public class ModelView extends Observable implements Serializable {
+public class ModelView implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private final Map<Tool, Boolean> tools;
     private final List<PublicObjective> publicObjective;
