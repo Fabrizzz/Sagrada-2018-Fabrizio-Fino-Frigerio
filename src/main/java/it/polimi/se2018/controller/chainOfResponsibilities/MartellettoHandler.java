@@ -24,8 +24,7 @@ public class MartellettoHandler extends ToolHandler {
                 LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare la mossa MARTELLETTO");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
             } else {
-                draftPool = model.getDraftPool();
-                draftPool.reRollDice();
+                model.getDraftPool().reRollDice();
                 completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                 return true;
             }

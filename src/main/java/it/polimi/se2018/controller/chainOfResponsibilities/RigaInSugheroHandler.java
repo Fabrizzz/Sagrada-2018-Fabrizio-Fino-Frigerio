@@ -6,7 +6,7 @@ import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
@@ -40,19 +40,20 @@ public class RigaInSugheroHandler extends ToolHandler {
                 throw new InvalidParameterException();
             }
 
-            if (row < 0 || row > 3 || column < 0 || column > 4 || pos < -1 || pos >= model.getDraftPool().size()) {
+            if (row < 0 || row > 3 || column < 0 || column > 4 || pos >= model.getDraftPool().size()) {
                 LOGGER.log(Level.WARNING,"Errore parametri RIGAINSUGHERO");
                 throw new InvalidParameterException();
             }
             try {
                 board = model.getBoard(remoteView.getPlayer());
                 die = model.getDraftPool().getDie(pos);
-                if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) || (!board.isEmpty() && (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
+                if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
+                        cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                         board.containsDie(row, column) ||
                         !board.verifyColorRestriction(die, row, column) ||
                         !board.verifyNumberRestriction(die, row, column) ||
                         !board.verifyNearCellsRestriction(die, row, column) ||
-                        board.verifyPositionRestriction(row, column)))) {
+                        board.verifyPositionRestriction(row, column)) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare RIGAINSUGHERO");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else {
@@ -65,7 +66,7 @@ public class RigaInSugheroHandler extends ToolHandler {
                 }
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in RIGAINSUGHERO");
-            } catch (AlredySetDie alredySetDie) {
+            } catch (AlreadySetDie alreadySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in RIGAINSUGHERO");
             }
         } else {

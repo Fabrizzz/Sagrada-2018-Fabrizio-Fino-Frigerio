@@ -9,7 +9,7 @@ import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
@@ -114,7 +114,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
 
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in DILUENTEPERPASTASALDA");
-            } catch (AlredySetDie alredySetDie) {
+            } catch (AlreadySetDie alreadySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in DILUENTEPERPASTASALDA");
             }
             catch (EmptyBagException e){

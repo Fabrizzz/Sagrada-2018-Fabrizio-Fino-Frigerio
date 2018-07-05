@@ -6,7 +6,7 @@ import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
@@ -57,7 +57,8 @@ public class Tool2_3Handler extends ToolHandler {
                 } else try {
                     die = board.getDie(row, column);
                     board.removeDie(row, column);
-                    if ((!board.isEmpty() && !board.verifyPositionRestriction(finalRow, finalColumn)) || !board.verifyNearCellsRestriction(die, finalRow, finalColumn) ||
+                    if ((!board.isEmpty() && !board.verifyPositionRestriction(finalRow, finalColumn))
+                            || !board.verifyNearCellsRestriction(die, finalRow, finalColumn) ||
                             (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)) ||
                             (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn))){
                         LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 2 isempty: " + board.isEmpty() +
@@ -72,7 +73,7 @@ public class Tool2_3Handler extends ToolHandler {
                         return true;
                     }
 
-                } catch (NoDieException | AlredySetDie e) {
+                } catch (NoDieException | AlreadySetDie e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
                 }
 

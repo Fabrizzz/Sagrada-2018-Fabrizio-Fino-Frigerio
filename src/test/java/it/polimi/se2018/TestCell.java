@@ -5,7 +5,7 @@ import it.polimi.se2018.model.cell.Cell;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.Restriction;
 import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class TestCell {
 
         try{
             cell.setDie(die);
-        }catch (AlredySetDie e){
+        } catch (AlreadySetDie e) {
             fail();
         }
         assertTrue(cell.isUsed());
@@ -38,7 +38,7 @@ public class TestCell {
         try{
             cell.setDie(die);
             fail();
-        }catch (AlredySetDie e){
+        } catch (AlreadySetDie e) {
             assertTrue(cell.isUsed());
         }
     }
@@ -54,7 +54,7 @@ public class TestCell {
 
         try{
             cell.setDie(die);
-        }catch (AlredySetDie e){
+        } catch (AlreadySetDie e) {
             fail();
         }
 
@@ -80,7 +80,7 @@ public class TestCell {
 
         try{
             cell.setDie(die);
-        }catch (AlredySetDie e){
+        } catch (AlreadySetDie e) {
             fail();
         }
 
@@ -95,14 +95,15 @@ public class TestCell {
     public void testSetDice(){
         try{
             cell.setDie(die);
-        }catch (AlredySetDie e){
+        } catch (AlreadySetDie e) {
             fail();
         }
 
         try{
             cell.setDie(die);
             fail();
-        }catch (AlredySetDie e){}
+        } catch (AlreadySetDie e) {
+        }
     }
 
     @Test

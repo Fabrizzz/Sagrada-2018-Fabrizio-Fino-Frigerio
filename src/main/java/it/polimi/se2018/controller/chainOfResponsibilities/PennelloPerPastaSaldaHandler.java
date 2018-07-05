@@ -8,7 +8,7 @@ import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.PlayerMove;
@@ -62,7 +62,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                         NumberEnum num = die.getNumber();
                         die.setNumber(newValue);
 
-                        if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) || ((!board.isEmpty()) && (
+                        if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) || (!board.isEmpty() && (
                                 board.containsDie(row, column) ||
                                 !board.verifyColorRestriction(die, row, column) ||
                                 !board.verifyNumberRestriction(die, row, column) ||
@@ -88,17 +88,16 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                             LOGGER.log(Level.FINE,"Controllo mosse possibili");
                             for (int r = 0; r < 4 && check; r++) {
                                 for (int c = 0; c < 5 && check; c++) {
-                                    if (board.verifyInitialPositionRestriction(r, c) &&
-                                            board.verifyNumberRestriction(die, r, c) &&
-                                            board.verifyColorRestriction(die, r, c) &&
-                                            board.verifyNearCellsRestriction(die, r, c) &&
-                                            board.verifyPositionRestriction(r, c))
+                                    if ((board.verifyInitialPositionRestriction(r, c) && board.isEmpty()) ||
+                                            (!board.containsDie(r, c) && board.verifyNumberRestriction(die, r, c) &&
+                                                    board.verifyColorRestriction(die, r, c) &&
+                                                    board.verifyNearCellsRestriction(die, r, c) &&
+                                                    board.verifyPositionRestriction(r, c)))
                                         check = false;
                                 }
                             }
                         }
                         if (check) {
-                            die.setNumber(newValue);
                             completeTool(remoteView.getPlayer(), model, playerMove.getTool());
                             return true;
                         } else {
@@ -112,7 +111,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
 
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in PENNELLOPERPASTASALDA");
-            } catch (AlredySetDie alredySetDie) {
+            } catch (AlreadySetDie alreadySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in PENNELLOPERPASTASALDA");
             }
         } else{

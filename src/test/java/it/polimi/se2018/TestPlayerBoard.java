@@ -6,7 +6,7 @@ import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class TestPlayerBoard {
 
                 try {
                     playerBoard.setDie(die, i, j);
-                } catch (AlredySetDie e) {
+                } catch (AlreadySetDie e) {
                     fail();
                 }
 
@@ -64,7 +64,7 @@ public class TestPlayerBoard {
                 Die dice = new Die(Color.BLUE);
                 try {
                     playerBoard.setDie(dice, i, j);
-                } catch (AlredySetDie e) {
+                } catch (AlreadySetDie e) {
                     fail();
                 }
 
@@ -90,7 +90,7 @@ public class TestPlayerBoard {
                 Die dice = new Die(Color.BLUE);
                 try {
                     playerBoard.setDie(dice, 0, 0);
-                } catch (AlredySetDie e) {
+                } catch (AlreadySetDie e) {
                     fail();
                 }
 
@@ -161,7 +161,7 @@ public class TestPlayerBoard {
         }
         try {
             playerBoard.setDie(new Die(Color.BLUE), 2, 2);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
         for (int i = -1; i <= 1; i++)
@@ -182,7 +182,7 @@ public class TestPlayerBoard {
 
         try {
             playerBoard.setDie(die, 2, 2);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 

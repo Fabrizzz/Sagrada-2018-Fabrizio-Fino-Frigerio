@@ -40,16 +40,17 @@ public class TaglierinaCircolareHandler extends ToolHandler {
                 roundTrackRound = roundTrackRoundO.get();
                 roundTrackPosition = roundTrackPositionO.get();
             }else{
-                LOGGER.log(Level.SEVERE,"Errore parametri MOSSASTANDARD");
+                LOGGER.log(Level.SEVERE, "Errore parametri TAGLIERINACIRCOLARE");
                 throw new InvalidParameterException();
             }
 
-            if(draftPoolPosition < 0 || roundTrackRound < 0 || roundTrackPosition < 0  || draftPoolPosition >= model.getDraftPool().size() || roundTrackRound > model.getRound() ||
+            if (draftPoolPosition < 0 || roundTrackRound < 0 || roundTrackPosition < 0 ||
+                    draftPoolPosition >= model.getDraftPool().size() || roundTrackRound > model.getRound() ||
                     roundTrackPosition >= model.getRoundTrack().numberOfDice(roundTrackRound)){
                 LOGGER.log(Level.INFO, "Errore parametri");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
             }else {
-                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || roundTrackPosition >= roundTrack.numberOfDice(roundTrackRound)) {
+                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAGLIERINACIRCOLARE");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else try {

@@ -191,6 +191,7 @@ public class TestPennelloPerPastaSaldaHandler {
         try{
             assertFalse(pennelloPerPastaSaldaHandler.process(playerMove,remoteView,model));
         }catch (Exception e){
+            e.printStackTrace();
             fail();
         }
     }

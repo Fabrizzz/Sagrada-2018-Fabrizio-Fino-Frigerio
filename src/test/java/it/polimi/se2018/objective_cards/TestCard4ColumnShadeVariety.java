@@ -6,7 +6,7 @@ import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.ONE);
         try {
             playerBoard.setDie(die, 0,0);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -43,7 +43,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 0,1);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -51,7 +51,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 0,2);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -59,7 +59,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.FOUR);
         try {
             playerBoard.setDie(die, 0,3);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -67,7 +67,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.ONE);
         try {
             playerBoard.setDie(die, 0,4);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -77,7 +77,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.SIX);
         try {
             playerBoard.setDie(die, 1,0);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -85,7 +85,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.ONE);
         try {
             playerBoard.setDie(die, 1,1);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -93,7 +93,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.FIVE);
         try {
             playerBoard.setDie(die, 1,2);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -101,7 +101,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 1,3);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -109,7 +109,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.FOUR);
         try {
             playerBoard.setDie(die, 1,4);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -119,7 +119,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 2,0);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -127,7 +127,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 2,1);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -135,7 +135,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 2,2);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -143,7 +143,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.FOUR);
         try {
             playerBoard.setDie(die, 2,3);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -151,7 +151,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.THREE);
         try {
             playerBoard.setDie(die, 2,4);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -162,7 +162,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.TWO);
         try {
             playerBoard.setDie(die, 3,0);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -170,7 +170,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.SIX);
         try {
             playerBoard.setDie(die, 3,1);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -178,7 +178,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.ONE);
         try {
             playerBoard.setDie(die, 3,2);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
 
@@ -186,7 +186,7 @@ public class TestCard4ColumnShadeVariety {
         die.setNumber(NumberEnum.SIX);
         try {
             playerBoard.setDie(die, 3,4);
-        } catch (AlredySetDie alredySetDie) {
+        } catch (AlreadySetDie alreadySetDie) {
             fail();
         }
     }

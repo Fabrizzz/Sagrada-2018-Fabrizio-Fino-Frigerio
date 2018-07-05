@@ -3,7 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.model.cell.*;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
@@ -38,7 +38,7 @@ public class PlayerBoard implements Serializable {
                 restrizione = factory.createNumberRestriction(NumberEnum.valueOf(restrictions[i]));
             else if (Arrays.stream(Color.values()).map(Enum::toString).anyMatch(color -> color.equals(temp)))
                 restrizione = factory.createColorRestriction(Color.valueOf(restrictions[i]));
-            else if (restrictions[i].length() == 0)
+            else if (restrictions[i].isEmpty())
                 restrizione = factory.createNoRestriction();
             else {
                 System.err.println("Sintassi mappe JSON errata");
@@ -113,9 +113,9 @@ public class PlayerBoard implements Serializable {
      * @param die die 
      * @param row row of the cell
      * @param column column of the cell
-     * @throws AlredySetDie if a die is already in the cell
+     * @throws AlreadySetDie if a die is already in the cell
      */
-    public void setDie(Die die, int row, int column) throws AlredySetDie {
+    public void setDie(Die die, int row, int column) throws AlreadySetDie {
         get(row, column).setDie(die);
         isEmpty = false;
     }

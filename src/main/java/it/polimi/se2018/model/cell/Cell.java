@@ -1,6 +1,6 @@
 package it.polimi.se2018.model.cell;
 
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 
 import java.io.Serializable;
@@ -56,11 +56,11 @@ public class Cell implements Serializable {
     /**
      * Insert a die in the cell
      * @param die die to insert
-     * @throws AlredySetDie if the cell already contains a die
+     * @throws AlreadySetDie if the cell already contains a die
      */
-    public void setDie(Die die) throws AlredySetDie {
+    public void setDie(Die die) throws AlreadySetDie {
         if (isUsed)
-            throw new AlredySetDie();
+            throw new AlreadySetDie();
         this.die = die;
         isUsed = true;
     }

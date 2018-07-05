@@ -45,7 +45,8 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
                 draftPool = model.getDraftPool();
                 die = draftPool.getDie(draftPosition);  //non dovrebbe lanciare eccezioni perchè ho già fatto il controllo nel first check
 
-                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || (die.getNumber() == NumberEnum.ONE && !aumentaDiUno) || (die.getNumber() == NumberEnum.SIX && aumentaDiUno)){
+                if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())
+                        || (die.getNumber() == NumberEnum.ONE && !aumentaDiUno) || (die.getNumber() == NumberEnum.SIX && aumentaDiUno)) {
                     LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PINZASGROSSATRICE");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                 }else {

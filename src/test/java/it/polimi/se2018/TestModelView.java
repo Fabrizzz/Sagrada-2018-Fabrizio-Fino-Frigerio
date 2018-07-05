@@ -1,13 +1,12 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
+import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
-import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import org.junit.Before;
@@ -117,7 +116,7 @@ public class TestModelView {
         assertEquals(false,modelView.boardContainsDie(modelView.getPlayers().get(1),1,1));
         try{
            model.getBoard(modelView.getPlayers().get(1)).setDie(new Die(Color.BLUE),1,1);
-        }catch (AlredySetDie e){
+        } catch (AlreadySetDie e) {
            fail();
         }
 
@@ -136,7 +135,7 @@ public class TestModelView {
         try{
 
             model.getBoard(modelView.getPlayers().get(1)).setDie(die,1,1);
-        }catch (AlredySetDie e){
+        } catch (AlreadySetDie e) {
             fail();
         }
 
