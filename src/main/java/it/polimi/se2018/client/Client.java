@@ -43,26 +43,22 @@ public class Client {
             LOGGER.log(Level.WARNING,"Impossibile aprire file di log");
         }
 
-        if(args[0].equals("--gui")){
-            clientGUI();
-        }else {
-            int i;
-            Scanner input = new Scanner(System.in);
-            System.out.println("Scegli l'interfaccia grafica:");
-            System.out.println("1) CLI");
-            System.out.println("2) GUI");
-            do {
-                i = input.nextInt();
-            } while (i < 1 || i > 2);
+        int i;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Scegli l'interfaccia grafica:");
+        System.out.println("1) CLI");
+        System.out.println("2) GUI");
+        do {
+            i = input.nextInt();
+        } while (i < 1 || i > 2);
 
-            switch (i) {
-                case 1:
-                    clientCLI();
-                    break;
-                case 2:
-                    clientGUI();
-                    break;
-            }
+        switch (i) {
+            case 1:
+                clientCLI();
+                break;
+            case 2:
+                clientGUI();
+                break;
         }
     }
 
