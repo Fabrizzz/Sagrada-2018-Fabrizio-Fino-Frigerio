@@ -13,6 +13,7 @@ import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.model.RoundTrack;
 import it.polimi.se2018.model.cell.ColorRestriction;
+import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
@@ -147,9 +148,6 @@ public class GUISwing extends JDialog {
         tool1Label.setIcon(new StretchIcon("src/main/resources/toolCard/" + toolCardMap.get(tools[0]) + ".png"));
         tool2Label.setIcon(new StretchIcon("src/main/resources/toolCard/" + toolCardMap.get(tools[1]) + ".png"));
         tool3Label.setIcon(new StretchIcon("src/main/resources/toolCard/" + toolCardMap.get(tools[2]) + ".png"));
-        System.out.println("src/main/resources/publicObjective/" + toolCardMap.get(tools[0]) + ".jpeg");
-        System.out.println("src/main/resources/publicObjective/" + toolCardMap.get(tools[1]) + ".jpeg");
-        System.out.println("src/main/resources/publicObjective/" + toolCardMap.get(tools[2]) + ".jpeg");
     }
 
     private void refreshBoard(){
@@ -200,6 +198,12 @@ public class GUISwing extends JDialog {
     }
     public static void main(String[] args) {
         Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);
+        model.getRoundTrack().addDie(0,new Die(Color.RED));
+        model.getRoundTrack().addDie(0,new Die(Color.BLUE));
+        model.getRoundTrack().addDie(0,new Die(Color.YELLOW));
+        model.getDraftPool().addDie(new Die(Color.RED));
+        model.getDraftPool().addDie(new Die(Color.BLUE));
+
         ModelView modelView = new ModelView(model);
         GUISwingProxy guiSwingProxy = new GUISwingProxy();
         GUISwing game = new GUISwing(guiSwingProxy);
