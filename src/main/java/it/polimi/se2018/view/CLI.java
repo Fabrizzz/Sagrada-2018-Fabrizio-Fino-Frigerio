@@ -4,6 +4,7 @@ import it.polimi.se2018.client.ClientNetwork;
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.ColorRestriction;
+import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.server.Server;
 import it.polimi.se2018.utils.InputUtils;
@@ -12,7 +13,9 @@ import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
-import it.polimi.se2018.utils.exceptions.AlredySetDie;
+import it.polimi.se2018.utils.exceptions.AlreadySetDie;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
+import it.polimi.se2018.utils.exceptions.FullBoardException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
@@ -21,7 +24,6 @@ import it.polimi.se2018.utils.messages.ServerMessage;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,10 +33,11 @@ import java.util.logging.Logger;
  */
 public class CLI extends View{
     private static final String ANSI_RESET = "\u001B[0m";
-    private Map<Color,String> colorMap = new EnumMap<Color, String>(Color.class);
+    private Map<Color, String> colorMap = new EnumMap<>(Color.class);
     private ModelView modelView;
     private Long localID;
     private String nick;
+    private boolean hasUsedTenaglia = false;
     private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
@@ -198,19 +201,31 @@ public class CLI extends View{
      */
     private int[] chooseRoundTrackDie() throws NoDieException{
         int[] position = new int[2];
-        if(modelView.getRoundTrack().numberOfDice(modelView.getRound()) == 0){
+        boolean empty = true;
+        for (int i = 0; i <= modelView.getRound(); i++) {
+            if (modelView.getRoundTrack().numberOfDice(i) > 0)
+                empty = false;
+        }
+        if (empty) {
             println("Errore, il tracciato dei dadi e' vuoto");
             throw new NoDieException();
         }
         showRoundTrack();
-        position[0] = modelView.getRound();
+        do {
+            println("Scegli la round position da cui prendere il dado: ");
+            position[0] = InputUtils.getInt();
+            position[0]--;
+        }
+        while (position[0] < 0 || position[0] > modelView.getRound() || modelView.getRoundTrack().numberOfDice(position[0]) == 0);
+
 
         println("Inserisci la posizione del dado: ");
         do {
             position[1] = InputUtils.getInt();
-        }while (position[1] > 0 && position[1] < modelView.getRoundTrack().numberOfDice(position[0] - 1));
+            position[1]--;
+        } while (position[1] < 0 || position[1] >= modelView.getRoundTrack().numberOfDice(position[0]));
 
-        position[1] --;
+
 
         return position;
     }
@@ -239,7 +254,7 @@ public class CLI extends View{
      */
     private int[] chooseBoardCellWithDie() throws NoDieException{
         int[] position = new int[2];
-        boolean repeat = true;
+        boolean repeat;
 
         if(modelView.getBoard(modelView.getPlayer(localID)).isEmpty()){
             println("La plancia e' vuota, non puoi eseguire questa mossa");
@@ -269,7 +284,7 @@ public class CLI extends View{
      * @return the chosen row
      */
     private int chooseRow(){
-        int row = 0;
+        int row;
         println("Inserisci l'indice di riga: ");
         row = InputUtils.getInt();
         while (row < 1 || row > 4) {
@@ -284,7 +299,7 @@ public class CLI extends View{
      * @return the chosen column
      */
     private int chooseColumn(){
-        int column = 0;
+        int column;
         println("Inserisci l'indice di colonna: ");
         column = InputUtils.getInt();
         while (column < 1 || column > 5) {
@@ -314,16 +329,16 @@ public class CLI extends View{
     /**
      * Let the player choose an empty cell in the board
      * @return the position of the cell
-     * @throws AlredySetDie if the board is full
+     * @throws AlreadySetDie if the board is full
      */
-    private int[] chooseBoardCellWithoutDie() throws AlredySetDie {
+    private int[] chooseBoardCellWithoutDie() throws FullBoardException {
         int[] position = new int[2];
-        boolean repeat = true;
+        boolean repeat;
 
         if(boardIsFull(modelView.getBoard(modelView.getPlayer(localID)))){
             println("Errore, la board e' piena non puoi eseguire questa mossa");
             LOGGER.log(Level.FINE,"La plancia e' piena");
-            throw new AlredySetDie();
+            throw new FullBoardException();
         }else {
             do {
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
@@ -349,17 +364,11 @@ public class CLI extends View{
     public void move(Tool tool){
         switch (tool) {
             case MOSSASTANDARD:
-                normalSugheroMove(tool);
-                break;
             case RIGAINSUGHERO:
                 normalSugheroMove(tool);
                 break;
             case SKIPTURN:
-                skipMartellettoTenagliaMove(tool);
-                break;
             case MARTELLETTO:
-                skipMartellettoTenagliaMove(tool);
-                break;
             case TENAGLIAAROTELLE:
                 skipMartellettoTenagliaMove(tool);
                 break;
@@ -367,12 +376,9 @@ public class CLI extends View{
                 sgrossatriceMove();
                 break;
             case PENNELLOPEREGLOMISE:
-                pennelloAlesatoreLeathekinManualeMove(tool);
-                break;
             case ALESATOREPERLAMINADIRAME:
-                pennelloAlesatoreLeathekinManualeMove(tool);
-                break;
             case TAGLIERINAMANUALE:
+            case LATHEKIN:
                 pennelloAlesatoreLeathekinManualeMove(tool);
                 break;
             case TAGLIERINACIRCOLARE:
@@ -412,7 +418,7 @@ public class CLI extends View{
             setChanged();
             notifyObservers(clientMessage);
             println("Mossa inviata");
-        }catch (AlredySetDie e){
+        } catch (FullBoardException e) {
             println("Errore, la plancia e' piena, non puoi usare questo tool");
             chooseMove();
         }
@@ -423,23 +429,19 @@ public class CLI extends View{
      * @param tool tool to use
      */
     private void skipMartellettoTenagliaMove(Tool tool){
-        if ((tool == Tool.TENAGLIAAROTELLE && !modelView.isFirstTurn()) || (tool == Tool.MARTELLETTO && (modelView.isFirstTurn() || modelView.isNormalMove()))) {
+        if ((tool == Tool.TENAGLIAAROTELLE && (!modelView.isFirstTurn() || !modelView.isNormalMove()))
+                || (tool == Tool.MARTELLETTO && (modelView.isFirstTurn() || modelView.isNormalMove()))) {
             println("Errore: Non puoi eseguire questa mossa");
             chooseMove();
         } else {
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool));
+            if (tool == Tool.TENAGLIAAROTELLE)
+                hasUsedTenaglia = true;
             setChanged();
             notifyObservers(clientMessage);
             println("Mossa inviata");
-            if (tool.equals(Tool.TENAGLIAAROTELLE)) {
-                println("Esegui il primo piazzamento");
-                normalSugheroMove(Tool.MOSSASTANDARD);
-                clientMessage = new ClientMessage(new PlayerMove(Tool.TENAGLIAAROTELLE));
-                setChanged();
-                notifyObservers(clientMessage);
-                println("Esegui il secondo piazzamento");
-                normalSugheroMove(Tool.MOSSASTANDARD);
-            }
+
+
         }
     }
 
@@ -450,11 +452,11 @@ public class CLI extends View{
        int position = chooseDraftpoolDie();
        try {
             println("Valore del dado selezionato: " + modelView.getDraftPoolDie(position).getNumber().getInt());
-            int scelta = 3;
-            while(scelta != 0 && scelta != 1){
+           int scelta;
+           do {
                 println("Inserisci 0 per diminuire il valore del dado selezionato, 1 per aumentare il valore del dado");
                 scelta = InputUtils.getInt();
-            }
+           } while (scelta != 0 && scelta != 1);
 
             Boolean aumento = (scelta != 0);
 
@@ -464,7 +466,7 @@ public class CLI extends View{
             println("Mossa inviata");
 
        }catch(NoDieException e){
-           LOGGER.log(Level.FINEST, "Nessun dado presente");
+           LOGGER.log(Level.SEVERE, "Nessun dado presente");
            println("Errore, dado non presente nel draftpool, mossa annullata");
            chooseMove();
        }
@@ -488,7 +490,7 @@ public class CLI extends View{
                 secondaMossa = true;
             }else if(tool == Tool.TAGLIERINAMANUALE){
                 println("Vuoi scegliere un secondo dado da muovere? 0 no, 1 si");
-                int scelta = 2;
+                int scelta;
                 do{
                     scelta = InputUtils.getInt();
                 }while(scelta != 0 && scelta != 1);
@@ -510,7 +512,7 @@ public class CLI extends View{
             setChanged();
             notifyObservers(clientMessage);
             println("Mossa inviata");
-        }catch (AlredySetDie e){
+        } catch (FullBoardException e) {
             println("Errore: la plancia e' piena, non puoi usare questo tool");
             chooseMove();
         }catch (NoDieException e){
@@ -545,17 +547,38 @@ public class CLI extends View{
     private void pennelloPastaSaldaMove(){
         try{
             int i = chooseDraftpoolDie();
-            NumberEnum newNum = NumberEnum.values()[(new Random()).nextInt(NumberEnum.values().length)];
-            println("Il nuovo valore del dado e': " + newNum.getInt());
-            int[] position = chooseBoardCellWithoutDie();
 
-            ClientMessage clientMessage = new ClientMessage(new PlayerMove(position[0],position[1],i,newNum,Tool.PENNELLOPERPASTASALDA));
+            Die die = modelView.getDraftPoolDie(i);
+            die.reRoll();
+            println("Il nuovo valore del dado e': " + die.getNumber().getInt());
+            boolean check = true;
+            PlayerBoard board = modelView.getBoard(modelView.getPlayer(localID));
+            for (int r = 0; r < 4 && check; r++) {
+                for (int c = 0; c < 5 && check; c++) {
+                    if ((board.verifyInitialPositionRestriction(r, c) && board.isEmpty()) ||
+                            (!board.containsDie(r, c) && board.verifyNumberRestriction(die, r, c) &&
+                                    board.verifyColorRestriction(die, r, c) &&
+                                    board.verifyNearCellsRestriction(die, r, c) &&
+                                    board.verifyPositionRestriction(r, c)))
+                        check = false;
+                }
+            }
+            ClientMessage clientMessage;
+            if (!check) {
+                int[] position = chooseBoardCellWithoutDie();
+                clientMessage = new ClientMessage(new PlayerMove(position[0], position[1], i, die.getNumber(), Tool.PENNELLOPERPASTASALDA));
+            } else {
+                System.out.println("Il dado viene riposto in riserva");
+                clientMessage = new ClientMessage(new PlayerMove(i, die.getNumber(), Tool.PENNELLOPERPASTASALDA));
+            }
             setChanged();
             notifyObservers(clientMessage);
             println("Mossa inviata");
-        }catch (AlredySetDie e){
+        } catch (FullBoardException e) {
             println("Errore: la plancia e' piena, non puoi usare questo tool");
             chooseMove();
+        } catch (NoDieException e) {
+            LOGGER.log(Level.SEVERE, "la chooseDraftPoolDie non funziona");
         }
     }
 
@@ -563,15 +586,47 @@ public class CLI extends View{
      * Use the diluente per pasta salda tool
      */
     private void diluentePerPastaSaldaMove(){
-        int i = chooseDraftpoolDie();
+        int pos = chooseDraftpoolDie();
         try {
-            modelView.getDiceBag().addDie(modelView.getDraftPoolDie(i));
-        }catch (NoDieException e){
-            println("Errore: dado non presente");
-            return;
+            Die die = modelView.getDiceBag().getFirst();
+            println("Il dado pescato dalla dicebag è " + die.getColor().getColorString());
+            int val;
+            do {
+                println("Scegli il valore del dado: ");
+                val = InputUtils.getInt();
+            } while (val < 1 || val > 6);
+            die.setNumber(NumberEnum.getNumber(val));
+
+            boolean check = true;
+            PlayerBoard board = modelView.getBoard(modelView.getPlayer(localID));
+            for (int r = 0; r < 4 && check; r++) {
+                for (int c = 0; c < 5 && check; c++) {
+                    if ((board.verifyInitialPositionRestriction(r, c) && board.isEmpty()) ||
+                            (!board.containsDie(r, c) &&
+                                    board.verifyNumberRestriction(die, r, c) &&
+                                    board.verifyColorRestriction(die, r, c) &&
+                                    board.verifyNearCellsRestriction(die, r, c) &&
+                                    board.verifyPositionRestriction(r, c)))
+                        check = false;
+                }
+            }
+            if (check) {
+                println("Non è possibile posizionarlo, viene riposto in riserva");
+                setChanged();
+                notifyObservers(new ClientMessage(new PlayerMove(pos, NumberEnum.getNumber(val), Tool.DILUENTEPERPASTASALDA)));
+            } else {
+                int[] pair = chooseBoardCellWithoutDie();
+                setChanged();
+                notifyObservers(new ClientMessage(new PlayerMove(pair[0], pair[1], pos, NumberEnum.getNumber(val), Tool.DILUENTEPERPASTASALDA)));
+            }
+            println("Mossa inviata");
+
+        } catch (EmptyBagException e) {
+            LOGGER.log(Level.SEVERE, "DiceBag Vuota");
+        } catch (FullBoardException e) {
+            LOGGER.log(Level.SEVERE, "La board è piena quando dovrebbe invece avere almeno una cella dove mettere il dado");
         }
 
-        //TODO problema, come passo il valore di colore del nuovo dado??
 
     }
 
@@ -591,7 +646,7 @@ public class CLI extends View{
      */
     public void chooseMove(){
         println("------------------------------------------------------");
-        println("E' il tuo turno, scelgi la mossa da effettuare:");
+        println("E' il tuo turno, scegli la mossa da effettuare:");
         if(modelView.isNormalMove() || modelView.isUsedTool())
             println("0) Finisci turno");
         else
@@ -601,14 +656,14 @@ public class CLI extends View{
         if(!modelView.isUsedTool())
             println("2) Usa una carta strumento");
         println("3) Visualizza la tua plancia");
-        println("4) Visualizza le plancie degli avversari");
+        println("4) Visualizza le plance degli avversari");
         println("5) Visualizza la riserva dei dadi");
         println("6) Visualizza il tracciato dei dadi");
-        println("7) Visualizza il le carte strumento");
-        println("8) Visualizza il le carte obiettivo pubblico");
+        println("7) Visualizza le carte strumento");
+        println("8) Visualizza le carte obiettivo pubblico");
         println("9) Visualizza il tuo obiettivo privato");
         print("Scelta: ");
-        int i = -1;
+        int i;
         do{
             i = InputUtils.getInt();
         }while(i < 0 || i > 9);
@@ -616,7 +671,7 @@ public class CLI extends View{
 
         switch (i){
             case 0:
-                println("In attesa di mandarlo");
+                println("In attesa di inviare la mossa");
                 setChanged();
                 notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
                 println("Mossa inviata");
@@ -631,7 +686,7 @@ public class CLI extends View{
                 if(!modelView.isUsedTool()){
                     showToolCards();
                     println("Carta strumento scelta: ");
-                    int k = 4;
+                    int k;
                     do{
                         k = InputUtils.getInt();
                     }while(k < 1 || k > 3);
@@ -719,7 +774,10 @@ public class CLI extends View{
                 println("Scegli la tua plancia di gioco");
                 for (int i = 0; i < message.getBoards().length; i++) {
                     println("Plancia " + (i+1));
+                    println(message.getBoards()[i].getName());
                     showBoard(new PlayerBoard(message.getBoards()[i]));
+                    println("Difficoltà della board: " + message.getBoards()[i].getTokens());
+                    System.out.println();
                 }
 
                 println("Inserisci il numero della plancia scelta: ");
@@ -734,35 +792,41 @@ public class CLI extends View{
             case MODELVIEWUPDATE:
                 println("------------------------------------------------------");
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
+
                 modelView = new ModelView(modelView, message.getModelView());
                 println("La tua plancia: ");
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
 
-                for(int k = 0; k < modelView.getPlayers().size(); k ++){
-                    if(modelView.getPlayers().get(k).isYourTurn()){
-                        LOGGER.log(Level.FINE,"E' il turno del giocatore " + modelView.getPlayers().get(k).getNick());
+                for (int k = 0; k < modelView.getPlayers().size(); k++) {
+                    if (modelView.getPlayers().get(k).isYourTurn()) {
+                        LOGGER.log(Level.FINE, "E' il turno del giocatore " + modelView.getPlayers().get(k).getNick());
                     }
                 }
-                if(modelView.getPlayer(localID).isYourTurn()){
-                    chooseMove();
-                }else{
-                    for(int h = 0; h < modelView.getPlayers().size(); h ++){
-                        if(!modelView.getPlayers().get(h).getId().equals(localID)){
-                            println("\nPlancia del giocatore: "+modelView.getPlayers().get(h).getNick());
+                if (modelView.getPlayer(localID).isYourTurn()) {
+                    if (hasUsedTenaglia) {
+                        hasUsedTenaglia = false;
+                        move(Tool.MOSSASTANDARD);
+                    } else
+                        chooseMove();
+                } else {
+                    for (int h = 0; h < modelView.getPlayers().size(); h++) {
+                        if (!modelView.getPlayers().get(h).getId().equals(localID)) {
+                            println("\nPlancia del giocatore: " + modelView.getPlayers().get(h).getNick());
                             showPlayerBoard(modelView.getBoard(modelView.getPlayers().get(h)));
                         }
+                        }
                     }
-                }
                 break;
             case HASDISCONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' disconnesso");
-                try {
+                //questo try non è necessario, in quanto non ricevi aggiornamenti sulla modelview alla disconnessione di qualcuno
+                /*try {
                     if (modelView.getPlayer(localID).isYourTurn()) {
                         chooseMove();
                     }
                 }catch (NullPointerException e){
                     LOGGER.log(Level.WARNING,"Null pointer has disconnected");
-                }
+                }*/
                 break;
             case HASRICONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
@@ -810,7 +874,7 @@ public class CLI extends View{
         println("Benvenuto, scegli il metodo di connessione: ");
         println("1) Socket");
         println("2) RMI");
-        int i = 0;
+        int i;
         do{
             i = InputUtils.getInt();
         }while(i < 1 || i > 2);
@@ -838,7 +902,6 @@ public class CLI extends View{
                     }
             }
             println("Connessione accettata");
-
 
 
         ClientMessage clientMessage = new ClientMessage(nick,localID);
