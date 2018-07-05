@@ -6,6 +6,7 @@ import it.polimi.se2018.utils.InputUtils;
 import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.ServerMessage;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -39,6 +40,7 @@ public class ControllerGUISocket implements Initializable {
     private Long localID;
     private ServerMessage message;
     private ControllerWaiting nextController;
+    private IntegerProperty num;
 
 
     @FXML
@@ -76,7 +78,7 @@ public class ControllerGUISocket implements Initializable {
                 System.out.println("File FXML not found");
             }
             nextController = loader.getController();
-            nextController.sendInfo(message);
+            nextController.sendInfo(message, num);
             stage.setTitle("Preparazione gioco");
             stage.setScene(scene);
             stage.setResizable(false);
@@ -178,9 +180,10 @@ public class ControllerGUISocket implements Initializable {
             popupStage.showAndWait();
     }
 
-    public void sendInfo(ClientNetwork clientNetwork, ServerMessage message) {
+    public void sendInfo(ClientNetwork clientNetwork, ServerMessage message, IntegerProperty num) {
         this.clientNetwork = clientNetwork;
         this.message = message;
+        this.num = num;
     }
 
     /*
