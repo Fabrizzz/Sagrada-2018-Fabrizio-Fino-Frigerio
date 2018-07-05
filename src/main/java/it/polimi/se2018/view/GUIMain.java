@@ -84,7 +84,7 @@ public class GUIMain {
         piazzaUnDadoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                normalMove();
+                normalSugheroMove();
             }
         });
         terminaTurnoButton.addActionListener(new ActionListener() {
@@ -257,7 +257,7 @@ public class GUIMain {
         return p;
     }
 
-    public void normalMove(){
+    public void normalSugheroMove(){
 
         int i = chooseDraftPoolPosition();
 
@@ -266,6 +266,51 @@ public class GUIMain {
         guiSwingProxy.sendMessage(clientMessage);
 
     }
+
+    public void tenagliaARotelleMove(){
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TENAGLIAAROTELLE));
+        guiSwingProxy.sendMessage(clientMessage);
+        normalSugheroMove();
+        normalSugheroMove();
+    }
+
+    public void martellettoMove(){
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.MARTELLETTO));
+        guiSwingProxy.sendMessage(clientMessage);
+    }
+
+    public void sgrossatriceMove(){
+        int pos = chooseDraftPoolPosition();
+        if(pos < modelView.getDraftPool().size()){
+            GUIAumentaValoreDialog dialog = new GUIAumentaValoreDialog();
+            boolean addOne = dialog.getValue();
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.PINZASGROSSATRICE,pos,addOne));
+            guiSwingProxy.sendMessage(clientMessage);
+        }else{
+            printError("Devi selezionare un dado");
+        }
+    }
+
+    public void alesatoreEglomiseMove(Tool tool){
+        int[] posi = chooseCell();
+        int[] posf = chooseCell();
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool,posi[0],posi[1],posf[0],posf[1]));
+        guiSwingProxy.sendMessage(clientMessage);
+    }
+
+    public void lathekinMove(){
+        int[] posi = chooseCell();
+        int[] posf = chooseCell();
+        printError("Scegli il secondo dado da muovere");
+        int[] pos2i = chooseCell();
+        int[] pos2f = chooseCell();
+
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1],new PlayerMove(Tool.LATHEKIN,pos2i[0],pos2i[1],pos2f[0],pos2f[1])));
+        guiSwingProxy.sendMessage(clientMessage);
+    }
+
+
 
     public static void main(String[] args) {
         Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);
