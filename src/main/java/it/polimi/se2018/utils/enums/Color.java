@@ -6,9 +6,19 @@ package it.polimi.se2018.utils.enums;
  */
 public enum Color {
 
-    RED,
-    YELLOW,
-    GREEN,
-    BLUE,
-    PURPLE
+    RED("Rosso"),
+    YELLOW("Giallo"),
+    GREEN("Verde"),
+    BLUE("Blu"),
+    PURPLE("Viola");
+
+    String str;
+
+    Color(String str) {
+        this.str = str;
+    }
+
+    public String getColorString() {
+        return str;
+    }
 }
