@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.polimi.se2018.model.Board;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.model.cell.ColorRestriction;
@@ -28,8 +29,6 @@ public class GUISwing extends JDialog {
 
     public GUISwing(GUISwingProxy guiSwingProxy) {
         this.guiSwingProxy = guiSwingProxy;
-        Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);
-        modelView = new ModelView(model);
         localID = new Long(123);
         colorMap.put(Color.BLUE,"B");
         colorMap.put(Color.RED,"R");
@@ -68,16 +67,45 @@ public class GUISwing extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        refreshBoard();
+        whiteRefreshBoard();
     }
 
-    private void refreshBoard(){
+    private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
                 ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
-
             }
         }
+    }
+
+    public void setModelView(ModelView modelView){
+        this.modelView = modelView;
+        refreshBoard();
+    }
+
+    public void chooseBoard(Board[] boards){
+        GUISwingChooseBoard dialog = new GUISwingChooseBoard(boards,this);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
+    public void selectedBoard(Board board){
+        guiSwingProxy.selectedBoard(board);
+    }
+
+    public ModelView getModelView(){
+        return modelView;
+    }
+
+    public void endGame(Map<String,Integer> scores){
+        //todo
+    }
+
+    public void printError(String error){
+        JOptionPane.showMessageDialog(this, error);
+    }
+    private void refreshBoard(){
+        whiteRefreshBoard();
 
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
@@ -98,9 +126,6 @@ public class GUISwing extends JDialog {
                 }
             }
         }
-
-
-
     }
 
     private String colorToString(Color color){
