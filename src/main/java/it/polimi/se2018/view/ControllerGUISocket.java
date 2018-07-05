@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.client.ClientNetwork;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -24,6 +25,8 @@ public class ControllerGUISocket implements Initializable {
 
     private static final int limitIPSocket= 15;
     private static final int limitIPPort= 5;
+
+    private ClientNetwork clientNetwork;
 
     @FXML
     private Label labelIPSocket;
@@ -70,6 +73,7 @@ public class ControllerGUISocket implements Initializable {
     public void handleButtonAvantiSocket(ActionEvent event) {
 
         createConnection();
+
         /*
         Aggiungere controllo se la connessione è riuscita o fallita
          */
@@ -171,6 +175,9 @@ public class ControllerGUISocket implements Initializable {
         */
     }
 
+    public void sendInfo(ClientNetwork temp) {
+        clientNetwork = temp;
+    }
 
 
 

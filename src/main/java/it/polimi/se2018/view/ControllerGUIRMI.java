@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.client.ClientNetwork;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import java.util.ResourceBundle;
 public class ControllerGUIRMI implements Initializable {
 
     private static final int limitIPRMI= 15;
+    private ClientNetwork clientNetwork;
 
     @FXML
     private Label labelIPRMI;
@@ -103,4 +105,9 @@ public class ControllerGUIRMI implements Initializable {
         });
 
     }
+
+    public void sendInfo(ClientNetwork temp) {
+        clientNetwork = temp;
+    }
+
 }

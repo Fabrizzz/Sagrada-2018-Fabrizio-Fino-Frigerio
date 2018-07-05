@@ -22,6 +22,8 @@ import java.util.ResourceBundle;
 public class ControllerGUI implements Initializable {
 
     private ClientNetwork clientNetwork;
+    ControllerGUISocket nextControllerSocket;
+    ControllerGUIRMI nextControllerRMI;
 
     @FXML
     private AnchorPane root;
@@ -45,32 +47,45 @@ public class ControllerGUI implements Initializable {
         Stage stage;
         Parent newScene;
         Scene scene = null;
+        FXMLLoader loader = null;
 
+        nextControllerSocket = null;
+        nextControllerRMI = null;
+
+        //SOCKET
         if (event.getSource() == buttonSocket){
-            //System.out.println("SOCKET!");
             stage = (Stage) buttonSocket.getScene().getWindow();
             try{
-                newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlSocket.fxml"));
+                loader = new FXMLLoader(getClass().getResource("/fxmlFile/fxmlSocket.fxml"));
+                newScene = (Parent) loader.load();
                 scene = new Scene(newScene);
             }
             catch (Exception e){
                 System.out.println("File FXML not found");
             }
+            nextControllerSocket = loader.getController();
+            nextControllerSocket.sendInfo(clientNetwork);
             stage.setTitle("Socket");
             stage.setScene(scene);
         }
+
+        //RMI
         else {
-            //System.out.println("RMI!");
-            stage = (Stage) buttonRMI.getScene().getWindow();try{
-                newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlRMI.fxml"));
+            stage = (Stage) buttonRMI.getScene().getWindow();
+            try{
+                loader = new FXMLLoader(getClass().getResource("/fxmlFile/fxmlRMI.fxml"));
+                newScene = (Parent) loader.load();
                 scene = new Scene(newScene);
             }
             catch (Exception e){
                 System.out.println("File FXML not found");
             }
+            nextControllerRMI = loader.getController();
+            nextControllerRMI.sendInfo(clientNetwork);
             stage.setTitle("RMI");
             stage.setScene(scene);
         }
+
         stage.setResizable(false);
         stage.show();
     }
@@ -87,8 +102,6 @@ public class ControllerGUI implements Initializable {
 
     public void sendInfo(ClientNetwork temp) {
         clientNetwork = temp;
-        System.out.println("Prova");
-        System.out.println(clientNetwork);
     }
 
 }
