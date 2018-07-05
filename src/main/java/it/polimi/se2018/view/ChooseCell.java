@@ -135,6 +135,16 @@ public class ChooseCell extends JDialog implements MouseListener {
 
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
+                if(playerBoard.getRestriction(i,j).isColorRestriction()){
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png",false));
+                }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png",false));
+                }
+            }
+        }
+
+        for(int i = 0; i < 4; i ++) {
+            for (int j = 0; j < 5; j++) {
                 if(playerBoard.containsDie(i,j)){
                     try{
                         ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png",false));
@@ -142,6 +152,8 @@ public class ChooseCell extends JDialog implements MouseListener {
                 }
             }
         }
+
+
     }
 
     private void onOK() {

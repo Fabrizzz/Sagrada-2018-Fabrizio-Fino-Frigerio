@@ -12,8 +12,10 @@ import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.messages.ClientMessage;
+import it.polimi.se2018.utils.messages.PlayerMove;
 
-public class GUISwing {
+public class GUIMain {
     private JPanel contentPane;
     private JPanel board;
     private JButton mostraRiservaButton;
@@ -29,7 +31,7 @@ public class GUISwing {
     private Long localID;
     private GUISwingProxy guiSwingProxy;
 
-    public GUISwing(GUISwingProxy guiSwingProxy) {
+    public GUIMain(GUISwingProxy guiSwingProxy) {
         this.guiSwingProxy = guiSwingProxy;;
         colorMap.put(Color.BLUE,"B");
         colorMap.put(Color.RED,"R");
@@ -77,7 +79,7 @@ public class GUISwing {
         piazzaUnDadoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mossaStandard();
+                normalMove();
             }
         });
     }
@@ -198,9 +200,10 @@ public class GUISwing {
         return colorMap.get(color);
     }
 
-    private void chooseCell(){
+    private int[] chooseCell(){
         ChooseCell dialog = new ChooseCell(modelView.getBoard(modelView.getPlayer(localID)));
         int[] pos = dialog.getPosition();
+        return pos;
     }
 
     public void mostraRiserva(){
@@ -225,9 +228,14 @@ public class GUISwing {
         return p;
     }
 
-    public void mossaStandard(){
-        chooseDraftPoolPosition();
-        chooseCell();
+    public void normalMove(){
+
+        int i = chooseDraftPoolPosition();
+
+        int[] position = chooseCell();
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.MOSSASTANDARD, position[0], position[1], i));
+        guiSwingProxy.sendMessage(clientMessage);
+
     }
 
     public static void main(String[] args) {
@@ -242,7 +250,7 @@ public class GUISwing {
 
         GUISwingProxy guiSwingProxy = new GUISwingProxy();
         JFrame frame = new JFrame("Sagrada");
-        GUISwing game = new GUISwing(guiSwingProxy);
+        GUIMain game = new GUIMain(guiSwingProxy);
         game.setId((long) 123);
         game.setModelView(modelView);
         frame.setContentPane(game.getContentPane());

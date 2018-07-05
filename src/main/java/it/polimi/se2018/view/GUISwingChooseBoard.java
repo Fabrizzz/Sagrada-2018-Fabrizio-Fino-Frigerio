@@ -1,7 +1,6 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Board;
-import it.polimi.se2018.model.BoardList;
 import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.NumberRestriction;
@@ -9,7 +8,6 @@ import it.polimi.se2018.utils.enums.Color;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,17 +21,17 @@ public class GUISwingChooseBoard extends JDialog {
     private JButton choose;
     private JLabel boardName;
     private Map<Color,String> colorMap = new HashMap<>();
-    private GUISwing guiSwing;
+    private GUIMain guiMain;
     private Board[] boards;
 
-    public GUISwingChooseBoard(Board[] boards,GUISwing guiSwing) {
+    public GUISwingChooseBoard(Board[] boards,GUIMain guiMain) {
         colorMap.put(Color.BLUE,"B");
         colorMap.put(Color.RED,"R");
         colorMap.put(Color.GREEN, "G");
         colorMap.put(Color.YELLOW,"Y");
         colorMap.put(Color.PURPLE, "P");
 
-        this.guiSwing = guiSwing;
+        this.guiMain = guiMain;
         this.boards = boards;
 
         setContentPane(contentPane);
@@ -126,13 +124,13 @@ public class GUISwingChooseBoard extends JDialog {
 
     private void onOK() {
         if(radioButton1.isSelected()){
-            guiSwing.selectedBoard(boards[0]);
+            guiMain.selectedBoard(boards[0]);
         }else if(radioButton2.isSelected()){
-            guiSwing.selectedBoard(boards[1]);
+            guiMain.selectedBoard(boards[1]);
         }else if(radioButton3.isSelected()){
-            guiSwing.selectedBoard(boards[2]);
+            guiMain.selectedBoard(boards[2]);
         }else if(radioButton4.isSelected()){
-            guiSwing.selectedBoard(boards[3]);
+            guiMain.selectedBoard(boards[3]);
         }
         dispose();
     }

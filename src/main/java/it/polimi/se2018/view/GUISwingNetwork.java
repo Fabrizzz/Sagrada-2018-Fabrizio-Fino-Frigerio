@@ -20,7 +20,7 @@ public class GUISwingNetwork extends JDialog{
     private ClientNetwork clientNetwork;
     private GUISwingProxy guiSwingProxy;
     private Long localID;
-    private GUISwing game;
+    private GUIMain game;
 
     public GUISwingNetwork() {
         guiSwingProxy = new GUISwingProxy();
@@ -67,7 +67,7 @@ public class GUISwingNetwork extends JDialog{
         int port = 0;
         String nick = nickname.getText();
         localID = JSONUtils.readID(nick);
-        game = new GUISwing(guiSwingProxy);
+        game = new GUIMain(guiSwingProxy);
         game.setId(localID);
         guiSwingProxy.gameWindow(game,localID);
         clientNetwork = new ClientNetwork(guiSwingProxy);

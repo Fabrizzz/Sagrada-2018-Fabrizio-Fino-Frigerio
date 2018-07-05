@@ -1,9 +1,8 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.client.Client;
 import it.polimi.se2018.model.Board;
 import it.polimi.se2018.model.ModelView;
-import it.polimi.se2018.model.PlayerBoard;
-import it.polimi.se2018.utils.InputUtils;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.ServerMessage;
@@ -13,12 +12,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GUISwingProxy extends View {
-    private GUISwing gameWindow;
+    private GUIMain gameWindow;
     private ModelView modelView;
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private Long localID;
 
-    public void gameWindow(GUISwing gameWindow, Long localID){
+    public void gameWindow(GUIMain gameWindow, Long localID){
         this.gameWindow = gameWindow;
         localID = localID;
     }
@@ -67,6 +66,11 @@ public class GUISwingProxy extends View {
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");
                 break;
         }
+    }
+
+    public void sendMessage(ClientMessage clientMessage){
+        setChanged();
+        notifyObservers(clientMessage);
     }
 
     public void selectedBoard(Board board){
