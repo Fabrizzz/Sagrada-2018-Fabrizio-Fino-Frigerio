@@ -5,11 +5,16 @@ import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class ServerMessage extends Message {
     private ErrorType errorType;
     private ModelView modelView;
     private String disconnectedPlayer;
     private Board[] boards;
+    private Map<String,Integer> scores;
 
     public ServerMessage(MessageType messageType, String player) {
         super(messageType);
@@ -25,6 +30,11 @@ public class ServerMessage extends Message {
     public ServerMessage(MessageType messageType, ModelView modelView) {
         super(messageType);
         this.modelView = modelView;
+    }
+
+    public ServerMessage(MessageType messageType, Map<String,Integer> scores){
+        super(messageType);
+        this.scores = scores;
     }
 
     public ServerMessage(Board[] boards) {
@@ -48,4 +58,6 @@ public class ServerMessage extends Message {
     public String getDisconnectedPlayer() {
         return disconnectedPlayer;
     }
+
+    public Map<String, Integer> getScores() { return scores; }
 }
