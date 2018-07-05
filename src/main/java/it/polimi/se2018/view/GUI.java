@@ -1,6 +1,9 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.client.ClientNetwork;
+import it.polimi.se2018.utils.messages.ServerMessage;
 import javafx.application.Application;
+import javafx.beans.property.IntegerProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,8 +17,12 @@ import java.util.concurrent.CountDownLatch;
  */
 public class GUI extends Application {
 
-    public static final CountDownLatch latch = new CountDownLatch(1);
-    public static GUI classe = null;
+    private static final CountDownLatch latch = new CountDownLatch(1);
+    private static GUI classe = null;
+    private ClientNetwork clientNetwork;
+    private ServerMessage message;
+    private ControllerGUI nextController;
+    private IntegerProperty num;
 
     public static GUI waitStartUpGUI() {
         try {
@@ -30,6 +37,12 @@ public class GUI extends Application {
     public static void setStartUpGUI(GUI startUp) {
         classe = startUp;
         latch.countDown();
+    }
+
+    public void sendInfo(ClientNetwork clientNetwork, ServerMessage message, IntegerProperty num) {
+        this.clientNetwork = clientNetwork;
+        this.message = message;
+        this.num = num;
     }
 
     public GUI() {
@@ -47,15 +60,20 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        FXMLLoader loader = null;
         Parent root;
         Scene scene = null;
         try{
-            root = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
+            loader = new FXMLLoader(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
+            root = (Parent) loader.load();
             scene = new Scene(root,600,400);
         }
         catch (Exception e){
             System.out.println("File FXML not found");
         }
+
+        nextController = loader.getController();
+        nextController.sendInfo(clientNetwork, message, num);
 
         primaryStage.setTitle("Sagrada");
         primaryStage.setScene(scene);

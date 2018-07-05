@@ -883,7 +883,6 @@ public class CLI extends View{
         int port;
             while(!clientNetwork.isConnected()) {
                 println("Inserisci l'indirizzo del server: ");
-                //Pattern pattern = Pattern.compile("((2[0-4]\\d|25[0-5]|[01]?\\d?\\d)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d?\\d)");
 
                     address = InputUtils.getString();
 

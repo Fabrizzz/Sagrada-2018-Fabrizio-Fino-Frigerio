@@ -14,7 +14,6 @@
       <bottom>
         <HBox alignment="BOTTOM_RIGHT" prefHeight="65.0" prefWidth="476.0" spacing="20.0">
           <children>
-            <Button fx:id="buttonIndietroSocket" mnemonicParsing="false" onAction="#handleButtonIndietroSocket" text="Indietro" />
             <Button fx:id="buttonAvantiSocket" mnemonicParsing="false" onAction="#handleButtonAvantiSocket" text="Avanti" />
           </children>
         </HBox>

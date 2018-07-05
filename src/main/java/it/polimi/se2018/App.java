@@ -19,7 +19,7 @@ public class App {
         }while(i < 1 || i > 2);
 
         if(i == 1){
-            Client client = new Client();
+            Client client = new Client(args);
         }else{
             Server server = new Server();
         }
