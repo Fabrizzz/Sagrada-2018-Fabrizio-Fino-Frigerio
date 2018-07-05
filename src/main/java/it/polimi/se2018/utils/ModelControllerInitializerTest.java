@@ -26,7 +26,7 @@ public class ModelControllerInitializerTest {
         boardMap = new HashMap();
         Player player = new Player("asd", (long) 123);
         boardMap.put(player, new PlayerBoard(boardList.getBoard("Firelight")));
-        boardMap.put(new Player("asd", (long) 1234), new PlayerBoard(boardList.getBoard("Firelight")));
+        boardMap.put(new Player("asdd", (long) 1234), new PlayerBoard(boardList.getBoard("Firelight")));
         publicObjectives = new ArrayList<>();
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSIRIGA));
         publicObjectives.add(PublicObjectiveFactory.createPublicObjective(PublicObjectiveName.COLORIDIVERSICOLONNA));
