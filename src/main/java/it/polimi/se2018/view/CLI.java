@@ -18,14 +18,12 @@ import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
-import java.io.*;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  * Command Line Interface
@@ -817,20 +815,14 @@ public class CLI extends View{
             i = InputUtils.getInt();
         }while(i < 1 || i > 2);
 
-        String address = "";
-        int port = 0;
+        String address;
+        int port;
             while(!clientNetwork.isConnected()) {
                 println("Inserisci l'indirizzo del server: ");
-                boolean prova = true;
-                Pattern pattern = Pattern.compile("((2[0-4]\\d|25[0-5]|[01]?\\d?\\d)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d?\\d)");
-                while (prova) {
-                    address = InputUtils.getString();
-                    if (pattern.matcher(address).matches())
-                        prova = false;
-                    else
-                        println("Ip non corretto\nRiprova: ");
+                //Pattern pattern = Pattern.compile("((2[0-4]\\d|25[0-5]|[01]?\\d?\\d)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d?\\d)");
 
-                }
+                    address = InputUtils.getString();
+
 
                 if (i == 1) {
                     do {
