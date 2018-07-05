@@ -2,6 +2,7 @@ package it.polimi.se2018.client;
 
 import it.polimi.se2018.view.CLI;
 import it.polimi.se2018.view.GUIProxy;
+import it.polimi.se2018.view.GUISwing;
 import it.polimi.se2018.view.View;
 import org.apache.commons.cli.*;
 
