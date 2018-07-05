@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.model.DiceBag;
 import it.polimi.se2018.model.DraftPool;
 import it.polimi.se2018.model.RoundTrack;
 import it.polimi.se2018.model.cell.Die;
@@ -38,17 +39,18 @@ public class GUISwingRiserva extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        populateBoard(draftPool);
     }
 
-    private void whiteRefreshBoard(){
+    private void whiteRefresh(){
         for(int i = 0; i < 9; i ++){
                 ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
-                //((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).setText("" + (i + 9 * j));
             }
     }
 
     private void populateBoard(DraftPool draftPool){
-        whiteRefreshBoard();
+        whiteRefresh();
 
         for(int i = 0; i < draftPool.size(); i ++) {
             try {
@@ -68,7 +70,8 @@ public class GUISwingRiserva extends JDialog {
     }
 
     /*public static void main(String[] args) {
-        GUISwingRiserva dialog = new GUISwingRiserva();
+        DraftPool prova = new DraftPool(4, new DiceBag(10));
+        GUISwingRiserva dialog = new GUISwingRiserva(prova);
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
