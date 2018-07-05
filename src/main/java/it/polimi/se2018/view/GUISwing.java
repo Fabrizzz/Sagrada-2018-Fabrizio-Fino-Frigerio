@@ -151,7 +151,6 @@ public class GUISwing extends JDialog {
     }
 
     private void refreshBoard(){
-        System.out.println("Caverio");
         whiteRefreshBoard();
         toolCardRefresh();
         try{
