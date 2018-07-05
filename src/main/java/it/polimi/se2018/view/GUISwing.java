@@ -149,6 +149,9 @@ public class GUISwing extends JDialog {
     }
 
     public void mostraRiserva(){
+        GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
+        dialog.pack();
+        dialog.setVisible(true);
 
     }
 
