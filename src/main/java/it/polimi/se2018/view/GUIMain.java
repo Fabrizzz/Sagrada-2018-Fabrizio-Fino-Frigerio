@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.polimi.se2018.client.Client;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
@@ -28,6 +29,7 @@ public class GUIMain {
     private JLabel labelTurn;
     private JLabel labelSegnalini;
     private JLabel labelRound;
+    private JButton terminaTurnoButton;
     private Map<Color,String> colorMap = new HashMap<>();
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
@@ -85,10 +87,18 @@ public class GUIMain {
                 normalMove();
             }
         });
+        terminaTurnoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
+                guiSwingProxy.sendMessage(clientMessage);
+            }
+        });
     }
 
     private void setCombobox() {
 
+        comboBoxPlayerBoard.removeAll();
         comboBoxPlayerBoard.addItem(modelView.getPlayer(localID).getNick());
         for(int j = 0; j < modelView.getPlayers().size(); j ++){
             if(!modelView.getPlayers().get(j).getId().equals(localID)){
@@ -278,10 +288,5 @@ public class GUIMain {
         frame.setLocationRelativeTo( null );
         frame.setVisible(true);
 
-    }
-
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }
