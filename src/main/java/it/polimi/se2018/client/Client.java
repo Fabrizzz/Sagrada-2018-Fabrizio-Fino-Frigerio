@@ -43,6 +43,25 @@ public class Client {
             LOGGER.log(Level.WARNING,"Impossibile aprire file di log");
         }
 
+        CommandLine cmd;
+        try{
+            Options options = new Options();
+            options.addOption("g", false, "Usa GUI");
+            options.addOption("c", false, "Usa CLI");
+
+            CommandLineParser parser = new DefaultParser();
+            cmd = parser.parse( options, args);
+            if(cmd.hasOption("g")) {
+                clientGUI();
+                return;
+            }else if(cmd.hasOption("c")) {
+                clientCLI();
+                return;
+            }
+        }catch (Exception e){
+            LOGGER.log(Level.FINE,"Errore parser options");
+        }
+
         int i;
         Scanner input = new Scanner(System.in);
         System.out.println("Scegli l'interfaccia grafica:");
