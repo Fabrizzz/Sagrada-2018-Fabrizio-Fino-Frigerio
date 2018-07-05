@@ -84,10 +84,14 @@ public class GUISwingDialog extends JDialog{
         if(clientNetwork.sendMessage(clientMessage)){
             JOptionPane.showMessageDialog(this, "Nome utente inviato, attendi inizio partita");
             dispose();
+
+            JFrame frame = new JFrame("Sagrada");
             GUISwing game = new GUISwing(guiSwingProxy);
             guiSwingProxy.gameWindow(game);
-            game.pack();
-            game.setVisible(true);
+            frame.setContentPane(game.getContentPane());
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(this, "Errore connessione.");
         }

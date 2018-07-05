@@ -21,7 +21,7 @@ import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
 
-public class GUISwing extends JDialog {
+public class GUISwing {
     private JPanel contentPane;
     private JPanel board;
     private JButton mostraRiservaButton;
@@ -56,8 +56,8 @@ public class GUISwing extends JDialog {
         toolCardMap.put(Tool.DILUENTEPERPASTASALDA,"toolCard11");
         toolCardMap.put(Tool.TAGLIERINAMANUALE,"toolCard12");
 
-        setContentPane(contentPane);
-        setModal(true);
+        //setContentPane(contentPane);
+        //setModal(true);
 
         mostraRiservaButton.addActionListener(new ActionListener() {
             @Override
@@ -73,13 +73,6 @@ public class GUISwing extends JDialog {
             }
         });
 
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
@@ -127,7 +120,7 @@ public class GUISwing extends JDialog {
     }
 
     public void printError(String error){
-        JOptionPane.showMessageDialog(this, error);
+        JOptionPane.showMessageDialog(this.contentPane, error);
     }
 
     public void mostraTracciatoDadi(){
@@ -185,15 +178,23 @@ public class GUISwing extends JDialog {
 
 
     public void mostraRiserva(){
-        GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
-        dialog.pack();
-        dialog.setVisible(true);
 
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
+                dialog.pack();
+                dialog.setVisible(true);
+            }
+        });
     }
 
     private void onCancel() {
         // add your code here if necessary
-        dispose();
+        //dispose();
+    }
+
+    public JPanel getContentPane(){
+        return contentPane;
     }
     public static void main(String[] args) {
         Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);
@@ -204,16 +205,17 @@ public class GUISwing extends JDialog {
         model.getDraftPool().addDie(new Die(Color.BLUE));
 
         ModelView modelView = new ModelView(model);
-        GUISwingProxy guiSwingProxy = new GUISwingProxy();
-        GUISwing game = new GUISwing(guiSwingProxy);
 
+        GUISwingProxy guiSwingProxy = new GUISwingProxy();
+        JFrame frame = new JFrame("Sagrada");
+        GUISwing game = new GUISwing(guiSwingProxy);
         game.setId((long) 123);
         game.setModelView(modelView);
-        game.refreshBoard();
-        game.pack();
-        game.setVisible(true);
+        frame.setContentPane(game.getContentPane());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
 
-        System.exit(0);
     }
 
 

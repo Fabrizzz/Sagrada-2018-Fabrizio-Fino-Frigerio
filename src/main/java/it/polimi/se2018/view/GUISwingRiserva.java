@@ -23,10 +23,10 @@ public class GUISwingRiserva extends JDialog {
         colorMap.put(Color.YELLOW,"Y");
         colorMap.put(Color.PURPLE, "P");
         setContentPane(contentPane);
-        setModal(true);
+        setModal(false);
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
@@ -65,7 +65,6 @@ public class GUISwingRiserva extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 

@@ -24,8 +24,7 @@ public class GUISwingRoundTrack extends JDialog {
         colorMap.put(Color.PURPLE, "P");
 
         setContentPane(contentPane);
-        setModal(true);
-        setModal(true);
+        setModal(false);
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
