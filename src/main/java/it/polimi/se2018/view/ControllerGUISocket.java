@@ -47,28 +47,7 @@ public class ControllerGUISocket implements Initializable {
     private TextField textNickSocket;
 
     @FXML
-    private Button buttonIndietroSocket;
-
-    @FXML
     private Button buttonAvantiSocket;
-
-    public void handleButtonIndietroSocket(ActionEvent event) {
-        Stage stage;
-        Parent newScene;
-        Scene scene = null;
-
-        stage = (Stage) buttonIndietroSocket.getScene().getWindow();
-        try{
-            newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
-            scene = new Scene(newScene);
-        }
-        catch (Exception e){
-            System.out.println("File FXML not found");
-        }
-        stage.setTitle("Sagrada");
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public void handleButtonAvantiSocket(ActionEvent event) {
 
@@ -194,5 +173,26 @@ public class ControllerGUISocket implements Initializable {
             popupStage.setMinHeight(100);
             popupStage.showAndWait();
     }
+
+    /*
+    //Tasto indietro: eliminato per problemi con clientNetwork
+    public void handleButtonIndietroSocket(ActionEvent event) {
+        Stage stage;
+        Parent newScene;
+        Scene scene = null;
+
+        stage = (Stage) buttonIndietroSocket.getScene().getWindow();
+        try{
+            newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
+            scene = new Scene(newScene);
+        }
+        catch (Exception e){
+            System.out.println("File FXML not found");
+        }
+        stage.setTitle("Sagrada");
+        stage.setScene(scene);
+        stage.show();
+    }
+     */
 
 }

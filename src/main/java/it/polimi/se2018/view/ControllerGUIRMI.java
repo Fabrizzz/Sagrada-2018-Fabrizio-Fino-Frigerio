@@ -40,29 +40,9 @@ public class ControllerGUIRMI implements Initializable {
     @FXML
     private TextField textNickRMI;
 
-    @FXML
-    private Button buttonIndietroRMI;
 
     @FXML
     private Button buttonAvantiRMI;
-
-    public void handleButtonIndietroRMI(ActionEvent event) {
-        Stage stage;
-        Parent newScene;
-        Scene scene = null;
-
-        stage = (Stage) buttonIndietroRMI.getScene().getWindow();
-        try{
-            newScene = FXMLLoader.load(getClass().getResource("/fxmlFile/fxmlGUI.fxml"));
-            scene = new Scene(newScene);
-        }
-        catch (Exception e){
-            System.out.println("File FXML not found");
-        }
-        stage.setTitle("Sagrada");
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public void handleButtonAvantiRMI(ActionEvent event) {
 
