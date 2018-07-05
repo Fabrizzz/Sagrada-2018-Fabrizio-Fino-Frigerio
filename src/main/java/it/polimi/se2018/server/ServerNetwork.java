@@ -6,6 +6,7 @@ import it.polimi.se2018.model.Player;
 import it.polimi.se2018.server.rmi.ServerRMIController;
 import it.polimi.se2018.server.rmi.ServerRMIControllerInterface;
 import it.polimi.se2018.server.socket.SocketConnectionGatherer;
+import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.network.Connection;
@@ -92,7 +93,7 @@ public class ServerNetwork implements Observer {
             waitingConnections.put(message.getId(), remoteView);
             if (waitingConnections.size() == 2) {
                 LOGGER.log(Level.FINE,"Avviato timer avvio partita, tempo rimanente 60s");
-                timer.schedule(new ConnectionTimer(this, getGames()), (long) 10 * 1000);
+                timer.schedule(new ConnectionTimer(this, getGames()), (long) JSONUtils.readConnectionTimer() * 1000);
             } else if (waitingConnections.size() == 4) {
                 LOGGER.log(Level.FINE,"Numero massimo di giocatori raggiunto, avvio inizializzazione");
                 initializeGame();

@@ -9,5 +9,6 @@ public enum MessageType {
     BOARDTOCHOOSE,
     ERROR,
     HASDISCONNECTED,
-    HASRICONNECTED
+    HASRICONNECTED,
+    ENDGAME
 }

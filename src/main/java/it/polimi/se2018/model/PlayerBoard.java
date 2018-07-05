@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class PlayerBoard implements Serializable {
     private Board board;
     private Cell[] cells = new Cell[20];
-    boolean isEmpty = true;
+    private boolean isEmpty = true;
     private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**

@@ -7,6 +7,7 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
+import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
@@ -35,6 +36,7 @@ public class Controller implements Observer {
     private List<RemoteView> views;
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
+    private int roundTimer = 1;
 
 
     /**
@@ -60,6 +62,8 @@ public class Controller implements Observer {
      * @param views remoteviews
      */
     public synchronized void startGame(Collection<RemoteView> views) {
+        roundTimer = JSONUtils.readRoundTimer();
+
         if (views.size() < 2 || views.size() > 4)
             throw new IllegalArgumentException();
 
@@ -104,7 +108,7 @@ public class Controller implements Observer {
 
             for (RemoteView view : views) {
                 model.addObserver(view);
-                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model)));
+                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model,model.getPrivateObjective(view.getPlayer()))));
             }
 
             setTimer(0, 0);
@@ -146,7 +150,7 @@ public class Controller implements Observer {
      */
     private void setTimer(int turn, int round) {
         LOGGER.log(Level.FINER, "Timer impostato");
-        timer.schedule(new RoundTimer(turn, round, this), (long) (Model.getMinutesPerTurn() * 60 * 1000));
+        timer.schedule(new RoundTimer(turn, round, this), (long) (roundTimer * 60 * 1000));
     }
 
     /**
@@ -155,6 +159,8 @@ public class Controller implements Observer {
     public void endGame() {
         //chiudere i timer
         //cancellare observers, chiudere connection, deregistrare connections dal server
+
+        LOGGER.log(Level.FINE,"Endgame");
     }
 
     /**
@@ -175,10 +181,26 @@ public class Controller implements Observer {
     }
 
     /**
+     * Check if there are more than one player still playing
+     * @return true if the count of connected players is > 1 false otherwise
+     */
+    public boolean playerCountCheck(){
+        int p = 0;
+        for(RemoteView remoteView : views){
+            if(remoteView.isConnected()){
+                p ++;
+            }
+        }
+        if(p > 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    /**
      * Change the current player turn
      */
     public void nextTurn() {
-        //aggiungere che se rimane un solo giocatore, ha vinto
         LOGGER.log(Level.FINE, "Next turn chiamato");
         model.setUsedTool(false);
         model.setNormalMove(false);
@@ -207,6 +229,7 @@ public class Controller implements Observer {
                 LOGGER.log(Level.FINE, "Prossimo giocatore: " + model.getPlayers().get(playerPosition2).getNick() + ". Notifico gli osservatori");
             }
         }
+
     }
 
 
@@ -217,57 +240,61 @@ public class Controller implements Observer {
      */
     @Override
     public synchronized void update(Observable o, Object arg) {
+        if(!playerCountCheck()){
+            LOGGER.log(Level.FINE,"1 giocatore rimanenti, termino partita");
+            endGame();
+        } else {
+            try {
+                ClientMessage message = (ClientMessage) arg;
+                RemoteView remoteView = (RemoteView) o;
 
-        try {
-            ClientMessage message = (ClientMessage) arg;
-            RemoteView remoteView = (RemoteView) o;
 
+                if (message.getMessageType() == MessageType.PLAYERMOVE) {
 
-            if (message.getMessageType() == MessageType.PLAYERMOVE) {
+                    PlayerMove playerMove = message.getPlayerMove();
+                    LOGGER.log(Level.INFO, "PlayerMove ricevuta");
 
-                PlayerMove playerMove = message.getPlayerMove();
-                LOGGER.log(Level.INFO, "PlayerMove ricevuta");
+                    try {
+                        if (firstHandler.process(playerMove, remoteView, getModel())) {
 
-                try {
-                    if (firstHandler.process(playerMove, remoteView, getModel())) {
-
-                        if ((playerMove.getTool().equals(Tool.SKIPTURN)) || model.hasUsedTool() && model.hasUsedNormalMove()) {
-                            nextTurn();
-                            setTimer(model.getTurn(), model.getRound());
-                            LOGGER.log(Level.FINE, "Mossa ricevuta e turno finito");
+                            if ((playerMove.getTool().equals(Tool.SKIPTURN)) || model.hasUsedTool() && model.hasUsedNormalMove()) {
+                                nextTurn();
+                                setTimer(model.getTurn(), model.getRound());
+                                LOGGER.log(Level.FINE, "Mossa ricevuta e turno finito");
+                            }
+                            model.notifyObs();
                         }
-                        model.notifyObs();
+
+                    } catch (InvalidParameterException e) {
+                        LOGGER.log(Level.SEVERE, "Ricevuta PlayerMove con parametri invalidi");
+                        remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                     }
 
-                } catch (InvalidParameterException e) {
-                    LOGGER.log(Level.SEVERE, "Ricevuta PlayerMove con parametri invalidi");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
+                    LOGGER.log(Level.INFO, "Board ricevuta");
+                    choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
+                    notifyAll();
+                } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
+                    LOGGER.log(Level.INFO, "Notifico la disconnessione di " + remoteView.getPlayer().getNick());
+                    for (RemoteView view : views) {
+                        view.sendBack(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
+                    }
+                    if (remoteView.getPlayer().isYourTurn()) {
+                        LOGGER.log(Level.FINE, "Era il turno del giocatore disconnesso, passo al nuovo turno");
+                        nextTurn();
+                        setTimer(model.getTurn(), model.getRound());
+                        getModel().notifyObs();
+                    }
+                } else if (message.getMessageType() == MessageType.HASRICONNECTED) {
+                    LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è riconnesso");
+                    for (RemoteView view : views) {
+                        view.sendBack(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
+                    }
+                    remoteView.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model, model.getPrivateObjective(remoteView.getPlayer()))));
                 }
-
-            } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
-                LOGGER.log(Level.INFO, "Board ricevuta");
-                choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
-                notifyAll();
-            } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
-                LOGGER.log(Level.INFO, "Notifico la disconnessione di " + remoteView.getPlayer().getNick());
-                for (RemoteView view : views) {
-                    view.sendBack(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
-                }
-                if (remoteView.getPlayer().isYourTurn()) {
-                    LOGGER.log(Level.FINE,"Era il turno del giocatore disconnesso, passo al nuovo turno");
-                    nextTurn();
-                    setTimer(model.getTurn(), model.getRound());
-                    getModel().notifyObs();
-                }
-            } else if (message.getMessageType() == MessageType.HASRICONNECTED) {
-                LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è riconnesso");
-                for (RemoteView view : views) {
-                    view.sendBack(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
-                }
-                remoteView.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER,new ModelView(model)));
+            } catch (ClassCastException e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
             }
-        } catch (ClassCastException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 
