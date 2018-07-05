@@ -19,17 +19,16 @@ import it.polimi.se2018.utils.enums.Tool;
 
 public class GUISwing extends JDialog {
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
     private JPanel board;
+    private JButton mostraRiservaButton;
+    private JButton mostraTracciatoDeiDadiButton;
     private Map<Color,String> colorMap = new HashMap<>();
     private ModelView modelView;
     private Long localID;
     private GUISwingProxy guiSwingProxy;
 
     public GUISwing(GUISwingProxy guiSwingProxy) {
-        this.guiSwingProxy = guiSwingProxy;
-        localID = new Long(123);
+        this.guiSwingProxy = guiSwingProxy;;
         colorMap.put(Color.BLUE,"B");
         colorMap.put(Color.RED,"R");
         colorMap.put(Color.GREEN, "G");
@@ -38,17 +37,18 @@ public class GUISwing extends JDialog {
 
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
+        mostraRiservaButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                onOK();
+                mostraRiserva();
             }
         });
 
-        buttonCancel.addActionListener(new ActionListener() {
+        mostraTracciatoDeiDadiButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                onCancel();
+                mostraTracciatoDadi();
             }
         });
 
@@ -83,6 +83,10 @@ public class GUISwing extends JDialog {
         refreshBoard();
     }
 
+    public void setId(Long localID){
+
+    }
+
     public void chooseBoard(Board[] boards){
         GUISwingChooseBoard dialog = new GUISwingChooseBoard(boards,this);
         dialog.pack();
@@ -104,6 +108,13 @@ public class GUISwing extends JDialog {
     public void printError(String error){
         JOptionPane.showMessageDialog(this, error);
     }
+
+    public void mostraTracciatoDadi(){
+        GUISwingRoundTrack dialog = new GUISwingRoundTrack(modelView.getRoundTrack());
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
     private void refreshBoard(){
         whiteRefreshBoard();
 
@@ -131,9 +142,14 @@ public class GUISwing extends JDialog {
     private String colorToString(Color color){
         return colorMap.get(color);
     }
+
     private void onOK() {
         // add your code here
         dispose();
+    }
+
+    public void mostraRiserva(){
+
     }
 
     private void onCancel() {

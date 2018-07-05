@@ -78,8 +78,6 @@ public class GUISwingDialog extends JDialog{
                 return;
             }
         }
-
-
         String nick = nickname.getText();
         localID = JSONUtils.readID(nick);
         ClientMessage clientMessage = new ClientMessage(nick,localID);
@@ -97,7 +95,6 @@ public class GUISwingDialog extends JDialog{
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 
