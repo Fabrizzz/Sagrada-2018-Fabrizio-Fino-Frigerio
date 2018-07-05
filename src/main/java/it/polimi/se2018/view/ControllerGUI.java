@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.client.ClientNetwork;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,8 @@ import java.util.ResourceBundle;
  * @author Matteo
  */
 public class ControllerGUI implements Initializable {
+
+    private ClientNetwork clientNetwork;
 
     @FXML
     private AnchorPane root;
@@ -80,8 +83,12 @@ public class ControllerGUI implements Initializable {
         imageView.fitHeightProperty().bind(root.heightProperty());
         imageView.fitWidthProperty().bind(root.widthProperty());
 
+    }
 
-
+    public void sendInfo(ClientNetwork temp) {
+        clientNetwork = temp;
+        System.out.println("Prova");
+        System.out.println(clientNetwork);
     }
 
 }

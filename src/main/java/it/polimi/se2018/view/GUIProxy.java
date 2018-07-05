@@ -11,6 +11,7 @@ public class GUIProxy extends View {
 
 
     private ClientNetwork clientNetwork;
+    private GUI startUpTest;
 
 
     public GUIProxy(){
@@ -26,12 +27,13 @@ public class GUIProxy extends View {
                 javafx.application.Application.launch(GUI.class);
             }
         }.start();
-        GUI startUpTest = GUI.waitStartUpGUI();
+        startUpTest = GUI.waitStartUpGUI();
         startUpTest.messageStartUpGUI();
     }
 
     public void setClientNetwork(ClientNetwork temp) {
         clientNetwork = temp;
+        startUpTest.sendInfo(clientNetwork);
     }
 
     /**
