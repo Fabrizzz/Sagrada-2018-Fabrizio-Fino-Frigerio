@@ -49,9 +49,6 @@ public class GUISwing {
         toolCardMap.put(Tool.DILUENTEPERPASTASALDA,"toolCard11");
         toolCardMap.put(Tool.TAGLIERINAMANUALE,"toolCard12");
 
-        //setContentPane(contentPane);
-        //setModal(true);
-
         mostraRiservaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
