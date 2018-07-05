@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cell.Die;
+import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.Tool;
@@ -31,6 +32,7 @@ public class ModelView extends Observable implements Serializable {
     private boolean firstTurn;
     private boolean usedTool;
     private boolean normalMove;
+    private Color privateObjective;
 
     /**
      * Constructor
@@ -38,6 +40,26 @@ public class ModelView extends Observable implements Serializable {
      */
     public ModelView(Model model) {
 
+        tools = model.getTools();
+        publicObjective = model.getPublicObjectives();
+        diceBag = model.getDiceBag();
+        draftPool = model.getDraftPool();
+        roundTrack = model.getRoundTrack();
+        players = model.getPlayers();
+        boardMap = model.getBoardMap();
+        round = model.getRound();
+        firstTurn = model.isFirstTurn();
+        usedTool = model.hasUsedTool();
+        normalMove = model.hasUsedNormalMove();
+    }
+
+    /**
+     * Constructor
+     * @param model model
+     * @param privateObjective player private  Objective
+     */
+    public ModelView(Model model, PrivateObjective privateObjective){
+        this.privateObjective = privateObjective.getColor();
         tools = model.getTools();
         publicObjective = model.getPublicObjectives();
         diceBag = model.getDiceBag();
@@ -62,6 +84,13 @@ public class ModelView extends Observable implements Serializable {
         firstTurn = updateView.isFirstTurn();
         usedTool = updateView.isUsedTool();
         normalMove = updateView.isNormalMove();
+
+        if(updateView.privateObjective != null){
+            privateObjective = updateView.getPrivateObjective();
+            LOGGER.log(Level.FINE,"PrivateObjective not null");
+        }else{
+            privateObjective = oldView.getPrivateObjective();
+        }
 
         if(updateView.getPlayers() != null){
             players = updateView.getPlayers();
@@ -96,6 +125,14 @@ public class ModelView extends Observable implements Serializable {
         }else{
             boardMap = oldView.getBoardMap();
         }
+    }
+
+    /**
+     * Get the private objective
+     * @return
+     */
+    public Color getPrivateObjective(){
+        return privateObjective;
     }
 
     /**

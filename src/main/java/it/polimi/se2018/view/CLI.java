@@ -164,7 +164,7 @@ public class CLI extends View{
      * Show the player private objective
      */
     private void showPrivateObjective(){
-        println("Colore obiettivo privato: \n\n" /*+ modelView.getPlayer(localID).*/);//TODO
+        println("Colore obiettivo privato: " + modelView.getPrivateObjective());
     }
 
     /**

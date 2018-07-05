@@ -8,9 +8,9 @@ import java.util.ArrayList;
  * @author Alessio
  */
 public class Board implements Serializable {
-    private String name;
-    private int tokens;
-    private ArrayList<String> restrictions;
+    private final String name;
+    private final int tokens;
+    private final ArrayList<String> restrictions;
 
     /**
      * Constructor

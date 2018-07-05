@@ -32,4 +32,8 @@ public class PrivateObjective implements ObjectiveCard {
         }
         return points;
     }
+
+    public Color getColor(){
+        return color;
+    }
 }

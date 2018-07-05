@@ -104,7 +104,7 @@ public class Controller implements Observer {
 
             for (RemoteView view : views) {
                 model.addObserver(view);
-                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model)));
+                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model,model.getPrivateObjective(view.getPlayer()))));
             }
 
             setTimer(0, 0);
@@ -264,7 +264,7 @@ public class Controller implements Observer {
                 for (RemoteView view : views) {
                     view.sendBack(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
                 }
-                remoteView.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER,new ModelView(model)));
+                remoteView.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER,new ModelView(model,model.getPrivateObjective(remoteView.getPlayer()))));
             }
         } catch (ClassCastException e) {
             LOGGER.log(Level.SEVERE, e.toString(), e);
