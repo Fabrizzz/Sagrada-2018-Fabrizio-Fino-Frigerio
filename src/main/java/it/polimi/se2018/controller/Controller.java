@@ -35,7 +35,6 @@ public class Controller implements Observer {
     private List<RemoteView> views;
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
-    private Boolean endGame = false;
 
 
     /**

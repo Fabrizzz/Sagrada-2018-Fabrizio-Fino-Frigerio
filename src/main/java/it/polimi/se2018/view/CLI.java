@@ -759,6 +759,28 @@ public class CLI extends View{
             case HASRICONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
                 break;
+            case ENDGAME:
+                try{
+                    int top = 0;
+                    println("------------------------------------------------------");
+                    println("Gioco terminato");
+                    println("Punteggi:");
+                    for(String nick : message.getScores().keySet()){
+                        if(message.getScores().get(nick) > top){
+                            top = message.getScores().get(nick);
+                        }
+                        println(nick + " : " + message.getScores().get(nick));
+                    }
+
+                    for(String nick : message.getScores().keySet()){
+                        if(message.getScores().get(nick) == top){
+                            println("Il giocatore " + nick + " ha vinto");
+                        }
+                    }
+                }catch (NullPointerException e){
+                    LOGGER.log(Level.WARNING,"mappa scores mancante");
+                }
+                break;
             default:
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");
                 break;
