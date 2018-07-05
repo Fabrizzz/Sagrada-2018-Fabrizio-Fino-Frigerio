@@ -8,10 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import it.polimi.se2018.model.Board;
-import it.polimi.se2018.model.Model;
-import it.polimi.se2018.model.ModelView;
-import it.polimi.se2018.model.RoundTrack;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
@@ -143,33 +140,32 @@ public class GUISwing {
         tool3Label.setIcon(new StretchIcon("src/main/resources/toolCard/" + toolCardMap.get(tools[2]) + ".png"));
     }
 
-    private void refreshBoard(){
+    private void showBoard(PlayerBoard playerBoard){
         whiteRefreshBoard();
         toolCardRefresh();
-        try{
-            modelView.getBoard(modelView.getPlayer(localID)).getRestriction(0,0).isColorRestriction();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
-                if(modelView.getBoard(modelView.getPlayer(localID)).getRestriction(i,j).isColorRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) modelView.getBoard(modelView.getPlayer(localID)).getRestriction(i,j)).getColor()) +".png",false));
-                }else if(modelView.getBoard(modelView.getPlayer(localID)).getRestriction(i,j).isNumberRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) modelView.getBoard(modelView.getPlayer(localID)).getRestriction(i,j)).getNumber().getInt() +".png",false));
+                if(playerBoard.getRestriction(i,j).isColorRestriction()){
+                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png",false));
+                }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
+                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png",false));
                 }
             }
         }
 
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
-                if(modelView.getBoard(modelView.getPlayer(localID)).containsDie(i,j)){
+                if(playerBoard.containsDie(i,j)){
                     try{
-                        ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(modelView.getBoard(modelView.getPlayer(localID)).getDie(i,j).getColor()) + modelView.getBoard(modelView.getPlayer(localID)).getDie(i,j).getNumber().getInt() +".png",false));
+                        ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png",false));
                     }catch (Exception e){}
                 }
             }
         }
+    }
+    private void refreshBoard(){
+        showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
 
     private String colorToString(Color color){
