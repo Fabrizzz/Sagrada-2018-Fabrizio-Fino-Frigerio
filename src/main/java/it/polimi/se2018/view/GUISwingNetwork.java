@@ -6,10 +6,9 @@ import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.messages.ClientMessage;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
-public class GUISwingDialog extends JDialog{
+public class GUISwingNetwork extends JDialog{
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -21,8 +20,9 @@ public class GUISwingDialog extends JDialog{
     private ClientNetwork clientNetwork;
     private GUISwingProxy guiSwingProxy;
     private Long localID;
+    private GUISwing game;
 
-    public GUISwingDialog() {
+    public GUISwingNetwork() {
         guiSwingProxy = new GUISwingProxy();
 
         setContentPane(contentPane);
@@ -60,12 +60,18 @@ public class GUISwingDialog extends JDialog{
         group.add(rmi);
         group.add(socketRadioButton);
         socketRadioButton.setSelected(true);
-        clientNetwork = new ClientNetwork(guiSwingProxy);
     }
 
     private void onOK() {
         String address = indirizzo.getText();
         int port = 0;
+        String nick = nickname.getText();
+        localID = JSONUtils.readID(nick);
+        game = new GUISwing(guiSwingProxy);
+        game.setId(localID);
+        guiSwingProxy.gameWindow(game,localID);
+        clientNetwork = new ClientNetwork(guiSwingProxy);
+
         if(socketRadioButton.isSelected()){
             port = Integer.parseInt(porta.getText());
             if(Server.available(port) || !clientNetwork.connectSocket(address, port)){
@@ -78,16 +84,14 @@ public class GUISwingDialog extends JDialog{
                 return;
             }
         }
-        String nick = nickname.getText();
-        localID = JSONUtils.readID(nick);
+
         ClientMessage clientMessage = new ClientMessage(nick,localID);
+
         if(clientNetwork.sendMessage(clientMessage)){
             JOptionPane.showMessageDialog(this, "Nome utente inviato, attendi inizio partita");
             dispose();
 
             JFrame frame = new JFrame("Sagrada");
-            GUISwing game = new GUISwing(guiSwingProxy);
-            guiSwingProxy.gameWindow(game);
             frame.setContentPane(game.getContentPane());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
@@ -103,7 +107,7 @@ public class GUISwingDialog extends JDialog{
     }
 
     public static void main(String[] args) {
-        GUISwingDialog dialog = new GUISwingDialog();
+        GUISwingNetwork dialog = new GUISwingNetwork();
         dialog.pack();
         dialog.setVisible(true);
     }

@@ -115,7 +115,6 @@ public class GUISwing {
 
     public void setModelView(ModelView modelView){
         this.modelView = modelView;
-
         setCombobox();
         refreshBoard();
     }

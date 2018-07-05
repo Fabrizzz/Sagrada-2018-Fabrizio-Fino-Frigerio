@@ -14,11 +14,13 @@ import java.util.logging.Logger;
 
 public class GUISwingProxy extends View {
     private GUISwing gameWindow;
+    private ModelView modelView;
     private static final Logger LOGGER = Logger.getLogger("Logger");
+    private Long localID;
 
-    public void gameWindow(GUISwing gameWindow){
+    public void gameWindow(GUISwing gameWindow, Long localID){
         this.gameWindow = gameWindow;
-
+        localID = localID;
     }
 
     @Override
@@ -38,20 +40,25 @@ public class GUISwingProxy extends View {
                 }
                 break;
             case INITIALCONFIGSERVER:
-                gameWindow.setModelView(message.getModelView());
+                modelView = message.getModelView();
+                gameWindow.setModelView(modelView);
                 break;
             case BOARDTOCHOOSE:
                 gameWindow.chooseBoard(message.getBoards());
                 break;
             case MODELVIEWUPDATE:
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
-                gameWindow.setModelView(new ModelView(gameWindow.getModelView(), message.getModelView()));
+                modelView = new ModelView(modelView, message.getModelView());
+                gameWindow.setModelView(modelView);
                 break;
             case HASDISCONNECTED:
                 gameWindow.printError("Il giocatore " +  message.getDisconnectedPlayer() + " si e' disconnesso");
                 break;
             case HASRICONNECTED:
-                gameWindow.printError("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
+                try{
+                    if(!message.getDisconnectedPlayer().equals(modelView.getPlayer(localID)))
+                        gameWindow.printError("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
+                }catch (Exception e){}
                 break;
             case ENDGAME:
                 gameWindow.endGame(message.getScores());
