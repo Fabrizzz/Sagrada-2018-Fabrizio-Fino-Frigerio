@@ -195,7 +195,15 @@ public class GUISwing {
         return contentPane;
     }
 
+    public int chooseDraftPoolPosition(){
+        ChooseDraftPoolDie chooseDraftPoolDie = new ChooseDraftPoolDie(modelView.getDraftPool());
+        int p = chooseDraftPoolDie.getPosition();
+        System.out.println(p);
+        return p;
+    }
+
     public void mossaStandard(){
+        chooseDraftPoolPosition();
         chooseCell();
     }
 
