@@ -55,6 +55,12 @@ public class ControllerWaiting implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public void sendInfo(ServerMessage message, IntegerProperty num) {
+        this.message = message;
+        this.num = num;
+
         changeListener = new ChangeListener() {
             @Override
             public void changed(ObservableValue observableValue, Object oldValue, Object newValue) {
@@ -63,11 +69,6 @@ public class ControllerWaiting implements Initializable {
             }
         };
 
-    }
-
-    public void sendInfo(ServerMessage message, IntegerProperty num) {
-        this.message = message;
-        this.num = num;
         num.addListener(changeListener);
     }
 }
