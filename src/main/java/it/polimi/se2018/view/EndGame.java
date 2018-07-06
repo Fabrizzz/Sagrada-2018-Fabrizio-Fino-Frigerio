@@ -65,12 +65,7 @@ public class EndGame extends JDialog {
             playerLabels.get(i).setText(nicknames[i] + ": " + serverMessage.getScores().get(nicknames[i]));
         }
 
-        for (String nick : serverMessage.getScores().keySet()) {
-            if (serverMessage.getScores().get(nick) == top) {
-                winnerLabel.setText("Il giocatore " + nick + " ha vinto");
-            }
-
-        }
+        winnerLabel.setText("Il giocatore " + serverMessage.getWinner() + " ha vinto");
     }
 
     private void onCancel() {
@@ -83,7 +78,7 @@ public class EndGame extends JDialog {
         prova.put("Alessio",20);
         prova.put("Giamp",5);
         prova.put("SanPietro",60);
-        ServerMessage serverMessage = new ServerMessage(prova);
+        ServerMessage serverMessage = new ServerMessage(prova,"San Pietro");
         EndGame dialog = new EndGame(serverMessage);
         dialog.pack();
         dialog.setVisible(true);

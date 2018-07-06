@@ -56,7 +56,7 @@ public class GUISwingProxy extends View {
                 break;
             case HASRICONNECTED:
                 try{
-                    if(!message.getDisconnectedPlayer().equals(modelView.getPlayer(localID)))
+                    if(!message.getDisconnectedPlayer().equals(modelView.getPlayer(localID).getNick()))
                         gameWindow.printError("Il giocatore " +  message.getDisconnectedPlayer() + " si e' riconnesso");
                 }catch (Exception e){}
                 break;

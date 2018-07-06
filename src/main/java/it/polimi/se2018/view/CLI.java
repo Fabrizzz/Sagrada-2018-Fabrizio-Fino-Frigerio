@@ -678,11 +678,12 @@ public class CLI extends View{
         println("7) Visualizza le carte strumento");
         println("8) Visualizza le carte obiettivo pubblico");
         println("9) Visualizza il tuo obiettivo privato");
+        println("10) Visualizza i tuoi tocken");
         print("Scelta: ");
         int i;
         do{
             i = InputUtils.getInt();
-        }while(i < 0 || i > 9);
+        }while(i < 0 || i > 11);
         println("Input ricevuto");
 
         switch (i){
@@ -743,6 +744,10 @@ public class CLI extends View{
                 break;
             case 9:
                 showPrivateObjective();
+                chooseMove();
+                break;
+            case 10:
+                println("Hai " + modelView.getPlayer(localID).getFavorTokens() + " tockens rimanenti");
                 chooseMove();
                 break;
             default:
