@@ -492,6 +492,8 @@ public class GUIMain  implements MouseListener{
             Die die = modelView.getDraftPool().getDie(i);
             Die newDie = modelView.getDiceBag().getFirst();
             ShowDie dialog = new ShowDie("src/main/resources/utilsGUI/" + GUIUtils.colorToString(newDie.getColor()) + newDie.getNumber().getInt() +".png");
+            dialog.pack();
+            dialog.setVisible(true);
             NumberEnum newValue = chooseNewValue();
 
             boolean check = true;
