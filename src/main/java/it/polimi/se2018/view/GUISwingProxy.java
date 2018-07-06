@@ -48,7 +48,7 @@ public class GUISwingProxy extends View {
                 break;
             case MODELVIEWUPDATE:
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
-                modelView = new ModelView(modelView, message.getModelView());
+                modelView.update(message.getUpdate());
                 gameWindow.setModelView(modelView);
                 break;
             case HASDISCONNECTED:

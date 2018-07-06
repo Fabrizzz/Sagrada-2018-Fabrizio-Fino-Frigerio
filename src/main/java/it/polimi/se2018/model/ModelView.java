@@ -11,7 +11,6 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -22,11 +21,11 @@ public class ModelView implements Serializable {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private final Map<Tool, Boolean> tools;
     private final List<PublicObjective> publicObjective;
-    private final DiceBag diceBag;
-    private final DraftPool draftPool;
-    private final RoundTrack roundTrack;
-    private final List<Player> players;
-    private final Map<Player, PlayerBoard> boardMap;
+    private DiceBag diceBag;
+    private DraftPool draftPool;
+    private RoundTrack roundTrack;
+    private List<Player> players;
+    private Map<Player, PlayerBoard> boardMap;
 
     private int round;
     private boolean firstTurn;
@@ -73,68 +72,27 @@ public class ModelView implements Serializable {
         normalMove = model.hasUsedNormalMove();
     }
 
-    /**
-     * Costructor used by the client to create a new modelView from the old view and the new modelView recived from the server in a update message
-     * @param oldView old modelView
-     * @param updateView new modelView sent by the server containing updated data
-     */
-    public ModelView(ModelView oldView, ModelView updateView){
-        tools = oldView.getTools();
-        publicObjective = oldView.getPublicObjective();
-        firstTurn = updateView.isFirstTurn();
-        usedTool = updateView.isUsedTool();
-        normalMove = updateView.isNormalMove();
-
-
-        if(updateView.privateObjective != null){
-            privateObjective = updateView.getPrivateObjective();
-            LOGGER.log(Level.FINE,"PrivateObjective not null");
-        }else{
-            privateObjective = oldView.getPrivateObjective();
+    public void update(ModelViewUpdate update) {
+        if (update.getBoardMap().isPresent()) {
+            boardMap = update.getBoardMap().get();
         }
-
-        if(updateView.getPlayers() != null){
-            players = updateView.getPlayers();
-            LOGGER.log(Level.FINE,"Players not null");
-        }else{
-            players = oldView.getPlayers();
+        if (update.getDiceBag().isPresent())
+            diceBag = update.getDiceBag().get();
+        if (update.getDraftPool().isPresent())
+            draftPool = update.getDraftPool().get();
+        if (update.getRound().isPresent())
+            round = update.getRound().get();
+        if (update.getRoundTrack().isPresent())
+            roundTrack = update.getRoundTrack().get();
+        if (update.isFirstTurn().isPresent())
+            firstTurn = update.isFirstTurn().get();
+        if (update.isNormalMove().isPresent())
+            normalMove = update.isNormalMove().get();
+        if (update.isUsedTool().isPresent())
+            usedTool = update.isUsedTool().get();
+        if (update.getPlayers().isPresent()) {
+            players = update.getPlayers().get();
         }
-
-        if(updateView.getDiceBag() != null){
-            diceBag = updateView.getDiceBag();
-            LOGGER.log(Level.FINE,"diceBag not null");
-        }else{
-            diceBag = oldView.getDiceBag();
-        }
-
-        if(updateView.getDraftPool() != null){
-            draftPool = updateView.getDraftPool();
-            LOGGER.log(Level.FINE,"draftPool not null");
-        }else{
-            draftPool = oldView.getDraftPool();
-        }
-
-        if(updateView.getRoundTrack() != null){
-            roundTrack = updateView.getRoundTrack();
-            LOGGER.log(Level.FINE,"roundTrack not null");
-        }else{
-            roundTrack = oldView.getRoundTrack();
-        }
-
-        if(updateView.getBoardMap() != null){
-            boardMap = updateView.getBoardMap();
-            LOGGER.log(Level.FINE, "boardMap not null");
-        }else{
-            boardMap = oldView.getBoardMap();
-        }
-        if (updateView.getBoardMap() != null) {
-            round = updateView.getRound();
-            LOGGER.log(Level.FINE, "round not null");
-        } else {
-            round = oldView.getRound();
-        }
-
-
     }
 
     /**
@@ -186,13 +144,6 @@ public class ModelView implements Serializable {
         return boardMap.get(player);
     }
 
-    /**
-     * Return the boardmap
-     * @return the board map
-     */
-    public Map<Player, PlayerBoard> getBoardMap() {
-        return boardMap;
-    }
 
     /**
      * Return the dicebag

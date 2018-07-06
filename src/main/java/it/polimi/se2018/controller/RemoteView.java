@@ -1,6 +1,6 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.ModelView;
+import it.polimi.se2018.model.ModelViewUpdate;
 import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.exceptions.DisconnectedException;
@@ -103,9 +103,9 @@ public class RemoteView extends View {
     public void update(Observable o, Object arg) {
         LOGGER.log(Level.FINE,"Ricevuto nuovo modelview");
 
-        ModelView modelView = (ModelView) arg;
+        ModelViewUpdate update = (ModelViewUpdate) o;
 
-        elaborateMessage(new ServerMessage(MessageType.MODELVIEWUPDATE, modelView));
+        elaborateMessage(new ServerMessage(update));
     }
 
 

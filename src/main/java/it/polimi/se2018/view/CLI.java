@@ -830,9 +830,11 @@ public class CLI extends View{
                 println("------------------------------------------------------");
                 LOGGER.log(Level.FINE,"ModelviewUpdate ricevuto");
 
-                modelView = new ModelView(modelView, message.getModelView());
+                modelView.update(message.getUpdate());
                 println("La tua plancia: ");
+
                 showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
+
 
                 for (int k = 0; k < modelView.getPlayers().size(); k++) {
                     if (modelView.getPlayers().get(k).isYourTurn()) {

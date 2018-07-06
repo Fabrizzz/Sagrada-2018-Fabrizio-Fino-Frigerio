@@ -39,6 +39,7 @@ public class Controller implements Observer {
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private ServerNetwork server;
     private Timer timer = new Timer();
+    private ModelViewUpdate modelViewUpdate;
     private int roundTimer = 1;
     private boolean gameEnded = false;
 
@@ -114,9 +115,11 @@ public class Controller implements Observer {
             temp = temp.setNextHandler(ToolFactory.createToolHandler(Tool.MOSSASTANDARD));
             temp.setNextHandler(ToolFactory.createLastHandler());
 
+            modelViewUpdate = new ModelViewUpdate();
+            model.addObserver(modelViewUpdate);
             for (RemoteView view : views) {
-                model.addObserver(view);
-                view.elaborateMessage(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model, model.getPrivateObjective(view.getPlayer()))));
+                modelViewUpdate.addObserver(view);
+                view.elaborateMessage(new ServerMessage(new ModelView(model, model.getPrivateObjective(view.getPlayer()))));
             }
 
             setTimer(0, 0);
@@ -146,9 +149,10 @@ public class Controller implements Observer {
             LOGGER.log(Level.INFO, "Timer scaduto, turno interrotto e nextTurn chiamata");
             System.out.println("Timer scaduto");
             nextTurn();
-            setTimer(model.getTurn(), model.getRound());
-            if (!gameEnded)
+            if (!gameEnded) {
+                setTimer(model.getTurn(), model.getRound());
                 model.notifyObs();
+            }
         }
 
     }
@@ -267,6 +271,7 @@ public class Controller implements Observer {
                 LOGGER.log(Level.INFO, "0 players connected");
             }
             model.deleteObservers();
+            modelViewUpdate.deleteObservers();
             server.deregisterConnections(views);
 
             LOGGER.log(Level.FINE, "Endgame");
@@ -420,7 +425,7 @@ public class Controller implements Observer {
                     for (RemoteView view : views) {
                         view.elaborateMessage(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
                     }
-                    remoteView.elaborateMessage(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model, model.getPrivateObjective(remoteView.getPlayer()))));
+                    remoteView.elaborateMessage(new ServerMessage(new ModelView(model, model.getPrivateObjective(remoteView.getPlayer()))));
                 }
             } catch (ClassCastException e) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
