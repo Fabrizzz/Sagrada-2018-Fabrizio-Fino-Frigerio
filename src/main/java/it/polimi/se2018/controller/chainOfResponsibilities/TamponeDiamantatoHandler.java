@@ -2,7 +2,6 @@ package it.polimi.se2018.controller.chainOfResponsibilities;
 
 import it.polimi.se2018.controller.RemoteView;
 import it.polimi.se2018.model.Model;
-import it.polimi.se2018.model.PlayerBoard;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.InvalidParameterException;
@@ -45,6 +44,8 @@ public class TamponeDiamantatoHandler extends ToolHandler {
                     return true;
                 } catch (NoDieException e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in TAMPONEDIAMANTATO");
+                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 }
             }
         } else {

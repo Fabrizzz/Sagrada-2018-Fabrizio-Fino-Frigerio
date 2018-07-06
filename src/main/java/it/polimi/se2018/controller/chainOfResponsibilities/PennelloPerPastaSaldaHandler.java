@@ -69,8 +69,9 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                                 !board.verifyNearCellsRestriction(die, row, column) ||
                                 !board.verifyPositionRestriction(row, column))))  {
                             LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA 2");
-                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
                             die.setNumber(num);
+                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            return false;
                         } else {
                             board.setDie(die, row, column);
                             draftPool.removeDie(die);
@@ -104,6 +105,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                             die.setNumber(num);
                             LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA 3");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            return false;
                         }
                     }
                     //nextHandler.process(playerMove, remoteView, model);

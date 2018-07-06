@@ -55,6 +55,7 @@ public class NormalMoveHandler extends Handler {
                             " positionRestriction:" + board.verifyPositionRestriction(row, column) + " isEmpty: " + board.isEmpty() + " containsDie:" +  board.containsDie(row, column) +
                             " usedNormalMove:" + model.hasUsedNormalMove());
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 } else {
 
                     board.setDie(die, row, column);
@@ -72,13 +73,16 @@ public class NormalMoveHandler extends Handler {
 
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in MOSSASTANDARD");
+                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                return false;
             } catch (AlreadySetDie alreadySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in MOSSASTANDARD");
+                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                return false;
             }
         } else{
             LOGGER.log(Level.FINEST,"La mossa non e' MOSSASTANDARD, passaggio responsabilita' all'handler successivo");
             return this.nextHandler.process(playerMove, remoteView, model);
         }
-        return false;
     }
 }

@@ -54,6 +54,7 @@ public class Tool2_3Handler extends ToolHandler {
                         !board.containsDie(row, column) || board.containsDie(finalRow, finalColumn)){
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 1");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 } else try {
                     die = board.getDie(row, column);
                     board.removeDie(row, column);
@@ -67,6 +68,7 @@ public class Tool2_3Handler extends ToolHandler {
                         " color restriction: " + (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)));
                         board.setDie(die, row, column);
                         remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                        return false;
                     } else {
                         board.setDie(die, finalRow, finalColumn);
                         completeTool(remoteView.getPlayer(), model, playerMove.getTool());
@@ -75,6 +77,7 @@ public class Tool2_3Handler extends ToolHandler {
 
                 } catch (NoDieException | AlreadySetDie e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME");
+                    throw new InvalidParameterException();
                 }
 
             } else {
@@ -86,6 +89,5 @@ public class Tool2_3Handler extends ToolHandler {
             LOGGER.log(Level.FINEST, "La mossa non e' PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME, passaggio responsabilita' all'handler successivo");
             return nextHandler.process(playerMove, remoteView, model);
         }
-        return false;
     }
 }

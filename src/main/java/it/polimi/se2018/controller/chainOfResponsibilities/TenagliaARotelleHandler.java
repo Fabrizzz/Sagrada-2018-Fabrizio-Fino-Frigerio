@@ -19,6 +19,7 @@ public class TenagliaARotelleHandler extends ToolHandler {
             if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || !model.isFirstTurn()){
                 LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TENAGLIAAROTELLE");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                return false;
             }
 
             else {
@@ -34,6 +35,5 @@ public class TenagliaARotelleHandler extends ToolHandler {
             LOGGER.log(Level.FINEST, "La mossa non e' TENAGLIAAROTELLE, passaggio responsabilita' all'handler successivo");
             return nextHandler.process(playerMove, remoteView, model);
         }
-        return false;
     }
 }

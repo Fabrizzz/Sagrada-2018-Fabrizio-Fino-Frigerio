@@ -126,6 +126,8 @@ public class Tool4_12Handler extends ToolHandler {
                                 board.setDie(die1,firstRow,firstColumn);
                                 LOGGER.log(Level.FINE,"Restrizioni dado 2 non rispettate: containsDie:" + board.containsDie(secondFinalRow, secondFinalColumn) +
                                 " position restriction: " + secondFinalRow + " " +secondFinalColumn + " " + board.verifyPositionRestriction(secondFinalRow, secondFinalColumn));
+                                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                                return false;
                             }else{
                                 board.setDie(die2, secondFinalRow, secondFinalColumn);
                                 return true;
@@ -142,8 +144,12 @@ public class Tool4_12Handler extends ToolHandler {
                     }
                 } catch (AlreadySetDie alreadySetDie) {
                     LOGGER.log(Level.SEVERE, "Dado gia' presente in LATHEKIN TAGLIERINAMANUALE 5");
+                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 } catch (NoDieException e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in LATHEKIN TAGLIERINAMANUALE 6");
+                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 }
             }else{
                 LOGGER.log(Level.SEVERE,"Errore parametri LATHEKIN TAGLIERINAMANUALE 7");
@@ -153,7 +159,6 @@ public class Tool4_12Handler extends ToolHandler {
             LOGGER.log(Level.FINEST, "La mossa non e' LATHEKIN TAGLIERINAMANUALE, passaggio responsabilita' all'handler successivo");
             return nextHandler.process(playerMove, remoteView, model);
         }
-        return false;
     }
 }
 

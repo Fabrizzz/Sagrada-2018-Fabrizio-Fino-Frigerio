@@ -56,6 +56,7 @@ public class RigaInSugheroHandler extends ToolHandler {
                         board.verifyPositionRestriction(row, column)) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare RIGAINSUGHERO");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 } else {
 
                     board.setDie(die, row, column);
@@ -66,13 +67,16 @@ public class RigaInSugheroHandler extends ToolHandler {
                 }
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in RIGAINSUGHERO");
+                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                return false;
             } catch (AlreadySetDie alreadySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in RIGAINSUGHERO");
+                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                return false;
             }
         } else {
             LOGGER.log(Level.FINEST, "La mossa non e' RIGAINSUGHERO, passaggio responsabilita' all'handler successivo");
             return this.nextHandler.process(playerMove, remoteView, model);
         }
-        return false;
     }
 }

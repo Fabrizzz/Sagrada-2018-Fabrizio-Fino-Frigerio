@@ -49,10 +49,12 @@ public class TaglierinaCircolareHandler extends ToolHandler {
                     roundTrackPosition >= model.getRoundTrack().numberOfDice(roundTrackRound)){
                 LOGGER.log(Level.INFO, "Errore parametri");
                 remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                return false;
             }else {
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAGLIERINACIRCOLARE");
                     remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 } else try {
                     Die roundTrackDie = roundTrack.getDie(roundTrackRound, roundTrackPosition);
                     Die draftPoolDie = draftPool.getDie(draftPoolPosition);
@@ -65,12 +67,13 @@ public class TaglierinaCircolareHandler extends ToolHandler {
                     return true;
                 } catch (NoDieException e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in TAGLIERINACIRCOLARE");
+                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    return false;
                 }
             }
         } else {
             LOGGER.log(Level.FINEST, "La mossa non e' TAGLIERINACIRCOLARE, passaggio responsabilita' all'handler successivo");
             return nextHandler.process(playerMove, remoteView, model);
         }
-        return false;
     }
 }
