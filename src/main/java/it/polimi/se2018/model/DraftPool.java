@@ -72,6 +72,7 @@ public class DraftPool implements Serializable {
     public Die getDie(int i) throws NoDieException {
         if (i >= size())
             throw new NoDieException();
+        setChanged();
         return dice.get(i);
     }
 
