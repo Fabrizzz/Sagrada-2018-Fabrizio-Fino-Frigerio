@@ -5,8 +5,6 @@ import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ServerMessage extends Message {
@@ -32,8 +30,8 @@ public class ServerMessage extends Message {
         this.modelView = modelView;
     }
 
-    public ServerMessage(MessageType messageType, Map<String,Integer> scores){
-        super(messageType);
+    public ServerMessage(Map<String, Integer> scores) {
+        super(MessageType.ENDGAME);
         this.scores = scores;
     }
 
