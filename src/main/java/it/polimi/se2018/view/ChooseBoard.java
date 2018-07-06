@@ -11,6 +11,9 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Alessio
+ */
 public class ChooseBoard extends JDialog {
     private JPanel contentPane;
     private JPanel board;
@@ -24,6 +27,11 @@ public class ChooseBoard extends JDialog {
     private GUIMain guiMain;
     private Board[] boards;
 
+    /**
+     * Costructor
+     * @param boards
+     * @param guiMain
+     */
     protected ChooseBoard(Board[] boards, GUIMain guiMain) {
 
         this.guiMain = guiMain;
@@ -88,6 +96,9 @@ public class ChooseBoard extends JDialog {
         refreshBoard(boards[0]);
     }
 
+    /**
+     * clean the Board
+     */
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
@@ -96,6 +107,10 @@ public class ChooseBoard extends JDialog {
         }
     }
 
+    /**
+     * Insert the dice and the constraints in the Board
+     * @param boardS
+     */
     private void refreshBoard(Board boardS){
         PlayerBoard playerBoard = new PlayerBoard(boardS);
         boardName.setText("Nome: " + boardS.getName());
@@ -114,6 +129,9 @@ public class ChooseBoard extends JDialog {
         repaint();
     }
 
+    /**
+     * Manage the ok button
+     */
     private void onOK() {
         if(radioButton1.isSelected()){
             guiMain.selectedBoard(boards[0]);

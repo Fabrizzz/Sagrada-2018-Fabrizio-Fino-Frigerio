@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Alessio
+ */
 public class ChooseCell extends JDialog implements MouseListener {
     private JPanel contentPane;
     private JPanel board;
@@ -20,6 +23,11 @@ public class ChooseCell extends JDialog implements MouseListener {
     private int r,c;
     private final CountDownLatch latch = new CountDownLatch(1);
 
+    /**
+     * Costructor
+     * @param playerBoard
+     * @param message
+     */
     protected ChooseCell(PlayerBoard playerBoard,String message) {
         r = 0;
         c = 0;
@@ -51,6 +59,10 @@ public class ChooseCell extends JDialog implements MouseListener {
         messaggeLabel.setText(message);
     }
 
+    /**
+     * Get position
+     * @return
+     */
     public int[] getPosition(){
         this.pack();
         this.setVisible(true);
@@ -66,6 +78,10 @@ public class ChooseCell extends JDialog implements MouseListener {
         return pos;
     }
 
+    /**
+     * manage the click of the mouse
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         JLabel source = (JLabel) e.getSource();
@@ -94,7 +110,9 @@ public class ChooseCell extends JDialog implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {}
 
-
+    /**
+     * clean the Board
+     */
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
@@ -103,6 +121,9 @@ public class ChooseCell extends JDialog implements MouseListener {
         }
     }
 
+    /**
+     * show the board with dice and the constraints
+     */
     private void showBoard(){
         whiteRefreshBoard();
 
@@ -129,6 +150,9 @@ public class ChooseCell extends JDialog implements MouseListener {
 
     }
 
+    /**
+     * manage the cancel button
+     */
     private void onCancel() {
         latch.countDown();
         dispose();
