@@ -71,7 +71,7 @@ public class Controller implements Observer {
         this.views = new ArrayList<>(views);
 
         this.views.stream().forEach(k -> k.addObserver(this));
-        this.views.stream().forEach(k -> k.sendBack(new ServerMessage(getBoards())));
+        this.views.stream().forEach(k -> k.elaborateMessage(new ServerMessage(getBoards())));
         try {
             LOGGER.log(Level.INFO, "In attesa di ricevere Board dai client");
             while (choosenBoards.size() < views.size())
@@ -87,10 +87,6 @@ public class Controller implements Observer {
             Iterator<Color> iterator = colors.iterator();
             Map<Player, PrivateObjective> privateObjectiveMap = views.stream().collect(Collectors.toMap(k -> k.getPlayer(), t -> new PrivateObjective(iterator.next())));
             List<Tool> tools = Tool.getRandTools(3);
-            /*ArrayList<Tool> tools = new ArrayList<>();
-            tools.add(Tool.LATHEKIN);
-            tools.add(Tool.TAGLIERINACIRCOLARE);
-            tools.add(Tool.PENNELLOPERPASTASALDA);*/
             ArrayList<Player> players = new ArrayList<>(views.stream().map(k -> k.getPlayer()).collect(Collectors.toList()));
 
             for (int j = 0; j < tools.size(); j++){
@@ -113,7 +109,7 @@ public class Controller implements Observer {
 
             for (RemoteView view : views) {
                 model.addObserver(view);
-                view.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model,model.getPrivateObjective(view.getPlayer()))));
+                view.elaborateMessage(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model, model.getPrivateObjective(view.getPlayer()))));
             }
 
             setTimer(0, 0);
@@ -162,12 +158,8 @@ public class Controller implements Observer {
     /**
      * End the game and send final scores to every player
      */
-    public synchronized void endGame() {
-        gameEnded = true;
-        //chiudere i timer
-        //cancellare observers, chiudere connection, deregistrare connections dal server
-
-        LOGGER.log(Level.FINE,"Endgame");
+    public synchronized void endGame(boolean onlyOnePlayer) {
+        
     }
 
     /**
@@ -176,7 +168,7 @@ public class Controller implements Observer {
     private void endRound() {
 
         if (getModel().getRound() == 9)
-            endGame();
+            endGame(false);
         else {
             getModel().setTurn(0);
             getModel().setFirstTurn(true);
@@ -193,19 +185,13 @@ public class Controller implements Observer {
      * @return true if the count of connected players is > 1 false otherwise
      */
     public boolean playerCountCheck(){
-        return true;
-        /*int p = 0;
+        long p;
 
-        for(RemoteView remoteView : views){
-            if(remoteView.isConnected()){
-                p ++;
-            }
-        }
-        if(p > 1){
+        p = views.stream().filter(k -> k.isConnected()).count();
+
+        if (p > 1)
             return true;
-        }else{
-            return false;
-        }*/
+        return false;
     }
     /**
      * Change the current player turn
@@ -253,7 +239,7 @@ public class Controller implements Observer {
     public synchronized void update(Observable o, Object arg) {
         if(!playerCountCheck()){
             LOGGER.log(Level.FINE,"1 giocatore rimanenti, termino partita");
-            endGame();
+            endGame(true);
         } else {
             try {
                 ClientMessage message = (ClientMessage) arg;
@@ -279,7 +265,7 @@ public class Controller implements Observer {
 
                     } catch (InvalidParameterException e) {
                         LOGGER.log(Level.SEVERE, "Ricevuta PlayerMove con parametri invalidi");
-                        remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                        remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     }
 
                 } else if (message.getMessageType() == MessageType.CHOSENBOARD) {
@@ -289,7 +275,7 @@ public class Controller implements Observer {
                 } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
                     LOGGER.log(Level.INFO, "Notifico la disconnessione di " + remoteView.getPlayer().getNick());
                     for (RemoteView view : views) {
-                        view.sendBack(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
+                        view.elaborateMessage(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
                     }
                     if (remoteView.getPlayer().isYourTurn()) {
                         LOGGER.log(Level.FINE, "Era il turno del giocatore disconnesso, passo al nuovo turno");
@@ -301,9 +287,9 @@ public class Controller implements Observer {
                 } else if (message.getMessageType() == MessageType.HASRICONNECTED) {
                     LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è riconnesso");
                     for (RemoteView view : views) {
-                        view.sendBack(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
+                        view.elaborateMessage(new ServerMessage(MessageType.HASRICONNECTED, remoteView.getPlayer().getNick()));
                     }
-                    remoteView.sendBack(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model, model.getPrivateObjective(remoteView.getPlayer()))));
+                    remoteView.elaborateMessage(new ServerMessage(MessageType.INITIALCONFIGSERVER, new ModelView(model, model.getPrivateObjective(remoteView.getPlayer()))));
                 }
             } catch (ClassCastException e) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
