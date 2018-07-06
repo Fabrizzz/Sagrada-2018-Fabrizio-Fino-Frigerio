@@ -373,8 +373,28 @@ public class GUIMain  implements MouseListener{
             Die die = modelView.getDraftPool().getDie(i);
             die.reRoll();
             printError("Valore del nuovo dado: " + die.getNumber().getInt());
-            int[] pos = chooseCell("Scegli dove piazzare il dado");
-            ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,die.getNumber(),Tool.PENNELLOPERPASTASALDA));
+
+            boolean check = true;
+            PlayerBoard board = modelView.getBoard(modelView.getPlayer(localID));
+            for (int r = 0; r < 4 && check; r++) {
+                for (int c = 0; c < 5 && check; c++) {
+                    if ((board.verifyInitialPositionRestriction(r, c) && board.isEmpty()) ||
+                            (!board.containsDie(r, c) && board.verifyNumberRestriction(die, r, c) &&
+                                    board.verifyColorRestriction(die, r, c) &&
+                                    board.verifyNearCellsRestriction(die, r, c) &&
+                                    board.verifyPositionRestriction(r, c)))
+                        check = false;
+                }
+            }
+            ClientMessage clientMessage;
+            if (!check) {
+                int[] position = chooseCell("Scegli dove piazzare il dado");
+                clientMessage = new ClientMessage(new PlayerMove(position[0], position[1], i, die.getNumber(), Tool.PENNELLOPERPASTASALDA));
+            } else {
+                printError("Il dado viene riposto in riserva");
+                clientMessage = new ClientMessage(new PlayerMove(i, die.getNumber(), Tool.PENNELLOPERPASTASALDA));
+            }
+
             guiSwingProxy.sendMessage(clientMessage);
         }catch (NoDieException e){
             printError("Errore, dado non presente nella cella scelta");
