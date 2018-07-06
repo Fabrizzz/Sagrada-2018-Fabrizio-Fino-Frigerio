@@ -67,14 +67,16 @@ public class GUIMain  implements MouseListener{
         mostraTracciatoDeiDadiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mostraTracciatoDadi();
+                if(modelView != null)
+                    mostraTracciatoDadi();
             }
         });
 
         mostraLeCarteObiettivoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mostraObiettivi();
+                if(modelView != null)
+                    mostraObiettivi();
             }
         });
 
@@ -93,14 +95,17 @@ public class GUIMain  implements MouseListener{
         piazzaUnDadoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                normalSugheroMove(Tool.MOSSASTANDARD);
+                if(modelView != null)
+                    normalSugheroMove(Tool.MOSSASTANDARD);
             }
         });
         terminaTurnoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
-                guiSwingProxy.sendMessage(clientMessage);
+                if(modelView != null) {
+                    ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.SKIPTURN));
+                    guiSwingProxy.sendMessage(clientMessage);
+                }
             }
         });
     }
@@ -132,7 +137,6 @@ public class GUIMain  implements MouseListener{
     private void setIndicator(){
 
         boolean yourTurn;
-        String color;
 
         yourTurn = modelView.getPlayer(localID).isYourTurn();
         if(yourTurn){
@@ -142,7 +146,7 @@ public class GUIMain  implements MouseListener{
             labelTurn.setText("Non e' il tuo turno");
         }
         labelSegnalini.setText("Segnalini: "+ modelView.getPlayer(localID).getFavorTokens());
-        labelRound.setText("Round: "+ modelView.getRound());
+        labelRound.setText("Round: "+ (modelView.getRound() + 1));
         privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective().getColorString());
     }
 
@@ -497,14 +501,16 @@ public class GUIMain  implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        JLabel source = (JLabel) e.getSource();
-        Tool[] tools = modelView.getTools().keySet().toArray(new Tool[modelView.getTools().keySet().size()]);
-        if(source.equals(tool1Label)){
-            move(tools[0]);
-        }else if(source.equals(tool2Label)){
-            move(tools[1]);
-        }else if(source.equals(tool3Label)){
-            move(tools[2]);
+        if(modelView != null){
+            JLabel source = (JLabel) e.getSource();
+            Tool[] tools = modelView.getTools().keySet().toArray(new Tool[modelView.getTools().keySet().size()]);
+            if(source.equals(tool1Label)){
+                move(tools[0]);
+            }else if(source.equals(tool2Label)){
+                move(tools[1]);
+            }else if(source.equals(tool3Label)){
+                move(tools[2]);
+            }
         }
     }
 
