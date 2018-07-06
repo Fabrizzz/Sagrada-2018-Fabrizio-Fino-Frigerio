@@ -40,6 +40,9 @@ public class TestModelView {
     private  Map<Player, PrivateObjective> privateObjectiveMap;
     private BoardList BoardList = new BoardList();
 
+    /**
+     * initializing the modelview
+     */
     @Before
     public void initialize(){
         LOGGER.setLevel(Level.OFF);
@@ -55,31 +58,49 @@ public class TestModelView {
         modelView = new ModelView(model);
     }
 
+    /**
+     * testing the costructor of the modelview
+     */
     @Test
     public void initialize2Test(){
         modelView = new ModelView(modelView,new ModelView(ModelControllerInitializerTest.initialize(Tool.PENNELLOPERPASTASALDA)));
     }
 
+    /**
+     * testing getting the round
+     */
     @Test
     public void getRound(){
         assertEquals(model.getRound(),modelView.getRound());
     }
 
+    /**
+     * testing getting the first turn status
+     */
     @Test
     public void isFirstTurnTest(){
         assertEquals(model.isFirstTurn(),modelView.isFirstTurn());
     }
 
+    /**
+     * testing getting the used tool status
+     */
     @Test
     public void isUsedToolTest(){
         assertEquals(model.hasUsedTool(),modelView.isUsedTool());
     }
 
+    /**
+     * test getting the normal move status
+     */
     @Test
     public void isNormalMoveTest(){
         assertEquals(model.hasUsedNormalMove(),modelView.isNormalMove());
     }
 
+    /**
+     * testing getting a board
+     */
     @Test
     public void getBoardTest(){
         for(int i = 0; i < players.size();i++){
@@ -87,36 +108,57 @@ public class TestModelView {
         }
     }
 
+    /**
+     * testing getting the dicebag
+     */
     @Test
     public void getDiceBagTest(){
         assertEquals(model.getDiceBag(),modelView.getDiceBag());
     }
 
+    /**
+     * testing getting the dicepool
+     */
     @Test
     public void getDraftPoolTest(){
         assertEquals(model.getDraftPool(),modelView.getDraftPool());
     }
 
+    /**
+     * testing getting the roundtrack
+     */
     @Test
     public void getRoundTrackTest(){
         assertEquals(model.getRoundTrack(),modelView.getRoundTrack());
     }
 
+    /**
+     * testing getting the players
+     */
     @Test
     public void getPlayerViewTest(){
         assertEquals(model.getPlayers(),modelView.getPlayers());
     }
 
+    /**
+     *test getting a player
+     */
     @Test
     public void getPlayerTest(){
         assertEquals(players.get(1),modelView.getPlayer(players.get(1).getId()));
     }
 
+    /**
+     * test getting the tools
+     */
     @Test
     public void getToolsTest(){
         assertEquals(model.getTools(),modelView.getTools());
     }
 
+    /**
+     * test if a board contains a die
+     */
     @Test
     public void boardContainsDieTest(){
         assertEquals(false,modelView.boardContainsDie(modelView.getPlayers().get(1),1,1));
@@ -130,6 +172,9 @@ public class TestModelView {
         assertTrue(modelView.boardContainsDie(modelView.getPlayers().get(1),1,1));
     }
 
+    /**
+     * test getting a die from a board
+     */
     @Test
     public void getBoardDieTest(){
         try{
@@ -154,6 +199,9 @@ public class TestModelView {
         }
     }
 
+    /**
+     * test getting a die from the roundtrack
+     */
     @Test
     public void getRoundTrackDieTest(){
         try{
@@ -172,6 +220,9 @@ public class TestModelView {
         }
     }
 
+    /**
+     * test if the roundtrack contains a color
+     */
     @Test
     public void roundTrackCOntainsColorTest(){
         assertFalse(modelView.roundTrackContainsColor(Color.BLUE));
@@ -183,11 +234,17 @@ public class TestModelView {
         assertTrue(modelView.roundTrackContainsColor(Color.BLUE));
     }
 
+    /**
+     * test the draftpool size
+     */
     @Test
     public void draftPoolSizeTest(){
         assertEquals(model.getDraftPool().size(),modelView.DraftPoolSize());
     }
 
+    /**
+     * test getting a die from the draftpool
+     */
     @Test
     public void getDraftPoolDieTest(){
         try{
@@ -203,6 +260,9 @@ public class TestModelView {
 
     }
 
+    /**
+     * testing getting a die from the dicebag
+     */
     @Test
     public void getDiceBagDie(){
         try {
@@ -212,6 +272,9 @@ public class TestModelView {
         }
     }
 
+    /**
+     * test getting the publicobjectives
+     */
     @Test
     public void getPublicObjectivesTest(){
         assertEquals(model.getPublicObjectives(),modelView.getPublicObjective());

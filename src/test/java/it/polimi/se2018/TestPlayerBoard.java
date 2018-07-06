@@ -12,11 +12,16 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Giampietro
+ */
 public class TestPlayerBoard {
     private PlayerBoard playerBoard;
     private BoardList BoardList = new BoardList();
 
-
+    /**
+     * test getting a die from the playerboard
+     */
     @Test
     public void testGetDie(){
         Die die = new Die(Color.BLUE);
@@ -50,7 +55,9 @@ public class TestPlayerBoard {
         }
 
 
-
+    /**
+     * test id the playerboard contains a die in a cell
+     */
     @Test
     public void testContainsDie() {
 
@@ -74,7 +81,9 @@ public class TestPlayerBoard {
     }
 
 
-
+    /**
+     * test removing a die from the board
+     */
     @Test
     public void testRemoveDice(){
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
@@ -110,6 +119,9 @@ public class TestPlayerBoard {
 
     }
 
+    /**
+     * test verifying the color restrictions of a cell
+     */
     @Test
     public void testVerifyColorRestriction(){
 
@@ -131,6 +143,9 @@ public class TestPlayerBoard {
         }
     }
 
+    /**
+     * test verifying the number restriction of a cell
+     */
     @Test
     public void testVerifyNumberRestriction(){
         Die die = new Die(Color.BLUE);
@@ -151,6 +166,9 @@ public class TestPlayerBoard {
         }
     }
 
+    /**
+     * test verifying the position restriction of a cell
+     */
     @Test
     public void testVerifyPositionRestriction(){
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
@@ -170,6 +188,9 @@ public class TestPlayerBoard {
                     assertTrue(playerBoard.verifyPositionRestriction(2 + i, 2 + j));
     }
 
+    /**
+     * test verifying the proximity restriction of a cell
+     */
     @Test
     public void testVerifyNearCellsRestriction(){
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));
@@ -201,6 +222,9 @@ public class TestPlayerBoard {
         }
     }
 
+    /**
+     * test verifying the first die insert
+     */
     @Test
     public void testInitialPositionRestriction(){
         playerBoard = new PlayerBoard(BoardList.getBoard("Kaleidoscopic Dream"));

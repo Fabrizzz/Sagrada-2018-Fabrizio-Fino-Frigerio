@@ -12,11 +12,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Alessio
+ */
 public class TestCell {
     private Cell cell;
     AbstractRestrictionFactory factory;
     private Die die;
 
+    /**
+     * Test initialization
+     */
     @Before
     public void initCell(){
         die = new Die(Color.BLUE);
@@ -24,6 +30,9 @@ public class TestCell {
         cell = new Cell(factory.createNoRestriction());
     }
 
+    /**
+     * Check if a cell is used
+     */
     @Test
     public void testIsUsed(){
         assertFalse(cell.isUsed());
@@ -43,6 +52,9 @@ public class TestCell {
         }
     }
 
+    /**
+     * Test the removal of a die from the cell
+     */
     @Test
     public void testRemoveDie(){
         try{
@@ -69,6 +81,9 @@ public class TestCell {
         assertFalse(cell.isUsed());
     }
 
+    /**
+     * Test taking a die from the cell
+     */
     @Test
     public void testGetDice(){
         try{
@@ -91,6 +106,9 @@ public class TestCell {
         }
     }
 
+    /**
+     * Test putting a die inside a cell
+     */
     @Test
     public void testSetDice(){
         try{
@@ -106,6 +124,9 @@ public class TestCell {
         }
     }
 
+    /**
+     * Test the restriction of a cell
+     */
     @Test
     public void testVerifyRestriction(){
 
@@ -118,6 +139,9 @@ public class TestCell {
 
     }
 
+    /**
+     * Test getting the restriction of the cell
+     */
     @Test
     public void testGetRestriction(){
         Restriction restriction = factory.createNoRestriction();

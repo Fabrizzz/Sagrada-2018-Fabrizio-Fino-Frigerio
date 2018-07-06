@@ -10,8 +10,14 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * @author Giampietro
+ */
 public class TestDie {
 
+    /**
+     * Test getting the color of a die
+     */
     @Test
     public void testGetColor() {
         for (Color color : Color.values()) {
@@ -20,6 +26,9 @@ public class TestDie {
         }
     }
 
+    /**
+     * test getting the number of a die
+     */
     @Test
     public void testGetNumber() {
         for(int i = 0; i<100; i++){
@@ -29,6 +38,9 @@ public class TestDie {
 
     }
 
+    /**
+     * test setting the number of a die
+     */
     @Test
     public void testSetNumber() {
         Die die = new Die(Color.BLUE);
@@ -38,6 +50,9 @@ public class TestDie {
         }
     }
 
+    /**
+     * test rerolloing a die
+     */
     @Test
     public void testReRoll() {
         Die die = new Die(Color.BLUE);
@@ -47,6 +62,9 @@ public class TestDie {
         }
     }
 
+    /**
+     * test flipping a die
+     */
     @Test
     public void testFlip(){
         for (int i = 0; i < 100; i++) {

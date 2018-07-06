@@ -13,12 +13,18 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Giampietro
+ */
 public class TestDraftPool {
 
     private DiceBag dicebag;
     private DraftPool draftpool;
     private int player;
 
+    /**
+     * initialize the draftpool
+     */
     @Before
     public void init() {
         dicebag = new DiceBag(18);
@@ -26,6 +32,9 @@ public class TestDraftPool {
         draftpool = new DraftPool(player, dicebag);
     }
 
+    /**
+     * test rolling the dice
+     */
     @Test
     public void rollDice() {
         assertEquals(player * 2 + 1, draftpool.size());
@@ -40,6 +49,9 @@ public class TestDraftPool {
         assertEquals(player*2 +1, draftpool.size());
     }
 
+    /**
+     * test rerolling the dice
+     */
     @Test
     public void reRollDice() {
         int old_size;
@@ -65,6 +77,9 @@ public class TestDraftPool {
 
     }
 
+    /**
+     * test getting the dice
+     */
     @Test
     public void getDie() {
         Die die = new Die(Color.BLUE);
@@ -82,6 +97,9 @@ public class TestDraftPool {
         } catch (NoDieException e) {}
     }
 
+    /**
+     * test adding a die
+     */
     @Test
     public void addDie() {
         Die die = new Die(Color.BLUE);
@@ -95,8 +113,12 @@ public class TestDraftPool {
         }
     }
 
+    /**
+     * test removing a die
+     * @throws NoDieException if there is no die
+     */
     @Test
-    public void removeDie() throws NoDieException {   //Rimozione per indice
+    public void removeDie() throws NoDieException {
         int i = draftpool.size();
         try {
             Die die = draftpool.getDie(0);
@@ -108,8 +130,11 @@ public class TestDraftPool {
         }
     }
 
+    /**
+     * test removing a die
+     */
     @Test
-    public void removeDie1() {   //Rimozione per dado
+    public void removeDie1() {
         int i = draftpool.size();
         Die die;
         try {
@@ -120,14 +145,11 @@ public class TestDraftPool {
         } catch (NoDieException e) {
             fail();
         }
-        /* try {
-            die = new Die(Color.BLUE);
-            draftpool.removeDie(die);
-            fail();
-        } catch (NoDieException e) {}*/
-
     }
 
+    /**
+     * test renivubg all the dice
+     */
     @Test
     public void removeAll() {
         draftpool.removeAll();
@@ -137,6 +159,9 @@ public class TestDraftPool {
 
     }
 
+    /**
+     * test getting the size
+     */
     @Test
     public void size() {
         int k = 0, i = draftpool.size();

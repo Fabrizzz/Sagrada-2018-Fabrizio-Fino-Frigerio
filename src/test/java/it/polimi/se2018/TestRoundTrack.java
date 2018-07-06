@@ -9,11 +9,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Giampietro,Alessio,Matteo
+ */
 public class TestRoundTrack {
 
     private RoundTrack roundtrack;
     private int round;
 
+    /**
+     * initialize the roundtrack
+     */
     @Before
     public void init() {
         round = 5;
@@ -21,6 +27,9 @@ public class TestRoundTrack {
 
     }
 
+    /**
+     * test getting a die from the roundtrack
+     */
     @Test
     public void getDie() {
         int i;
@@ -34,6 +43,9 @@ public class TestRoundTrack {
         }
     }
 
+    /**
+     * test adding a die from the roundtrack
+     */
     @Test
     public void addDie() {
         int i;
@@ -48,6 +60,9 @@ public class TestRoundTrack {
         assertEquals(i+1, roundtrack.numberOfDice(round));
     }
 
+    /**
+     * testing the number of dice in the roundtrack
+     */
     @Test
     public void numberOfDice() {
         RoundTrack roundtrack = new RoundTrack();
@@ -57,6 +72,9 @@ public class TestRoundTrack {
         assertEquals(3, roundtrack.numberOfDice(round));
     }
 
+    /**
+     * testing if the roundtrack contains a color
+     */
     @Test
     public void hasColor() {
         RoundTrack roundtrack = new RoundTrack();
@@ -72,6 +90,9 @@ public class TestRoundTrack {
 
     }
 
+    /**
+     * test removing a die from the roundtrack
+     */
     @Test
     public void testRemoveDie(){
         RoundTrack roundtrack = new RoundTrack();

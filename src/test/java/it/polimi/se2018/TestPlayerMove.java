@@ -16,6 +16,9 @@ public class TestPlayerMove {
 
     private PlayerMove playerMove;
 
+    /**
+     * Test initializing the playermove with a SKIPTURN move
+     */
     @Test
     public void skipturnMartellettoTenagliaTest(){
         playerMove = new PlayerMove(Tool.SKIPTURN);
@@ -27,6 +30,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a MOSSASTANDARD move
+     */
     @Test
     public void standardSugheroTest(){
         playerMove = new PlayerMove(Tool.MOSSASTANDARD,1,2,3);
@@ -41,6 +47,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a PINZASGROSSATRICE move
+     */
     @Test
     public void pinzaSgrossatriceTest(){
         playerMove = new PlayerMove(Tool.PINZASGROSSATRICE,3,true);
@@ -54,6 +63,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a PENNELLOPEREGLOMISE move
+     */
     @Test
     public void pennelloAlesatoreLathekinTaglierinaTest(){
         playerMove = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,2,3,4);
@@ -69,6 +81,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a PENNELLOPEREGLOMISE move
+     */
     @Test
     public void teglierinaLathekinTest(){
         PlayerMove playerMove2 = new PlayerMove(Tool.PENNELLOPEREGLOMISE,1,2,3,4);
@@ -86,6 +101,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a TAGLIERINACIRCOLARE move
+     */
     @Test
     public void taglierinaCircolareTest(){
         playerMove = new PlayerMove(1,2,3,Tool.TAGLIERINACIRCOLARE);
@@ -100,6 +118,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a PENNELLOPERPASTASALDA move
+     */
     @Test
     public void pennelloDiluentePastaSaldaTest(){
         playerMove = new PlayerMove(1,2,3,NumberEnum.ONE,Tool.PENNELLOPERPASTASALDA);
@@ -115,6 +136,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a PENNELLOPERPASTASALDA move
+     */
     @Test
     public void pennelloDiluentePastaSaldaTest2(){
         playerMove = new PlayerMove(3,NumberEnum.ONE,Tool.PENNELLOPERPASTASALDA);
@@ -128,6 +152,9 @@ public class TestPlayerMove {
         }catch (IllegalArgumentException e){}
     }
 
+    /**
+     * Test initializing the playermove with a TAMPONEDIAMANTATO move
+     */
     @Test
     public void tamponeDiamantatoTest(){
         playerMove = new PlayerMove(Tool.TAMPONEDIAMANTATO,1);

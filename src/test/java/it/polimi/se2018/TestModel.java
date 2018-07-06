@@ -18,6 +18,9 @@ import java.util.*;
 
 import static junit.framework.TestCase.*;
 
+/**
+ * @author Alessio
+ */
 public class TestModel {
     private  Model model;
     private ArrayList<Player> players = new ArrayList<>();
@@ -28,6 +31,9 @@ public class TestModel {
     private  Map<Player, PrivateObjective> privateObjectiveMap;
     private BoardList BoardList = new BoardList();
 
+    /**
+     * initialize the model
+     */
     @Before
     public void initialize(){
         BoardList boardList = new BoardList();
@@ -54,9 +60,11 @@ public class TestModel {
         Collections.addAll(this.players,boardMap.keySet().toArray(new Player[boardMap.keySet().size()]));
         this.playerBoard = boardMap.values().toArray(new PlayerBoard[boardMap.values().size()]);
         this.privateObjective = privateObjectiveMap.values().toArray(new PrivateObjective[privateObjectiveMap.values().size()]);
-
     }
 
+    /**
+     * test the costructor of the model
+     */
     @Test
     public void testCostructor(){
         try{
@@ -88,6 +96,9 @@ public class TestModel {
 
     }
 
+    /**
+     * test setting the round
+     */
     @Test
     public void testSetRound(){
         int roundI = model.getRound();
@@ -95,6 +106,9 @@ public class TestModel {
         assertEquals(model.getRound(),roundI + 1);
     }
 
+    /**
+     * test checking the first turn status
+     */
     @Test
     public void testSetFirstTurn(){
         assertTrue(model.isFirstTurn());
@@ -104,6 +118,9 @@ public class TestModel {
         assertTrue(model.isFirstTurn());
     }
 
+    /**
+     * test checking the used tool status
+     */
     @Test
     public void testSetUsedTool(){
         assertFalse(model.hasUsedTool());
@@ -113,22 +130,33 @@ public class TestModel {
         assertFalse(model.hasUsedTool());
     }
 
+    /**
+     * test getting a playerboard
+     */
     @Test
     public void testGetBoard(){
         assertSame(boardMap.get(players.get(0)), model.getBoard(players.get(0)));
     }
 
+    /**
+     * test getting a player
+     */
     @Test
     public void testGetPlayers(){
         assertEquals(players, model.getPlayers());
     }
 
-
+    /**
+     * test getting a public objective
+     */
     @Test
     public void testGetPublicObjectives(){
         assertEquals(publicObjectives,model.getPublicObjectives());
     }
 
+    /**
+     * test setting a public objective
+     */
     @Test
     public void testSetPublicObjective(){
         try{
@@ -137,7 +165,9 @@ public class TestModel {
         }catch(SizeLimitExceededException e){}
     }
 
-
+    /**
+     * test setting the normal move status
+     */
     @Test
     public void setNormalMoveTest(){
         assertFalse(model.hasUsedNormalMove());

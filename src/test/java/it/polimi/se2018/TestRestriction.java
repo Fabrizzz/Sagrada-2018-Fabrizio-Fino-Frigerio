@@ -10,6 +10,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * @author Giampietro
+ */
 public class TestRestriction {
 
     private Die die;
@@ -17,6 +20,9 @@ public class TestRestriction {
     private AbstractRestrictionFactory factory = AbstractRestrictionFactory.getFactory();
 
 
+    /**
+     * testing the correct insert of a die in a cell with restriction
+     */
     @Test
     public void testTrueRestriction() {
 
@@ -43,6 +49,9 @@ public class TestRestriction {
 
     }
 
+    /**
+     * testing the incorrect insert of a die in a cell with restriction
+     */
     @Test
     public void testFalseRestriction() {
         restriction = factory.createNoRestriction();

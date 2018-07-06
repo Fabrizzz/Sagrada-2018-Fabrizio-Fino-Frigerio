@@ -8,6 +8,9 @@ import org.junit.Test;
  */
 public class TestJSON {
 
+    /**
+     * testing the loading of the board from the file
+     */
     @Test
     public void testJson(){
         BoardList BoardList = new BoardList();
