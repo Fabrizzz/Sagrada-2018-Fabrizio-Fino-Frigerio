@@ -6,6 +6,7 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.AlreadySetDie;
 import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
@@ -52,6 +53,11 @@ public class TestModelView {
         players = (ArrayList) model.getPlayers();
         model.setRound(3);
         modelView = new ModelView(model);
+    }
+
+    @Test
+    public void initialize2Test(){
+        modelView = new ModelView(modelView,new ModelView(ModelControllerInitializerTest.initialize(Tool.PENNELLOPERPASTASALDA)));
     }
 
     @Test
