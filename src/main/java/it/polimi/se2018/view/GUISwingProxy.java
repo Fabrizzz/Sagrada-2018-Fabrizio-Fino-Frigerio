@@ -10,6 +10,10 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * GUI
+ * @author Alessio
+ */
 public class GUISwingProxy extends View {
     private GUIMain gameWindow;
     private ModelView modelView;
@@ -21,11 +25,18 @@ public class GUISwingProxy extends View {
         this.localID = localID;
     }
 
+    /**
+     * Called when the connection is closed
+     */
     @Override
     public  void connectionClosed() {
         gameWindow.printError("Connessione persa");
     }
 
+    /**
+     * process  the server message
+     * @param message
+     */
     @Override
     public void elaborateMessage(ServerMessage message) {
         switch (message.getMessageType()) {
@@ -69,6 +80,11 @@ public class GUISwingProxy extends View {
         }
     }
 
+    /**
+     * Server update
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         ServerMessage message = (ServerMessage) arg;
@@ -76,11 +92,19 @@ public class GUISwingProxy extends View {
 
     }
 
+    /**
+     * Send a client message to the server
+     * @param clientMessage
+     */
     public void sendMessage(ClientMessage clientMessage){
         setChanged();
         notifyObservers(clientMessage);
     }
 
+    /**
+     * notify the chosen board
+     * @param board
+     */
     public void selectedBoard(Board board){
         setChanged();
         notifyObservers(new ClientMessage(board));
