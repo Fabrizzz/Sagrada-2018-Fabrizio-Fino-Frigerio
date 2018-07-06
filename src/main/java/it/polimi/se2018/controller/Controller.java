@@ -347,8 +347,18 @@ public class Controller implements Observer {
     @Override
     public synchronized void update(Observable o, Object arg) {
         if(!playerCountCheck()){
-            LOGGER.log(Level.FINE,"1 giocatore rimanenti, termino partita");
-            endGame(true);
+            if (choosenBoards.size() == views.size()) {
+                LOGGER.log(Level.FINE, "1 giocatore rimanenti, termino partita");
+                endGame(true);
+            } else {
+                gameEnded = true;
+                for (RemoteView view : views) {
+                    view.connectionClosed();
+                }
+                server.deregisterConnections(views);
+                LOGGER.log(Level.FINE, "Endgame");
+            }
+
         } else {
             try {
                 ClientMessage message = (ClientMessage) arg;
