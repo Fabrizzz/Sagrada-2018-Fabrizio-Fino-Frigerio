@@ -38,7 +38,7 @@ public class GUIMain  implements MouseListener{
     private Long localID;
     private GUISwingProxy guiSwingProxy;
 
-    public GUIMain(GUISwingProxy guiSwingProxy){
+    protected GUIMain(GUISwingProxy guiSwingProxy){
         this.guiSwingProxy = guiSwingProxy;;
         toolCardMap.put(Tool.PINZASGROSSATRICE,"toolCard01");
         toolCardMap.put(Tool.PENNELLOPEREGLOMISE,"toolCard02");
@@ -166,7 +166,7 @@ public class GUIMain  implements MouseListener{
         this.localID = localID;
     }
 
-    public void chooseBoard(Board[] boards){
+    protected void chooseBoard(Board[] boards){
         ChooseBoard dialog = new ChooseBoard(boards,this);
         dialog.pack();
         dialog.setVisible(true);
@@ -184,12 +184,12 @@ public class GUIMain  implements MouseListener{
         return pos;
     }
 
-    public NumberEnum chooseNewValue(){
+    private NumberEnum chooseNewValue(){
         ChooseNewValue dialog = new ChooseNewValue();
         return dialog.getNewValue();
     }
 
-    public void selectedBoard(Board board){
+    protected void selectedBoard(Board board){
         guiSwingProxy.selectedBoard(board);
     }
 
@@ -197,15 +197,15 @@ public class GUIMain  implements MouseListener{
         return modelView;
     }
 
-    public void endGame(Map<String,Integer> scores){
+    protected void endGame(Map<String,Integer> scores){
         //todo
     }
 
-    public void printError(String error){
+    protected void printError(String error){
         JOptionPane.showMessageDialog(this.contentPane, error);
     }
 
-    public void mostraTracciatoDadi(){
+    private void mostraTracciatoDadi(){
         if(modelView != null) {
             ShowRoundTrack dialog = new ShowRoundTrack(modelView.getRoundTrack());
             dialog.pack();
@@ -254,29 +254,28 @@ public class GUIMain  implements MouseListener{
         showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
 
-    public void mostraRiserva(){
+    private void mostraRiserva(){
         ShowDraftPool dialog = new ShowDraftPool(modelView.getDraftPool());
         dialog.pack();
         dialog.setVisible(true);
     }
 
     private void onCancel() {
-        // add your code here if necessary
-        //dispose();
+        System.exit(0);
     }
 
     public JPanel getContentPane(){
         return contentPane;
     }
 
-    public int chooseDraftPoolPosition(){
+    private int chooseDraftPoolPosition(){
         ChooseDraftPoolDie chooseDraftPoolDie = new ChooseDraftPoolDie(modelView.getDraftPool());
         int p = chooseDraftPoolDie.getPosition();
         chooseDraftPoolDie.dispose();
         return p;
     }
 
-    public void normalSugheroMove(Tool tool){
+    private void normalSugheroMove(Tool tool){
         int i = chooseDraftPoolPosition();
 
         int[] position = chooseCell("Scegli dove piazzare il dado");
@@ -285,19 +284,19 @@ public class GUIMain  implements MouseListener{
 
     }
 
-    public void tenagliaARotelleMove(){
+    private void tenagliaARotelleMove(){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TENAGLIAAROTELLE));
         guiSwingProxy.sendMessage(clientMessage);
         normalSugheroMove(Tool.MOSSASTANDARD);
         normalSugheroMove(Tool.MOSSASTANDARD);
     }
 
-    public void martellettoMove(){
+    private void martellettoMove(){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.MARTELLETTO));
         guiSwingProxy.sendMessage(clientMessage);
     }
 
-    public void sgrossatriceMove(){
+    private void sgrossatriceMove(){
         int pos = chooseDraftPoolPosition();
         if(pos < modelView.getDraftPool().size()){
             addDieValue dialog = new addDieValue();
@@ -309,7 +308,7 @@ public class GUIMain  implements MouseListener{
         }
     }
 
-    public void alesatoreEglomiseMove(Tool tool){
+    private void alesatoreEglomiseMove(Tool tool){
         int[] posi = chooseCell("Scegli il dado da muovere");
         int[] posf = chooseCell("Scegli dove piazzare il dado");
 
@@ -317,7 +316,7 @@ public class GUIMain  implements MouseListener{
         guiSwingProxy.sendMessage(clientMessage);
     }
 
-    public void lathekinMove(){
+    private void lathekinMove(){
         int[] posi = chooseCell("Scegli il primo dado da muovere");
         int[] posf = chooseCell("Scegli dove piazzare il dado");
         printError("Scegli il secondo dado da muovere");
@@ -328,7 +327,7 @@ public class GUIMain  implements MouseListener{
         guiSwingProxy.sendMessage(clientMessage);
     }
 
-    public void taglierinaManualeMove(){
+    private void taglierinaManualeMove(){
         int[] posi = chooseCell("Scegli il primo dado da muovere");
         int[] posf = chooseCell("Scegli dove piazzare il dado");
 
@@ -383,7 +382,7 @@ public class GUIMain  implements MouseListener{
         }
     }
 
-    public void tamponeDiamantatoMove(){
+    private void tamponeDiamantatoMove(){
         int i = chooseDraftPoolPosition();
         try{
             modelView.getDraftPool().getDie(i);
@@ -455,24 +454,16 @@ public class GUIMain  implements MouseListener{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 
     public static void main(String[] args) {
         Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);

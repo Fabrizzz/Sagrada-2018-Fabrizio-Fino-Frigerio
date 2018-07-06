@@ -6,9 +6,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.image.ImageObserver;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 public class StretchIcon extends ImageIcon {
+
+    private static final Logger LOGGER = Logger.getLogger("Logger");
 
     public StretchIcon(String filename) {
         super(filename);
@@ -18,6 +22,7 @@ public class StretchIcon extends ImageIcon {
     public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
         Image image = getImage();
         if (image == null) {
+            LOGGER.log(Level.FINE,"Immagine carta null");
             return;
         }
 

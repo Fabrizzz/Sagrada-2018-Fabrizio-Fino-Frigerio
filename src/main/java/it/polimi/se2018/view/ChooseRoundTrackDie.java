@@ -12,11 +12,11 @@ import java.util.concurrent.CountDownLatch;
 public class ChooseRoundTrackDie extends JDialog implements MouseListener{
     private JPanel contentPane;
     private JPanel board;
-    public final CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch latch = new CountDownLatch(1);
     private int[] p = new int[2];
     private RoundTrack roundTrack;
 
-    public ChooseRoundTrackDie(RoundTrack roundTrack) {
+    protected ChooseRoundTrackDie(RoundTrack roundTrack) {
         p[0] = 0;
         p[1] = 0;
 

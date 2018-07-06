@@ -11,7 +11,7 @@ public class addDieValue extends JDialog {
     private JRadioButton diminuisciDiUnoRadioButton;
     private final CountDownLatch latch = new CountDownLatch(1);
 
-    public addDieValue() {
+    protected addDieValue() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);

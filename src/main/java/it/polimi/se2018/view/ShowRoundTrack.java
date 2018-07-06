@@ -6,14 +6,12 @@ import it.polimi.se2018.utils.enums.Color;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ShowRoundTrack extends JDialog {
     private JPanel contentPane;
     private JPanel board;
 
-    public ShowRoundTrack(RoundTrack roundTrack) {
+    protected ShowRoundTrack(RoundTrack roundTrack) {
 
         setContentPane(contentPane);
         setModal(false);
@@ -38,7 +36,6 @@ public class ShowRoundTrack extends JDialog {
         for(int i = 0; i < 9; i ++){
             for(int j = 0; j < 10; j++){
                 ((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
-                //((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).setText("" + (i + 9 * j));
             }
         }
     }
@@ -58,8 +55,6 @@ public class ShowRoundTrack extends JDialog {
     private void onCancel() {
         dispose();
     }
-
-
 
     public static void main(String[] args) {
         RoundTrack roundTrack = new RoundTrack();

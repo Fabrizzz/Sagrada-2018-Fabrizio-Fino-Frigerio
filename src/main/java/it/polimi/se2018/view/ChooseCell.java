@@ -18,9 +18,9 @@ public class ChooseCell extends JDialog implements MouseListener {
     private JLabel messaggeLabel;
     private PlayerBoard playerBoard;
     private int r,c;
-    public final CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch latch = new CountDownLatch(1);
 
-    public ChooseCell(PlayerBoard playerBoard,String message) {
+    protected ChooseCell(PlayerBoard playerBoard,String message) {
         r = 0;
         c = 0;
 
@@ -125,11 +125,6 @@ public class ChooseCell extends JDialog implements MouseListener {
         }
 
 
-    }
-
-    private void onOK() {
-        latch.countDown();
-        dispose();
     }
 
     private void onCancel() {
