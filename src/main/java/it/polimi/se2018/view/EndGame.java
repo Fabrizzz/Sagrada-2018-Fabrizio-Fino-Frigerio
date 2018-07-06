@@ -17,7 +17,7 @@ public class EndGame extends JDialog {
 
     public EndGame(Map<String,Integer> scores) {
 
-        map = scores;
+        map = new HashMap<String, Integer>(scores);
 
         setContentPane(contentPane);
         setModal(true);
