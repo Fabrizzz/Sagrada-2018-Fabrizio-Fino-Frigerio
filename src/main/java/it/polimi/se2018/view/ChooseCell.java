@@ -57,7 +57,9 @@ public class ChooseCell extends JDialog implements MouseListener {
 
         try{
             latch.await();
-        }catch (InterruptedException e){}
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
         int[] pos = new int[2];
         pos[0] = r;
         pos[1] = c;

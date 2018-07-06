@@ -52,7 +52,9 @@ public class addDieValue extends JDialog {
         this.setVisible(true);
         try{
             latch.await();
-        }catch (InterruptedException e){}
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
 
         return aumentaDiUnoRadioButton.isSelected();
     }

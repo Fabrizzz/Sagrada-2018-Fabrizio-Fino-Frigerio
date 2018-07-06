@@ -45,7 +45,9 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
         this.setVisible(true);
         try {
             latch.await();
-        }catch (InterruptedException e){}
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
 
         return p;
     }
