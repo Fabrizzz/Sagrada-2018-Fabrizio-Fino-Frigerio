@@ -52,7 +52,6 @@ public class EndGame extends JDialog {
         int i;
         String nick;
 
-        System.out.println(map.entrySet());
         if (map == null){
             //Errore
         }
@@ -69,10 +68,7 @@ public class EndGame extends JDialog {
             map.remove(nick);
             nick = top();
             player4.setText(nick+": "+map.get(nick));
-
         }
-
-
     }
 
     private String top(){
