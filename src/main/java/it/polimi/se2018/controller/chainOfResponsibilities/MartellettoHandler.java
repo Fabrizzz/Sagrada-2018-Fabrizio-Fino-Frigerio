@@ -22,7 +22,7 @@ public class MartellettoHandler extends ToolHandler {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa MARTELLETTO");
             if (model.isFirstTurn() || model.hasUsedNormalMove() || cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
                 LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare la mossa MARTELLETTO");
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
             } else {
                 model.getDraftPool().reRollDice();
                 completeTool(remoteView.getPlayer(), model, playerMove.getTool());

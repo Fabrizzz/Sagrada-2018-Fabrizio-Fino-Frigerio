@@ -5,9 +5,9 @@ import it.polimi.se2018.model.Player;
 import it.polimi.se2018.utils.enums.MessageType;
 import it.polimi.se2018.utils.exceptions.DisconnectedException;
 import it.polimi.se2018.utils.messages.ClientMessage;
-import it.polimi.se2018.utils.messages.Message;
 import it.polimi.se2018.utils.messages.ServerMessage;
 import it.polimi.se2018.utils.network.Connection;
+import it.polimi.se2018.view.View;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * this class acts as a view for the Server and is the only onw to communicate through connection with the client
  * @author Giampietro
  */
-public class RemoteView extends Observable implements Observer {
+public class RemoteView extends View {
     private static final Logger LOGGER = Logger.getLogger("Logger");
     private Player player;
 
@@ -55,11 +55,17 @@ public class RemoteView extends Observable implements Observer {
         return player;
     }
 
+    @Override
+    public void connectionClosed() {
+        //da scrivere
+    }
+
     /**
      * It sends a ServerMessage back to the client
      * @param message
      */
-    public void sendBack(Message message) {
+    @Override
+    public void elaborateMessage(ServerMessage message) {
         LOGGER.log(Level.FINE, "Invio messaggio");
         try {
             connection.sendMessage(message);
@@ -97,7 +103,7 @@ public class RemoteView extends Observable implements Observer {
 
         ModelView modelView = (ModelView) arg;
 
-        sendBack(new ServerMessage(MessageType.MODELVIEWUPDATE, modelView));
+        elaborateMessage(new ServerMessage(MessageType.MODELVIEWUPDATE, modelView));
     }
 
 

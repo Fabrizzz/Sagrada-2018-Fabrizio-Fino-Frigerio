@@ -18,7 +18,7 @@ public class TenagliaARotelleHandler extends ToolHandler {
             LOGGER.log(Level.FINE,"Elaborazione validita' mossa TENAGLIAAROTELLE");
             if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) || !model.isFirstTurn()){
                 LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TENAGLIAAROTELLE");
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                 return false;
             }
 

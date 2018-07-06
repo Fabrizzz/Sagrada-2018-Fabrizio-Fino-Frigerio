@@ -1,6 +1,5 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.client.Client;
 import it.polimi.se2018.model.Board;
 import it.polimi.se2018.model.ModelView;
 import it.polimi.se2018.utils.enums.ErrorType;
@@ -28,8 +27,7 @@ public class GUISwingProxy extends View {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        ServerMessage message = (ServerMessage) arg;
+    public void elaborateMessage(ServerMessage message) {
         switch (message.getMessageType()) {
             case ERROR:
                 if(message.getErrorType().equals(ErrorType.ILLEGALMOVE)){
@@ -66,6 +64,13 @@ public class GUISwingProxy extends View {
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");
                 break;
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        ServerMessage message = (ServerMessage) arg;
+        elaborateMessage(message);
+
     }
 
     public void sendMessage(ClientMessage clientMessage){

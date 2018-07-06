@@ -53,7 +53,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                 dieToRemove = draftPool.getDie(draftPoolPosition);
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilzzare DILUENTEPERPASTASALDA 2");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                 } else {
                     board = model.getBoard(remoteView.getPlayer());
 
@@ -76,7 +76,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                                     " colorRestriction: " + board.verifyColorRestriction(dieToGet, row, column) + " numberRestriction:" +
                                     board.verifyNumberRestriction(dieToGet, row, column) + " nearCellREstriction:" + board.verifyNearCellsRestriction(dieToGet, row, column) +
                                     " positionRestriction:" + board.verifyPositionRestriction(row, column));
-                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                         } else {
                             diceBag.takeDie();
                             board.setDie(dieToGet, row, column);
@@ -106,7 +106,7 @@ public class DiluentePerPastaSaldaHandler extends ToolHandler {
                             return true;
                         } else {
                             LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare la mossa DILUENTEPERPASTASALDA 4");
-                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                         }
                     }
                     //nextHandler.process(playerMove, remoteView, model);

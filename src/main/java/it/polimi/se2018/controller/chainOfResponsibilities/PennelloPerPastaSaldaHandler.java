@@ -47,7 +47,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                 Die die = draftPool.getDie(draftPoolPosition);
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())){
                     LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA 1");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                 }
 
                 else {
@@ -70,7 +70,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                                 !board.verifyPositionRestriction(row, column))))  {
                             LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA 2");
                             die.setNumber(num);
-                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                             return false;
                         } else {
                             board.setDie(die, row, column);
@@ -104,7 +104,7 @@ public class PennelloPerPastaSaldaHandler extends ToolHandler {
                         } else {
                             die.setNumber(num);
                             LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PENNELLOPERPASTASALDA 3");
-                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                             return false;
                         }
                     }
