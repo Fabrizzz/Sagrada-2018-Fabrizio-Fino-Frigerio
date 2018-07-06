@@ -95,6 +95,7 @@ public class GUINetwork extends JDialog{
 
             JFrame frame = new JFrame("Sagrada");
             frame.setContentPane(game.getContentPane());
+            frame.setSize(500,400);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
             frame.setVisible(true);

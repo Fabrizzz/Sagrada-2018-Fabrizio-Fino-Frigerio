@@ -20,6 +20,7 @@ public class ChooseBoard extends JDialog {
     private JRadioButton radioButton4;
     private JButton choose;
     private JLabel boardName;
+    private JLabel difficultyLabel;
     private GUIMain guiMain;
     private Board[] boards;
 
@@ -98,6 +99,7 @@ public class ChooseBoard extends JDialog {
     private void refreshBoard(Board boardS){
         PlayerBoard playerBoard = new PlayerBoard(boardS);
         boardName.setText("Nome: " + boardS.getName());
+        difficultyLabel.setText("Difficoltà: " + boardS.getTokens());
         whiteRefreshBoard();
 
         for(int i = 0; i < 4; i ++) {

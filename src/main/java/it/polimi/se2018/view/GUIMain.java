@@ -452,7 +452,7 @@ public class GUIMain  implements MouseListener{
             move(tools[0]);
         }else if(source.equals(tool2Label)){
             move(tools[1]);
-        }else if((source.equals(tool2Label))){
+        }else if(source.equals(tool3Label)){
             move(tools[2]);
         }
     }
