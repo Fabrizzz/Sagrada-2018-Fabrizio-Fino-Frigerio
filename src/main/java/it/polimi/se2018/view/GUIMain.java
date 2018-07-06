@@ -9,6 +9,7 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
+import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.NumberEnum;
@@ -130,6 +131,7 @@ public class GUIMain  implements MouseListener{
     private void setIndicator(){
 
         boolean yourTurn;
+        String color;
 
         yourTurn = modelView.getPlayer(localID).isYourTurn();
         if(yourTurn){
@@ -140,7 +142,7 @@ public class GUIMain  implements MouseListener{
         }
         labelSegnalini.setText("Segnalini: "+ modelView.getPlayer(localID).getFavorTokens());
         labelRound.setText("Round: "+ modelView.getRound());
-        privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective());
+        privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective().getColorString());
     }
 
     private void mostraObiettivi(){
@@ -255,9 +257,11 @@ public class GUIMain  implements MouseListener{
                 }
             }
         }
-        
+
         if(!initialPack) {
-            ((JFrame) SwingUtilities.getWindowAncestor(contentPane)).pack();
+            try{
+                ((JFrame) SwingUtilities.getWindowAncestor(contentPane)).pack();
+            }catch (NullPointerException e){}
             initialPack = true;
         }
     }
@@ -399,6 +403,7 @@ public class GUIMain  implements MouseListener{
         try{
             modelView.getDraftPool().getDie(i);
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
+            guiSwingProxy.sendMessage(clientMessage);
         }catch (NoDieException e){
             printError("Nessun dado presente nella cella selezionata");
         }
@@ -485,7 +490,7 @@ public class GUIMain  implements MouseListener{
         model.getDraftPool().addDie(new Die(Color.RED));
         model.getDraftPool().addDie(new Die(Color.BLUE));
 
-        ModelView modelView = new ModelView(model);
+        ModelView modelView = new ModelView(model,new PrivateObjective(Color.RED));
 
         GUISwingProxy guiSwingProxy = new GUISwingProxy();
         JFrame frame = new JFrame("Sagrada");

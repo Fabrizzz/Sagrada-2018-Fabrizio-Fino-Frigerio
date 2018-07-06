@@ -51,6 +51,7 @@ public class EndGame extends JDialog {
 
         int i;
         String nick;
+        int dim = map.size();
 
         if (map == null){
             //Errore
@@ -60,14 +61,20 @@ public class EndGame extends JDialog {
             player1.setText(nick+": "+map.get(nick));
             player1.setForeground (Color.red);
             map.remove(nick);
-            nick = top();
-            player2.setText(nick+": "+map.get(nick));
-            map.remove(nick);
-            nick = top();
-            player3.setText(nick+": "+map.get(nick));
-            map.remove(nick);
-            nick = top();
-            player4.setText(nick+": "+map.get(nick));
+            if (dim>1) {
+                nick = top();
+                player2.setText(nick + ": " + map.get(nick));
+                map.remove(nick);
+                if (dim>2) {
+                    nick = top();
+                    player3.setText(nick + ": " + map.get(nick));
+                    map.remove(nick);
+                    if(dim>3) {
+                        nick = top();
+                        player4.setText(nick + ": " + map.get(nick));
+                    }
+                }
+            }
         }
     }
 
@@ -95,7 +102,7 @@ public class EndGame extends JDialog {
         prova.put("Matteo",10);
         prova.put("Alessio",20);
         prova.put("Giamp",5);
-        prova.put("Sanpietro",60);
+        prova.put("SanPietro",60);
         EndGame dialog = new EndGame(prova);
         dialog.pack();
         dialog.setVisible(true);
