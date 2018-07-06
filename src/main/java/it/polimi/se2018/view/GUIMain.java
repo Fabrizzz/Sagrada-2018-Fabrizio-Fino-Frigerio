@@ -5,18 +5,20 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polimi.se2018.client.Client;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
+import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
 
-public class GUIMain {
+public class GUIMain  implements MouseListener{
     private JPanel contentPane;
     private JPanel board;
     private JButton mostraRiservaButton;
@@ -30,20 +32,14 @@ public class GUIMain {
     private JLabel labelSegnalini;
     private JLabel labelRound;
     private JButton terminaTurnoButton;
-    private Map<Color,String> colorMap = new HashMap<>();
+    private JButton mostraLeCarteObiettivoButton;
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
     private Long localID;
     private GUISwingProxy guiSwingProxy;
 
-    public GUIMain(GUISwingProxy guiSwingProxy) {
+    public GUIMain(GUISwingProxy guiSwingProxy){
         this.guiSwingProxy = guiSwingProxy;;
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
-
         toolCardMap.put(Tool.PINZASGROSSATRICE,"toolCard01");
         toolCardMap.put(Tool.PENNELLOPEREGLOMISE,"toolCard02");
         toolCardMap.put(Tool.ALESATOREPERLAMINADIRAME,"toolCard03");
@@ -71,7 +67,16 @@ public class GUIMain {
             }
         });
 
+        mostraLeCarteObiettivoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostraObiettivi();
+            }
+        });
 
+        tool1Label.addMouseListener(this);
+        tool2Label.addMouseListener(this);
+        tool3Label.addMouseListener(this);
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
@@ -84,7 +89,7 @@ public class GUIMain {
         piazzaUnDadoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                normalSugheroMove();
+                normalSugheroMove(Tool.MOSSASTANDARD);
             }
         });
         terminaTurnoButton.addActionListener(new ActionListener() {
@@ -98,7 +103,7 @@ public class GUIMain {
 
     private void setCombobox() {
 
-        comboBoxPlayerBoard.removeAll();
+        comboBoxPlayerBoard.removeAllItems();
         comboBoxPlayerBoard.addItem(modelView.getPlayer(localID).getNick());
         for(int j = 0; j < modelView.getPlayers().size(); j ++){
             if(!modelView.getPlayers().get(j).getId().equals(localID)){
@@ -135,10 +140,17 @@ public class GUIMain {
         labelRound.setText("Round: "+ modelView.getRound());
     }
 
+    private void mostraObiettivi(){
+        ShowObjectives dialog = new ShowObjectives(modelView.getPublicObjective());
+        dialog.pack();
+        dialog.setVisible(true);
+
+    }
+
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
-                ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
+                ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
             }
         }
     }
@@ -155,9 +167,26 @@ public class GUIMain {
     }
 
     public void chooseBoard(Board[] boards){
-        GUISwingChooseBoard dialog = new GUISwingChooseBoard(boards,this);
+        ChooseBoard dialog = new ChooseBoard(boards,this);
         dialog.pack();
         dialog.setVisible(true);
+    }
+
+    private int[] chooseCell(String message){
+        ChooseCell dialog = new ChooseCell(modelView.getBoard(modelView.getPlayer(localID)),message);
+        int[] pos = dialog.getPosition();
+        return pos;
+    }
+
+    private int[] chooseRoundTrackDie(){
+        ChooseRoundTrackDie dialog = new ChooseRoundTrackDie(modelView.getRoundTrack());
+        int[] pos = dialog.getPosition();
+        return pos;
+    }
+
+    public NumberEnum chooseNewValue(){
+        ChooseNewValue dialog = new ChooseNewValue();
+        return dialog.getNewValue();
     }
 
     public void selectedBoard(Board board){
@@ -178,11 +207,11 @@ public class GUIMain {
 
     public void mostraTracciatoDadi(){
         if(modelView != null) {
-            GUISwingRoundTrack dialog = new GUISwingRoundTrack(modelView.getRoundTrack());
+            ShowRoundTrack dialog = new ShowRoundTrack(modelView.getRoundTrack());
             dialog.pack();
             dialog.setVisible(true);
         }else{
-            GUISwingRoundTrack dialog = new GUISwingRoundTrack(new RoundTrack());
+            ShowRoundTrack dialog = new ShowRoundTrack(new RoundTrack());
             dialog.pack();
             dialog.setVisible(true);
         }
@@ -203,9 +232,9 @@ public class GUIMain {
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.getRestriction(i,j).isColorRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png"));
                 }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png"));
                 }
             }
         }
@@ -214,7 +243,7 @@ public class GUIMain {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.containsDie(i,j)){
                     try{
-                        ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png",false));
+                        ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png"));
                     }catch (Exception e){}
                 }
             }
@@ -225,18 +254,8 @@ public class GUIMain {
         showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
 
-    private String colorToString(Color color){
-        return colorMap.get(color);
-    }
-
-    private int[] chooseCell(){
-        ChooseCell dialog = new ChooseCell(modelView.getBoard(modelView.getPlayer(localID)));
-        int[] pos = dialog.getPosition();
-        return pos;
-    }
-
     public void mostraRiserva(){
-        GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
+        ShowDraftPool dialog = new ShowDraftPool(modelView.getDraftPool());
         dialog.pack();
         dialog.setVisible(true);
     }
@@ -253,16 +272,15 @@ public class GUIMain {
     public int chooseDraftPoolPosition(){
         ChooseDraftPoolDie chooseDraftPoolDie = new ChooseDraftPoolDie(modelView.getDraftPool());
         int p = chooseDraftPoolDie.getPosition();
-        System.out.println(p);
+        chooseDraftPoolDie.dispose();
         return p;
     }
 
-    public void normalSugheroMove(){
-
+    public void normalSugheroMove(Tool tool){
         int i = chooseDraftPoolPosition();
 
-        int[] position = chooseCell();
-        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.MOSSASTANDARD, position[0], position[1], i));
+        int[] position = chooseCell("Scegli dove piazzare il dado");
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
         guiSwingProxy.sendMessage(clientMessage);
 
     }
@@ -270,8 +288,8 @@ public class GUIMain {
     public void tenagliaARotelleMove(){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TENAGLIAAROTELLE));
         guiSwingProxy.sendMessage(clientMessage);
-        normalSugheroMove();
-        normalSugheroMove();
+        normalSugheroMove(Tool.MOSSASTANDARD);
+        normalSugheroMove(Tool.MOSSASTANDARD);
     }
 
     public void martellettoMove(){
@@ -282,7 +300,7 @@ public class GUIMain {
     public void sgrossatriceMove(){
         int pos = chooseDraftPoolPosition();
         if(pos < modelView.getDraftPool().size()){
-            GUIAumentaValoreDialog dialog = new GUIAumentaValoreDialog();
+            addDieValue dialog = new addDieValue();
             boolean addOne = dialog.getValue();
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.PINZASGROSSATRICE,pos,addOne));
             guiSwingProxy.sendMessage(clientMessage);
@@ -292,38 +310,168 @@ public class GUIMain {
     }
 
     public void alesatoreEglomiseMove(Tool tool){
-        int[] posi = chooseCell();
-        int[] posf = chooseCell();
+        int[] posi = chooseCell("Scegli il dado da muovere");
+        int[] posf = chooseCell("Scegli dove piazzare il dado");
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool,posi[0],posi[1],posf[0],posf[1]));
         guiSwingProxy.sendMessage(clientMessage);
     }
 
     public void lathekinMove(){
-        int[] posi = chooseCell();
-        int[] posf = chooseCell();
+        int[] posi = chooseCell("Scegli il primo dado da muovere");
+        int[] posf = chooseCell("Scegli dove piazzare il dado");
         printError("Scegli il secondo dado da muovere");
-        int[] pos2i = chooseCell();
-        int[] pos2f = chooseCell();
+        int[] pos2i = chooseCell("Scegli il secondo dado da muovere");
+        int[] pos2f = chooseCell("Scegli dove piazzare il dado");
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1],new PlayerMove(Tool.LATHEKIN,pos2i[0],pos2i[1],pos2f[0],pos2f[1])));
         guiSwingProxy.sendMessage(clientMessage);
     }
 
     public void taglierinaManualeMove(){
-        int[] posi = chooseCell();
-        int[] posf = chooseCell();
+        int[] posi = chooseCell("Scegli il primo dado da muovere");
+        int[] posf = chooseCell("Scegli dove piazzare il dado");
 
         GenericRadio dialog = new GenericRadio("Vuoi spostare un altro dado?");
         if(dialog.getValue()){
-            int[] pos2i = chooseCell();
-            int[] pos2f = chooseCell();
+            int[] pos2i = chooseCell("Scegli il secondo dado da muovere");
+            int[] pos2f = chooseCell("Scegli dove piazzare il dado");
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1],new PlayerMove(Tool.LATHEKIN,pos2i[0],pos2i[1],pos2f[0],pos2f[1])));
             guiSwingProxy.sendMessage(clientMessage);
         }else{
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1]));
             guiSwingProxy.sendMessage(clientMessage);
         }
+    }
+
+    private void taglierinaCircolareMove(){
+        int pos = chooseDraftPoolPosition();
+        int[] pos2 = chooseRoundTrackDie();
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos,pos2[0],pos2[1],Tool.TAGLIERINACIRCOLARE));
+        guiSwingProxy.sendMessage(clientMessage);
+    }
+
+    private void pennelloPastaSaldaMove(){
+        int i = chooseDraftPoolPosition();
+        try{
+            Die die = modelView.getDraftPool().getDie(i);
+            die.reRoll();
+            printError("Valore del nuovo dado: " + die.getNumber().getInt());
+            int[] pos = chooseCell("Scegli dove piazzare il dado");
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,die.getNumber(),Tool.PENNELLOPERPASTASALDA));
+            guiSwingProxy.sendMessage(clientMessage);
+        }catch (NoDieException e){
+            printError("Errore, dado non presente nella cella scelta");
+        }
+    }
+
+    private void diluentePerPastaSaldaMove(){
+        int i = chooseDraftPoolPosition();
+        try{
+            Die die = modelView.getDraftPool().getDie(i);
+            Die newDie = modelView.getDiceBag().getFirst();
+            ShowDie dialog = new ShowDie("src/main/resources/utilsGUI/" + GUIUtils.colorToString(newDie.getColor()) + newDie.getNumber().getInt() +".png");
+            NumberEnum newValue = chooseNewValue();
+
+            int[] pos = chooseCell("Scegli dove piazzare il dado");
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,newValue,Tool.DILUENTEPERPASTASALDA));
+            guiSwingProxy.sendMessage(clientMessage);
+        }catch (NoDieException e){
+            printError("Errore, dado non presente nella cella scelta");
+        }catch (EmptyBagException e){
+            printError("Errore, nessun dado presente nel sacchetto");
+        }
+    }
+
+    public void tamponeDiamantatoMove(){
+        int i = chooseDraftPoolPosition();
+        try{
+            modelView.getDraftPool().getDie(i);
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
+        }catch (NoDieException e){
+            printError("Nessun dado presente nella cella selezionata");
+        }
+
+    }
+
+    public void move(Tool tool){
+        switch (tool) {
+            case MOSSASTANDARD:
+                break;
+            case RIGAINSUGHERO:
+                normalSugheroMove(tool);
+                break;
+            case SKIPTURN:
+                break;
+            case MARTELLETTO:
+                martellettoMove();
+                break;
+            case TENAGLIAAROTELLE:
+                tenagliaARotelleMove();
+                break;
+            case PINZASGROSSATRICE:
+                sgrossatriceMove();
+                break;
+            case PENNELLOPEREGLOMISE:
+                alesatoreEglomiseMove(tool);
+                break;
+            case ALESATOREPERLAMINADIRAME:
+                alesatoreEglomiseMove(tool);
+                break;
+            case TAGLIERINAMANUALE:
+                taglierinaManualeMove();
+                break;
+            case LATHEKIN:
+                lathekinMove();
+                break;
+            case TAGLIERINACIRCOLARE:
+                taglierinaCircolareMove();
+                break;
+            case PENNELLOPERPASTASALDA:
+                pennelloPastaSaldaMove();
+                break;
+            case DILUENTEPERPASTASALDA:
+                diluentePerPastaSaldaMove();
+                break;
+            case TAMPONEDIAMANTATO:
+                tamponeDiamantatoMove();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        JLabel source = (JLabel) e.getSource();
+        Tool[] tools = modelView.getTools().keySet().toArray(new Tool[modelView.getTools().keySet().size()]);
+        if(source.equals(tool1Label)){
+            move(tools[0]);
+        }else if(source.equals(tool2Label)){
+            move(tools[1]);
+        }else if((source.equals(tool2Label))){
+            move(tools[2]);
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 
     public static void main(String[] args) {

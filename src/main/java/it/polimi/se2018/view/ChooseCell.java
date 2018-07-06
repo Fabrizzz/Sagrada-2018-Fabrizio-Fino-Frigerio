@@ -14,39 +14,20 @@ import java.util.concurrent.CountDownLatch;
 
 public class ChooseCell extends JDialog implements MouseListener {
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
     private JPanel board;
+    private JLabel messaggeLabel;
     private PlayerBoard playerBoard;
-    private Map<Color,String> colorMap = new HashMap<>();
     private int r,c;
     public final CountDownLatch latch = new CountDownLatch(1);
 
-    public ChooseCell(PlayerBoard playerBoard) {
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
+    public ChooseCell(PlayerBoard playerBoard,String message) {
+        r = 0;
+        c = 0;
 
         this.playerBoard = playerBoard;
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -54,7 +35,6 @@ public class ChooseCell extends JDialog implements MouseListener {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -67,6 +47,8 @@ public class ChooseCell extends JDialog implements MouseListener {
                 ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).addMouseListener(this);
             }
         }
+
+        messaggeLabel.setText(message);
     }
 
     public int[] getPosition(){
@@ -99,33 +81,22 @@ public class ChooseCell extends JDialog implements MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e) {}
 
-    }
-
-    private String colorToString(Color color){
-        return colorMap.get(color);
-    }
 
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
-                ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
+                ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
             }
         }
     }
@@ -136,9 +107,9 @@ public class ChooseCell extends JDialog implements MouseListener {
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.getRestriction(i,j).isColorRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png"));
                 }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png"));
                 }
             }
         }
@@ -147,7 +118,7 @@ public class ChooseCell extends JDialog implements MouseListener {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.containsDie(i,j)){
                     try{
-                        ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png",false));
+                        ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png"));
                     }catch (Exception e){}
                 }
             }
@@ -157,12 +128,12 @@ public class ChooseCell extends JDialog implements MouseListener {
     }
 
     private void onOK() {
-        // add your code here
+        latch.countDown();
         dispose();
     }
 
     private void onCancel() {
-        // add your code here if necessary
+        latch.countDown();
         dispose();
     }
 }
