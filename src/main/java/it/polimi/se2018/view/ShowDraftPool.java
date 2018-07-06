@@ -11,7 +11,7 @@ public class ShowDraftPool extends JDialog {
 
     protected ShowDraftPool(DraftPool draftPool) {
         setContentPane(contentPane);
-        setModal(false);
+        setModal(true);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
