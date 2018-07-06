@@ -63,7 +63,7 @@ public class TestModelView {
      */
     @Test
     public void initialize2Test(){
-        modelView = new ModelView(modelView,new ModelView(ModelControllerInitializerTest.initialize(Tool.PENNELLOPERPASTASALDA)));
+        modelView = new ModelView(ModelControllerInitializerTest.initialize(Tool.PENNELLOPERPASTASALDA));
     }
 
     /**

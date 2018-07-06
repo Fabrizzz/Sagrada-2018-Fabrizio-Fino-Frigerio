@@ -65,9 +65,9 @@ public class TestServerMessage {
         model.setRound(3);
         modelView = new ModelView(model);
 
-        ServerMessage serverMessage = new ServerMessage(MessageType.MODELVIEWUPDATE,modelView);
+        ServerMessage serverMessage = new ServerMessage(modelView);
         assertEquals(modelView,serverMessage.getModelView());
-        assertEquals(MessageType.MODELVIEWUPDATE,serverMessage.getMessageType());
+        assertEquals(MessageType.INITIALCONFIGSERVER, serverMessage.getMessageType());
     }
 
 }
