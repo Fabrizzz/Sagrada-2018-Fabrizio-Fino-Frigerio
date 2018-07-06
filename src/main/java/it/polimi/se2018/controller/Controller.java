@@ -293,7 +293,7 @@ public class Controller implements Observer {
 
     /**
      * Check if there are more than one player still playing
-     * @return true if the count of connected players is > 1 false otherwise
+     * @return true if the count of connected players is greater than 1 false otherwise
      */
     public boolean playerCountCheck(){
         long p;
