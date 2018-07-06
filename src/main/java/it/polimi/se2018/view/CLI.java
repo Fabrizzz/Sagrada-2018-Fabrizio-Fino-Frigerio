@@ -746,6 +746,7 @@ public class CLI extends View{
                 break;
             case 10:
                 println("Hai " + modelView.getPlayer(localID).getFavorTokens() + " tockens rimanenti");
+                chooseMove();
                 break;
             default:
                 println("Input non corretto");
