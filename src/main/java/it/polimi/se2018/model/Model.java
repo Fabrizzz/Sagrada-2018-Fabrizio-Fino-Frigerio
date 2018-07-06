@@ -239,4 +239,8 @@ public class Model extends Observable {
     public void setTurn(int turn) {
         this.turn = turn;
     }
+
+    public void deleteObservers() {
+        super.deleteObservers();
+    }
 }

@@ -57,7 +57,9 @@ public class RemoteView extends View {
 
     @Override
     public void connectionClosed() {
-        //da scrivere
+        if (connection.isConnected())
+            connection.close();
+        this.deleteObservers();
     }
 
     /**

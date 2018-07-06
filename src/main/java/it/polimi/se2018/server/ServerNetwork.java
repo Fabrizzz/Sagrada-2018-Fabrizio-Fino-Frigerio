@@ -61,7 +61,7 @@ public class ServerNetwork implements Observer {
      * Start the game and remove the connection still waiting for initializzation
      */
     private synchronized void initializeGame() {
-        Controller controller = new Controller();
+        Controller controller = new Controller(this);
         new Thread(() -> controller.startGame(new ArrayList<>(waitingConnections.values()))).start();
         playingConnections.putAll(waitingConnections);
         waitingConnections.size();
@@ -112,6 +112,19 @@ public class ServerNetwork implements Observer {
 
 
 
+    }
+
+    public synchronized void deregisterConnections(List<RemoteView> views) {
+        while (!views.isEmpty()) {
+            for (Long id : playingConnections.keySet()) {
+                if (views.contains(playingConnections.get(id))) {
+                    views.remove(playingConnections.get(id));
+                    playingConnections.remove(id);
+
+                }
+                break;
+            }
+        }
     }
 
     @Override

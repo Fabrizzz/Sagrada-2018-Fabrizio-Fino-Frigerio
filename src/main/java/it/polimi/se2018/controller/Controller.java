@@ -7,6 +7,7 @@ import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
 import it.polimi.se2018.objective_cards.PublicObjectiveName;
 import it.polimi.se2018.objective_cards.public_cards.PublicObjectiveFactory;
+import it.polimi.se2018.server.ServerNetwork;
 import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.enums.Color;
 import it.polimi.se2018.utils.enums.ErrorType;
@@ -35,10 +36,15 @@ public class Controller implements Observer {
     private BoardList boardList = new BoardList();
     private List<RemoteView> views;
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
+    private ServerNetwork server;
     private Timer timer = new Timer();
     private int roundTimer = 1;
     private boolean gameEnded = false;
 
+
+    public Controller(ServerNetwork serverNetwork) {
+        server = serverNetwork;
+    }
 
     /**
      * It return two playerboard couples to choose
@@ -140,7 +146,8 @@ public class Controller implements Observer {
             System.out.println("Timer scaduto");
             nextTurn();
             setTimer(model.getTurn(), model.getRound());
-            model.notifyObs();
+            if (!gameEnded)
+                model.notifyObs();
         }
 
     }
@@ -159,98 +166,103 @@ public class Controller implements Observer {
      * End the game and send final scores to every player
      */
     public synchronized void endGame(boolean onlyOnePlayer) {
-        gameEnded = true;
-        timer.cancel();
-        Map<String, Integer> mappa = new HashMap<>();
-        if (onlyOnePlayer) {
-            RemoteView winner = views.stream().filter(k -> k.isConnected()).findAny().orElseThrow(RuntimeException::new);
-            PlayerBoard playerBoard = model.getBoard(winner.getPlayer());
-            int punteggio = 0;
-            List<PublicObjective> publicObjectives = model.getPublicObjectives();
-            punteggio += publicObjectives.stream().mapToInt(k -> k.getPoints(playerBoard)).sum();
-            punteggio += model.getPrivateObjective(winner.getPlayer()).getPoints(playerBoard);
-            punteggio += winner.getPlayer().getFavorTokens();
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 5; j++) {
-                    if (!playerBoard.containsDie(i, j))
-                        punteggio--;
-                }
-            }
-            mappa.put(winner.getPlayer().getNick(), punteggio);
-            winner.elaborateMessage(new ServerMessage(mappa, winner.getPlayer().getNick()));
-        } else {
-            String vincitore = "";
-            List<Player> winners = new ArrayList<>();
-            int max = -1000;
-            for (RemoteView view : views) {
-                PlayerBoard playerBoard = model.getBoard(view.getPlayer());
+        if (!gameEnded) {
+            gameEnded = true;
+            timer.cancel();
+            Map<String, Integer> mappa = new HashMap<>();
+            if (onlyOnePlayer) {
+                RemoteView winner = views.stream().filter(k -> k.isConnected()).findAny().orElseThrow(RuntimeException::new);
+                PlayerBoard playerBoard = model.getBoard(winner.getPlayer());
                 int punteggio = 0;
                 List<PublicObjective> publicObjectives = model.getPublicObjectives();
                 punteggio += publicObjectives.stream().mapToInt(k -> k.getPoints(playerBoard)).sum();
-                punteggio += model.getPrivateObjective(view.getPlayer()).getPoints(playerBoard);
-                punteggio += view.getPlayer().getFavorTokens();
+                punteggio += model.getPrivateObjective(winner.getPlayer()).getPoints(playerBoard);
+                punteggio += winner.getPlayer().getFavorTokens();
                 for (int i = 0; i < 4; i++) {
                     for (int j = 0; j < 5; j++) {
                         if (!playerBoard.containsDie(i, j))
                             punteggio--;
                     }
                 }
-                mappa.put(view.getPlayer().getNick(), punteggio);
-                if (punteggio > max) {
-                    max = punteggio;
-                    winners.clear();
-                    winners.add(view.getPlayer());
-                }
-                if (punteggio == max) {
-                    winners.add(view.getPlayer());
-                }
-            }
-
-            if (winners.size() > 1) {
-
-                int playerPosition = views.size() - 1;
-                int punteggio = -1000;
-
-                boolean tentativo = true;
-                for (Player winner : winners) {
-                    int temp = model.getPrivateObjective(winner).getPoints(model.getBoard(winner));
-                    if (temp > punteggio) {
-                        punteggio = temp;
-                        vincitore = winner.getNick();
-                    } else if (temp == punteggio) {
-                        tentativo = false;
-                    }
-                }
-                if (!tentativo) {
-                    punteggio = -1000;
-                    tentativo = true;
-                    for (Player winner : winners) {
-                        if (winner.getFavorTokens() > punteggio) {
-                            punteggio = winner.getFavorTokens();
-                            vincitore = winner.getNick();
-                        } else if (winner.getFavorTokens() == punteggio)
-                            tentativo = false;
-                    }
-                }
-                if (!tentativo) {
-                    while (playerPosition >= 0) {
-                        if (winners.contains(model.getPlayers().get(playerPosition))) {
-                            vincitore = model.getPlayers().get(playerPosition).getNick();
-                            break;
-                        } else {
-                            playerPosition--;
+                mappa.put(winner.getPlayer().getNick(), punteggio);
+                winner.elaborateMessage(new ServerMessage(mappa, winner.getPlayer().getNick()));
+                winner.connectionClosed();
+            } else {
+                String vincitore = "";
+                List<Player> winners = new ArrayList<>();
+                int max = -1000;
+                for (RemoteView view : views) {
+                    PlayerBoard playerBoard = model.getBoard(view.getPlayer());
+                    int punteggio = 0;
+                    List<PublicObjective> publicObjectives = model.getPublicObjectives();
+                    punteggio += publicObjectives.stream().mapToInt(k -> k.getPoints(playerBoard)).sum();
+                    punteggio += model.getPrivateObjective(view.getPlayer()).getPoints(playerBoard);
+                    punteggio += view.getPlayer().getFavorTokens();
+                    for (int i = 0; i < 4; i++) {
+                        for (int j = 0; j < 5; j++) {
+                            if (!playerBoard.containsDie(i, j))
+                                punteggio--;
                         }
                     }
+                    mappa.put(view.getPlayer().getNick(), punteggio);
+                    if (punteggio > max) {
+                        max = punteggio;
+                        winners.clear();
+                        winners.add(view.getPlayer());
+                    }
+                    if (punteggio == max) {
+                        winners.add(view.getPlayer());
+                    }
                 }
-            } else
-                vincitore = winners.get(0).getNick();
-            for (RemoteView view : views) {
-                view.elaborateMessage(new ServerMessage(mappa, vincitore));
-            }
-        }
-        //cancellare observers, chiudere connection, deregistrare connections dal server
 
-        LOGGER.log(Level.FINE, "Endgame");
+                if (winners.size() > 1) {
+
+                    int playerPosition = views.size() - 1;
+                    int punteggio = -1000;
+
+                    boolean tentativo = true;
+                    for (Player winner : winners) {
+                        int temp = model.getPrivateObjective(winner).getPoints(model.getBoard(winner));
+                        if (temp > punteggio) {
+                            punteggio = temp;
+                            vincitore = winner.getNick();
+                        } else if (temp == punteggio) {
+                            tentativo = false;
+                        }
+                    }
+                    if (!tentativo) {
+                        punteggio = -1000;
+                        tentativo = true;
+                        for (Player winner : winners) {
+                            if (winner.getFavorTokens() > punteggio) {
+                                punteggio = winner.getFavorTokens();
+                                vincitore = winner.getNick();
+                            } else if (winner.getFavorTokens() == punteggio)
+                                tentativo = false;
+                        }
+                    }
+                    if (!tentativo) {
+                        while (playerPosition >= 0) {
+                            if (winners.contains(model.getPlayers().get(playerPosition))) {
+                                vincitore = model.getPlayers().get(playerPosition).getNick();
+                                break;
+                            } else {
+                                playerPosition--;
+                            }
+                        }
+                    }
+                } else
+                    vincitore = winners.get(0).getNick();
+                for (RemoteView view : views) {
+                    view.elaborateMessage(new ServerMessage(mappa, vincitore));
+                    view.connectionClosed();
+                }
+            }
+            model.deleteObservers();
+            server.deregisterConnections(views);
+
+            LOGGER.log(Level.FINE, "Endgame");
+        }
     }
 
     /**
@@ -370,16 +382,20 @@ public class Controller implements Observer {
                     choosenBoards.put(remoteView.getPlayer(), new PlayerBoard(message.getBoardName()));
                     notifyAll();
                 } else if (message.getMessageType() == MessageType.HASDISCONNECTED) {
-                    LOGGER.log(Level.INFO, "Notifico la disconnessione di " + remoteView.getPlayer().getNick());
-                    for (RemoteView view : views) {
-                        view.elaborateMessage(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
-                    }
-                    if (remoteView.getPlayer().isYourTurn()) {
-                        LOGGER.log(Level.FINE, "Era il turno del giocatore disconnesso, passo al nuovo turno");
-                        nextTurn();
-                        setTimer(model.getTurn(), model.getRound());
-                        if (!gameEnded)
-                            getModel().notifyObs();
+                    if (!gameEnded) {
+                        LOGGER.log(Level.INFO, "Notifico la disconnessione di " + remoteView.getPlayer().getNick());
+                        for (RemoteView view : views) {
+                            view.elaborateMessage(new ServerMessage(MessageType.HASDISCONNECTED, remoteView.getPlayer().getNick()));
+                        }
+                        if (remoteView.getPlayer().isYourTurn()) {
+
+                            LOGGER.log(Level.FINE, "Era il turno del giocatore disconnesso, passo al nuovo turno");
+                            nextTurn();
+                            setTimer(model.getTurn(), model.getRound());
+                            if (!gameEnded)
+                                getModel().notifyObs();
+
+                        }
                     }
                 } else if (message.getMessageType() == MessageType.HASRICONNECTED) {
                     LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è riconnesso");
