@@ -19,6 +19,7 @@ public class PlayerBoard implements Serializable {
     private Board board;
     private Cell[] cells = new Cell[20];
     private boolean isEmpty = true;
+    private boolean changed = false;
     private static final Logger LOGGER = Logger.getLogger("Logger");
 
     /**
@@ -106,6 +107,7 @@ public class PlayerBoard implements Serializable {
                 }
             }
         }
+        setChanged();
     }
 
     /**
@@ -118,6 +120,7 @@ public class PlayerBoard implements Serializable {
     public void setDie(Die die, int row, int column) throws AlreadySetDie {
         get(row, column).setDie(die);
         isEmpty = false;
+        setChanged();
     }
 
     /**
@@ -270,6 +273,21 @@ public class PlayerBoard implements Serializable {
      */
     public int getBoardDifficulty(){
         return board.getTokens();
+    }
+
+    public synchronized void setChanged() {
+        changed = true;
+    }
+
+    /**
+     * It tells if something has changed from the last ModelViewUpdate
+     *
+     * @return
+     */
+    public synchronized boolean isChanged() {
+        boolean temp = changed;
+        changed = false;
+        return temp;
     }
 
 }

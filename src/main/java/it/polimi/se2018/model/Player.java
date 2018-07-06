@@ -10,6 +10,7 @@ public class Player implements Serializable {
     private String nick;
     private long id;
     private int favorTokens;
+    private boolean changed = false;
 
     private boolean skipSecondTurn; //per la tool card numero 8
     private boolean canDoTwoTurn;
@@ -39,6 +40,7 @@ public class Player implements Serializable {
      */
     public void setSkipSecondTurn(boolean skipSecondTurn) {
         this.skipSecondTurn = skipSecondTurn;
+        setChanged();
     }
 
     /**
@@ -55,6 +57,7 @@ public class Player implements Serializable {
      */
     public void setFavorTokens(int favorTokens) {
         this.favorTokens = favorTokens;
+        setChanged();
     }
 
     /**
@@ -72,6 +75,7 @@ public class Player implements Serializable {
      */
     public void setCanDoTwoTurn(boolean canDoTwoTurn) {
         this.canDoTwoTurn = canDoTwoTurn;
+        setChanged();
     }
 
     /**
@@ -94,10 +98,29 @@ public class Player implements Serializable {
      */
     public void setYourTurn(boolean yourTurn) {
         isYourTurn = yourTurn;
+        setChanged();
     }
 
 
     public Long getId(){ //da rimuovere sia dal player che dalla modelview
         return id;
+    }
+
+    /**
+     * It set Changed to True
+     */
+    public synchronized void setChanged() {
+        changed = true;
+    }
+
+    /**
+     * It tells if something has changed from the last ModelViewUpdate
+     *
+     * @return
+     */
+    public synchronized boolean isChanged() {
+        boolean temp = changed;
+        changed = false;
+        return temp;
     }
 }

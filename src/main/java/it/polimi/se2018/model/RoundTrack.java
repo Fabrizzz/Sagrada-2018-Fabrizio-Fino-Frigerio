@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class RoundTrack implements Serializable {
     private List<List<Die>> tracks = new ArrayList<>(10);   //Il tracciato è una lista di liste perchè a ogni round si possono scartare più dadi
+    private boolean changed = false;
 
     /**
      * Costruttore
@@ -47,6 +48,7 @@ public class RoundTrack implements Serializable {
      */
     public void addDie(int round, Die die) {
         tracks.get(round).add(die);
+        setChanged();
     }
 
     /**
@@ -56,6 +58,7 @@ public class RoundTrack implements Serializable {
      */
     public void addDice(int round, List<Die> dice) {
         tracks.get(round).addAll(dice);
+        setChanged();
     }
 
     /**
@@ -68,6 +71,7 @@ public class RoundTrack implements Serializable {
         if (pos >= tracks.get(round).size())
             throw new NoDieException();
         tracks.get(round).remove(pos);
+        setChanged();
     }
 
     /**
@@ -92,5 +96,23 @@ public class RoundTrack implements Serializable {
             }
         }
         return false;
+    }
+
+    /**
+     * It set Changed to True
+     */
+    public synchronized void setChanged() {
+        changed = true;
+    }
+
+    /**
+     * It tells if something has changed from the last ModelViewUpdate
+     *
+     * @return
+     */
+    public synchronized boolean isChanged() {
+        boolean temp = changed;
+        changed = false;
+        return temp;
     }
 }

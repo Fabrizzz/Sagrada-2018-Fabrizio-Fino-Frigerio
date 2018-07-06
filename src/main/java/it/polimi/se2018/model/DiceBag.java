@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class DiceBag implements Serializable {
     private LinkedList<Die> bag = new LinkedList<>();
     private static final Logger LOGGER = Logger.getLogger("Logger");
+    private boolean changed = false;
 
     /**
      * Constructor
@@ -40,6 +41,7 @@ public class DiceBag implements Serializable {
         if (bag.isEmpty()) {
             throw new EmptyBagException();
         }
+        setChanged();
         return bag.poll();
     }
 
@@ -61,6 +63,7 @@ public class DiceBag implements Serializable {
     public void addDie(Die die) {
         bag.add(die);
         Collections.shuffle(bag);
+        setChanged();
     }
 
     /**
@@ -71,4 +74,21 @@ public class DiceBag implements Serializable {
         return bag.size();
     }
 
+    /**
+     * It set Changed to True
+     */
+    public synchronized void setChanged() {
+        changed = true;
+    }
+
+    /**
+     * It tells if something has changed from the last ModelViewUpdate
+     *
+     * @return
+     */
+    public synchronized boolean isChanged() {
+        boolean temp = changed;
+        changed = false;
+        return temp;
+    }
 }

@@ -19,6 +19,7 @@ public class DraftPool implements Serializable {
     private List<Die> dice = new ArrayList<>(9);    //Lista contenente tutti i dadi pescati
     private int numberOfDice;  //Numero di dadi da pescare a ogni round
     private static final Logger LOGGER = Logger.getLogger("Logger");
+    private boolean changed = false;
 
     /**
      * Constructor
@@ -49,6 +50,7 @@ public class DraftPool implements Serializable {
         catch (EmptyBagException e){
             LOGGER.log(Level.SEVERE, "Tentativo di estrarre un dado da DiceBag vuota", e);
         }
+        setChanged();
     }
 
     /**
@@ -58,6 +60,7 @@ public class DraftPool implements Serializable {
         for (Die die : dice) {
             die.reRoll();
         }
+        setChanged();
     }
 
     /**
@@ -78,6 +81,7 @@ public class DraftPool implements Serializable {
      */
     public void addDie(Die die) {
         dice.add(die);
+        setChanged();
     }
 
     /**
@@ -91,6 +95,7 @@ public class DraftPool implements Serializable {
         catch (IndexOutOfBoundsException e){
             throw new NoDieException();
         }
+        setChanged();
     }
 
     /**
@@ -102,6 +107,7 @@ public class DraftPool implements Serializable {
         if (!dice.contains(die))
             throw new NoDieException();
         dice.remove(die);
+        setChanged();
     }
 
     /**
@@ -111,8 +117,8 @@ public class DraftPool implements Serializable {
     public List<Die> removeAll() {
         List<Die> temp = new ArrayList<>(dice);
         dice.clear();
+        setChanged();
         return temp;
-
     }
 
     /**
@@ -121,6 +127,24 @@ public class DraftPool implements Serializable {
      */
     public int size() {
         return dice.size();
+    }
+
+    /**
+     * It set Changed to True
+     */
+    public synchronized void setChanged() {
+        changed = true;
+    }
+
+    /**
+     * It tells if something has changed from the last ModelViewUpdate
+     *
+     * @return
+     */
+    public synchronized boolean isChanged() {
+        boolean temp = changed;
+        changed = false;
+        return temp;
     }
 
 }
