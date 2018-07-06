@@ -255,7 +255,7 @@ public class GUIMain  implements MouseListener{
                 }
             }
         }
-        
+
         if(!initialPack) {
             ((JFrame) SwingUtilities.getWindowAncestor(contentPane)).pack();
             initialPack = true;
@@ -399,6 +399,7 @@ public class GUIMain  implements MouseListener{
         try{
             modelView.getDraftPool().getDie(i);
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
+            guiSwingProxy.sendMessage(clientMessage);
         }catch (NoDieException e){
             printError("Nessun dado presente nella cella selezionata");
         }
