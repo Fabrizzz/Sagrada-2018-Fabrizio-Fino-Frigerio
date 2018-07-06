@@ -11,6 +11,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -73,25 +74,42 @@ public class ModelView implements Serializable {
     }
 
     public void update(ModelViewUpdate update) {
-        if (update.getBoardMap().isPresent()) {
-            boardMap = update.getBoardMap().get();
+        Optional<Map<Player, PlayerBoard>> boardMap = update.getBoardMap();
+        if (boardMap.isPresent()) {
+            this.boardMap = boardMap.get();
         }
-        if (update.getDiceBag().isPresent())
-            diceBag = update.getDiceBag().get();
-        if (update.getDraftPool().isPresent())
-            draftPool = update.getDraftPool().get();
-        if (update.getRound().isPresent())
-            round = update.getRound().get();
-        if (update.getRoundTrack().isPresent())
-            roundTrack = update.getRoundTrack().get();
-        if (update.isFirstTurn().isPresent())
-            firstTurn = update.isFirstTurn().get();
-        if (update.isNormalMove().isPresent())
-            normalMove = update.isNormalMove().get();
-        if (update.isUsedTool().isPresent())
-            usedTool = update.isUsedTool().get();
-        if (update.getPlayers().isPresent()) {
-            players = update.getPlayers().get();
+
+        Optional<DiceBag> diceBag = update.getDiceBag();
+        if (diceBag.isPresent())
+            this.diceBag = diceBag.get();
+
+        Optional<DraftPool> draftPool = update.getDraftPool();
+        if (draftPool.isPresent())
+            this.draftPool = draftPool.get();
+
+        Optional<Integer> round = update.getRound();
+        if (round.isPresent())
+            this.round = round.get();
+
+        Optional<RoundTrack> roundTrack = update.getRoundTrack();
+        if (roundTrack.isPresent())
+            this.roundTrack = roundTrack.get();
+
+        Optional<Boolean> firstTurn = update.isFirstTurn();
+        if (firstTurn.isPresent())
+            this.firstTurn = firstTurn.get();
+
+        Optional<Boolean> normalMove = update.isNormalMove();
+        if (normalMove.isPresent())
+            this.normalMove = normalMove.get();
+
+        Optional<Boolean> usedTool = update.isUsedTool();
+        if (usedTool.isPresent())
+            this.usedTool = usedTool.get();
+
+        Optional<List<Player>> players = update.getPlayers();
+        if (players.isPresent()) {
+            this.players = players.get();
         }
     }
 
