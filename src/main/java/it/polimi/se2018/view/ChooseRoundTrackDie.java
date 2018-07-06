@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.RoundTrack;
+import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.utils.enums.Color;
 
 import javax.swing.*;
@@ -40,17 +41,17 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
 
         populateBoard(roundTrack);
 
-        for(int i = 0; i < 9; i ++) {
-            for (int j = 0; j < 10; j++) {
-                ((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).addMouseListener(this);
+        for(int i = 0; i < 10; i ++) {
+            for (int j = 0; j < 9; j++) {
+                ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).addMouseListener(this);
             }
         }
     }
 
     private void whiteRefreshBoard(){
-        for(int i = 0; i < 9; i ++){
-            for(int j = 0; j < 10; j++){
-                ((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
+        for(int i = 0; i < 10; i ++){
+            for(int j = 0; j < 9; j++){
+                ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
             }
         }
     }
@@ -88,10 +89,10 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
         JLabel source = (JLabel) e.getSource();
         for(int i = 0; i < 10; i ++) {
             for (int j = 0; j < 9; j++) {
-                if (((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).equals(source)) {
+                if (((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).equals(source)) {
                     p[0] = i;
                     p[1] = j;
-                    latch.countDown();
+                    onCancel();
                     return;
                 }
             }
@@ -109,4 +110,13 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {}
+
+    public static void main(String[] args) {
+        RoundTrack roundTrack = new RoundTrack();
+        roundTrack.addDie(0,new Die(Color.RED));
+        ChooseRoundTrackDie dialog = new ChooseRoundTrackDie(roundTrack);
+        int[] pos = dialog.getPosition();
+        System.out.println(pos[0] + " " + pos[1]);
+    }
+
 }
