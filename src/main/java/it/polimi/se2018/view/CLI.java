@@ -604,6 +604,7 @@ public class CLI extends View{
             Die die = modelView.getDiceBag().getFirst();
             println("Il dado pescato dalla dicebag è " + die.getColor().getColorString());
             int val;
+            NumberEnum oldVal = die.getNumber();
             do {
                 println("Scegli il valore del dado: ");
                 val = InputUtils.getInt();
@@ -623,6 +624,7 @@ public class CLI extends View{
                         check = false;
                 }
             }
+            die.setNumber(oldVal);
             if (check) {
                 println("Non è possibile posizionarlo, viene riposto in riserva");
                 setChanged();
