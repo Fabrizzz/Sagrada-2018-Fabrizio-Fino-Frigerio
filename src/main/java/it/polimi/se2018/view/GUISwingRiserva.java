@@ -25,7 +25,6 @@ public class GUISwingRiserva extends JDialog {
         setContentPane(contentPane);
         setModal(false);
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -33,7 +32,6 @@ public class GUISwingRiserva extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -45,7 +43,7 @@ public class GUISwingRiserva extends JDialog {
 
     private void whiteRefresh(){
         for(int i = 0; i < 9; i ++){
-                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
+                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
             }
     }
 
@@ -54,7 +52,7 @@ public class GUISwingRiserva extends JDialog {
 
         for(int i = 0; i < draftPool.size(); i ++) {
             try {
-                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png", false));
+                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png"));
             } catch (Exception e) {}
         }
 
@@ -67,12 +65,4 @@ public class GUISwingRiserva extends JDialog {
     private void onCancel() {
         dispose();
     }
-
-    /*public static void main(String[] args) {
-        DraftPool prova = new DraftPool(4, new DiceBag(10));
-        GUISwingRiserva dialog = new GUISwingRiserva(prova);
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }*/
 }

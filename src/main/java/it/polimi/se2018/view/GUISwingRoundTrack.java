@@ -26,7 +26,6 @@ public class GUISwingRoundTrack extends JDialog {
         setContentPane(contentPane);
         setModal(false);
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -34,7 +33,6 @@ public class GUISwingRoundTrack extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -47,7 +45,7 @@ public class GUISwingRoundTrack extends JDialog {
     private void whiteRefreshBoard(){
         for(int i = 0; i < 9; i ++){
             for(int j = 0; j < 10; j++){
-                ((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
+                ((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
                 //((JLabel) (((JPanel) board.getComponent(i + 9 * j)).getComponent(0))).setText("" + (i + 9 * j));
             }
         }
@@ -59,14 +57,13 @@ public class GUISwingRoundTrack extends JDialog {
         for(int i = 0; i < 10; i ++) {
             for (int j = 0; j < roundTrack.numberOfDice(i); j++) {
                 try {
-                    ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(roundTrack.getDie(i, j).getColor()) + "" + roundTrack.getDie(i, j).getNumber().getInt() + ".png", false));
+                    ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(roundTrack.getDie(i, j).getColor()) + "" + roundTrack.getDie(i, j).getNumber().getInt() + ".png"));
                 } catch (Exception e) {}
             }
         }
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 

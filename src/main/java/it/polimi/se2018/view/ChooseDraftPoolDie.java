@@ -15,7 +15,7 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
     private Map<Color,String> colorMap = new HashMap<>();
     private DraftPool draftPool;
     public final CountDownLatch latch = new CountDownLatch(1);
-    private int p;
+    private int p = 0;
 
     public ChooseDraftPoolDie(DraftPool draftPool) {
         colorMap.put(Color.BLUE,"B");
@@ -27,7 +27,6 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
         setModal(true);
         this.draftPool = draftPool;
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -35,7 +34,6 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -59,18 +57,16 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
     }
 
     private void onOK() {
-        // add your code here
-        dispose();
+        latch.countDown();
     }
 
     private void onCancel() {
-        // add your code here if necessary
-        dispose();
+        latch.countDown();
     }
 
     private void whiteRefresh(){
         for(int i = 0; i < 9; i ++){
-            ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
+            ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
         }
     }
 
@@ -79,7 +75,7 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
 
         for(int i = 0; i < draftPool.size(); i ++) {
             try {
-                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png", false));
+                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png"));
             } catch (Exception e) {}
         }
 
@@ -96,7 +92,6 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
                 if(((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).equals(source)){
                     p = i;
                     latch.countDown();
-                    onCancel();
                     return;
                 }
         }

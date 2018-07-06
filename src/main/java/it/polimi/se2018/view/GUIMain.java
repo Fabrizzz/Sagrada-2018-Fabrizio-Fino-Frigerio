@@ -12,7 +12,10 @@ import it.polimi.se2018.model.cell.Die;
 import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.ModelControllerInitializerTest;
 import it.polimi.se2018.utils.enums.Color;
+import it.polimi.se2018.utils.enums.NumberEnum;
 import it.polimi.se2018.utils.enums.Tool;
+import it.polimi.se2018.utils.exceptions.EmptyBagException;
+import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
 
@@ -151,7 +154,7 @@ public class GUIMain {
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
-                ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png",false));
+                ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
             }
         }
     }
@@ -171,6 +174,11 @@ public class GUIMain {
         GUISwingChooseBoard dialog = new GUISwingChooseBoard(boards,this);
         dialog.pack();
         dialog.setVisible(true);
+    }
+
+    public NumberEnum chooseNewValue(){
+        ChooseNewValue dialog = new ChooseNewValue();
+        return dialog.getNewValue();
     }
 
     public void selectedBoard(Board board){
@@ -216,9 +224,9 @@ public class GUIMain {
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.getRestriction(i,j).isColorRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png"));
                 }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png",false));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png"));
                 }
             }
         }
@@ -227,7 +235,7 @@ public class GUIMain {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.containsDie(i,j)){
                     try{
-                        ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png",false));
+                        ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png"));
                     }catch (Exception e){}
                 }
             }
@@ -244,6 +252,12 @@ public class GUIMain {
 
     private int[] chooseCell(){
         ChooseCell dialog = new ChooseCell(modelView.getBoard(modelView.getPlayer(localID)));
+        int[] pos = dialog.getPosition();
+        return pos;
+    }
+
+    private int[] chooseRoundTrackDie(){
+        ChooseRoundTrackDie dialog = new ChooseRoundTrackDie(modelView.getRoundTrack());
         int[] pos = dialog.getPosition();
         return pos;
     }
@@ -337,6 +351,57 @@ public class GUIMain {
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1]));
             guiSwingProxy.sendMessage(clientMessage);
         }
+    }
+
+    private void taglierinaCircolareMove(){
+        int pos = chooseDraftPoolPosition();
+        int[] pos2 = chooseRoundTrackDie();
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos,pos2[0],pos2[1],Tool.TAGLIERINACIRCOLARE));
+        guiSwingProxy.sendMessage(clientMessage);
+    }
+
+    private void pennelloPastaSaldaMove(){
+        int i = chooseDraftPoolPosition();
+        try{
+            Die die = modelView.getDraftPool().getDie(i);
+            die.reRoll();
+            printError("Valore del nuovo dado: " + die.getNumber().getInt());
+            int[] pos = chooseCell();
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,die.getNumber(),Tool.PENNELLOPERPASTASALDA));
+            guiSwingProxy.sendMessage(clientMessage);
+        }catch (NoDieException e){
+            printError("Errore, dado non presente nella cella scelta");
+        }
+    }
+
+    private void diluentePerPastaSaldaMove(){
+        int i = chooseDraftPoolPosition();
+        try{
+            Die die = modelView.getDraftPool().getDie(i);
+            Die newDie = modelView.getDiceBag().getFirst();
+            ShowDie dialog = new ShowDie("src/main/resources/utilsGUI/" + colorToString(newDie.getColor()) + newDie.getNumber().getInt() +".png");
+            NumberEnum newValue = chooseNewValue();
+
+            int[] pos = chooseCell();
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,newValue,Tool.DILUENTEPERPASTASALDA));
+            guiSwingProxy.sendMessage(clientMessage);
+        }catch (NoDieException e){
+            printError("Errore, dado non presente nella cella scelta");
+        }catch (EmptyBagException e){
+            printError("Errore, nessun dado presente nel sacchetto");
+        }
+
+    }
+
+    public void tamponeDiamantatoMove(){
+        int i = chooseDraftPoolPosition();
+        try{
+            modelView.getDraftPool().getDie(i);
+            ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TAMPONEDIAMANTATO,i));
+        }catch (NoDieException e){
+            printError("Nessun dado presente nella cella selezionata");
+        }
+
     }
 
     public static void main(String[] args) {
