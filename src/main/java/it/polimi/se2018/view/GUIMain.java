@@ -33,6 +33,7 @@ public class GUIMain  implements MouseListener{
     private JLabel labelRound;
     private JButton terminaTurnoButton;
     private JButton mostraLeCarteObiettivoButton;
+    private JLabel privateObjectiveLabel;
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
     private Long localID;
@@ -114,7 +115,7 @@ public class GUIMain  implements MouseListener{
         comboBoxPlayerBoard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nickPlayer = comboBoxPlayerBoard.getSelectedItem().toString();
+                String nickPlayer = (String) comboBoxPlayerBoard.getSelectedItem();
                 for(int j = 0; j < modelView.getPlayers().size(); j ++){
                     if(modelView.getPlayers().get(j).getNick().equals(nickPlayer)){
                         showBoard(modelView.getBoard(modelView.getPlayers().get(j)));
@@ -138,6 +139,7 @@ public class GUIMain  implements MouseListener{
         }
         labelSegnalini.setText("Segnalini: "+ modelView.getPlayer(localID).getFavorTokens());
         labelRound.setText("Round: "+ modelView.getRound());
+        privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective());
     }
 
     private void mostraObiettivi(){
@@ -198,7 +200,11 @@ public class GUIMain  implements MouseListener{
     }
 
     protected void endGame(Map<String,Integer> scores){
-        //todo
+        EndGame dialog = new EndGame(scores);
+        dialog.pack();
+        dialog.setLocationRelativeTo( null );
+        dialog.setVisible(true);
+        System.exit(0);
     }
 
     protected void printError(String error){
