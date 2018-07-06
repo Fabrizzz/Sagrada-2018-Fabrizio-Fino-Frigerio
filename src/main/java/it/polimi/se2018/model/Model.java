@@ -2,7 +2,6 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.objective_cards.PrivateObjective;
 import it.polimi.se2018.objective_cards.PublicObjective;
-import it.polimi.se2018.utils.JSONUtils;
 import it.polimi.se2018.utils.enums.Tool;
 import it.polimi.se2018.utils.exceptions.SizeLimitExceededException;
 
@@ -47,7 +46,7 @@ public class Model extends Observable {
      */
     public Model(List<Player> players, List<PublicObjective> publicObjectives, Map<Player, PlayerBoard> boardMap,
                  Map<Player, PrivateObjective> privateObjectiveMap, List<Tool> tools) {
-        if (players.size() >= 4 || tools.size() != NUMBER_OF_TOOL_CARDS || publicObjectives.size() != NUMBER_OF_PUBLIC_OBJECTIVES ||
+        if (players.size() > 4 || tools.size() != NUMBER_OF_TOOL_CARDS || publicObjectives.size() != NUMBER_OF_PUBLIC_OBJECTIVES ||
                 boardMap.size() != players.size() ||
                 privateObjectiveMap.size() != players.size())
             throw new IllegalArgumentException();
