@@ -37,6 +37,7 @@ public class Controller implements Observer {
     private Map<Player, PlayerBoard> choosenBoards = new HashMap();
     private Timer timer = new Timer();
     private int roundTimer = 1;
+    private boolean gameEnded = false;
 
 
     /**
@@ -86,6 +87,10 @@ public class Controller implements Observer {
             Iterator<Color> iterator = colors.iterator();
             Map<Player, PrivateObjective> privateObjectiveMap = views.stream().collect(Collectors.toMap(k -> k.getPlayer(), t -> new PrivateObjective(iterator.next())));
             List<Tool> tools = Tool.getRandTools(3);
+            /*ArrayList<Tool> tools = new ArrayList<>();
+            tools.add(Tool.LATHEKIN);
+            tools.add(Tool.TAGLIERINACIRCOLARE);
+            tools.add(Tool.PENNELLOPERPASTASALDA);*/
             ArrayList<Player> players = new ArrayList<>(views.stream().map(k -> k.getPlayer()).collect(Collectors.toList()));
 
             for (int j = 0; j < tools.size(); j++){
@@ -134,8 +139,9 @@ public class Controller implements Observer {
      */
     public synchronized void timerScaduto(int turn, int round) {
 
-        if (model.getTurn() == turn && model.getRound() == round) {
+        if (model.getTurn() == turn && model.getRound() == round && !gameEnded) {
             LOGGER.log(Level.INFO, "Timer scaduto, turno interrotto e nextTurn chiamata");
+            System.out.println("Timer scaduto");
             nextTurn();
             setTimer(model.getTurn(), model.getRound());
             model.notifyObs();
@@ -156,7 +162,8 @@ public class Controller implements Observer {
     /**
      * End the game and send final scores to every player
      */
-    public void endGame() {
+    public synchronized void endGame() {
+        gameEnded = true;
         //chiudere i timer
         //cancellare observers, chiudere connection, deregistrare connections dal server
 
@@ -174,7 +181,7 @@ public class Controller implements Observer {
             getModel().setTurn(0);
             getModel().setFirstTurn(true);
             getModel().getRoundTrack().addDice(getModel().getRound(), getModel().getDraftPool().removeAll());
-            Collections.rotate(getModel().getPlayers(), 1);
+            Collections.rotate(getModel().getPlayers(), -1);
             getModel().getDraftPool().rollDice(getModel().getDiceBag());
         }
 
@@ -185,7 +192,9 @@ public class Controller implements Observer {
      * @return true if the count of connected players is > 1 false otherwise
      */
     public boolean playerCountCheck(){
-        int p = 0;
+        return true;
+        /*int p = 0;
+
         for(RemoteView remoteView : views){
             if(remoteView.isConnected()){
                 p ++;
@@ -195,12 +204,13 @@ public class Controller implements Observer {
             return true;
         }else{
             return false;
-        }
+        }*/
     }
     /**
      * Change the current player turn
      */
-    public void nextTurn() {
+    public synchronized void nextTurn() {
+
         LOGGER.log(Level.FINE, "Next turn chiamato");
         model.setUsedTool(false);
         model.setNormalMove(false);
@@ -222,7 +232,7 @@ public class Controller implements Observer {
                 LOGGER.log(Level.FINE, "Il giocatore " + model.getPlayers().get(playerPosition2).getNick() + " salta il secondo turno a causa di una tool");
                 model.getPlayers().get(playerPosition2).setSkipSecondTurn(false);
                 nextTurn();
-            } else if (!views.stream().filter(k -> k.getPlayer() == model.getPlayers().get(playerPosition2)).findAny().get().isConnected()) {
+            } else if (!views.stream().filter(k -> k.getPlayer() == model.getPlayers().get(playerPosition2)).findAny().orElseThrow(RuntimeException::new).isConnected()) {
                 LOGGER.log(Level.FINE, "Il giocatore " + model.getPlayers().get(playerPosition2).getNick() + " passa il turno poichè disconnesso");
                 nextTurn();
             } else {
