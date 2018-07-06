@@ -3,7 +3,8 @@ package it.polimi.se2018.client;
 import it.polimi.se2018.view.CLI;
 import it.polimi.se2018.view.GUINetwork;
 import it.polimi.se2018.view.View;
-import org.apache.commons.cli.*;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 
 import java.io.*;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class Client {
     /**
      * Constructor
      */
-    public Client(String[] args){
+    public Client(OptionSet options){
 
         LOGGER.setLevel(Level.FINEST);
 
@@ -43,41 +44,29 @@ public class Client {
             LOGGER.log(Level.WARNING,"Impossibile aprire file di log");
         }
 
-        CommandLine cmd;
-        try{
-            Options options = new Options();
-            options.addOption("g", false, "Usa GUI");
-            options.addOption("c", false, "Usa CLI");
+        if(options.has("g")){
+            clientGUI();
+        }else if(options.has("c")){
+            clientCLI();
+        }else {
 
-            CommandLineParser parser = new DefaultParser();
-            cmd = parser.parse( options, args);
-            if(cmd.hasOption("g")) {
-                clientGUI();
-                return;
-            }else if(cmd.hasOption("c")) {
-                clientCLI();
-                return;
+            int i;
+            Scanner input = new Scanner(System.in);
+            System.out.println("Scegli l'interfaccia grafica:");
+            System.out.println("1) CLI");
+            System.out.println("2) GUI");
+            do {
+                i = input.nextInt();
+            } while (i < 1 || i > 2);
+
+            switch (i) {
+                case 1:
+                    clientCLI();
+                    break;
+                case 2:
+                    clientGUI();
+                    break;
             }
-        }catch (Exception e){
-            LOGGER.log(Level.FINE,"Errore parser options");
-        }
-
-        int i;
-        Scanner input = new Scanner(System.in);
-        System.out.println("Scegli l'interfaccia grafica:");
-        System.out.println("1) CLI");
-        System.out.println("2) GUI");
-        do {
-            i = input.nextInt();
-        } while (i < 1 || i > 2);
-
-        switch (i) {
-            case 1:
-                clientCLI();
-                break;
-            case 2:
-                clientGUI();
-                break;
         }
     }
 

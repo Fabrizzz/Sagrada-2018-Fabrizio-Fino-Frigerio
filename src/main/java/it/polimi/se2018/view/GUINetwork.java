@@ -23,11 +23,11 @@ public class GUINetwork extends JDialog{
     private GUIMain game;
 
     public GUINetwork() {
-        guiSwingProxy = new GUISwingProxy();
-
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+
+        guiSwingProxy = new GUISwingProxy();
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -41,7 +41,6 @@ public class GUINetwork extends JDialog{
             }
         });
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -49,7 +48,6 @@ public class GUINetwork extends JDialog{
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
