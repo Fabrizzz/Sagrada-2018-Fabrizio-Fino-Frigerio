@@ -198,7 +198,11 @@ public class GUIMain  implements MouseListener{
     }
 
     protected void endGame(Map<String,Integer> scores){
-        //todo
+        EndGame dialog = new EndGame(scores);
+        dialog.pack();
+        dialog.setLocationRelativeTo( null );
+        dialog.setVisible(true);
+        System.exit(0);
     }
 
     protected void printError(String error){
