@@ -37,7 +37,7 @@ public class Server {
             LOGGER.log(Level.WARNING,"Impossibile aprire file di log");
         }
 
-        int port = 0;
+        int port;
 
         do {
             System.out.println("Inserire la porta: ");
@@ -45,6 +45,14 @@ public class Server {
         }while(!available(port));
 
         new ServerNetwork().start(port);
+
+        int i;
+        do {
+            System.out.println("Inserire 0 per chiudere il server");
+            i = InputUtils.getInt();
+            if (i == 0)
+                System.exit(i);
+        } while (true);
 
     }
 

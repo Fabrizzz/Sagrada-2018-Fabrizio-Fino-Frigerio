@@ -88,15 +88,17 @@ public class Tool4_12Handler extends ToolHandler {
                 try {
                     Die die1;
                     Die die2;
-                    die1 = board.getDie(firstRow, firstColumn);
                     if (board.containsDie(firstRow, firstColumn)) {
+                        die1 = board.getDie(firstRow, firstColumn);
                         board.removeDie(firstRow,firstColumn);
                         if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
-                                board.containsDie(firstFinalRow, firstFinalColumn) ||
-                                !board.verifyPositionRestriction(firstFinalRow, firstFinalColumn) ||
-                                !board.verifyNearCellsRestriction(die1, firstFinalRow, firstFinalColumn) ||
-                                !board.verifyColorRestriction(die1, firstFinalRow, firstFinalColumn) ||
-                                !board.verifyNumberRestriction(die1, firstFinalRow, firstFinalColumn)){
+                                (board.isEmpty() && !board.verifyInitialPositionRestriction(firstFinalRow, firstFinalColumn)) ||
+                                !board.isEmpty() && (
+                                        board.containsDie(firstFinalRow, firstFinalColumn) ||
+                                                !board.verifyPositionRestriction(firstFinalRow, firstFinalColumn) ||
+                                                !board.verifyNearCellsRestriction(die1, firstFinalRow, firstFinalColumn) ||
+                                                !board.verifyColorRestriction(die1, firstFinalRow, firstFinalColumn) ||
+                                                !board.verifyNumberRestriction(die1, firstFinalRow, firstFinalColumn))) {
                             board.setDie(die1,firstRow,firstColumn);
                             LOGGER.log(Level.FINE,"Restrizioni dado 1 non rispettate");
                             remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));

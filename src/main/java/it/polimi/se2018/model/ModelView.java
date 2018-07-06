@@ -85,6 +85,7 @@ public class ModelView implements Serializable {
         usedTool = updateView.isUsedTool();
         normalMove = updateView.isNormalMove();
 
+
         if(updateView.privateObjective != null){
             privateObjective = updateView.getPrivateObjective();
             LOGGER.log(Level.FINE,"PrivateObjective not null");
@@ -121,10 +122,19 @@ public class ModelView implements Serializable {
         }
 
         if(updateView.getBoardMap() != null){
-            boardMap = updateView.getBoardMap();LOGGER.log(Level.FINE,"boardMap not null");
+            boardMap = updateView.getBoardMap();
+            LOGGER.log(Level.FINE, "boardMap not null");
         }else{
             boardMap = oldView.getBoardMap();
         }
+        if (updateView.getBoardMap() != null) {
+            round = updateView.getRound();
+            LOGGER.log(Level.FINE, "round not null");
+        } else {
+            round = oldView.getRound();
+        }
+
+
     }
 
     /**

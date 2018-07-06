@@ -181,11 +181,12 @@ public class CLI extends View{
      */
     private void showRoundTrack(){
         println("Tracciato dei dadi:");
+
         for(int i = 0; i < modelView.getRound(); i ++){
             println("Round " + (i+1));
             for(int j = 0; j < modelView.getRoundTrack().numberOfDice(i); j ++){
                 try{
-                    println("|" + modelView.getRoundTrackDie(i,j));
+                    print("|" + colorMap.get(modelView.getRoundTrackDie(i, j).getColor()) + modelView.getRoundTrackDie(i, j).getNumber().getInt() + ANSI_RESET);
                 }catch (NoDieException e){
                     LOGGER.log(Level.FINEST,"Dado non presente");
                 }
