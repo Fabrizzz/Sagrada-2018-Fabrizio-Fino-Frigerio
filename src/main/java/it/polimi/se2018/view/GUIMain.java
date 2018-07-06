@@ -276,9 +276,12 @@ public class GUIMain  implements MouseListener{
     }
 
     private void mostraRiserva(){
-        ShowDraftPool dialog = new ShowDraftPool(modelView.getDraftPool());
-        dialog.pack();
-        dialog.setVisible(true);
+        if(modelView != null){
+            ShowDraftPool dialog = new ShowDraftPool(modelView.getDraftPool());
+            dialog.pack();
+            dialog.setVisible(true);
+        }
+
     }
 
     private void onCancel() {
