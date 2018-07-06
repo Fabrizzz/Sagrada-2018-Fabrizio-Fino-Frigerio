@@ -3,10 +3,9 @@ package it.polimi.se2018.client;
 import it.polimi.se2018.view.CLI;
 import it.polimi.se2018.view.GUINetwork;
 import it.polimi.se2018.view.View;
-import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.*;
 
@@ -75,8 +74,7 @@ public class Client {
      */
     private void clientCLI(){
         view = new CLI();
-        clientNetwork = new ClientNetwork(view);
-        ((CLI) view).createConnection(clientNetwork);
+        ((CLI) view).createConnection();
     }
 
     /**

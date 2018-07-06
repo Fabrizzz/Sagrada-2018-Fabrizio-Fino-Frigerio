@@ -50,12 +50,6 @@ public class CLI extends View{
         colorMap.put(Color.YELLOW,"\u001B[33m");
         colorMap.put(Color.PURPLE, "\u001B[35m");
 
-        println("Inserisci il tuo nome: ");
-        do{
-            nick = InputUtils.getString();
-        } while (nick.isEmpty());
-
-        this.localID = JSONUtils.readID(nick);
     }
 
     /**
@@ -783,6 +777,9 @@ public class CLI extends View{
                 }else{
                     println("Non e' il tuo turno");
                 }
+                if (message.getErrorType().equals(ErrorType.CONNECTIONREFUSED)) {
+                    createConnection();
+                }
                 break;
             case INITIALCONFIGSERVER:
                 println("------------------------------------------------------");
@@ -894,10 +891,16 @@ public class CLI extends View{
 
     /**
      * Prompt the user for the connection detail to initialize the connection
-     * @param clientNetwork the connection manager of the client
      */
-    public void createConnection(ClientNetwork clientNetwork){
-        println("Benvenuto, scegli il metodo di connessione: ");
+    public void createConnection() {
+        ClientNetwork clientNetwork = new ClientNetwork(this);
+        println("Inserisci il tuo nome: ");
+        do {
+            nick = InputUtils.getString();
+        } while (nick.isEmpty());
+
+        this.localID = JSONUtils.readID(nick);
+        println("Scegli il metodo di connessione: ");
         println("1) Socket");
         println("2) RMI");
         int i;
