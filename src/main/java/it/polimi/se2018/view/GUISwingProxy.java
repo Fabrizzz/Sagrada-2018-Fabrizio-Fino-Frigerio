@@ -58,7 +58,7 @@ public class GUISwingProxy extends View {
                 }catch (Exception e){}
                 break;
             case ENDGAME:
-                gameWindow.endGame(message.getScores());
+                gameWindow.endGame(message);
                 break;
             default:
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");

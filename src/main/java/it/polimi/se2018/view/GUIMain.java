@@ -18,6 +18,7 @@ import it.polimi.se2018.utils.exceptions.EmptyBagException;
 import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
+import it.polimi.se2018.utils.messages.ServerMessage;
 
 public class GUIMain  implements MouseListener{
     private JPanel contentPane;
@@ -202,8 +203,8 @@ public class GUIMain  implements MouseListener{
         return modelView;
     }
 
-    protected void endGame(Map<String,Integer> scores){
-        EndGame dialog = new EndGame(scores);
+    protected void endGame(ServerMessage message){
+        EndGame dialog = new EndGame(message);
         dialog.pack();
         dialog.setLocationRelativeTo( null );
         dialog.setVisible(true);
