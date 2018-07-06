@@ -158,9 +158,11 @@ public class Controller implements Observer {
      * @param turn turn when the timer was called
      * @param round round when the timer was called
      */
-    private void setTimer(int turn, int round) {
-        LOGGER.log(Level.FINER, "Timer impostato");
-        timer.schedule(new RoundTimer(turn, round, this), (long) (roundTimer * 60 * 1000));
+    private synchronized void setTimer(int turn, int round) {
+        if (!gameEnded) {
+            LOGGER.log(Level.FINER, "Timer impostato");
+            timer.schedule(new RoundTimer(turn, round, this), (long) (roundTimer * 60 * 1000));
+        }
     }
 
     /**
