@@ -28,7 +28,7 @@ public final class BoardList {
         JSONParser parser = new JSONParser();
         try {
 
-            Object obj2 = parser.parse(new FileReader("mappe.json"));
+            Object obj2 = parser.parse(new FileReader("./mappe.json"));
 
             JSONObject jsonObject = (JSONObject) obj2;
             JSONArray boards = (JSONArray) jsonObject.get("boards");

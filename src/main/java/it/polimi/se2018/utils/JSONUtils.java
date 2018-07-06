@@ -27,7 +27,7 @@ public class JSONUtils {
         JSONParser parser = new JSONParser();
         try {
 
-            Object obj = parser.parse(new FileReader("settings.json"));
+            Object obj = parser.parse(new FileReader("./settings.json"));
 
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray players = (JSONArray) jsonObject.get("players");
@@ -98,7 +98,7 @@ public class JSONUtils {
         JSONParser parser = new JSONParser();
 
         try {
-            Object obj = parser.parse(new FileReader("settings.json"));
+            Object obj = parser.parse(new FileReader("./settings.json"));
 
             JSONObject jsonObject = (JSONObject) obj;
 
@@ -125,7 +125,7 @@ public class JSONUtils {
         JSONParser parser = new JSONParser();
 
         try {
-            Object obj = parser.parse(new FileReader("settings.json"));
+            Object obj = parser.parse(new FileReader("./settings.json"));
 
             JSONObject jsonObject = (JSONObject) obj;
 
@@ -149,7 +149,7 @@ public class JSONUtils {
      * @param obj json object
      */
     private static void writeJSON(JSONObject obj){
-        try (FileWriter file = new FileWriter("settings.json")) {
+        try (FileWriter file = new FileWriter("./settings.json")) {
             file.write(obj.toJSONString());
             file.flush();
         } catch (IOException h) {
