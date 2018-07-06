@@ -33,9 +33,23 @@ public class StretchIcon extends ImageIcon {
             return;
         }
 
+
         Insets insets = ((Container) c).getInsets();
         int w = c.getWidth() - insets.left - insets.right;
         int h = c.getHeight() - insets.top - insets.bottom;
+
+        int iw = image.getWidth(c);
+        int ih = image.getHeight(c);
+
+        if (iw * h < ih * w) {
+            iw = (h * iw) / ih;
+            x += (w - iw) / 2;
+            w = iw;
+        } else {
+            ih = (w * ih) / iw;
+            y += (h - ih) / 2;
+            h = ih;
+        }
 
         ImageObserver io = getImageObserver();
         g.drawImage(image, insets.left, insets.top, w, h, io == null ? c : io);
