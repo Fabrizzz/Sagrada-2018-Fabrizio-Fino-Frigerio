@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Alessio
+ */
 public class ChooseRoundTrackDie extends JDialog implements MouseListener{
     private JPanel contentPane;
     private JPanel board;
@@ -17,6 +20,10 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
     private int[] p = new int[2];
     private RoundTrack roundTrack;
 
+    /**
+     * Costructor
+     * @param roundTrack
+     */
     protected ChooseRoundTrackDie(RoundTrack roundTrack) {
         p[0] = 0;
         p[1] = 0;
@@ -48,6 +55,9 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
         }
     }
 
+    /**
+     * clean the board
+     */
     private void whiteRefreshBoard(){
         for(int i = 0; i < 10; i ++){
             for(int j = 0; j < 9; j++){
@@ -56,6 +66,10 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
         }
     }
 
+    /**
+     * insert the dice in the Board
+     * @param roundTrack
+     */
     private void populateBoard(RoundTrack roundTrack){
         whiteRefreshBoard();
 
@@ -79,11 +93,16 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
         return p;
     }
 
+    /**
+     * manage the cancel botton
+     */
     private void onCancel() {
         latch.countDown();
         dispose();
     }
-
+    /**
+     * manage the mouse click
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         JLabel source = (JLabel) e.getSource();
