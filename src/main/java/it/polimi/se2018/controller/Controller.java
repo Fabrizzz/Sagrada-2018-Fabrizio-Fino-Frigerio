@@ -365,7 +365,7 @@ public class Controller implements Observer {
                 RemoteView remoteView = (RemoteView) o;
 
 
-                if (message.getMessageType() == MessageType.PLAYERMOVE) {
+                if (message.getMessageType() == MessageType.PLAYERMOVE && choosenBoards.size() == views.size()) {
 
                     PlayerMove playerMove = message.getPlayerMove();
                     LOGGER.log(Level.INFO, "PlayerMove ricevuta");
