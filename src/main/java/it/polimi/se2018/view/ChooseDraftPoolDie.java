@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Alessio
+ */
 public class ChooseDraftPoolDie extends JDialog implements MouseListener {
     private JPanel contentPane;
     private JPanel board;
@@ -16,6 +19,10 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
     private final CountDownLatch latch = new CountDownLatch(1);
     private int p = 0;
 
+    /**
+     * Costructor
+     * @param draftPool
+     */
     protected ChooseDraftPoolDie(DraftPool draftPool) {
         setContentPane(contentPane);
         setModal(true);
@@ -40,6 +47,10 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
         populateBoard(draftPool);
     }
 
+    /**
+     * get position
+     * @return
+     */
     public int getPosition(){
         this.pack();
         this.setVisible(true);
@@ -52,17 +63,27 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
         return p;
     }
 
+    /**
+     * manage cancel button
+     */
     private void onCancel() {
         latch.countDown();
         dispose();
     }
 
+    /**
+     * clean the Board
+     */
     private void whiteRefresh(){
         for(int i = 0; i < 9; i ++){
             ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
         }
     }
 
+    /**
+     * insert the dice in the draftpool
+     * @param draftPool
+     */
     private void populateBoard(DraftPool draftPool){
         whiteRefresh();
 
@@ -74,6 +95,10 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
 
     }
 
+    /**
+     * manage the click of the mouse
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         JLabel source = (JLabel) e.getSource();

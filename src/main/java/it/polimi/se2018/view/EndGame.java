@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+/**
+ * @author Matteo
+ */
 public class EndGame extends JDialog {
     private JPanel contentPane;
     private JButton buttonCancel;
@@ -18,6 +21,10 @@ public class EndGame extends JDialog {
     private JLabel winnerLabel;
     private ServerMessage serverMessage;
 
+    /**
+     * Costructor
+     * @param serverMessage
+     */
     protected EndGame(ServerMessage serverMessage) {
 
         this.serverMessage = serverMessage;
@@ -48,6 +55,9 @@ public class EndGame extends JDialog {
 
     }
 
+    /**
+     * manage the server message and define the winner
+     */
     private void end() {
         int top = 0;
         String[] nicknames = new String[serverMessage.getScores().size()];
@@ -68,6 +78,9 @@ public class EndGame extends JDialog {
         winnerLabel.setText("Il giocatore " + serverMessage.getWinner() + " ha vinto");
     }
 
+    /**
+     * manage the cancel button
+     */
     private void onCancel() {
         dispose();
     }

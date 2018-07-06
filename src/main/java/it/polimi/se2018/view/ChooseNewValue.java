@@ -6,12 +6,18 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Alessio
+ */
 public class ChooseNewValue extends JDialog{
     private JPanel contentPane;
     private JButton buttonOK;
     private JComboBox comboBox1;
     private final CountDownLatch latch = new CountDownLatch(1);
 
+    /**
+     * Costructor
+     */
     protected ChooseNewValue() {
         setContentPane(contentPane);
         setModal(true);
@@ -50,6 +56,9 @@ public class ChooseNewValue extends JDialog{
         return NumberEnum.getNumber(comboBox1.getSelectedIndex() + 1);
     }
 
+    /**
+     * manage the ok button
+     */
     private void onOK() {
         latch.countDown();
         dispose();
