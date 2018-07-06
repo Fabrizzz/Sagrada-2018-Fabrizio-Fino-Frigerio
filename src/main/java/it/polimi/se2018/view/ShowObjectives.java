@@ -10,6 +10,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.List;
 
+/**
+ * @author Matteo
+ */
 public class ShowObjectives extends JDialog {
     private JPanel contentPane;
     private JLabel objective1;
@@ -18,6 +21,10 @@ public class ShowObjectives extends JDialog {
     private JPanel board;
     List<PublicObjective> publicObjective;
 
+    /**
+     * Costructor
+     * @param publicObjective
+     */
     protected ShowObjectives(List<PublicObjective> publicObjective) {
 
         this.publicObjective = publicObjective;
@@ -40,6 +47,9 @@ public class ShowObjectives extends JDialog {
         showObjectiveCard();
     }
 
+    /**
+     * Show the objective card
+     */
     private void showObjectiveCard() {
         String name;
 
@@ -52,6 +62,11 @@ public class ShowObjectives extends JDialog {
 
     }
 
+    /**
+     * convert the objective card in the string
+     * @param objectiveCard
+     * @return
+     */
     private String ObjectiveCardNamePNG(PublicObjective objectiveCard){
 
         switch (objectiveCard.getObjectiveName()){

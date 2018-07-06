@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Alessio
+ */
 public class GenericRadio extends JDialog {
     private JPanel contentPane;
     private JRadioButton siRadioButton;
@@ -12,6 +15,10 @@ public class GenericRadio extends JDialog {
     private JLabel domandaLabel;
     private final CountDownLatch latch = new CountDownLatch(1);
 
+    /**
+     * Costructor
+     * @param question
+     */
     protected GenericRadio(String question) {
         setContentPane(contentPane);
         setModal(true);
@@ -64,6 +71,9 @@ public class GenericRadio extends JDialog {
         return siRadioButton.isSelected();
     }
 
+    /**
+     * manage the ok button
+     */
     private void onOK() {
         latch.countDown();
         dispose();

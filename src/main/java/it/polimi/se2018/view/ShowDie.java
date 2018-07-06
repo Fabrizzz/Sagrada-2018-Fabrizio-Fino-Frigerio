@@ -3,11 +3,18 @@ package it.polimi.se2018.view;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * @author Alessio
+ */
 public class ShowDie extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JLabel dieLabel;
 
+    /**
+     * Costructor
+     * @param imagePath
+     */
     protected ShowDie(String imagePath) {
         setContentPane(contentPane);
         setModal(true);
