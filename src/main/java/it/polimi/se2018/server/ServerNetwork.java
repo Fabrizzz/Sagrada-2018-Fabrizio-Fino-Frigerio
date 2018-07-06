@@ -115,6 +115,12 @@ public class ServerNetwork implements Observer {
 
     }
 
+    /**
+     * Deregister all the RemoteViews
+     *
+     * @param views remoteviews to deregister
+     */
+
     public synchronized void deregisterConnections(List<RemoteView> views) {
         while (!views.isEmpty()) {
             for (Long id : playingConnections.keySet()) {
