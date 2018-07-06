@@ -91,7 +91,8 @@ public class Tool4_12Handler extends ToolHandler {
                     if (board.containsDie(firstRow, firstColumn)) {
                         die1 = board.getDie(firstRow, firstColumn);
                         board.removeDie(firstRow,firstColumn);
-                        if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
+                        if (tool == Tool.TAGLIERINAMANUALE && !model.getRoundTrack().hasColor(die1.getColor()) ||
+                                cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                                 (board.isEmpty() && !board.verifyInitialPositionRestriction(firstFinalRow, firstFinalColumn)) ||
                                 !board.isEmpty() && (
                                         board.containsDie(firstFinalRow, firstFinalColumn) ||
@@ -116,7 +117,8 @@ public class Tool4_12Handler extends ToolHandler {
                         if (board.containsDie(secondRow, secondColumn)) {
                             die2 = board.getDie(secondRow, secondColumn);
                             board.removeDie(secondRow,secondColumn);
-                            if (board.containsDie(secondFinalRow, secondFinalColumn) ||
+                            if ((tool == Tool.TAGLIERINAMANUALE && (die1.getColor() != die2.getColor())) ||
+                                    board.containsDie(secondFinalRow, secondFinalColumn) ||
                                     !board.verifyPositionRestriction(secondFinalRow, secondFinalColumn) ||
                                     !board.verifyNearCellsRestriction(die2, secondFinalRow, secondFinalColumn) ||
                                     !board.verifyColorRestriction(die2, secondFinalRow, secondFinalColumn) ||
