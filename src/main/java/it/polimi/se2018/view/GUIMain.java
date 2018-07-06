@@ -114,7 +114,7 @@ public class GUIMain  implements MouseListener{
         comboBoxPlayerBoard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nickPlayer = comboBoxPlayerBoard.getSelectedItem().toString();
+                String nickPlayer = (String) comboBoxPlayerBoard.getSelectedItem();
                 for(int j = 0; j < modelView.getPlayers().size(); j ++){
                     if(modelView.getPlayers().get(j).getNick().equals(nickPlayer)){
                         showBoard(modelView.getBoard(modelView.getPlayers().get(j)));
