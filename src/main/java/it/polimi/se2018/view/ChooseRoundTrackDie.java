@@ -87,7 +87,7 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
     public void mouseClicked(MouseEvent e) {
         JLabel source = (JLabel) e.getSource();
         for(int i = 0; i < 10; i ++) {
-            for (int j = 0; j < roundTrack.numberOfDice(i); j++) {
+            for (int j = 0; j < 9; j++) {
                 if (((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).equals(source)) {
                     p[0] = i;
                     p[1] = j;
