@@ -756,6 +756,18 @@ public class CLI extends View{
     @Override
     public void update(Observable o, Object arg) {
         ServerMessage message = (ServerMessage) arg;
+        elaborateMessage(message);
+    }
+
+    /**
+     * Called when the connection is closed
+     */
+    public void connectionClosed() {
+        println("Connessione al server chiusa");
+    }
+
+    @Override
+    public void elaborateMessage(ServerMessage message) {
         switch (message.getMessageType()) {
             case ERROR:
                 hasUsedTenaglia = false;
@@ -831,8 +843,8 @@ public class CLI extends View{
                             println("\nPlancia del giocatore: " + modelView.getPlayers().get(h).getNick());
                             showPlayerBoard(modelView.getBoard(modelView.getPlayers().get(h)));
                         }
-                        }
                     }
+                }
                 break;
             case HASDISCONNECTED:
                 println("Il giocatore " +  message.getDisconnectedPlayer() + " si e' disconnesso");
@@ -874,13 +886,6 @@ public class CLI extends View{
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");
                 break;
         }
-    }
-
-    /**
-     * Called when the connection is closed
-     */
-    public void connectionClosed(){
-        println("Connessione al server chiusa");
     }
 
     /**

@@ -53,7 +53,7 @@ public class Tool2_3Handler extends ToolHandler {
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
                         !board.containsDie(row, column) || board.containsDie(finalRow, finalColumn)){
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare PENNELLOPEREGLOMISE ALESATOREPERLAMINADIRAME 1");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     return false;
                 } else try {
                     die = board.getDie(row, column);
@@ -67,7 +67,7 @@ public class Tool2_3Handler extends ToolHandler {
                         " number restriction:" + (toolname == Tool.PENNELLOPEREGLOMISE && !board.verifyNumberRestriction(die, finalRow, finalColumn)) +
                         " color restriction: " + (toolname == Tool.ALESATOREPERLAMINADIRAME && !board.verifyColorRestriction(die, finalRow, finalColumn)));
                         board.setDie(die, row, column);
-                        remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                        remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                         return false;
                     } else {
                         board.setDie(die, finalRow, finalColumn);

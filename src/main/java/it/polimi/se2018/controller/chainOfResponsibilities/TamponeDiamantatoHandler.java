@@ -36,7 +36,7 @@ public class TamponeDiamantatoHandler extends ToolHandler {
 
             if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())){
                 LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare TAMPONEDIAMANTATO");
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
             } else {
                 try {
                     model.getDraftPool().getDie(draftPosition).flip();
@@ -44,7 +44,7 @@ public class TamponeDiamantatoHandler extends ToolHandler {
                     return true;
                 } catch (NoDieException e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in TAMPONEDIAMANTATO");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     return false;
                 }
             }

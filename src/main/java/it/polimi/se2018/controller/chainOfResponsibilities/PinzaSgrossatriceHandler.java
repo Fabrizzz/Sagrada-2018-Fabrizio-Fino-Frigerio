@@ -48,7 +48,7 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
                 if (cantUseTool(remoteView.getPlayer(), model, playerMove.getTool())
                         || (die.getNumber() == NumberEnum.ONE && !aumentaDiUno) || (die.getNumber() == NumberEnum.SIX && aumentaDiUno)) {
                     LOGGER.log(Level.INFO,"Il giocatore non puo' utilizzare PINZASGROSSATRICE");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     return false;
                 }else {
                     if (aumentaDiUno)
@@ -62,7 +62,7 @@ public class PinzaSgrossatriceHandler extends ToolHandler {
 
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in PINZASGROSSATRICE");
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                 return false;
             }
 

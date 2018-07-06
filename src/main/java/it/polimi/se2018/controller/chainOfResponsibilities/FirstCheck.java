@@ -35,7 +35,7 @@ public class FirstCheck extends Handler {
 
         } else {
             LOGGER.log(Level.FINE,"Non e' il turno del giocatore " + remoteView.getPlayer().getNick() +" id: " + remoteView.getPlayer().getId() +", invio messaggio NOTYOURTURN");
-            remoteView.sendBack(new ServerMessage(ErrorType.NOTYOURTURN));
+            remoteView.elaborateMessage(new ServerMessage(ErrorType.NOTYOURTURN));
         }
         return false;
     }

@@ -101,12 +101,12 @@ public class Tool4_12Handler extends ToolHandler {
                                                 !board.verifyNumberRestriction(die1, firstFinalRow, firstFinalColumn))) {
                             board.setDie(die1,firstRow,firstColumn);
                             LOGGER.log(Level.FINE,"Restrizioni dado 1 non rispettate");
-                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                             return false;
                         }
                     } else{
                         LOGGER.log(Level.FINE,"Dado 1 non presente");
-                        remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                        remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                         return false;
                     }
 
@@ -126,7 +126,7 @@ public class Tool4_12Handler extends ToolHandler {
                                 board.setDie(die1,firstRow,firstColumn);
                                 LOGGER.log(Level.FINE,"Restrizioni dado 2 non rispettate: containsDie:" + board.containsDie(secondFinalRow, secondFinalColumn) +
                                 " position restriction: " + secondFinalRow + " " +secondFinalColumn + " " + board.verifyPositionRestriction(secondFinalRow, secondFinalColumn));
-                                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                                remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                                 return false;
                             }else{
                                 board.setDie(die2, secondFinalRow, secondFinalColumn);
@@ -136,7 +136,7 @@ public class Tool4_12Handler extends ToolHandler {
                             board.removeDie(firstFinalRow,firstFinalColumn);
                             board.setDie(die1,firstRow,firstColumn);
                             LOGGER.log(Level.FINE,"Dado 2 non presente in posizione " + secondRow + " " + secondColumn);
-                            remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                            remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                             return false;
                         }
                     }else {
@@ -144,11 +144,11 @@ public class Tool4_12Handler extends ToolHandler {
                     }
                 } catch (AlreadySetDie alreadySetDie) {
                     LOGGER.log(Level.SEVERE, "Dado gia' presente in LATHEKIN TAGLIERINAMANUALE 5");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     return false;
                 } catch (NoDieException e) {
                     LOGGER.log(Level.SEVERE, "Dado non presente in LATHEKIN TAGLIERINAMANUALE 6");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     return false;
                 }
             }else{

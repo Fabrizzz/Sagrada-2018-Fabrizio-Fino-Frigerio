@@ -55,7 +55,7 @@ public class RigaInSugheroHandler extends ToolHandler {
                         !board.verifyNearCellsRestriction(die, row, column) ||
                         board.verifyPositionRestriction(row, column)) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare RIGAINSUGHERO");
-                    remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                    remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     return false;
                 } else {
 
@@ -67,11 +67,11 @@ public class RigaInSugheroHandler extends ToolHandler {
                 }
             } catch (NoDieException e) {
                 LOGGER.log(Level.SEVERE, "Dado non presente in RIGAINSUGHERO");
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                 return false;
             } catch (AlreadySetDie alreadySetDie) {
                 LOGGER.log(Level.SEVERE, "Dado gia' presente in RIGAINSUGHERO");
-                remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+                remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                 return false;
             }
         } else {

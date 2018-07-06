@@ -13,7 +13,7 @@ public class EndOfTheChainHandler extends Handler {
     public boolean process(PlayerMove playerMove, RemoteView remoteView, Model model) throws InvalidParameterException {
         if (playerMove.getTool() == Tool.SKIPTURN)
             return true;
-        remoteView.sendBack(new ServerMessage(ErrorType.ILLEGALMOVE));
+        remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
         return false;
     }
 }
