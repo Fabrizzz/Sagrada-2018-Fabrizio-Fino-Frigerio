@@ -49,11 +49,13 @@ public class RigaInSugheroHandler extends ToolHandler {
                 die = model.getDraftPool().getDie(pos);
                 if ((board.isEmpty() && !board.verifyInitialPositionRestriction(row, column)) ||
                         cantUseTool(remoteView.getPlayer(), model, playerMove.getTool()) ||
-                        board.containsDie(row, column) ||
-                        !board.verifyColorRestriction(die, row, column) ||
-                        !board.verifyNumberRestriction(die, row, column) ||
-                        !board.verifyNearCellsRestriction(die, row, column) ||
-                        board.verifyPositionRestriction(row, column)) {
+                        model.hasUsedNormalMove() ||
+                        (!board.isEmpty() && (
+                                board.containsDie(row, column) ||
+                                        !board.verifyColorRestriction(die, row, column) ||
+                                        !board.verifyNumberRestriction(die, row, column) ||
+                                        !board.verifyNearCellsRestriction(die, row, column) ||
+                                        board.verifyPositionRestriction(row, column)))) {
                     LOGGER.log(Level.INFO, "Il giocatore non puo' utilizzare RIGAINSUGHERO");
                     remoteView.elaborateMessage(new ServerMessage(ErrorType.ILLEGALMOVE));
                     return false;
