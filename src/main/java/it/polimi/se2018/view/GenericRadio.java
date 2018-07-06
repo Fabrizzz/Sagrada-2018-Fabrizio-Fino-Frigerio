@@ -57,7 +57,9 @@ public class GenericRadio extends JDialog {
 
         try{
             latch.await();
-        }catch (InterruptedException e){}
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
 
         return siRadioButton.isSelected();
     }

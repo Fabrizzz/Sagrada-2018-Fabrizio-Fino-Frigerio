@@ -44,7 +44,9 @@ public class ChooseNewValue extends JDialog{
         this.setVisible(true);
         try{
             latch.await();
-        }catch (InterruptedException e){}
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
         return NumberEnum.getNumber(comboBox1.getSelectedIndex() + 1);
     }
 

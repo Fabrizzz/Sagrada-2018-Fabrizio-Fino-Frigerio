@@ -12,9 +12,8 @@ public class ShowRoundTrack extends JDialog {
     private JPanel board;
 
     protected ShowRoundTrack(RoundTrack roundTrack) {
-
         setContentPane(contentPane);
-        setModal(false);
+        setModal(true);
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {

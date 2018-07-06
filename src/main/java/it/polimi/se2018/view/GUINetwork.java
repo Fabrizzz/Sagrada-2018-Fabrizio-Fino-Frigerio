@@ -73,7 +73,11 @@ public class GUINetwork extends JDialog{
         clientNetwork = new ClientNetwork(guiSwingProxy);
 
         if(socketRadioButton.isSelected()){
-            port = Integer.parseInt(porta.getText());
+            try{
+                port = Integer.parseInt(porta.getText());
+            }catch (Exception e){
+                port = 0;
+            }
             if(Server.available(port) || !clientNetwork.connectSocket(address, port)){
                 JOptionPane.showMessageDialog(this, "Errore connessione.");
                 return;
