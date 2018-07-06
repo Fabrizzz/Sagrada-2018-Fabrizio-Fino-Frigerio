@@ -139,7 +139,7 @@ public class Controller implements Observer {
      */
     public synchronized void timerScaduto(int turn, int round) {
 
-        if (model.getTurn() == turn && model.getRound() == round && !gameEnded) {
+        if (!gameEnded && model.getTurn() == turn && model.getRound() == round) {
             LOGGER.log(Level.INFO, "Timer scaduto, turno interrotto e nextTurn chiamata");
             System.out.println("Timer scaduto");
             nextTurn();
@@ -174,8 +174,8 @@ public class Controller implements Observer {
      * End the round and update the round variables
      */
     private void endRound() {
-        getModel().setRound(getModel().getRound() + 1);
-        if (getModel().getRound() == 10)
+
+        if (getModel().getRound() == 9)
             endGame();
         else {
             getModel().setTurn(0);
@@ -184,6 +184,7 @@ public class Controller implements Observer {
             Collections.rotate(getModel().getPlayers(), -1);
             getModel().getDraftPool().rollDice(getModel().getDiceBag());
         }
+        getModel().setRound(getModel().getRound() + 1);
 
     }
 
