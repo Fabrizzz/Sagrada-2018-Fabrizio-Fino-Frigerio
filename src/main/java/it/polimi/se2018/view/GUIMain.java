@@ -33,6 +33,7 @@ public class GUIMain  implements MouseListener{
     private JLabel labelRound;
     private JButton terminaTurnoButton;
     private JButton mostraLeCarteObiettivoButton;
+    private JLabel privateObjectiveLabel;
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
     private Long localID;
@@ -138,6 +139,7 @@ public class GUIMain  implements MouseListener{
         }
         labelSegnalini.setText("Segnalini: "+ modelView.getPlayer(localID).getFavorTokens());
         labelRound.setText("Round: "+ modelView.getRound());
+        privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective());
     }
 
     private void mostraObiettivi(){
