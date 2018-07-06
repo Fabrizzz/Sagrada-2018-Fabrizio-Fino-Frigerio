@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.List;
 
-public class GUISwingObiettivi extends JDialog {
+public class ShowObjectives extends JDialog {
     private JPanel contentPane;
     private JLabel objective1;
     private JLabel objective2;
@@ -18,7 +18,7 @@ public class GUISwingObiettivi extends JDialog {
     private JPanel board;
     List<PublicObjective> publicObjective;
 
-    public GUISwingObiettivi(List<PublicObjective> publicObjective) {
+    public ShowObjectives(List<PublicObjective> publicObjective) {
 
         this.publicObjective = publicObjective;
         setContentPane(contentPane);
@@ -91,7 +91,7 @@ public class GUISwingObiettivi extends JDialog {
     public static void main(String[] args) {
         Model model = ModelControllerInitializerTest.initialize(Tool.LATHEKIN);
         ModelView modelView = new ModelView(model);
-        GUISwingObiettivi dialog = new GUISwingObiettivi(modelView.getPublicObjective());
+        ShowObjectives dialog = new ShowObjectives(modelView.getPublicObjective());
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);

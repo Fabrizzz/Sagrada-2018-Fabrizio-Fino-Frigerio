@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.concurrent.CountDownLatch;
 
-public class GUIAumentaValoreDialog extends JDialog {
+public class addDieValue extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JRadioButton aumentaDiUnoRadioButton;
     private JRadioButton diminuisciDiUnoRadioButton;
     private final CountDownLatch latch = new CountDownLatch(1);
 
-    public GUIAumentaValoreDialog() {
+    public addDieValue() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -68,7 +68,7 @@ public class GUIAumentaValoreDialog extends JDialog {
     }
 
     public static void main(String[] args) {
-        GUIAumentaValoreDialog dialog = new GUIAumentaValoreDialog();
+        addDieValue dialog = new addDieValue();
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);

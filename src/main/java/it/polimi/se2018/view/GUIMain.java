@@ -33,7 +33,6 @@ public class GUIMain  implements MouseListener{
     private JLabel labelRound;
     private JButton terminaTurnoButton;
     private JButton mostraLeCarteObiettivoButton;
-    private Map<Color,String> colorMap = new HashMap<>();
     private Map<Tool,String> toolCardMap = new HashMap<>();
     private ModelView modelView;
     private Long localID;
@@ -41,12 +40,6 @@ public class GUIMain  implements MouseListener{
 
     public GUIMain(GUISwingProxy guiSwingProxy){
         this.guiSwingProxy = guiSwingProxy;;
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
-
         toolCardMap.put(Tool.PINZASGROSSATRICE,"toolCard01");
         toolCardMap.put(Tool.PENNELLOPEREGLOMISE,"toolCard02");
         toolCardMap.put(Tool.ALESATOREPERLAMINADIRAME,"toolCard03");
@@ -148,7 +141,7 @@ public class GUIMain  implements MouseListener{
     }
 
     private void mostraObiettivi(){
-        GUISwingObiettivi dialog = new GUISwingObiettivi(modelView.getPublicObjective());
+        ShowObjectives dialog = new ShowObjectives(modelView.getPublicObjective());
         dialog.pack();
         dialog.setVisible(true);
 
@@ -174,7 +167,7 @@ public class GUIMain  implements MouseListener{
     }
 
     public void chooseBoard(Board[] boards){
-        GUISwingChooseBoard dialog = new GUISwingChooseBoard(boards,this);
+        ChooseBoard dialog = new ChooseBoard(boards,this);
         dialog.pack();
         dialog.setVisible(true);
     }
@@ -214,11 +207,11 @@ public class GUIMain  implements MouseListener{
 
     public void mostraTracciatoDadi(){
         if(modelView != null) {
-            GUISwingRoundTrack dialog = new GUISwingRoundTrack(modelView.getRoundTrack());
+            ShowRoundTrack dialog = new ShowRoundTrack(modelView.getRoundTrack());
             dialog.pack();
             dialog.setVisible(true);
         }else{
-            GUISwingRoundTrack dialog = new GUISwingRoundTrack(new RoundTrack());
+            ShowRoundTrack dialog = new ShowRoundTrack(new RoundTrack());
             dialog.pack();
             dialog.setVisible(true);
         }
@@ -239,7 +232,7 @@ public class GUIMain  implements MouseListener{
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.getRestriction(i,j).isColorRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png"));
+                    ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png"));
                 }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
                     ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png"));
                 }
@@ -250,7 +243,7 @@ public class GUIMain  implements MouseListener{
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.containsDie(i,j)){
                     try{
-                        ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png"));
+                        ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(playerBoard.getDie(i,j).getColor()) + playerBoard.getDie(i,j).getNumber().getInt() +".png"));
                     }catch (Exception e){}
                 }
             }
@@ -261,13 +254,8 @@ public class GUIMain  implements MouseListener{
         showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
 
-    private String colorToString(Color color){
-        return colorMap.get(color);
-    }
-
-
     public void mostraRiserva(){
-        GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
+        ShowDraftPool dialog = new ShowDraftPool(modelView.getDraftPool());
         dialog.pack();
         dialog.setVisible(true);
     }
@@ -312,7 +300,7 @@ public class GUIMain  implements MouseListener{
     public void sgrossatriceMove(){
         int pos = chooseDraftPoolPosition();
         if(pos < modelView.getDraftPool().size()){
-            GUIAumentaValoreDialog dialog = new GUIAumentaValoreDialog();
+            addDieValue dialog = new addDieValue();
             boolean addOne = dialog.getValue();
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.PINZASGROSSATRICE,pos,addOne));
             guiSwingProxy.sendMessage(clientMessage);
@@ -382,7 +370,7 @@ public class GUIMain  implements MouseListener{
         try{
             Die die = modelView.getDraftPool().getDie(i);
             Die newDie = modelView.getDiceBag().getFirst();
-            ShowDie dialog = new ShowDie("src/main/resources/utilsGUI/" + colorToString(newDie.getColor()) + newDie.getNumber().getInt() +".png");
+            ShowDie dialog = new ShowDie("src/main/resources/utilsGUI/" + GUIUtils.colorToString(newDie.getColor()) + newDie.getNumber().getInt() +".png");
             NumberEnum newValue = chooseNewValue();
 
             int[] pos = chooseCell("Scegli dove piazzare il dado");

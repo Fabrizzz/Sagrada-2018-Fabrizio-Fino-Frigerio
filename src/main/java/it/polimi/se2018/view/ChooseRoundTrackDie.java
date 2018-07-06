@@ -13,7 +13,6 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
     private JPanel contentPane;
     private JPanel board;
     public final CountDownLatch latch = new CountDownLatch(1);
-    private Map<Color,String> colorMap = new HashMap<>();
     private int[] p = new int[2];
     private RoundTrack roundTrack;
 
@@ -22,12 +21,6 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
         p[1] = 0;
 
         this.roundTrack = roundTrack;
-
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
 
         setContentPane(contentPane);
         setModal(true);
@@ -68,14 +61,10 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
         for(int i = 0; i < 10; i ++) {
             for (int j = 0; j < roundTrack.numberOfDice(i); j++) {
                 try {
-                    ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(roundTrack.getDie(i, j).getColor()) + "" + roundTrack.getDie(i, j).getNumber().getInt() + ".png"));
+                    ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(roundTrack.getDie(i, j).getColor()) + "" + roundTrack.getDie(i, j).getNumber().getInt() + ".png"));
                 } catch (Exception e) {}
             }
         }
-    }
-
-    private String colorToString(Color color){
-        return colorMap.get(color);
     }
 
     public int[] getPosition(){
@@ -108,22 +97,14 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 }

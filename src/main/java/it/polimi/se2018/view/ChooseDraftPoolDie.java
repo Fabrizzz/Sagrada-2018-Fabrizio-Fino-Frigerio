@@ -12,17 +12,11 @@ import java.util.concurrent.CountDownLatch;
 public class ChooseDraftPoolDie extends JDialog implements MouseListener {
     private JPanel contentPane;
     private JPanel board;
-    private Map<Color,String> colorMap = new HashMap<>();
     private DraftPool draftPool;
     public final CountDownLatch latch = new CountDownLatch(1);
     private int p = 0;
 
     public ChooseDraftPoolDie(DraftPool draftPool) {
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
         setContentPane(contentPane);
         setModal(true);
         this.draftPool = draftPool;
@@ -72,15 +66,12 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
 
         for(int i = 0; i < draftPool.size(); i ++) {
             try {
-                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png"));
+                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png"));
             } catch (Exception e) {}
         }
 
     }
 
-    private String colorToString(Color color){
-        return colorMap.get(color);
-    }
 
     @Override
     public void mouseClicked(MouseEvent e) {

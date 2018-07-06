@@ -1,8 +1,7 @@
 package it.polimi.se2018.client;
 
 import it.polimi.se2018.view.CLI;
-import it.polimi.se2018.view.GUIProxy;
-import it.polimi.se2018.view.GUISwingNetwork;
+import it.polimi.se2018.view.GUINetwork;
 import it.polimi.se2018.view.View;
 import org.apache.commons.cli.*;
 
@@ -95,7 +94,7 @@ public class Client {
      * Initialize GUI
      */
     private void clientGUI() {
-        GUISwingNetwork dialog = new GUISwingNetwork();
+        GUINetwork dialog = new GUINetwork();
         dialog.pack();
         dialog.setVisible(true);
         /*view = new GUIProxy();

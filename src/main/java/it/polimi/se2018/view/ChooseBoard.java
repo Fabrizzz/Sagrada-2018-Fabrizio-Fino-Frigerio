@@ -11,7 +11,7 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GUISwingChooseBoard extends JDialog {
+public class ChooseBoard extends JDialog {
     private JPanel contentPane;
     private JPanel board;
     private JRadioButton radioButton1;
@@ -20,16 +20,10 @@ public class GUISwingChooseBoard extends JDialog {
     private JRadioButton radioButton4;
     private JButton choose;
     private JLabel boardName;
-    private Map<Color,String> colorMap = new HashMap<>();
     private GUIMain guiMain;
     private Board[] boards;
 
-    public GUISwingChooseBoard(Board[] boards,GUIMain guiMain) {
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
+    public ChooseBoard(Board[] boards, GUIMain guiMain) {
 
         this.guiMain = guiMain;
         this.boards = boards;
@@ -109,17 +103,13 @@ public class GUISwingChooseBoard extends JDialog {
         for(int i = 0; i < 4; i ++) {
             for (int j = 0; j < 5; j++) {
                 if(playerBoard.getRestriction(i,j).isColorRestriction()){
-                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png"));
+                    ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(((ColorRestriction) playerBoard.getRestriction(i,j)).getColor()) +".png"));
                 }else if(playerBoard.getRestriction(i,j).isNumberRestriction()){
                     ((JLabel) (((JPanel) board.getComponent(i + 4 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/numberRestriction" + ((NumberRestriction) playerBoard.getRestriction(i,j)).getNumber().getInt() +".png"));
                 }
             }
         }
         repaint();
-    }
-
-    private String colorToString(Color color){
-        return colorMap.get(color);
     }
 
     private void onOK() {
@@ -134,18 +124,4 @@ public class GUISwingChooseBoard extends JDialog {
         }
         dispose();
     }
-
-    /*public static void main(String[] args) {
-        Board[] boardsss = new Board[4];
-        BoardList boardList = new BoardList();
-        ArrayList<Board> boards = new ArrayList<>();
-        boards.add(boardList.getCouple()[0]);
-        boards.add(boardList.getCouple()[0]);
-        boards.add(boardList.getCouple()[0]);
-        boards.add(boardList.getCouple()[0]);
-        GUISwingChooseBoard dialog = new GUISwingChooseBoard(boards.toArray(boardsss));
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }*/
 }

@@ -11,17 +11,11 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GUISwingRiserva extends JDialog {
+public class ShowDraftPool extends JDialog {
     private JPanel contentPane;
     private JPanel board;
-    private Map<Color,String> colorMap = new HashMap<>();
 
-    public GUISwingRiserva(DraftPool draftPool) {
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
+    public ShowDraftPool(DraftPool draftPool) {
         setContentPane(contentPane);
         setModal(false);
 
@@ -52,14 +46,10 @@ public class GUISwingRiserva extends JDialog {
 
         for(int i = 0; i < draftPool.size(); i ++) {
             try {
-                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png"));
+                ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(draftPool.getDie(i).getColor()) + "" + draftPool.getDie(i).getNumber().getInt() + ".png"));
             } catch (Exception e) {}
         }
 
-    }
-
-    private String colorToString(Color color){
-        return colorMap.get(color);
     }
 
     private void onCancel() {

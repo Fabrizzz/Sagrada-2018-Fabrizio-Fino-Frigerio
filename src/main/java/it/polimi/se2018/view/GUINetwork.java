@@ -8,7 +8,7 @@ import it.polimi.se2018.utils.messages.ClientMessage;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class GUISwingNetwork extends JDialog{
+public class GUINetwork extends JDialog{
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -22,7 +22,7 @@ public class GUISwingNetwork extends JDialog{
     private Long localID;
     private GUIMain game;
 
-    public GUISwingNetwork() {
+    public GUINetwork() {
         guiSwingProxy = new GUISwingProxy();
 
         setContentPane(contentPane);
@@ -107,7 +107,7 @@ public class GUISwingNetwork extends JDialog{
     }
 
     public static void main(String[] args) {
-        GUISwingNetwork dialog = new GUISwingNetwork();
+        GUINetwork dialog = new GUINetwork();
         dialog.pack();
         dialog.setVisible(true);
     }

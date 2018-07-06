@@ -1,9 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.RoundTrack;
-import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.model.cell.NumberRestriction;
 import it.polimi.se2018.utils.enums.Color;
 
 import javax.swing.*;
@@ -11,17 +9,11 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GUISwingRoundTrack extends JDialog {
+public class ShowRoundTrack extends JDialog {
     private JPanel contentPane;
     private JPanel board;
-    private Map<Color,String> colorMap = new HashMap<>();
 
-    public GUISwingRoundTrack(RoundTrack roundTrack) {
-        colorMap.put(Color.BLUE,"B");
-        colorMap.put(Color.RED,"R");
-        colorMap.put(Color.GREEN, "G");
-        colorMap.put(Color.YELLOW,"Y");
-        colorMap.put(Color.PURPLE, "P");
+    public ShowRoundTrack(RoundTrack roundTrack) {
 
         setContentPane(contentPane);
         setModal(false);
@@ -57,7 +49,7 @@ public class GUISwingRoundTrack extends JDialog {
         for(int i = 0; i < 10; i ++) {
             for (int j = 0; j < roundTrack.numberOfDice(i); j++) {
                 try {
-                    ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + colorToString(roundTrack.getDie(i, j).getColor()) + "" + roundTrack.getDie(i, j).getNumber().getInt() + ".png"));
+                    ((JLabel) (((JPanel) board.getComponent(i + 10 * j)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/" + GUIUtils.colorToString(roundTrack.getDie(i, j).getColor()) + "" + roundTrack.getDie(i, j).getNumber().getInt() + ".png"));
                 } catch (Exception e) {}
             }
         }
@@ -67,9 +59,6 @@ public class GUISwingRoundTrack extends JDialog {
         dispose();
     }
 
-    private String colorToString(Color color){
-        return colorMap.get(color);
-    }
 
 
     public static void main(String[] args) {
@@ -82,7 +71,7 @@ public class GUISwingRoundTrack extends JDialog {
         roundTrack.addDie(3,new Die(Color.GREEN));
         roundTrack.addDie(4,new Die(Color.RED));
 
-        GUISwingRoundTrack dialog = new GUISwingRoundTrack(roundTrack);
+        ShowRoundTrack dialog = new ShowRoundTrack(roundTrack);
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);

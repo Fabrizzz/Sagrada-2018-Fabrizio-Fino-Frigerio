@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="it.polimi.se2018.view.GUISwingRiserva">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="it.polimi.se2018.view.ShowDraftPool">
   <grid id="cbd77" binding="contentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="0" y="244" width="1044" height="224"/>
