@@ -1,5 +1,7 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.utils.messages.ServerMessage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,11 +15,12 @@ public class EndGame extends JDialog {
     private JLabel player2;
     private JLabel player3;
     private JLabel player4;
-    Map<String,Integer> map;
+    private JLabel winnerLabel;
+    private ServerMessage serverMessage;
 
-    public EndGame(Map<String,Integer> scores) {
+    protected EndGame(ServerMessage serverMessage) {
 
-        map = new HashMap<String, Integer>(scores);
+        this.serverMessage = serverMessage;
 
         setContentPane(contentPane);
         setModal(true);
@@ -28,7 +31,6 @@ public class EndGame extends JDialog {
             }
         });
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -36,7 +38,6 @@ public class EndGame extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -48,52 +49,31 @@ public class EndGame extends JDialog {
     }
 
     private void end() {
-
-        int i;
-        String nick;
-        int dim = map.size();
-
-        if (map == null){
-            //Errore
-        }
-        else {
-            nick = top();
-            player1.setText(nick+": "+map.get(nick));
-            player1.setForeground (Color.red);
-            map.remove(nick);
-            if (dim>1) {
-                nick = top();
-                player2.setText(nick + ": " + map.get(nick));
-                map.remove(nick);
-                if (dim>2) {
-                    nick = top();
-                    player3.setText(nick + ": " + map.get(nick));
-                    map.remove(nick);
-                    if(dim>3) {
-                        nick = top();
-                        player4.setText(nick + ": " + map.get(nick));
-                    }
-                }
-            }
-        }
-    }
-
-    private String top(){
-
         int top = 0;
-        String temp = null;
+        String[] nicknames = new String[serverMessage.getScores().size()];
+        nicknames = serverMessage.getScores().keySet().toArray(nicknames);
+        ArrayList<JLabel> playerLabels = new ArrayList<>();
+        playerLabels.add(player1);
+        playerLabels.add(player2);
+        playerLabels.add(player3);
+        playerLabels.add(player4);
 
-        for(String nick : map.keySet()){
-            if(map.get(nick) > top){
-                top = map.get(nick);
-                temp = nick;
-            }
+        for(int i = 0; i < serverMessage.getScores().size(); i ++){
+            if (serverMessage.getScores().get(nicknames[i]) > top) {
+                top = serverMessage.getScores().get(nicknames[i]);
+            };
+            playerLabels.get(i).setText(nicknames[i] + ": " + serverMessage.getScores().get(nicknames[i]));
         }
-        return temp;
+
+        for (String nick : serverMessage.getScores().keySet()) {
+            if (serverMessage.getScores().get(nick) == top) {
+                winnerLabel.setText("Il giocatore " + nick + " ha vinto");
+            }
+
+        }
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 
@@ -103,7 +83,8 @@ public class EndGame extends JDialog {
         prova.put("Alessio",20);
         prova.put("Giamp",5);
         prova.put("SanPietro",60);
-        EndGame dialog = new EndGame(prova);
+        ServerMessage serverMessage = new ServerMessage(prova);
+        EndGame dialog = new EndGame(serverMessage);
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
