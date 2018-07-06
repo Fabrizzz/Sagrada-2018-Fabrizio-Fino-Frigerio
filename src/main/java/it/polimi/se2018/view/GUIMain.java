@@ -20,6 +20,7 @@ import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
 import it.polimi.se2018.utils.messages.ServerMessage;
 
+
 public class GUIMain  implements MouseListener{
     private JPanel contentPane;
     private JPanel board;
@@ -42,6 +43,10 @@ public class GUIMain  implements MouseListener{
     private GUISwingProxy guiSwingProxy;
     private boolean initialPack = false;
 
+    /**
+     * Costructor
+     * @param guiSwingProxy
+     */
     protected GUIMain(GUISwingProxy guiSwingProxy){
         this.guiSwingProxy = guiSwingProxy;;
         toolCardMap.put(Tool.PINZASGROSSATRICE,"toolCard01");
@@ -110,6 +115,9 @@ public class GUIMain  implements MouseListener{
         });
     }
 
+    /**
+     * set the combobox with the name of all player
+     */
     private void setCombobox() {
 
         comboBoxPlayerBoard.removeAllItems();
@@ -134,6 +142,9 @@ public class GUIMain  implements MouseListener{
 
     }
 
+    /**
+     * set the indicator: private objective, turn, token and round
+     */
     private void setIndicator(){
 
         boolean yourTurn;
@@ -150,6 +161,9 @@ public class GUIMain  implements MouseListener{
         privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective().getColorString());
     }
 
+    /**
+     * show the public objective
+     */
     private void mostraObiettivi(){
         ShowObjectives dialog = new ShowObjectives(modelView.getPublicObjective());
         dialog.pack();
@@ -157,6 +171,9 @@ public class GUIMain  implements MouseListener{
 
     }
 
+    /**
+     * clean the board
+     */
     private void whiteRefreshBoard(){
         for(int i = 0; i < 4; i ++){
             for(int j = 0; j < 5; j++){
@@ -165,6 +182,10 @@ public class GUIMain  implements MouseListener{
         }
     }
 
+    /**
+     * new modelview
+     * @param modelView
+     */
     public void setModelView(ModelView modelView){
         this.modelView = modelView;
         setCombobox();
@@ -172,6 +193,10 @@ public class GUIMain  implements MouseListener{
         refreshBoard();
     }
 
+    /**
+     * set player id
+     * @param localID
+     */
     public void setId(Long localID){
         this.localID = localID;
     }
@@ -203,10 +228,18 @@ public class GUIMain  implements MouseListener{
         guiSwingProxy.selectedBoard(board);
     }
 
+    /**
+     * get modelview
+     * @return
+     */
     public ModelView getModelView(){
         return modelView;
     }
 
+    /**
+     * call the last window of the point
+     * @param message
+     */
     protected void endGame(ServerMessage message){
         EndGame dialog = new EndGame(message);
         dialog.pack();
@@ -219,6 +252,9 @@ public class GUIMain  implements MouseListener{
         JOptionPane.showMessageDialog(this.contentPane, error);
     }
 
+    /**
+     * show the round tack
+     */
     private void mostraTracciatoDadi(){
         if(modelView != null) {
             ShowRoundTrack dialog = new ShowRoundTrack(modelView.getRoundTrack());
@@ -231,6 +267,9 @@ public class GUIMain  implements MouseListener{
         }
     }
 
+    /**
+     * show the toll card
+     */
     private void toolCardRefresh(){
         Tool[] tools = modelView.getTools().keySet().toArray(new Tool[modelView.getTools().keySet().size()]);
 
@@ -239,6 +278,10 @@ public class GUIMain  implements MouseListener{
         tool3Label.setIcon(new StretchIcon("src/main/resources/toolCard/" + toolCardMap.get(tools[2]) + ".png"));
     }
 
+    /**
+     * inster the dice in the board
+     * @param playerBoard
+     */
     private void showBoard(PlayerBoard playerBoard){
         whiteRefreshBoard();
         toolCardRefresh();
@@ -275,6 +318,9 @@ public class GUIMain  implements MouseListener{
         showBoard(modelView.getBoard(modelView.getPlayer(localID)));
     }
 
+    /**
+     * Show the draftpool
+     */
     private void mostraRiserva(){
         if(modelView != null){
             ShowDraftPool dialog = new ShowDraftPool(modelView.getDraftPool());
@@ -299,6 +345,10 @@ public class GUIMain  implements MouseListener{
         return p;
     }
 
+    /**
+     * tool sughero
+     * @param tool
+     */
     private void normalSugheroMove(Tool tool){
         int i = chooseDraftPoolPosition();
 
@@ -308,6 +358,9 @@ public class GUIMain  implements MouseListener{
 
     }
 
+    /**
+     * tool tenaglia a rotelle
+     */
     private void tenagliaARotelleMove(){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TENAGLIAAROTELLE));
         guiSwingProxy.sendMessage(clientMessage);
@@ -315,11 +368,17 @@ public class GUIMain  implements MouseListener{
         normalSugheroMove(Tool.MOSSASTANDARD);
     }
 
+    /**
+     * tool martelletto
+     */
     private void martellettoMove(){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.MARTELLETTO));
         guiSwingProxy.sendMessage(clientMessage);
     }
 
+    /**
+     * tool sgrossatrice
+     */
     private void sgrossatriceMove(){
         int pos = chooseDraftPoolPosition();
         if(pos < modelView.getDraftPool().size()){
@@ -332,6 +391,10 @@ public class GUIMain  implements MouseListener{
         }
     }
 
+    /**
+     * tool alasatore
+     * @param tool
+     */
     private void alesatoreEglomiseMove(Tool tool){
         int[] posi = chooseCell("Scegli il dado da muovere");
         int[] posf = chooseCell("Scegli dove piazzare il dado");
@@ -340,6 +403,9 @@ public class GUIMain  implements MouseListener{
         guiSwingProxy.sendMessage(clientMessage);
     }
 
+    /**
+     * tool lathekin
+     */
     private void lathekinMove(){
         int[] posi = chooseCell("Scegli il primo dado da muovere");
         int[] posf = chooseCell("Scegli dove piazzare il dado");
@@ -351,6 +417,9 @@ public class GUIMain  implements MouseListener{
         guiSwingProxy.sendMessage(clientMessage);
     }
 
+    /**
+     * tool taglierina manuale
+     */
     private void taglierinaManualeMove(){
         int[] posi = chooseCell("Scegli il primo dado da muovere");
         int[] posf = chooseCell("Scegli dove piazzare il dado");
@@ -367,6 +436,9 @@ public class GUIMain  implements MouseListener{
         }
     }
 
+    /**
+     * tool taglierina circolare
+     */
     private void taglierinaCircolareMove(){
         int pos = chooseDraftPoolPosition();
         int[] pos2 = chooseRoundTrackDie();
@@ -374,6 +446,9 @@ public class GUIMain  implements MouseListener{
         guiSwingProxy.sendMessage(clientMessage);
     }
 
+    /**
+     * tool pannello pasta salda
+     */
     private void pennelloPastaSaldaMove(){
         int i = chooseDraftPoolPosition();
         try{
@@ -408,6 +483,9 @@ public class GUIMain  implements MouseListener{
         }
     }
 
+    /**
+     * tool diluente per parta salda
+     */
     private void diluentePerPastaSaldaMove(){
         int i = chooseDraftPoolPosition();
         try{
@@ -443,6 +521,9 @@ public class GUIMain  implements MouseListener{
         }
     }
 
+    /**
+     * tool tampone diamantato
+     */
     private void tamponeDiamantatoMove(){
         int i = chooseDraftPoolPosition();
         try{

@@ -5,10 +5,17 @@ import it.polimi.se2018.model.DraftPool;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * @author Matteo
+ */
 public class ShowDraftPool extends JDialog {
     private JPanel contentPane;
     private JPanel board;
 
+    /**
+     * Costructor
+     * @param draftPool
+     */
     protected ShowDraftPool(DraftPool draftPool) {
         setContentPane(contentPane);
         setModal(true);
@@ -29,12 +36,19 @@ public class ShowDraftPool extends JDialog {
         populateBoard(draftPool);
     }
 
+    /**
+     * clean the board
+     */
     private void whiteRefresh(){
         for(int i = 0; i < 9; i ++){
                 ((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).setIcon(new StretchIcon("src/main/resources/utilsGUI/WHITE.png"));
             }
     }
 
+    /**
+     * insert the dice in the board
+     * @param draftPool
+     */
     private void populateBoard(DraftPool draftPool){
         whiteRefresh();
 

@@ -7,10 +7,17 @@ import it.polimi.se2018.utils.enums.Color;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * @author Alessio
+ */
 public class ShowRoundTrack extends JDialog {
     private JPanel contentPane;
     private JPanel board;
 
+    /**
+     * Costructor
+     * @param roundTrack
+     */
     protected ShowRoundTrack(RoundTrack roundTrack) {
         setContentPane(contentPane);
         setModal(true);
@@ -31,6 +38,9 @@ public class ShowRoundTrack extends JDialog {
         populateBoard(roundTrack);
     }
 
+    /**
+     * clear the board
+     */
     private void whiteRefreshBoard(){
         for(int i = 0; i < 9; i ++){
             for(int j = 0; j < 10; j++){
@@ -39,6 +49,10 @@ public class ShowRoundTrack extends JDialog {
         }
     }
 
+    /**
+     * popolate the board
+     * @param roundTrack
+     */
     private void populateBoard(RoundTrack roundTrack){
         whiteRefreshBoard();
 

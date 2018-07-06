@@ -8,6 +8,9 @@ import it.polimi.se2018.utils.messages.ClientMessage;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * @author Alessio
+ */
 public class GUINetwork extends JDialog{
     private JPanel contentPane;
     private JButton buttonOK;
@@ -22,6 +25,9 @@ public class GUINetwork extends JDialog{
     private Long localID;
     private GUIMain game;
 
+    /**
+     * Costructor
+     */
     public GUINetwork() {
         setContentPane(contentPane);
         setModal(true);
@@ -60,6 +66,9 @@ public class GUINetwork extends JDialog{
         socketRadioButton.setSelected(true);
     }
 
+    /**
+     * manage the ok button and create the connection
+     */
     private void onOK() {
         String address = indirizzo.getText();
         int port = 0;
@@ -105,6 +114,9 @@ public class GUINetwork extends JDialog{
 
     }
 
+    /**
+     * manage cancel button
+     */
     private void onCancel() {
         dispose();
     }
