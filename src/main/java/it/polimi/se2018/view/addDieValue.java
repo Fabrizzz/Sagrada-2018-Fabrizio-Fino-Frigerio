@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Alessio
+ */
 public class addDieValue extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -11,6 +14,9 @@ public class addDieValue extends JDialog {
     private JRadioButton diminuisciDiUnoRadioButton;
     private final CountDownLatch latch = new CountDownLatch(1);
 
+    /**
+     * Costructor
+     */
     protected addDieValue() {
         setContentPane(contentPane);
         setModal(true);
@@ -47,6 +53,10 @@ public class addDieValue extends JDialog {
         aumentaDiUnoRadioButton.setSelected(true);
     }
 
+    /**
+     * get the value of radiobutton
+     * @return
+     */
     public boolean getValue(){
         this.pack();
         this.setVisible(true);
@@ -59,11 +69,17 @@ public class addDieValue extends JDialog {
         return aumentaDiUnoRadioButton.isSelected();
     }
 
+    /**
+     * Manage the ok button
+     */
     private void onOK() {
         latch.countDown();
         dispose();
     }
 
+    /**
+     * Manage the cancel button
+     */
     private void onCancel() {
         latch.countDown();
         dispose();
