@@ -59,9 +59,9 @@ public class ServerNetwork implements Observer {
      */
     private synchronized void initializeGame() {
         Controller controller = new Controller();
-        controller.startGame(waitingConnections.values());
+        new Thread(() -> controller.startGame(new ArrayList<>(waitingConnections.values()))).start();
         playingConnections.putAll(waitingConnections);
-        waitingConnections.clear();
+        waitingConnections.size();
         games++;
     }
 

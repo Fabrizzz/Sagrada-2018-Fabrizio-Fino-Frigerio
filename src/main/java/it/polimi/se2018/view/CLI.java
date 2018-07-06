@@ -408,6 +408,11 @@ public class CLI extends View{
             chooseMove();
             return;
         }
+        if (tool.equals(Tool.RIGAINSUGHERO) && (modelView.isNormalMove() || modelView.isUsedTool())) {
+            println("Puoi usare questa tool solo all' inizio del tuo turno");
+            chooseMove();
+            return;
+        }
 
         int i = chooseDraftpoolDie();
 
@@ -503,7 +508,10 @@ public class CLI extends View{
                 println("Scegli il secondo dado da muovere");
                 int[] position2 = chooseBoardCellWithDie();
                 println("Scegli dove piazzare il secondo dado");
-                int[] newPosition2 = chooseBoardCellWithoutDie();
+                showPlayerBoard(modelView.getBoard(modelView.getPlayer(localID)));
+                int[] newPosition2 = new int[2];
+                newPosition2[0] = chooseRow();
+                newPosition2[1] = chooseColumn();
                 clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1],new PlayerMove(tool, position2[0], position2[1], newPosition2[0], newPosition2[1])));
             }else{
                 clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], newPosition[0], newPosition[1]));
@@ -545,7 +553,10 @@ public class CLI extends View{
      * Use the pennello per pasta salda tool
      */
     private void pennelloPastaSaldaMove(){
-        try{
+        if (modelView.isNormalMove() || modelView.isUsedTool()) {
+            println("Puoi usare questa tool solo all' inizio del tuo turno");
+            chooseMove();
+        } else try {
             int i = chooseDraftpoolDie();
 
             Die die = modelView.getDraftPoolDie(i);
@@ -579,6 +590,7 @@ public class CLI extends View{
             chooseMove();
         } catch (NoDieException e) {
             LOGGER.log(Level.SEVERE, "la chooseDraftPoolDie non funziona");
+            chooseMove();
         }
     }
 
@@ -622,7 +634,8 @@ public class CLI extends View{
             println("Mossa inviata");
 
         } catch (EmptyBagException e) {
-            LOGGER.log(Level.SEVERE, "DiceBag Vuota");
+            LOGGER.log(Level.SEVERE, "DiceBag Vuota, mossa annullata");
+            chooseMove();
         } catch (FullBoardException e) {
             LOGGER.log(Level.SEVERE, "La board è piena quando dovrebbe invece avere almeno una cella dove mettere il dado");
         }
@@ -730,9 +743,9 @@ public class CLI extends View{
                 chooseMove();
                 break;
             default:
-                setChanged();
-                notifyObservers(new ClientMessage(new PlayerMove(Tool.SKIPTURN)));
-                println("Mossa inviata");
+                println("Input non corretto");
+                chooseMove();
+
 
         }
     }
@@ -742,6 +755,7 @@ public class CLI extends View{
         ServerMessage message = (ServerMessage) arg;
         switch (message.getMessageType()) {
             case ERROR:
+                hasUsedTenaglia = false;
                 println("Errore: " + message.getErrorType().toString());
                 if(message.getErrorType().equals(ErrorType.ILLEGALMOVE)){
                     println("Mossa inviata non valida, ripeti la scelta");
