@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polimi.se2018.client.Client;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cell.ColorRestriction;
 import it.polimi.se2018.model.cell.Die;
@@ -19,7 +18,7 @@ import it.polimi.se2018.utils.exceptions.NoDieException;
 import it.polimi.se2018.utils.messages.ClientMessage;
 import it.polimi.se2018.utils.messages.PlayerMove;
 
-public class GUIMain {
+public class GUIMain  implements MouseListener{
     private JPanel contentPane;
     private JPanel board;
     private JButton mostraRiservaButton;
@@ -40,7 +39,7 @@ public class GUIMain {
     private Long localID;
     private GUISwingProxy guiSwingProxy;
 
-    public GUIMain(GUISwingProxy guiSwingProxy) {
+    public GUIMain(GUISwingProxy guiSwingProxy){
         this.guiSwingProxy = guiSwingProxy;;
         colorMap.put(Color.BLUE,"B");
         colorMap.put(Color.RED,"R");
@@ -82,6 +81,10 @@ public class GUIMain {
             }
         });
 
+        tool1Label.addMouseListener(this);
+        tool2Label.addMouseListener(this);
+        tool3Label.addMouseListener(this);
+
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -93,7 +96,7 @@ public class GUIMain {
         piazzaUnDadoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                normalSugheroMove();
+                normalSugheroMove(Tool.MOSSASTANDARD);
             }
         });
         terminaTurnoButton.addActionListener(new ActionListener() {
@@ -107,7 +110,7 @@ public class GUIMain {
 
     private void setCombobox() {
 
-        comboBoxPlayerBoard.removeAll();
+        comboBoxPlayerBoard.removeAllItems();
         comboBoxPlayerBoard.addItem(modelView.getPlayer(localID).getNick());
         for(int j = 0; j < modelView.getPlayers().size(); j ++){
             if(!modelView.getPlayers().get(j).getId().equals(localID)){
@@ -174,6 +177,18 @@ public class GUIMain {
         GUISwingChooseBoard dialog = new GUISwingChooseBoard(boards,this);
         dialog.pack();
         dialog.setVisible(true);
+    }
+
+    private int[] chooseCell(String message){
+        ChooseCell dialog = new ChooseCell(modelView.getBoard(modelView.getPlayer(localID)),message);
+        int[] pos = dialog.getPosition();
+        return pos;
+    }
+
+    private int[] chooseRoundTrackDie(){
+        ChooseRoundTrackDie dialog = new ChooseRoundTrackDie(modelView.getRoundTrack());
+        int[] pos = dialog.getPosition();
+        return pos;
     }
 
     public NumberEnum chooseNewValue(){
@@ -250,17 +265,6 @@ public class GUIMain {
         return colorMap.get(color);
     }
 
-    private int[] chooseCell(){
-        ChooseCell dialog = new ChooseCell(modelView.getBoard(modelView.getPlayer(localID)));
-        int[] pos = dialog.getPosition();
-        return pos;
-    }
-
-    private int[] chooseRoundTrackDie(){
-        ChooseRoundTrackDie dialog = new ChooseRoundTrackDie(modelView.getRoundTrack());
-        int[] pos = dialog.getPosition();
-        return pos;
-    }
 
     public void mostraRiserva(){
         GUISwingRiserva dialog = new GUISwingRiserva(modelView.getDraftPool());
@@ -280,16 +284,15 @@ public class GUIMain {
     public int chooseDraftPoolPosition(){
         ChooseDraftPoolDie chooseDraftPoolDie = new ChooseDraftPoolDie(modelView.getDraftPool());
         int p = chooseDraftPoolDie.getPosition();
-        System.out.println(p);
+        chooseDraftPoolDie.dispose();
         return p;
     }
 
-    public void normalSugheroMove(){
-
+    public void normalSugheroMove(Tool tool){
         int i = chooseDraftPoolPosition();
 
-        int[] position = chooseCell();
-        ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.MOSSASTANDARD, position[0], position[1], i));
+        int[] position = chooseCell("Scegli dove piazzare il dado");
+        ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool, position[0], position[1], i));
         guiSwingProxy.sendMessage(clientMessage);
 
     }
@@ -297,8 +300,8 @@ public class GUIMain {
     public void tenagliaARotelleMove(){
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.TENAGLIAAROTELLE));
         guiSwingProxy.sendMessage(clientMessage);
-        normalSugheroMove();
-        normalSugheroMove();
+        normalSugheroMove(Tool.MOSSASTANDARD);
+        normalSugheroMove(Tool.MOSSASTANDARD);
     }
 
     public void martellettoMove(){
@@ -319,32 +322,32 @@ public class GUIMain {
     }
 
     public void alesatoreEglomiseMove(Tool tool){
-        int[] posi = chooseCell();
-        int[] posf = chooseCell();
+        int[] posi = chooseCell("Scegli il dado da muovere");
+        int[] posf = chooseCell("Scegli dove piazzare il dado");
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(tool,posi[0],posi[1],posf[0],posf[1]));
         guiSwingProxy.sendMessage(clientMessage);
     }
 
     public void lathekinMove(){
-        int[] posi = chooseCell();
-        int[] posf = chooseCell();
+        int[] posi = chooseCell("Scegli il primo dado da muovere");
+        int[] posf = chooseCell("Scegli dove piazzare il dado");
         printError("Scegli il secondo dado da muovere");
-        int[] pos2i = chooseCell();
-        int[] pos2f = chooseCell();
+        int[] pos2i = chooseCell("Scegli il secondo dado da muovere");
+        int[] pos2f = chooseCell("Scegli dove piazzare il dado");
 
         ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1],new PlayerMove(Tool.LATHEKIN,pos2i[0],pos2i[1],pos2f[0],pos2f[1])));
         guiSwingProxy.sendMessage(clientMessage);
     }
 
     public void taglierinaManualeMove(){
-        int[] posi = chooseCell();
-        int[] posf = chooseCell();
+        int[] posi = chooseCell("Scegli il primo dado da muovere");
+        int[] posf = chooseCell("Scegli dove piazzare il dado");
 
         GenericRadio dialog = new GenericRadio("Vuoi spostare un altro dado?");
         if(dialog.getValue()){
-            int[] pos2i = chooseCell();
-            int[] pos2f = chooseCell();
+            int[] pos2i = chooseCell("Scegli il secondo dado da muovere");
+            int[] pos2f = chooseCell("Scegli dove piazzare il dado");
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(Tool.LATHEKIN,posi[0],posi[1],posf[0],posf[1],new PlayerMove(Tool.LATHEKIN,pos2i[0],pos2i[1],pos2f[0],pos2f[1])));
             guiSwingProxy.sendMessage(clientMessage);
         }else{
@@ -366,7 +369,7 @@ public class GUIMain {
             Die die = modelView.getDraftPool().getDie(i);
             die.reRoll();
             printError("Valore del nuovo dado: " + die.getNumber().getInt());
-            int[] pos = chooseCell();
+            int[] pos = chooseCell("Scegli dove piazzare il dado");
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,die.getNumber(),Tool.PENNELLOPERPASTASALDA));
             guiSwingProxy.sendMessage(clientMessage);
         }catch (NoDieException e){
@@ -382,7 +385,7 @@ public class GUIMain {
             ShowDie dialog = new ShowDie("src/main/resources/utilsGUI/" + colorToString(newDie.getColor()) + newDie.getNumber().getInt() +".png");
             NumberEnum newValue = chooseNewValue();
 
-            int[] pos = chooseCell();
+            int[] pos = chooseCell("Scegli dove piazzare il dado");
             ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,newValue,Tool.DILUENTEPERPASTASALDA));
             guiSwingProxy.sendMessage(clientMessage);
         }catch (NoDieException e){
@@ -390,7 +393,6 @@ public class GUIMain {
         }catch (EmptyBagException e){
             printError("Errore, nessun dado presente nel sacchetto");
         }
-
     }
 
     public void tamponeDiamantatoMove(){
@@ -401,6 +403,86 @@ public class GUIMain {
         }catch (NoDieException e){
             printError("Nessun dado presente nella cella selezionata");
         }
+
+    }
+
+    public void move(Tool tool){
+        switch (tool) {
+            case MOSSASTANDARD:
+                break;
+            case RIGAINSUGHERO:
+                normalSugheroMove(tool);
+                break;
+            case SKIPTURN:
+                break;
+            case MARTELLETTO:
+                martellettoMove();
+                break;
+            case TENAGLIAAROTELLE:
+                tenagliaARotelleMove();
+                break;
+            case PINZASGROSSATRICE:
+                sgrossatriceMove();
+                break;
+            case PENNELLOPEREGLOMISE:
+                alesatoreEglomiseMove(tool);
+                break;
+            case ALESATOREPERLAMINADIRAME:
+                alesatoreEglomiseMove(tool);
+                break;
+            case TAGLIERINAMANUALE:
+                taglierinaManualeMove();
+                break;
+            case LATHEKIN:
+                lathekinMove();
+                break;
+            case TAGLIERINACIRCOLARE:
+                taglierinaCircolareMove();
+                break;
+            case PENNELLOPERPASTASALDA:
+                pennelloPastaSaldaMove();
+                break;
+            case DILUENTEPERPASTASALDA:
+                diluentePerPastaSaldaMove();
+                break;
+            case TAMPONEDIAMANTATO:
+                tamponeDiamantatoMove();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        JLabel source = (JLabel) e.getSource();
+        Tool[] tools = modelView.getTools().keySet().toArray(new Tool[modelView.getTools().keySet().size()]);
+        if(source.equals(tool1Label)){
+            move(tools[0]);
+        }else if(source.equals(tool2Label)){
+            move(tools[1]);
+        }else if((source.equals(tool2Label))){
+            move(tools[2]);
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 
@@ -426,5 +508,4 @@ public class GUIMain {
         frame.setVisible(true);
 
     }
-
 }

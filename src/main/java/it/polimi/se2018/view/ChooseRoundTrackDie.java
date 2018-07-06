@@ -87,12 +87,9 @@ public class ChooseRoundTrackDie extends JDialog implements MouseListener{
         return p;
     }
 
-    private void onOK() {
-        latch.countDown();
-    }
-
     private void onCancel() {
         latch.countDown();
+        dispose();
     }
 
     @Override

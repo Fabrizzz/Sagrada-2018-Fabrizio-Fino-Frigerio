@@ -50,6 +50,7 @@ public class ChooseNewValue extends JDialog{
 
     private void onOK() {
         latch.countDown();
+        dispose();
     }
 
     public static void main(String[] args) {

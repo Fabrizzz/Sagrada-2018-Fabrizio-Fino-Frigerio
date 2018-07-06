@@ -14,15 +14,17 @@ import java.util.concurrent.CountDownLatch;
 
 public class ChooseCell extends JDialog implements MouseListener {
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
     private JPanel board;
+    private JLabel messaggeLabel;
     private PlayerBoard playerBoard;
     private Map<Color,String> colorMap = new HashMap<>();
     private int r,c;
     public final CountDownLatch latch = new CountDownLatch(1);
 
-    public ChooseCell(PlayerBoard playerBoard) {
+    public ChooseCell(PlayerBoard playerBoard,String message) {
+        r = 0;
+        c = 0;
+
         colorMap.put(Color.BLUE,"B");
         colorMap.put(Color.RED,"R");
         colorMap.put(Color.GREEN, "G");
@@ -32,19 +34,6 @@ public class ChooseCell extends JDialog implements MouseListener {
         this.playerBoard = playerBoard;
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
-
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -65,6 +54,8 @@ public class ChooseCell extends JDialog implements MouseListener {
                 ((JLabel) (((JPanel) board.getComponent(j + 5 * i)).getComponent(0))).addMouseListener(this);
             }
         }
+
+        messaggeLabel.setText(message);
     }
 
     public int[] getPosition(){
@@ -148,9 +139,11 @@ public class ChooseCell extends JDialog implements MouseListener {
 
     private void onOK() {
         latch.countDown();
+        dispose();
     }
 
     private void onCancel() {
         latch.countDown();
+        dispose();
     }
 }

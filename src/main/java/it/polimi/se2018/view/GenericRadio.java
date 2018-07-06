@@ -66,10 +66,12 @@ public class GenericRadio extends JDialog {
 
     private void onOK() {
         latch.countDown();
+        dispose();
     }
 
     private void onCancel() {
         latch.countDown();
+        dispose();
     }
 
     public static void main(String[] args) {

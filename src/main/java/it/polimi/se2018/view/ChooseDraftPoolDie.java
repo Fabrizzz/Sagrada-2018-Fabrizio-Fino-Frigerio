@@ -56,12 +56,9 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
         return p;
     }
 
-    private void onOK() {
-        latch.countDown();
-    }
-
     private void onCancel() {
         latch.countDown();
+        dispose();
     }
 
     private void whiteRefresh(){
@@ -92,6 +89,7 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
                 if(((JLabel) (((JPanel) board.getComponent(i)).getComponent(0))).equals(source)){
                     p = i;
                     latch.countDown();
+                    dispose();
                     return;
                 }
         }
