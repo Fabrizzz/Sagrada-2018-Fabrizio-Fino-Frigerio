@@ -13,6 +13,7 @@ public class ServerMessage extends Message {
     private String disconnectedPlayer;
     private Board[] boards;
     private Map<String,Integer> scores;
+    private String winner;
 
     public ServerMessage(MessageType messageType, String player) {
         super(messageType);
@@ -30,9 +31,10 @@ public class ServerMessage extends Message {
         this.modelView = modelView;
     }
 
-    public ServerMessage(Map<String, Integer> scores) {
+    public ServerMessage(Map<String, Integer> scores, String winner) {
         super(MessageType.ENDGAME);
         this.scores = scores;
+        this.winner = winner;
     }
 
     public ServerMessage(Board[] boards) {
@@ -58,4 +60,9 @@ public class ServerMessage extends Message {
     }
 
     public Map<String, Integer> getScores() { return scores; }
+
+    public String getWinner() {
+        return winner;
+    }
 }
+

@@ -863,10 +863,12 @@ public class CLI extends View{
                 break;
             case ENDGAME:
                 try{
-                    int top = 0;
+                    int top = -1000;
                     println("------------------------------------------------------");
                     println("Gioco terminato");
                     println("Punteggi:");
+
+
                     for(String nick : message.getScores().keySet()){
                         if(message.getScores().get(nick) > top){
                             top = message.getScores().get(nick);
@@ -874,15 +876,12 @@ public class CLI extends View{
                         println(nick + " : " + message.getScores().get(nick));
                     }
 
-                    for(String nick : message.getScores().keySet()){
-                        if(message.getScores().get(nick) == top){
-                            println("Il giocatore " + nick + " ha vinto");
-                        }
-                    }
+                    println("Il giocatore " + message.getWinner() + " ha vinto");
+
                 }catch (NullPointerException e){
                     LOGGER.log(Level.WARNING,"mappa scores mancante");
                 }
-                break;
+                System.exit(0);
             default:
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");
                 break;
