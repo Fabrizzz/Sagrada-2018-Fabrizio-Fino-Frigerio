@@ -6,9 +6,17 @@ import it.polimi.se2018.utils.enums.Tool;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Alessio
+ */
 public class GUIUtils {
     private static Map<Color,String> colorMap = new HashMap<>();
 
+    /**
+     * convert colors to strings
+     * @param color
+     * @return
+     */
     public static String colorToString(Color color){
         colorMap.clear();
         colorMap.put(Color.BLUE,"B");

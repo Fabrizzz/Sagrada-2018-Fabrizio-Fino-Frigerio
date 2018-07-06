@@ -10,10 +10,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
+/**
+ * Class that fit images into JLabel
+ */
 public class StretchIcon extends ImageIcon {
 
     private static final Logger LOGGER = Logger.getLogger("Logger");
 
+    /**
+     * Costructor
+     * @param filename
+     */
     public StretchIcon(String filename) {
         super(filename);
     }
