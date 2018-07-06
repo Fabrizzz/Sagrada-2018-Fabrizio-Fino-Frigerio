@@ -7,8 +7,11 @@ import it.polimi.se2018.server.rmi.ServerRMIController;
 import it.polimi.se2018.server.rmi.ServerRMIControllerInterface;
 import it.polimi.se2018.server.socket.SocketConnectionGatherer;
 import it.polimi.se2018.utils.JSONUtils;
+import it.polimi.se2018.utils.enums.ErrorType;
 import it.polimi.se2018.utils.enums.MessageType;
+import it.polimi.se2018.utils.exceptions.DisconnectedException;
 import it.polimi.se2018.utils.messages.ClientMessage;
+import it.polimi.se2018.utils.messages.ServerMessage;
 import it.polimi.se2018.utils.network.Connection;
 
 import java.net.MalformedURLException;
@@ -85,7 +88,14 @@ public class ServerNetwork implements Observer {
      */
     public synchronized void initializeConnection(Connection connection, ClientMessage message) {
         LOGGER.log( Level.FINE, "initialize connection con message id: " + message.getId() + " e nickname " + message.getNick());
-        if (playingConnections.containsKey(message.getId())) {
+        if (waitingConnections.values().stream().map(k -> k.getPlayer().getNick()).anyMatch(k -> k.equals(message.getNick()))) {
+            LOGGER.log(Level.FINE, "Connessione rifiutata, nick ripetuto");
+            try {
+                connection.sendMessage(new ServerMessage(ErrorType.CONNECTIONREFUSED));
+            } catch (DisconnectedException e) {
+                e.printStackTrace();
+            }
+        } else if (playingConnections.containsKey(message.getId())) {
             playingConnections.get(message.getId()).changeConnection(connection);
         } else {
             RemoteView remoteView = new RemoteView(new Player(message.getNick(), message.getId()), connection);
