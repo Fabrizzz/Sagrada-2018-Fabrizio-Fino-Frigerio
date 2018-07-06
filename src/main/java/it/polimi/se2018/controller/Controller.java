@@ -177,8 +177,9 @@ public class Controller implements Observer {
                 }
             }
             mappa.put(winner.getPlayer().getNick(), punteggio);
-            winner.elaborateMessage(new ServerMessage(mappa));
+            winner.elaborateMessage(new ServerMessage(mappa, winner.getPlayer().getNick()));
         } else {
+            String vincitore = "";
             List<Player> winners = new ArrayList<>();
             int max = -1000;
             for (RemoteView view : views) {
@@ -209,7 +210,7 @@ public class Controller implements Observer {
 
                 int playerPosition = views.size() - 1;
                 int punteggio = -1000;
-                String vincitore = "";
+
                 boolean tentativo = true;
                 for (Player winner : winners) {
                     int temp = model.getPrivateObjective(winner).getPoints(model.getBoard(winner));
@@ -242,10 +243,10 @@ public class Controller implements Observer {
                         }
                     }
                 }
-                mappa.put(vincitore, mappa.get(vincitore) + 1);
-            }
+            } else
+                vincitore = winners.get(0).getNick();
             for (RemoteView view : views) {
-                view.elaborateMessage(new ServerMessage(mappa));
+                view.elaborateMessage(new ServerMessage(mappa, vincitore));
             }
         }
         //cancellare observers, chiudere connection, deregistrare connections dal server
@@ -256,7 +257,7 @@ public class Controller implements Observer {
     /**
      * End the round and update the round variables
      */
-    private void endRound() {
+    private synchronized void endRound() {
 
         if (getModel().getRound() == 9)
             endGame(false);
@@ -293,6 +294,9 @@ public class Controller implements Observer {
         model.setUsedTool(false);
         model.setNormalMove(false);
         int playerPosition = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 - model.getTurn() - 1;
+        if (playerPosition > model.getPlayers().size() - 1) {
+            LOGGER.log(Level.SEVERE, "Player position = " + playerPosition + " Player Size = " + model.getPlayers().size());
+        }
         model.getPlayers().get(playerPosition).setYourTurn(false);
         model.setTurn(model.getTurn() + 1);
 
