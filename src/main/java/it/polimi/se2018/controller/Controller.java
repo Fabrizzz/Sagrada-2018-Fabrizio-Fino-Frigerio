@@ -272,7 +272,8 @@ public class Controller implements Observer {
                                 setTimer(model.getTurn(), model.getRound());
                                 LOGGER.log(Level.FINE, "Mossa ricevuta e turno finito");
                             }
-                            model.notifyObs();
+                            if (!gameEnded)
+                                model.notifyObs();
                         }
 
                     } catch (InvalidParameterException e) {
@@ -293,7 +294,8 @@ public class Controller implements Observer {
                         LOGGER.log(Level.FINE, "Era il turno del giocatore disconnesso, passo al nuovo turno");
                         nextTurn();
                         setTimer(model.getTurn(), model.getRound());
-                        getModel().notifyObs();
+                        if (!gameEnded)
+                            getModel().notifyObs();
                     }
                 } else if (message.getMessageType() == MessageType.HASRICONNECTED) {
                     LOGGER.log(Level.INFO, remoteView.getPlayer().getNick() + " si è riconnesso");
