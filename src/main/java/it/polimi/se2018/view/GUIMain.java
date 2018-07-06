@@ -38,6 +38,7 @@ public class GUIMain  implements MouseListener{
     private ModelView modelView;
     private Long localID;
     private GUISwingProxy guiSwingProxy;
+    private boolean initialPack = false;
 
     protected GUIMain(GUISwingProxy guiSwingProxy){
         this.guiSwingProxy = guiSwingProxy;;
@@ -253,6 +254,11 @@ public class GUIMain  implements MouseListener{
                     }catch (Exception e){}
                 }
             }
+        }
+        
+        if(!initialPack) {
+            ((JFrame) SwingUtilities.getWindowAncestor(contentPane)).pack();
+            initialPack = true;
         }
     }
 
