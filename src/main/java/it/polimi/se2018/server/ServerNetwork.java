@@ -94,7 +94,7 @@ public class ServerNetwork implements Observer {
             try {
                 connection.sendMessage(new ServerMessage(ErrorType.CONNECTIONREFUSED));
             } catch (DisconnectedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.WARNING,"Errore invio messaggio connessione rifiutata");
             }
         } else if (playingConnections.containsKey(message.getId())) {
             playingConnections.get(message.getId()).changeConnection(connection);
