@@ -32,8 +32,11 @@ public class GUISwingProxy extends View {
             case ERROR:
                 if(message.getErrorType().equals(ErrorType.ILLEGALMOVE)){
                     gameWindow.printError("Mossa inviata non valida, ripeti la scelta");
-                }else{
+                }else if(message.getErrorType().equals(ErrorType.NOTYOURTURN)){
                     gameWindow.printError("Non e' il tuo turno");
+                }else if(message.getErrorType().equals(ErrorType.CONNECTIONREFUSED)){
+                    gameWindow.printError("Errore di connessione: non puoi avere lo stesso nickname di un altro giocatore connesso");
+                    System.exit(0);
                 }
                 break;
             case INITIALCONFIGSERVER:
