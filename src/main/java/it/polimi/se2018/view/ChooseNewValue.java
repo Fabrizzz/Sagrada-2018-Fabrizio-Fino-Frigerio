@@ -10,9 +10,9 @@ public class ChooseNewValue extends JDialog{
     private JPanel contentPane;
     private JButton buttonOK;
     private JComboBox comboBox1;
-    public final CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch latch = new CountDownLatch(1);
 
-    public ChooseNewValue() {
+    protected ChooseNewValue() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -39,7 +39,7 @@ public class ChooseNewValue extends JDialog{
         comboBox1.setSelectedIndex(0);
     }
 
-    public NumberEnum getNewValue(){
+    protected NumberEnum getNewValue(){
         this.pack();
         this.setVisible(true);
         try{

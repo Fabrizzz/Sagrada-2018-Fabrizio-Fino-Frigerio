@@ -23,7 +23,7 @@ public class ChooseBoard extends JDialog {
     private GUIMain guiMain;
     private Board[] boards;
 
-    public ChooseBoard(Board[] boards, GUIMain guiMain) {
+    protected ChooseBoard(Board[] boards, GUIMain guiMain) {
 
         this.guiMain = guiMain;
         this.boards = boards;

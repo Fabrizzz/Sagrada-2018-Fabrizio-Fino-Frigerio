@@ -18,13 +18,12 @@ public class ShowObjectives extends JDialog {
     private JPanel board;
     List<PublicObjective> publicObjective;
 
-    public ShowObjectives(List<PublicObjective> publicObjective) {
+    protected ShowObjectives(List<PublicObjective> publicObjective) {
 
         this.publicObjective = publicObjective;
         setContentPane(contentPane);
         setModal(true);
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -32,7 +31,6 @@ public class ShowObjectives extends JDialog {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -43,7 +41,6 @@ public class ShowObjectives extends JDialog {
     }
 
     private void showObjectiveCard() {
-
         String name;
 
         name = ObjectiveCardNamePNG(publicObjective.get(0));
@@ -84,7 +81,6 @@ public class ShowObjectives extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 

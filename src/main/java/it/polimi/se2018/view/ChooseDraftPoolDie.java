@@ -13,10 +13,10 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
     private JPanel contentPane;
     private JPanel board;
     private DraftPool draftPool;
-    public final CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch latch = new CountDownLatch(1);
     private int p = 0;
 
-    public ChooseDraftPoolDie(DraftPool draftPool) {
+    protected ChooseDraftPoolDie(DraftPool draftPool) {
         setContentPane(contentPane);
         setModal(true);
         this.draftPool = draftPool;
@@ -72,7 +72,6 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
 
     }
 
-
     @Override
     public void mouseClicked(MouseEvent e) {
         JLabel source = (JLabel) e.getSource();
@@ -87,22 +86,14 @@ public class ChooseDraftPoolDie extends JDialog implements MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 }

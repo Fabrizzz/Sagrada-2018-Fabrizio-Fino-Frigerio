@@ -1,21 +1,15 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.model.DiceBag;
 import it.polimi.se2018.model.DraftPool;
-import it.polimi.se2018.model.RoundTrack;
-import it.polimi.se2018.model.cell.Die;
-import it.polimi.se2018.utils.enums.Color;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ShowDraftPool extends JDialog {
     private JPanel contentPane;
     private JPanel board;
 
-    public ShowDraftPool(DraftPool draftPool) {
+    protected ShowDraftPool(DraftPool draftPool) {
         setContentPane(contentPane);
         setModal(false);
 

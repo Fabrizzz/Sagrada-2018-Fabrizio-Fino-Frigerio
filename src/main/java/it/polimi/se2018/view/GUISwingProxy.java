@@ -19,7 +19,7 @@ public class GUISwingProxy extends View {
 
     public void gameWindow(GUIMain gameWindow, Long localID){
         this.gameWindow = gameWindow;
-        localID = localID;
+        this.localID = localID;
     }
 
     @Override
