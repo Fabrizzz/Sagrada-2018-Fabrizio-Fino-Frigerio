@@ -62,9 +62,10 @@ public class ServerNetwork implements Observer {
      */
     private synchronized void initializeGame() {
         Controller controller = new Controller(this);
-        new Thread(() -> controller.startGame(new ArrayList<>(waitingConnections.values()))).start();
+        ArrayList<RemoteView> views = new ArrayList<>(waitingConnections.values());
+        new Thread(() -> controller.startGame(new ArrayList<>(views))).start();
         playingConnections.putAll(waitingConnections);
-        waitingConnections.size();
+        waitingConnections.clear();
         games++;
     }
 
@@ -120,9 +121,8 @@ public class ServerNetwork implements Observer {
                 if (views.contains(playingConnections.get(id))) {
                     views.remove(playingConnections.get(id));
                     playingConnections.remove(id);
-
+                    break;
                 }
-                break;
             }
         }
     }
