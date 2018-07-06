@@ -11,8 +11,9 @@ public class InputUtils {
         while (i < 0) {
             try {
                 i = scanner.nextInt();
-            } catch (Exception e) {
+            } catch (java.util.InputMismatchException e) {
                 scanner.reset();
+                scanner.next();
                 System.out.println("Input non corretto, inserire un numero");
             }
             if (i < 0)
