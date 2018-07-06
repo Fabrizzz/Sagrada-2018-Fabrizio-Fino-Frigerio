@@ -160,6 +160,8 @@ public class CLI extends View{
         for(int i = 0; i < modelView.getPublicObjective().size(); i ++){
             println("Numero " + (i+1));
             println(modelView.getPublicObjective().get(i).getObjectiveName() + "\n\n");
+            println(modelView.getPublicObjective().get(i).getObjectiveName().getDescription());
+            System.out.println();
         }
     }
 
@@ -887,6 +889,7 @@ public class CLI extends View{
                     LOGGER.log(Level.WARNING,"mappa scores mancante");
                 }
                 System.exit(0);
+                break;
             default:
                 LOGGER.log(Level.WARNING,"Messaggio ricevuto di tipo non elaborabile");
                 break;

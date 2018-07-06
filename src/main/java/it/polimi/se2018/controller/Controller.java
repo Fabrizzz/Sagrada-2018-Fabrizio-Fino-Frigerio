@@ -228,14 +228,13 @@ public class Controller implements Observer {
                         if (winner.getFavorTokens() > punteggio) {
                             punteggio = winner.getFavorTokens();
                             vincitore = winner.getNick();
-                        }
-                        if (winner.getFavorTokens() == punteggio)
+                        } else if (winner.getFavorTokens() == punteggio)
                             tentativo = false;
                     }
                 }
                 if (!tentativo) {
                     while (playerPosition >= 0) {
-                        if (winners.contains(model.getPlayers().get(playerPosition).getNick())) {
+                        if (winners.contains(model.getPlayers().get(playerPosition))) {
                             vincitore = model.getPlayers().get(playerPosition).getNick();
                             break;
                         } else {
@@ -309,6 +308,9 @@ public class Controller implements Observer {
         if (model.getRound() != 10) {
 
             int playerPosition2 = (model.getTurn() < model.getPlayers().size()) ? model.getTurn() : model.getPlayers().size() * 2 - model.getTurn() - 1;
+            if (playerPosition2 > model.getPlayers().size() - 1) {
+                LOGGER.log(Level.SEVERE, "Player position2 = " + playerPosition2 + " Player Size = " + model.getPlayers().size());
+            }
             model.getPlayers().get(playerPosition2).setYourTurn(true);
             if (model.getPlayers().get(playerPosition2).isSkipSecondTurn()) {
                 LOGGER.log(Level.FINE, "Il giocatore " + model.getPlayers().get(playerPosition2).getNick() + " salta il secondo turno a causa di una tool");
