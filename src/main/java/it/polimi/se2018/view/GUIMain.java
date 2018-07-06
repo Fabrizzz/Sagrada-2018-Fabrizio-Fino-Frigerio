@@ -409,9 +409,26 @@ public class GUIMain  implements MouseListener{
             ShowDie dialog = new ShowDie("src/main/resources/utilsGUI/" + GUIUtils.colorToString(newDie.getColor()) + newDie.getNumber().getInt() +".png");
             NumberEnum newValue = chooseNewValue();
 
-            int[] pos = chooseCell("Scegli dove piazzare il dado");
-            ClientMessage clientMessage = new ClientMessage(new PlayerMove(pos[0],pos[1],i,newValue,Tool.DILUENTEPERPASTASALDA));
-            guiSwingProxy.sendMessage(clientMessage);
+            boolean check = true;
+            PlayerBoard board = modelView.getBoard(modelView.getPlayer(localID));
+            for (int r = 0; r < 4 && check; r++) {
+                for (int c = 0; c < 5 && check; c++) {
+                    if ((board.verifyInitialPositionRestriction(r, c) && board.isEmpty()) ||
+                            (!board.containsDie(r, c) &&
+                                    board.verifyNumberRestriction(die, r, c) &&
+                                    board.verifyColorRestriction(die, r, c) &&
+                                    board.verifyNearCellsRestriction(die, r, c) &&
+                                    board.verifyPositionRestriction(r, c)))
+                        check = false;
+                }
+            }
+            if (check) {
+                printError("Non è possibile posizionarlo, viene riposto in riserva");
+                guiSwingProxy.sendMessage(new ClientMessage(new PlayerMove(i, newValue, Tool.DILUENTEPERPASTASALDA)));
+            } else {
+                int[] pair = chooseCell("Scegli dove piazzare il dado");
+                guiSwingProxy.sendMessage(new ClientMessage(new PlayerMove(pair[0], pair[1], i, newValue, Tool.DILUENTEPERPASTASALDA)));
+            }
         }catch (NoDieException e){
             printError("Errore, dado non presente nella cella scelta");
         }catch (EmptyBagException e){
