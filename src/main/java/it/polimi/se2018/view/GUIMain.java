@@ -131,6 +131,7 @@ public class GUIMain  implements MouseListener{
     private void setIndicator(){
 
         boolean yourTurn;
+        String color;
 
         yourTurn = modelView.getPlayer(localID).isYourTurn();
         if(yourTurn){
@@ -141,7 +142,7 @@ public class GUIMain  implements MouseListener{
         }
         labelSegnalini.setText("Segnalini: "+ modelView.getPlayer(localID).getFavorTokens());
         labelRound.setText("Round: "+ modelView.getRound());
-        privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective());
+        privateObjectiveLabel.setText("Obiettivo privato: "+ modelView.getPrivateObjective().getColorString());
     }
 
     private void mostraObiettivi(){
